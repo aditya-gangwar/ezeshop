@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="SETTINGS">
+
+        <PreferenceScreen
+            android:title="Cashback"
+            android:key="prefGrpCb">
+
+            <EditTextPreference
+                android:title="Cashback on Bill"
+                android:key="settings_cb_rate"
+                android:summary="@string/addCBSummary"
+                android:inputType="number"
+                android:digits="0123456789."
+                android:maxLength="@string/cb_rate_char_limit">
+            </EditTextPreference>
+
+        </PreferenceScreen>
+
+        <PreferenceScreen
+            android:title="Customer Account"
+            android:key="prefGrpAcc">
+
+            <SwitchPreference
+                android:title="Add Cash to Account"
+                android:key="settings_cl_add_enabled"
+                android:summary="@string/addCashSummary"
+                android:disableDependentsState="true">
+            </SwitchPreference>
+
+            <EditTextPreference
+                android:title="Extra Cashback on Add Cash"
+                android:key="settings_ppcb_rate"
+                android:summary="@string/addExtraCBSummary"
+                android:inputType="number"
+                android:digits="0123456789."
+                android:maxLength="@string/cb_rate_char_limit">
+            </EditTextPreference>
+
+            <EditTextPreference
+                android:title="Minimum Cash for Extra Cashback"
+                android:key="settings_ppcb_amt"
+                android:summary="@string/minCashExtraCBSummary"
+                android:inputType="number"
+                android:digits="0123456789"
+                android:maxLength="@string/cash_char_limit">
+            </EditTextPreference>
+
+        </PreferenceScreen>
+
+        <!--PreferenceScreen
+            android:title="Cashback \u0026 Account"
+            android:key="prefGrpCbAcc">
+
+            <PreferenceCategory
+                android:title="CASHBACK (%)"
+                android:key="prefCatCb">
+
+                <EditTextPreference
+                    android:title="Cashback on Bill"
+                    android:key="settings_cb_rate"
+                    android:summary="@string/addCBSummary"
+                    android:inputType="number"
+                    android:digits="0123456789."
+                    android:maxLength="@string/cb_rate_char_limit">
+                </EditTextPreference>
+
+            </PreferenceCategory>
+
+            <PreferenceCategory
+                android:title="ACCOUNT"
+                android:key="prefCatAcc">
+
+                <SwitchPreference
+                    android:title="Add Cash to Account"
+                    android:key="settings_cl_add_enabled"
+                    android:summary="@string/addCashSummary"
+                    android:disableDependentsState="true">
+                </SwitchPreference>
+
+                <EditTextPreference
+                    android:title="Extra Cashback on Add Cash"
+                    android:key="settings_ppcb_rate"
+                    android:summary="@string/addExtraCBSummary"
+                    android:inputType="number"
+                    android:digits="0123456789."
+                    android:maxLength="@string/cb_rate_char_limit">
+                </EditTextPreference>
+
+                <EditTextPreference
+                    android:title="Minimum Cash for Extra Cashback"
+                    android:key="settings_ppcb_amt"
+                    android:summary="@string/minCashExtraCBSummary"
+                    android:inputType="number"
+                    android:digits="0123456789"
+                    android:maxLength="@string/cash_char_limit">
+                </EditTextPreference>
+
+            </PreferenceCategory>
+
+        </PreferenceScreen-->
+
+    <PreferenceScreen
+        android:title="Profile"
+        android:key="prefGrpProfile">
+
+        <in.ezeshop.merchantbase.PasswordPreference
+            android:title="Account Password"
+            android:key="settings_change_password"
+            android:summary="@string/passwordSummary"/>
+
+        <in.ezeshop.merchantbase.MobileChangePreference
+            android:title="Registered Mobile"
+            android:key="settings_change_mobile"
+            android:summary="@string/regdMobileSummary"/>
+
+        <EditTextPreference
+            android:title="Email"
+            android:key="settings_email_id"
+            android:summary="@string/emailSummary"
+            android:maxLength="@string/email_char_limit">
+        </EditTextPreference>
+
+        <EditTextPreference
+            android:title="Contact Number"
+            android:key="settings_contact_num"
+            android:summary="@string/contactPhoneSummary"
+            android:inputType="number"
+            android:digits="0123456789"
+            android:maxLength="@string/mobile_char_limit">
+        </EditTextPreference>
+
+    </PreferenceScreen>
+
+    <!--PreferenceScreen
+        android:title="External Invoice"
+        android:key="prefGrpInvoice">
+
+        <SwitchPreference
+            android:title="Ask External Invoice#"
+            android:key="settings_linked_invoice"
+            android:summary="Ask for Linked External Invoice Number for each Transaction?">
+        </SwitchPreference>
+
+        <SwitchPreference
+            android:title="External Invoice# Optional"
+            android:key="settings_invoice_optional"
+            android:summary="If disabled, transaction without Invoice Number is not allowed."
+            android:dependency="settings_linked_invoice">
+        </SwitchPreference>
+
+        <SwitchPreference
+            android:title="Invoice# Only Numbers"
+            android:key="settings_invoice_numbers_only"
+            android:summary="Invoice Number contain only numbers from 0-9?"
+            android:dependency="settings_linked_invoice">
+        </SwitchPreference>
+
+    </PreferenceScreen-->
+
+    <PreferenceScreen
+        android:title="Others"
+        android:key="prefGrpOthers">
+
+        <!--SwitchPreference
+            android:title="Camera Flash"
+            android:key="settings_camera_flash"
+            android:summary="Always use Camera Flash while Scanning Card"
+            android:defaultValue="false">
+        </SwitchPreference-->
+
+        <PreferenceCategory
+            android:title="EXTERNAL INVOICE">
+
+            <SwitchPreference
+                android:title="Ask Invoice#"
+                android:key="settings_linked_invoice"
+                android:summary="Ask for Linked External Invoice Number for each Transaction?">
+            </SwitchPreference>
+
+            <SwitchPreference
+                android:title="Mandatory"
+                android:key="settings_invoice_mandatory"
+                android:summary="If Enabled, transaction without Invoice Number is not allowed."
+                android:dependency="settings_linked_invoice">
+            </SwitchPreference>
+
+            <SwitchPreference
+                android:title="Only Numbers"
+                android:key="settings_invoice_numbers_only"
+                android:summary="Invoice Number contain only numbers from 0-9?"
+                android:dependency="settings_linked_invoice">
+            </SwitchPreference>
+
+        </PreferenceCategory>
+
+    </PreferenceScreen>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

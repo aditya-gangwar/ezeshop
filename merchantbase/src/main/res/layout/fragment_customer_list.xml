@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LL_Vertical"
+    android:id="@+id/list_root">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/list_header"
+        android:background="@color/bg_listWithCard_header">
+
+        <EditText
+            style="@style/Edittext_only_view_small_lessPad"
+            android:layout_width="wrap_content"
+            android:id="@+id/list_header_id"
+            android:layout_height="wrap_content"
+            android:text="Customer ID"
+            android:textColor="@color/white"
+            android:paddingBottom="0dp"/>
+
+        <EditText
+            style="@style/Edittext_only_view_small_lessPad"
+            android:layout_width="wrap_content"
+            android:id="@+id/list_header_cb"
+            android:layout_below="@id/list_header_id"
+            android:layout_height="wrap_content"
+            android:text="Cashback:  Add - Debit = Balance"
+            android:paddingTop="0dp"
+            android:textColor="@color/white"/>
+
+        <!--EditText
+            style="@style/Edittext_only_view_small_lessPad"
+            android:layout_width="wrap_content"
+            android:id="@+id/list_header_acc"
+            android:layout_below="@id/list_header_cb"
+            android:layout_height="wrap_content"
+            android:text="Account:  Add - Debit = Balance"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
+            android:textColor="@color/white"/-->
+
+        <EditText
+            style="@style/Edittext_only_view_small_lessPad"
+            android:id="@+id/list_header_txnTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="▼Last Txn Time"
+            android:paddingBottom="0dp"
+            android:textColor="@color/white"/>
+
+        <EditText
+            style="@style/Edittext_only_view_small_lessPad"
+            android:id="@+id/list_header_bill"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/list_header_txnTime"
+            android:layout_alignParentRight="true"
+            android:text="Total Bill"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
+            android:textColor="@color/white"/>
+
+        <View
+            style="@style/Divider_horizontal_Large"
+            android:id="@+id/list_divider_1"
+            android:layout_below="@id/list_header_cb"/>
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bg_light_grey_dark"
+        android:id="@+id/cust_recycler_view"
+        android:layout_weight="1">
+    </android.support.v7.widget.RecyclerView>
+
+    <!--Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="100"/-->
+
+    <View
+        style="@style/Divider_horizontal_Medium"/>
+
+    <LinearLayout
+        style="@style/LL_Horizontal_wrap"
+        android:layout_marginTop="@dimen/medium_space"
+        android:layout_marginLeft="@dimen/medium_space">
+
+        <EditText
+            style="@style/Edittext_only_view_small_lessPad"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="* Updated: "
+            android:textStyle="italic"
+            android:textColor="@color/secondary_text"/>
+        <EditText
+            style="@style/Edittext_only_view_small_lessPad"
+            android:id="@+id/input_updated_time"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="01:54 PM"
+            android:textStyle="italic"
+            android:textColor="@color/accent2"
+            android:paddingLeft="0dp"/>
+    </LinearLayout>
+
+    <EditText
+        style="@style/Edittext_only_view_small_lessPad"
+        android:layout_marginLeft="@dimen/medium_space"
+        android:id="@+id/updated_time_details"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:paddingTop="0dp"
+        android:text="Data is updated only once every 4 hours."
+        android:textStyle="italic"
+        android:textColor="@color/secondary_text"/>
+
+</LinearLayout>

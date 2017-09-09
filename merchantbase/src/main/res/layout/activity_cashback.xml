@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
+    android:descendantFocusability="blocksDescendants">
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/toolbar_layout">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:minHeight="@dimen/toolbar_min_height"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_min_height"
+            android:background="@color/primary"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            app:theme="@style/ToolbarStyle"
+            app:elevation="4dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetEnd="0dp"
+            app:contentInsetStartWithNavigation="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/tb_image"
+                    android:layout_width="@dimen/toolbar_image_width"
+                    android:layout_height="@dimen/toolbar_image_height"
+                    android:padding="@dimen/toolbar_image_padding"
+                    android:layout_gravity="center_vertical|left"
+                    android:src="@drawable/ic_store_white_24dp"
+                    android:tint="@color/icon_grey"
+                    android:scaleType="fitXY"
+                    android:layout_marginRight="@dimen/small_space"/>
+
+                <!-- the title view -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <EditText
+                        style="@style/Toolbar_title"
+                        android:id="@+id/tb_title"
+                        android:layout_height="0dp"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="60"
+                        android:text="TBS"
+                        android:layout_gravity="left|center_vertical"
+                        android:gravity="left|center_vertical"/>
+
+                    <EditText
+                        style="@style/Toolbar_subtitle"
+                        android:id="@+id/tb_title_2"
+                        android:layout_height="0dp"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="40"
+                        android:text="TBS"
+                        android:gravity="left|top"
+                        android:layout_gravity="left|top"
+                        android:paddingTop="0dp"
+                        android:textStyle="italic|bold"
+                        android:visibility="visible"/>
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"/>
+
+                <!-- the description view -->
+                <!--android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/tb_calculator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_calculator_white_24dp"
+                    android:padding="8dp"
+                    android:layout_marginRight="@dimen/small_space"/-->
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/tb_layout_subhead1"
+                    android:orientation="vertical"
+                    android:layout_marginRight="@dimen/medium_space"
+                    android:visibility="visible">
+
+                    <TextView
+                        style="@style/Edittext_only_view_medium_lessPad"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="50"
+                        android:gravity="right|center_vertical"
+                        android:layout_gravity="right|center_vertical"
+                        android:id="@+id/tb_curr_cashback"
+                        android:textColor="@color/toolbar_text_primary"
+                        android:textStyle="bold"
+                        android:text="\u20B9 987"
+                        android:padding="0dp"
+                        android:drawableLeft="@drawable/ic_favorite_white_18dp"
+                        android:drawablePadding="@dimen/large_space" />
+
+                    <TextView
+                        style="@style/Edittext_only_view_medium_lessPad"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="50"
+                        android:id="@+id/tb_curr_cashload"
+                        android:gravity="right|center_vertical"
+                        android:layout_gravity="right|center_vertical"
+                        android:text="\u20B9 3456"
+                        android:drawableLeft="@drawable/ic_account_balance_wallet_white_18dp"
+                        android:drawablePadding="@dimen/large_space"
+                        android:textColor="@color/toolbar_text_primary"
+                        android:textStyle="bold"
+                        android:padding="0dp"
+                        android:layout_marginTop="@dimen/XS_space"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+        <!-- The main content view where fragments are loaded -->
+        <FrameLayout
+            android:id="@+id/fragment_container_1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/toolbar"
+            android:background="?android:attr/windowBackground">
+        </FrameLayout>
+
+    </RelativeLayout>
+
+    <!-- The navigation drawer that comes from the left -->
+    <!-- Note that `android:layout_gravity` needs to be set to 'start' -->
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/drawer_header"
+        app:menu="@menu/drawer_menu"
+        app:itemTextAppearance="@style/NavDrawerTextStyle"/>
+
+</android.support.v4.widget.DrawerLayout>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/windowBackground">
+
+    <LinearLayout
+        style="@style/LL_Vertical_paddingSidesLarge"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:layout_marginTop="@dimen/XL_space">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_verified_user_white_24dp"
+                android:tint="@color/primary"
+                android:layout_gravity="top"
+                android:paddingTop="@dimen/edittext_padding"/>
+
+            <EditText
+                style="@style/Edittext_only_view_small"
+                android:id="@+id/label_information_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Provide your 'Date of Birth' in DDMMYYYY format \n(as given during Registration)" />
+        </LinearLayout>
+
+        <EditText
+            style="@style/Edittext_only_view_small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="E.g. 06031983 in place of '06 March 1983'" />
+
+        <EditText
+            android:id="@+id/input_secret_1"
+            style="@style/MyEdittext_Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Date of Birth  (DDMMYYYY)"
+            android:gravity="center"
+            android:imeOptions="actionDone"
+            android:layout_marginTop="@dimen/large_space"/>
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:layout_marginTop="@dimen/XL_space">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_lock_outline_white_24dp"
+                android:tint="@color/primary"
+                android:layout_gravity="top"
+                android:paddingTop="@dimen/edittext_padding"/>
+
+            <EditText
+                style="@style/Edittext_only_view_small"
+                android:id="@+id/label_info_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/cust_pin_reset_info" />
+        </LinearLayout>
+
+        <EditText
+            style="@style/Edittext_only_view_small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Are you sure to reset your PIN ?"
+            android:layout_marginBottom="@dimen/XL_space"
+            android:textColor="@color/accent2"/>
+    </LinearLayout>
+</RelativeLayout>

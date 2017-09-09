@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/windowBackground">
+
+    <LinearLayout
+        style="@style/LL_Vertical_paddingSidesLarge"
+        android:layout_height="wrap_content">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/XXL_space"/>
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:layout_marginTop="@dimen/medium_space">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_lock_outline_white_24dp"
+                android:tint="@color/primary"/>
+
+            <EditText
+                style="@style/Edittext_only_view_small"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Provide existing PIN for verification" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/input_current_passwd"
+            style="@style/MyEdittext_Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberPassword"
+            android:hint="Current PIN"
+            android:maxLength="@string/pin_char_limit"
+            android:gravity="center"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/XL_space"/>
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_lock_outline_white_24dp"
+                android:tint="@color/primary"/>
+
+            <EditText
+                style="@style/Edittext_only_view_small"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Provide new PIN to set" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/input_new_passwd"
+            style="@style/MyEdittext_Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberPassword"
+            android:hint="New PIN"
+            android:maxLength="@string/pin_char_limit"
+            android:gravity="center"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/medium_space"/>
+
+        <EditText
+            style="@style/Edittext_only_view_small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Confirm new PIN" />
+
+        <EditText
+            android:id="@+id/input_new_passwd_2"
+            style="@style/MyEdittext_Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberPassword"
+            android:hint="Confirm New PIN"
+            android:maxLength="@string/pin_char_limit"
+            android:gravity="center"
+            android:imeOptions="actionDone"/>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/XL_space"/>
+
+    </LinearLayout>
+</RelativeLayout>

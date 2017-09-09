@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LL_Vertical"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/medium_space">
+
+        <EditText
+            style="@style/Edittext_only_click_small_lessPad"
+            android:id="@+id/txn_time"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="08 Apr,16  20:15"
+            android:textStyle="bold"
+            android:textColor="@color/subheading"
+            android:longClickable="false"
+            android:textIsSelectable="false"/>
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:id="@+id/bill_amts_layout"
+            android:layout_width="wrap_content"
+            android:layout_alignParentRight="true">
+
+            <EditText
+                style="@style/Edittext_only_click_small_lessPad"
+                android:id="@+id/txn_bill"
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:text="\u20B9 99,999"
+                android:paddingRight="0dp"
+                android:textStyle="bold"/>
+
+            <EditText
+                style="@style/Edittext_only_click_small_lessPad"
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:id="@+id/txn_bill_divider"
+                android:text="|"
+                android:paddingTop="0dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/txn_cashback_icon_1"
+                android:src="@drawable/ic_favorite_white_18dp"
+                android:paddingTop="@dimen/edittext_padding_less"
+                android:paddingBottom="@dimen/edittext_padding_less"
+                android:tint="@color/primary"
+                android:alpha="0.8"/>
+
+            <EditText
+                style="@style/Edittext_only_click_small_lessPad"
+                android:id="@+id/txn_cashback_award"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="+ \u20B9 23"/>
+            <EditText
+                style="@style/Edittext_only_click_small_lessPad"
+                android:id="@+id/txn_cb_award_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="\u20B9 23"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:layout_below="@id/txn_time"
+            android:id="@+id/row2">
+
+            <EditText
+                style="@style/Edittext_only_click_small_lessPad"
+                android:id="@+id/txn_mchnt_name"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="Ganga Stores and Sons Pvt Ltd"
+                android:paddingTop="0dp"
+                android:longClickable="false"
+                android:textIsSelectable="false"
+                android:gravity="left"
+                android:textStyle="italic"
+                android:ellipsize="end"/>
+
+            <LinearLayout
+                style="@style/LL_Horizontal_wrap"
+                android:id="@+id/txn_amts_layout"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="@dimen/medium_space"
+                android:gravity="right">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/txn_account_icon"
+                    android:src="@drawable/ic_account_balance_wallet_white_18dp"
+                    android:paddingTop="0dp"
+                    android:paddingBottom="@dimen/edittext_padding_less"
+                    android:tint="@color/primary"
+                    android:alpha="0.8"/>
+                <EditText
+                    style="@style/Edittext_only_click_small_lessPad"
+                    android:id="@+id/txn_account_amt"
+                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:text="+ \u20B9 345"
+                    android:paddingTop="0dp"
+                    android:paddingRight="0dp"/>
+                <EditText
+                    style="@style/Edittext_only_click_small_lessPad"
+                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/txn_amts_divider"
+                    android:text="|"
+                    android:paddingTop="0dp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/txn_cashback_icon"
+                    android:src="@drawable/ic_favorite_white_18dp"
+                    android:paddingTop="0dp"
+                    android:paddingBottom="@dimen/edittext_padding_less"
+                    android:tint="@color/primary"
+                    android:alpha="0.8"/>
+                <EditText
+                    style="@style/Edittext_only_click_small_lessPad"
+                    android:id="@+id/txn_cashback_amt"
+                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:text="- \u20B9 3456"
+                    android:paddingTop="0dp"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <!--LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:id="@+id/layout_cancelled"
+            android:layout_below="@id/row2"
+            android:layout_width="wrap_content">
+
+            <EditText
+                style="@style/Edittext_only_click_small_lessPad"
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:text="CANCELLED AT "
+                android:paddingBottom="@dimen/edittext_padding_less"
+                android:paddingRight="0dp"
+                android:paddingTop="0dp"
+                android:textColor="@color/red_negative"/>
+
+            <EditText
+                style="@style/Edittext_only_click_small_lessPad"
+                android:id="@+id/input_cancel_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="22 JULY 2016 22:34"
+                android:paddingTop="0dp"
+                android:textColor="@color/red_negative"/>
+
+        </LinearLayout-->
+
+    </RelativeLayout>
+
+    <View
+        style="@style/Divider_horizontal_Large"
+        android:id="@+id/txn_divider_1"/>
+
+</LinearLayout>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="?android:attr/windowBackground">
+
+    <!--android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"/-->
+
+    <LinearLayout
+        style="@style/LL_Horizontal_paddingSidesLarge"
+        android:id="@+id/header"
+        android:layout_below="@id/toolbar"
+        android:background="@color/bg_light_grey">
+
+        <EditText
+            style="@style/Edittext_only_view_small"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:text="#."
+            android:paddingLeft="@dimen/edittext_padding_less"
+            android:paddingRight="@dimen/edittext_padding_less"
+            android:layout_marginRight="@dimen/medium_space"
+            android:textStyle="bold"/>
+
+        <EditText
+            style="@style/Edittext_only_view_small"
+            android:layout_width="0dp"
+            android:layout_weight="35"
+            android:layout_height="wrap_content"
+            android:text="PRICE"
+            android:gravity="left"
+            android:textStyle="bold"/>
+
+        <EditText
+            style="@style/Edittext_only_view_medium"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="10"
+            android:text="x"
+            android:textStyle="bold"/>
+
+        <EditText
+            style="@style/Edittext_only_view_small"
+            android:id="@+id/input_quantity"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="20"
+            android:text="QTY"
+            android:gravity="left"
+            android:textStyle="bold"/>
+
+        <EditText
+            style="@style/Edittext_only_view_small"
+            android:id="@+id/input_item_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="TOTAL"
+            android:layout_weight="35"
+            android:gravity="right"
+            android:textStyle="bold"/>
+
+        <android.support.v7.widget.AppCompatImageButton
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:id="@+id/img_delete"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_delete_forever_black_18dp"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:paddingRight="0dp"/>
+
+    </LinearLayout>
+
+    <View
+        style="@style/Divider_horizontal_Large"
+        android:id="@+id/divider_1"
+        android:layout_below="@id/header"/>
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:drawSelectorOnTop="false"
+        android:layout_below="@id/divider_1"
+        android:layout_above="@+id/layout_last_row_btn"/>
+
+    <LinearLayout
+        style="@style/LL_Vertical"
+        android:layout_height="wrap_content"
+        android:id="@+id/layout_last_row_btn"
+        android:layout_alignParentBottom="true">
+
+        <View
+            style="@style/Divider_horizontal_Medium"
+            android:background="@color/accent"/>
+        <android.support.v7.widget.AppCompatButton
+            style="@style/button_normal_border"
+            android:id="@+id/btn_bill_total"
+            android:text="Total      \u20B9 0"
+            android:textColor="@color/green_positive"/>
+    </LinearLayout>
+
+</RelativeLayout>

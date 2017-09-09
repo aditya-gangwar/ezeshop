@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LL_Vertical"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/root_layout"
+        android:padding="@dimen/medium_space"
+        android:clickable="false"
+        android:focusable="false">
+
+        <TextView
+            style="@style/Edittext_only_view_small_lessPad"
+            android:id="@+id/txn_time"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="08 Apr,16  20:15"
+            android:textStyle="bold"
+            android:textColor="@color/subheading"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            style="@style/Edittext_only_view_small_lessPad"
+            android:id="@+id/txn_customer_id"
+            android:text="AUX678GF"
+            android:layout_below="@id/txn_time"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:paddingTop="0dp"
+            android:textColor="@color/secondary_text"/>
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:id="@+id/bill_amts_layout"
+            android:layout_width="wrap_content"
+            android:layout_alignParentRight="true"
+            android:clickable="false"
+            android:focusable="false">
+
+            <TextView
+                style="@style/Edittext_only_view_small_lessPad"
+                android:id="@+id/txn_bill"
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:text="\u20B9 99,999"
+                android:paddingRight="0dp"
+                android:textColor="@color/secondary_text"
+                android:textStyle="bold"/>
+
+            <TextView
+                style="@style/Edittext_only_view_small_lessPad"
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:id="@+id/txn_bill_divider"
+                android:text=" | "/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/txn_cashback_icon_1"
+                android:src="@drawable/ic_favorite_white_18dp"
+                android:paddingBottom="@dimen/edittext_padding_less"
+                android:paddingTop="@dimen/edittext_padding_less"
+                android:tint="@color/primary"
+                android:alpha="0.8"/>
+
+            <TextView
+                style="@style/Edittext_only_view_small_lessPad"
+                android:id="@+id/txn_cashback_award"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="+ \u20B9 23"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:id="@+id/txn_amts_layout"
+            android:layout_width="wrap_content"
+            android:layout_below="@id/bill_amts_layout"
+            android:layout_alignParentRight="true"
+            android:clickable="false"
+            android:focusable="false">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/txn_account_icon"
+                android:src="@drawable/ic_account_balance_wallet_white_18dp"
+                android:paddingTop="0dp"
+                android:paddingBottom="@dimen/edittext_padding_less"
+                android:tint="@color/primary"
+                android:alpha="0.8"/>
+            <TextView
+                style="@style/Edittext_only_view_small_lessPad"
+                android:id="@+id/txn_account_amt"
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:text="+ \u20B9 3456"
+                android:paddingTop="0dp"
+                android:paddingRight="0dp"/>
+            <TextView
+                style="@style/Edittext_only_view_small_lessPad"
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:id="@+id/txn_amts_divider"
+                android:text=" | "
+                android:paddingTop="0dp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/txn_cashback_icon"
+                android:src="@drawable/ic_favorite_white_18dp"
+                android:paddingTop="0dp"
+                android:paddingBottom="@dimen/edittext_padding_less"
+                android:tint="@color/primary"
+                android:alpha="0.8"/>
+            <TextView
+                style="@style/Edittext_only_view_small_lessPad"
+                android:id="@+id/txn_cashback_amt"
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:paddingTop="0dp"
+                android:text="- \u20B9 3456"/>
+
+        </LinearLayout>
+
+        <!--TextView
+            style="@style/Edittext_only_view_small_lessPad"
+            android:id="@+id/input_cancel_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txn_customer_id"
+            android:text="CANCELLED AT 22 JULY 2016 22:34"
+            android:paddingTop="0dp"
+            android:textColor="@color/red_negative"/-->
+
+        <!--LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:id="@+id/layout_cancelled"
+            android:layout_below="@id/txn_customer_id"
+            android:layout_width="wrap_content"
+            android:clickable="false"
+            android:focusable="false">
+
+            <TextView
+                style="@style/Edittext_only_view_small_lessPad"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="CANCELLED AT "
+                android:paddingRight="0dp"
+                android:paddingTop="0dp"
+                android:textColor="@color/red_negative"/>
+
+            <TextView
+                style="@style/Edittext_only_view_small_lessPad"
+                android:id="@+id/input_cancel_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="22 JULY 2016 22:34"
+                android:paddingTop="0dp"
+                android:textColor="@color/red_negative"/>
+
+        </LinearLayout-->
+
+    </RelativeLayout>
+
+    <View
+        style="@style/Divider_horizontal_Medium"/>
+
+</LinearLayout>
