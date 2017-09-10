@@ -78,6 +78,14 @@
         <item name="android:layout_gravity">center</item>
     </style>
 
+    <style name="Imageview_Left_Column">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">wrap_content</item>
+        <!--item name="android:layout_marginEnd">@dimen/medium_space</item-->
+        <item name="android:layout_marginRight">@dimen/medium_space</item>
+        <item name="android:tint">@color/primary</item>
+    </style>
+
     <style name="button_keyboard_dialog_small" parent="button_keyboard_dialog">
         <item name="android:layout_height">@dimen/keyboard_button_height_dialog_less</item>
         <item name="android:layout_width">@dimen/keyboard_button_width_dialog_less</item>
@@ -235,6 +243,11 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingLeft">@dimen/screen_side_padding</item>
         <item name="android:paddingRight">@dimen/screen_side_padding</item>
+    </style>
+
+    <style name="LL_Horizontal_paddingSidesXL" parent="LL_Horizontal_paddingSidesLarge">
+        <item name="android:paddingLeft">@dimen/screen_side_padding_more</item>
+        <item name="android:paddingRight">@dimen/screen_side_padding_more</item>
     </style>
 
     <style name="Divider_vertical_Large" parent="Divider_vertical_Medium">

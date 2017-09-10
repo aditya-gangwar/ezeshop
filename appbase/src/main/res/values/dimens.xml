@@ -44,7 +44,7 @@
 
     <!-- 10 + 12 = total 22dp side padding -->
     <dimen name="screen_side_padding">10dp</dimen>
-    <dimen name="screen_side_padding_more">14dp</dimen>
+    <dimen name="screen_side_padding_more">16dp</dimen>
 
     <dimen name="keyboard_button_height_dialog_less">72dp</dimen>
     <dimen name="keyboard_button_width_dialog_less">84dp</dimen>

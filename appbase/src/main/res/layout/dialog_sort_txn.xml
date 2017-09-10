@@ -6,17 +6,9 @@
     android:orientation="vertical">
 
     <EditText
-        style="@style/Edittext_only_view_small_more_pad"
-        android:textStyle="bold"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="false"
-        android:gravity="left"
-        android:text="Sort Transactions by:"/>
-
-    <View
-        style="@style/Divider_horizontal_Large"
-        android:id="@+id/divider_cash_pay_title"/>
+        style="@style/Dialog_title"
+        android:id="@+id/label_title"
+        android:text="SORT  TRANSACTIONS"/>
 
     <LinearLayout
         style="@style/LL_Vertical_paddingSidesLarge">
@@ -33,49 +25,28 @@
             <RadioButton
                 style="@style/radio_button_medium"
                 android:id="@+id/dateTime"
-                android:text="Date-Time" />
+                android:text="Date-Time"
+                android:layout_marginBottom="@dimen/small_space"/>
 
             <RadioButton
                 style="@style/radio_button_medium"
                 android:id="@+id/billAmt"
-                android:text="Bill Amount" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/small_space"/>
-
-            <LinearLayout
-                style="@style/LL_Horizontal_wrap">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_favorite_white_24dp"
-                    android:tint="@color/primary"/>
-                <EditText
-                    style="@style/Edittext_only_view_small"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="Cashback"
-                    android:textStyle="bold"
-                    android:textColor="@color/accent"/>
-            </LinearLayout>
+                android:text="Bill Amount"
+                android:layout_marginBottom="@dimen/small_space"/>
 
             <RadioButton
                 style="@style/radio_button_medium"
                 android:id="@+id/awardCb"
-                android:text="Add Cashback" />
+                android:text="Cashback"
+                android:layout_marginBottom="@dimen/small_space"/>
 
             <RadioButton
                 style="@style/radio_button_medium"
-                android:id="@+id/redeemCb"
-                android:text="Debit Cashback" />
+                android:id="@+id/accAmount"
+                android:text="Account Add/Debit"
+                android:layout_marginBottom="@dimen/small_space"/>
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/small_space"/>
-
-            <LinearLayout
+            <!--LinearLayout
                 style="@style/LL_Horizontal_wrap"
                 android:id="@+id/labelAcc">
 
@@ -101,7 +72,7 @@
             <RadioButton
                 style="@style/radio_button_medium"
                 android:id="@+id/debitAcc"
-                android:text="Debit Account" />
+                android:text="Debit Account" /-->
 
         </RadioGroup>
 
