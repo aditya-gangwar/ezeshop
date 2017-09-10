@@ -7,499 +7,474 @@
     <EditText
         style="@style/Dialog_title"
         android:id="@+id/label_title"
+        android:layout_marginBottom="@dimen/large_space"
         android:text="MERCHANT  DETAILS"/>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <LinearLayout
-        style="@style/LL_Vertical_paddingSidesLarge"
-        android:layout_height="wrap_content">
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/medium_space"/>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <LinearLayout
+            style="@style/LL_Vertical_paddingSidesXL"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/display_image"
-                android:src="@drawable/untitled"
-                android:layout_width="@dimen/dp_dialog_image_width"
-                android:layout_height="@dimen/dp_dialog_image_height"
-                android:scaleType="centerInside"
-                android:layout_marginRight="@dimen/large_space"
-                android:layout_gravity="bottom"/>
-
-            <EditText
-                style="@style/Edittext_only_view_small"
-                android:id="@+id/input_store_name"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textCapSentences"
-                android:text="TBS"
-                android:layout_toRightOf="@id/display_image"
-                android:gravity="left"/>
-            <EditText
-                style="@style/Edittext_only_view_small"
-                android:layout_below="@+id/input_store_name"
-                android:layout_toRightOf="@id/display_image"
-                android:gravity="left"
-                android:id="@+id/input_store_category"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/display_image"
+                    android:src="@drawable/untitled"
+                    android:layout_width="@dimen/dp_dialog_image_width"
+                    android:layout_height="@dimen/dp_dialog_image_height"
+                    android:scaleType="centerInside"
+                    android:layout_marginRight="@dimen/large_space"
+                    android:layout_gravity="bottom"/>
+
+                <EditText
+                    style="@style/Edittext_only_view_small"
+                    android:id="@+id/input_store_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapSentences"
+                    android:text="TBS"
+                    android:layout_toRightOf="@id/display_image"
+                    android:gravity="left"/>
+                <EditText
+                    style="@style/Edittext_only_view_small"
+                    android:layout_below="@+id/input_store_name"
+                    android:layout_toRightOf="@id/display_image"
+                    android:gravity="left"
+                    android:id="@+id/input_store_category"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TBS"
+                    android:paddingTop="0dp"
+                    android:textStyle="italic"/>
+
+            </RelativeLayout>
+
+            <Space
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TBS"
-                android:paddingTop="0dp"
-                android:textStyle="italic"/>
+                android:layout_height="@dimen/medium_space" />
 
-        </RelativeLayout>
+            <LinearLayout
+                style="@style/LL_Horizontal_wrap">
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/medium_space" />
+                <ImageView
+                    style="@style/Imageview_Left_Column"
+                    android:src="@drawable/ic_perm_identity_white_18dp"/>
+                <EditText
+                    style="@style/Edittext_only_view_small"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:text="Merchant ID"
+                    android:layout_weight="1"
+                    android:gravity="left"/>
+                <EditText
+                    style="@style/Edittext_only_view_small"
+                    android:id="@+id/input_merchant_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/medium_space"
+                    android:layout_marginRight="@dimen/medium_space"
+                    android:text="TBS"/>
+            </LinearLayout>
 
-        <LinearLayout
-            style="@style/LL_Horizontal_wrap">
+            <LinearLayout
+                style="@style/LL_Horizontal_wrap">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_perm_identity_white_18dp"
-                android:tint="@color/primary"/>
-            <EditText
-                style="@style/Edittext_only_view_small"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:text="Merchant ID"
-                android:layout_weight="45"
-                android:gravity="left"/>
-            <EditText
-                style="@style/Edittext_only_view_small"
-                android:id="@+id/input_merchant_id"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="TBS"
-                android:layout_weight="55"
-                android:gravity="left"/>
-        </LinearLayout>
+                <ImageView
+                    style="@style/Imageview_Left_Column"
+                    android:src="@drawable/ic_phone_android_white_18dp"/>
+                <EditText
+                    style="@style/Edittext_only_view_small"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:text="Registered Mobile"
+                    android:layout_weight="45"
+                    android:gravity="left"/>
+                <EditText
+                    style="@style/Edittext_only_view_small"
+                    android:id="@+id/input_merchant_mobile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TBS"
+                    android:layout_marginEnd="@dimen/medium_space"
+                    android:layout_marginRight="@dimen/medium_space"
+                    android:gravity="left"/>
+            </LinearLayout>
 
-        <LinearLayout
-            style="@style/LL_Horizontal_wrap">
+            <LinearLayout
+                style="@style/LL_Horizontal_wrap">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_perm_identity_white_18dp"
-                android:tint="@color/primary"
-                android:visibility="invisible"
-                android:paddingTop="0dp"/>
-            <EditText
-                style="@style/Edittext_only_view_small"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:text="Contact Person"
-                android:layout_weight="45"
-                android:gravity="left"
-                android:paddingTop="0dp"/>
-            <EditText
-                style="@style/Edittext_only_view_small"
-                android:id="@+id/input_contact_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="TBS"
-                android:layout_weight="55"
-                android:gravity="left"
-                android:paddingTop="0dp"/>
-        </LinearLayout>
+                <ImageView
+                    style="@style/Imageview_Left_Column"
+                    android:src="@drawable/ic_perm_identity_white_18dp"
+                    android:visibility="invisible"
+                    android:paddingTop="0dp"/>
+                <EditText
+                    style="@style/Edittext_only_view_small"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:text="Contact Person"
+                    android:layout_weight="45"
+                    android:gravity="left"
+                    android:paddingTop="0dp"/>
+                <EditText
+                    style="@style/Edittext_only_view_small"
+                    android:id="@+id/input_contact_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TBS"
+                    android:layout_marginEnd="@dimen/medium_space"
+                    android:layout_marginRight="@dimen/medium_space"
+                    android:gravity="left"
+                    android:paddingTop="0dp"/>
+            </LinearLayout>
 
-        <LinearLayout
-            style="@style/LL_Horizontal_wrap">
+            <LinearLayout
+                style="@style/LL_Horizontal_wrap">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_phone_android_white_18dp"
-                android:tint="@color/primary"/>
-            <EditText
-                style="@style/Edittext_only_view_small"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:text="Registered Mobile"
-                android:layout_weight="45"
-                android:gravity="left"/>
-            <EditText
-                style="@style/Edittext_only_view_small"
-                android:id="@+id/input_merchant_mobile"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="TBS"
-                android:layout_weight="55"
-                android:gravity="left"/>
-        </LinearLayout>
+                <ImageView
+                    style="@style/Imageview_Left_Column"
+                    android:src="@drawable/ic_access_time_white_18dp"/>
+                <EditText
+                    style="@style/Edittext_only_view_small"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:text="Registered on"
+                    android:layout_weight="45"
+                    android:gravity="left"/>
+                <EditText
+                    style="@style/Edittext_only_view_small"
+                    android:id="@+id/input_registered_on"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TBS - 22 July 16"
+                    android:layout_marginEnd="@dimen/medium_space"
+                    android:layout_marginRight="@dimen/medium_space"
+                    android:gravity="left"/>
+            </LinearLayout>
 
-        <LinearLayout
-            style="@style/LL_Horizontal_wrap">
+            <LinearLayout
+                style="@style/LL_Horizontal_wrap">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_phone_android_white_18dp"
-                android:tint="@color/primary"
-                android:visibility="invisible"/>
-            <EditText
-                style="@style/Edittext_only_view_small"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:text="Registered on"
-                android:layout_weight="45"
-                android:gravity="left"
-                android:paddingTop="0dp"/>
-            <EditText
-                style="@style/Edittext_only_view_small"
-                android:id="@+id/input_registered_on"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="TBS - 22 July 16"
-                android:layout_weight="55"
-                android:gravity="left"
-                android:paddingTop="0dp"/>
-        </LinearLayout>
+                <ImageView
+                    style="@style/Imageview_Left_Column"
+                    android:src="@drawable/ic_phone_android_white_18dp"
+                    android:visibility="invisible"/>
+                <EditText
+                    style="@style/Edittext_only_view_small"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:text="Expiring on"
+                    android:layout_weight="45"
+                    android:gravity="left"
+                    android:paddingTop="0dp"/>
+                <EditText
+                    style="@style/Edittext_only_view_small"
+                    android:id="@+id/input_expiring_on"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TBS - 22 July 16"
+                    android:layout_marginEnd="@dimen/medium_space"
+                    android:layout_marginRight="@dimen/medium_space"
+                    android:gravity="left"
+                    android:paddingTop="0dp"/>
+            </LinearLayout>
 
-        <LinearLayout
-            style="@style/LL_Horizontal_wrap">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_phone_android_white_18dp"
-                android:tint="@color/primary"
-                android:visibility="invisible"/>
-            <EditText
-                style="@style/Edittext_only_view_small"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:text="Expiring on"
-                android:layout_weight="45"
-                android:gravity="left"
-                android:paddingTop="0dp"/>
-            <EditText
-                style="@style/Edittext_only_view_small"
-                android:id="@+id/input_expiring_on"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="TBS - 22 July 16"
-                android:layout_weight="55"
-                android:gravity="left"
-                android:paddingTop="0dp"/>
-        </LinearLayout>
-
-        <!--LinearLayout
-            style="@style/LL_Horizontal_wrap">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_phone_android_white_18dp"
-                android:tint="@color/primary"
-                android:visibility="invisible"/>
-            <EditText
-                style="@style/Edittext_only_view_small"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:text="Last Login on"
-                android:layout_weight="45"
-                android:gravity="left"
-                android:paddingTop="0dp"/>
-            <EditText
-                style="@style/Edittext_only_view_small"
-                android:id="@+id/input_lastLogin"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="TBS - 22 July 16"
-                android:layout_weight="55"
-                android:gravity="left"
-                android:paddingTop="0dp"/>
-        </LinearLayout-->
-
-        <LinearLayout
-            style="@style/LL_Horizontal_wrap"
-            android:visibility="visible">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_input_white_18dp"
-                android:tint="@color/primary"/>
-            <EditText
-                style="@style/Edittext_only_view_small"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:text="Status"
-                android:layout_weight="45"
-                android:gravity="left|bottom"
-                android:layout_gravity="bottom"/>
-            <EditText
-                style="@style/Edittext_only_view_small"
-                android:layout_weight="55"
-                android:gravity="left"
-                android:id="@+id/input_status"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Active"
-                android:textColor="@color/green_positive"/>
-        </LinearLayout>
-
-        <LinearLayout
-            style="@style/LL_Vertical"
-            android:id="@+id/layout_status_details">
             <LinearLayout
                 style="@style/LL_Horizontal_wrap"
                 android:visibility="visible">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_input_white_18dp"
-                    android:visibility="invisible"
-                    android:paddingTop="0dp"/>
+                    style="@style/Imageview_Left_Column"
+                    android:src="@drawable/ic_input_white_18dp"/>
                 <EditText
                     style="@style/Edittext_only_view_small"
-                    android:layout_weight="55"
-                    android:gravity="left"
-                    android:id="@+id/input_reason"
-                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Wrong password attempts limit reached."
-                    android:paddingTop="0dp"
-                    android:textStyle="italic"/>
+                    android:layout_width="0dp"
+                    android:text="Status"
+                    android:layout_weight="45"
+                    android:gravity="left|bottom"
+                    android:layout_gravity="bottom"/>
+                <EditText
+                    style="@style/Edittext_only_view_small"
+                    android:layout_marginEnd="@dimen/medium_space"
+                    android:layout_marginRight="@dimen/medium_space"
+                    android:gravity="left"
+                    android:id="@+id/input_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Active"
+                    android:textColor="@color/green_positive"/>
             </LinearLayout>
+
+            <LinearLayout
+                style="@style/LL_Vertical"
+                android:id="@+id/layout_status_details">
+                <LinearLayout
+                    style="@style/LL_Horizontal_wrap"
+                    android:visibility="visible">
+
+                    <ImageView
+                        style="@style/Imageview_Left_Column"
+                        android:src="@drawable/ic_input_white_18dp"
+                        android:visibility="invisible"
+                        android:paddingTop="0dp"/>
+                    <EditText
+                        style="@style/Edittext_only_view_small"
+                        android:layout_weight="55"
+                        android:gravity="left"
+                        android:id="@+id/input_reason"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Wrong password attempts limit reached."
+                        android:paddingTop="0dp"
+                        android:textStyle="italic"/>
+                </LinearLayout>
+                <LinearLayout
+                    style="@style/LL_Horizontal_wrap"
+                    android:visibility="visible">
+
+                    <ImageView
+                        style="@style/Imageview_Left_Column"
+                        android:src="@drawable/ic_input_white_18dp"
+                        android:visibility="invisible"
+                        android:paddingTop="0dp"/>
+                    <EditText
+                        style="@style/Edittext_only_view_small"
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:text="Changed on"
+                        android:layout_weight="45"
+                        android:gravity="left|bottom"
+                        android:layout_gravity="bottom"
+                        android:paddingTop="0dp"/>
+                    <EditText
+                        style="@style/Edittext_only_view_small"
+                        android:layout_marginEnd="@dimen/medium_space"
+                        android:layout_marginRight="@dimen/medium_space"
+                        android:gravity="left"
+                        android:id="@+id/input_status_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="22 July 16, 23:00"
+                        android:paddingTop="0dp"/>
+                </LinearLayout>
+                <LinearLayout
+                    style="@style/LL_Horizontal_wrap"
+                    android:visibility="visible"
+                    android:id="@+id/layout_activation">
+
+                    <ImageView
+                        style="@style/Imageview_Left_Column"
+                        android:src="@drawable/ic_input_white_18dp"
+                        android:visibility="invisible"
+                        android:paddingTop="0dp"/>
+                    <EditText
+                        style="@style/Edittext_only_view_small"
+                        android:id="@+id/input_activation"
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:text="Will be automatically activated within 24 hours"
+                        android:layout_weight="100"
+                        android:gravity="left|bottom"
+                        android:layout_gravity="bottom"
+                        android:paddingTop="0dp"
+                        android:textStyle="italic"/>
+                </LinearLayout>
+            </LinearLayout>
+
             <LinearLayout
                 style="@style/LL_Horizontal_wrap"
-                android:visibility="visible">
+                android:id="@+id/layout_extra_details"
+                android:paddingTop="@dimen/XL_space">
 
-                <ImageView
+                <View
+                    style="@style/Divider_horizontal_Medium"
+                    android:layout_weight="50"
+                    android:background="@color/primary"/>
+
+                <EditText
+                    style="@style/Edittext_only_view_small"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/label_cash_back"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_input_white_18dp"
-                    android:visibility="invisible"
-                    android:paddingTop="0dp"/>
-                <EditText
-                    style="@style/Edittext_only_view_small"
-                    android:layout_height="wrap_content"
-                    android:layout_width="0dp"
-                    android:text="Changed on"
-                    android:layout_weight="45"
-                    android:gravity="left|bottom"
-                    android:layout_gravity="bottom"
-                    android:paddingTop="0dp"/>
-                <EditText
-                    style="@style/Edittext_only_view_small"
-                    android:layout_weight="55"
-                    android:gravity="left"
-                    android:id="@+id/input_status_date"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="22 July 16, 23:00"
-                    android:paddingTop="0dp"/>
-            </LinearLayout>
-            <LinearLayout
-                style="@style/LL_Horizontal_wrap"
-                android:visibility="visible"
-                android:id="@+id/layout_activation">
+                    android:layout_gravity="center"
+                    android:text="Contact Details"
+                    android:textColor="@color/primary"/>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_input_white_18dp"
-                    android:visibility="invisible"
-                    android:paddingTop="0dp"/>
-                <EditText
-                    style="@style/Edittext_only_view_small"
-                    android:id="@+id/input_activation"
-                    android:layout_height="wrap_content"
-                    android:layout_width="0dp"
-                    android:text="Will be automatically activated within 24 hours"
-                    android:layout_weight="100"
-                    android:gravity="left|bottom"
-                    android:layout_gravity="bottom"
-                    android:paddingTop="0dp"
-                    android:textStyle="italic"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/medium_space"/>
-
-        <LinearLayout
-            style="@style/LL_Horizontal_wrap">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_contact_phone_white_18dp"
-                android:tint="@color/primary"/>
-            <EditText
-                style="@style/Edittext_only_view_small"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:text="Contact Phone"
-                android:layout_weight="45"
-                android:gravity="left"/>
-            <EditText
-                style="@style/Edittext_only_view_small"
-                android:id="@+id/input_contact_phone"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="TBS"
-                android:layout_weight="55"
-                android:gravity="left"/>
-        </LinearLayout>
-
-        <LinearLayout
-            style="@style/LL_Horizontal_wrap">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_email_white_18dp"
-                android:tint="@color/primary"/>
-            <EditText
-                style="@style/Edittext_only_view_small"
-                android:layout_height="match_parent"
-                android:layout_width="0dp"
-                android:text="Email"
-                android:layout_weight="45"
-                android:gravity="left|center_vertical"/>
-            <EditText
-                style="@style/Edittext_only_view_small"
-                android:id="@+id/input_merchant_email"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:text="TBS"
-                android:layout_weight="55"
-                android:gravity="left|center_vertical"/>
-        </LinearLayout>
-
-        <LinearLayout
-            style="@style/LL_Horizontal_wrap">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_place_white_18dp"
-                android:tint="@color/primary"/>
-            <EditText
-                style="@style/Edittext_only_view_small"
-                android:layout_height="match_parent"
-                android:layout_width="0dp"
-                android:text="Address"
-                android:layout_weight="45"
-                android:gravity="left|center_vertical"/>
-            <EditText
-                style="@style/Edittext_only_view_small"
-                android:layout_weight="55"
-                android:gravity="left|center_vertical"
-                android:id="@+id/input_address"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:text="TBS"/>
-        </LinearLayout>
-
-        <LinearLayout
-            style="@style/LL_Vertical">
-
-            <LinearLayout
-                style="@style/LL_Horizontal_wrap">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_place_white_18dp"
-                    android:visibility="invisible"
-                    android:paddingTop="0dp"/>
-                <EditText
-                    style="@style/Edittext_only_view_small"
-                    android:layout_height="wrap_content"
-                    android:layout_width="0dp"
-                    android:text="City"
-                    android:layout_weight="45"
-                    android:gravity="left|bottom"
-                    android:layout_gravity="bottom"
-                    android:paddingTop="0dp"/>
-                <EditText
-                    style="@style/Edittext_only_view_small"
-                    android:layout_weight="55"
-                    android:gravity="left"
-                    android:id="@+id/input_city"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="TBS"
-                    android:paddingTop="0dp"/>
+                <View
+                    style="@style/Divider_horizontal_Medium"
+                    android:layout_weight="50"
+                    android:background="@color/primary"/>
             </LinearLayout>
 
             <LinearLayout
                 style="@style/LL_Horizontal_wrap">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_place_white_18dp"
-                    android:visibility="invisible"
-                    android:paddingTop="0dp"/>
+                    style="@style/Imageview_Left_Column"
+                    android:src="@drawable/ic_contact_phone_white_18dp"/>
                 <EditText
                     style="@style/Edittext_only_view_small"
                     android:layout_height="wrap_content"
                     android:layout_width="0dp"
-                    android:text="State"
+                    android:text="Contact Phone"
                     android:layout_weight="45"
-                    android:gravity="left|bottom"
-                    android:layout_gravity="bottom"
-                    android:paddingTop="0dp"/>
+                    android:gravity="left"/>
                 <EditText
                     style="@style/Edittext_only_view_small"
-                    android:layout_weight="55"
-                    android:gravity="left"
-                    android:id="@+id/input_state"
-                    android:layout_width="0dp"
+                    android:id="@+id/input_contact_phone"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TBS"
-                    android:paddingTop="0dp"/>
+                    android:layout_marginEnd="@dimen/medium_space"
+                    android:layout_marginRight="@dimen/medium_space"
+                    android:gravity="left"/>
             </LinearLayout>
 
             <LinearLayout
                 style="@style/LL_Horizontal_wrap">
 
                 <ImageView
+                    style="@style/Imageview_Left_Column"
+                    android:src="@drawable/ic_email_white_18dp"/>
+                <EditText
+                    style="@style/Edittext_only_view_small"
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:text="Email"
+                    android:layout_weight="45"
+                    android:gravity="left|center_vertical"/>
+                <EditText
+                    style="@style/Edittext_only_view_small"
+                    android:id="@+id/input_merchant_email"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:src="@drawable/ic_place_white_18dp"
-                    android:visibility="invisible"
-                    android:paddingTop="0dp"/>
-                <EditText
-                    style="@style/Edittext_only_view_small"
-                    android:layout_height="wrap_content"
-                    android:layout_width="0dp"
-                    android:text="PIN Code"
-                    android:layout_weight="45"
-                    android:gravity="left|bottom"
-                    android:layout_gravity="bottom"
-                    android:paddingTop="0dp"/>
-                <EditText
-                    style="@style/Edittext_only_view_small"
-                    android:layout_weight="55"
-                    android:gravity="left"
-                    android:id="@+id/input_pincode"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
                     android:text="TBS"
-                    android:paddingTop="0dp"/>
+                    android:layout_marginEnd="@dimen/medium_space"
+                    android:layout_marginRight="@dimen/medium_space"
+                    android:gravity="left|center_vertical"/>
             </LinearLayout>
 
-        </LinearLayout>
+            <LinearLayout
+                style="@style/LL_Horizontal_wrap">
+
+                <ImageView
+                    style="@style/Imageview_Left_Column"
+                    android:src="@drawable/ic_place_white_18dp"/>
+                <EditText
+                    style="@style/Edittext_only_view_small"
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:text="Address"
+                    android:layout_weight="45"
+                    android:gravity="left|center_vertical"/>
+                <EditText
+                    style="@style/Edittext_only_view_small"
+                    android:layout_marginEnd="@dimen/medium_space"
+                    android:layout_marginRight="@dimen/medium_space"
+                    android:gravity="left|center_vertical"
+                    android:id="@+id/input_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="TBS"/>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/LL_Vertical">
+
+                <LinearLayout
+                    style="@style/LL_Horizontal_wrap">
+
+                    <ImageView
+                        style="@style/Imageview_Left_Column"
+                        android:src="@drawable/ic_place_white_18dp"
+                        android:visibility="invisible"
+                        android:paddingTop="0dp"/>
+                    <EditText
+                        style="@style/Edittext_only_view_small"
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:text="City"
+                        android:layout_weight="45"
+                        android:gravity="left|bottom"
+                        android:layout_gravity="bottom"
+                        android:paddingTop="0dp"/>
+                    <EditText
+                        style="@style/Edittext_only_view_small"
+                        android:layout_marginEnd="@dimen/medium_space"
+                        android:layout_marginRight="@dimen/medium_space"
+                        android:gravity="left"
+                        android:id="@+id/input_city"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TBS"
+                        android:paddingTop="0dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/LL_Horizontal_wrap">
+
+                    <ImageView
+                        style="@style/Imageview_Left_Column"
+                        android:src="@drawable/ic_place_white_18dp"
+                        android:visibility="invisible"
+                        android:paddingTop="0dp"/>
+                    <EditText
+                        style="@style/Edittext_only_view_small"
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:text="State"
+                        android:layout_weight="45"
+                        android:gravity="left|bottom"
+                        android:layout_gravity="bottom"
+                        android:paddingTop="0dp"/>
+                    <EditText
+                        style="@style/Edittext_only_view_small"
+                        android:layout_marginEnd="@dimen/medium_space"
+                        android:layout_marginRight="@dimen/medium_space"
+                        android:gravity="left"
+                        android:id="@+id/input_state"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TBS"
+                        android:paddingTop="0dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/LL_Horizontal_wrap">
+
+                    <ImageView
+                        style="@style/Imageview_Left_Column"
+                        android:src="@drawable/ic_place_white_18dp"
+                        android:visibility="invisible"
+                        android:paddingTop="0dp"/>
+                    <EditText
+                        style="@style/Edittext_only_view_small"
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:text="PIN Code"
+                        android:layout_weight="45"
+                        android:gravity="left|bottom"
+                        android:layout_gravity="bottom"
+                        android:paddingTop="0dp"/>
+                    <EditText
+                        style="@style/Edittext_only_view_small"
+                        android:layout_marginEnd="@dimen/medium_space"
+                        android:layout_marginRight="@dimen/medium_space"
+                        android:gravity="left"
+                        android:id="@+id/input_pincode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TBS"
+                        android:paddingTop="0dp"/>
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
 </LinearLayout>

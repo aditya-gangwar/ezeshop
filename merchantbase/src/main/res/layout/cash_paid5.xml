@@ -12,6 +12,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/cash_logo_18dp"
+            android:layout_marginBottom="@dimen/small_space"
             android:layout_gravity="center"/>
 
         <EditText
@@ -21,7 +22,8 @@
             android:layout_gravity="center"
             android:textStyle="bold"
             android:textColor="@color/secondary_text"
-            android:text="CASH PAID"/>
+            android:layout_marginBottom="@dimen/small_space"
+            android:text="PAYMENT"/>
 
         <!--View
             style="@style/Divider_horizontal_Medium"

@@ -112,7 +112,8 @@
                         android:text="\u20B9 987"
                         android:padding="0dp"
                         android:drawableLeft="@drawable/ic_favorite_white_18dp"
-                        android:drawablePadding="@dimen/large_space" />
+                        android:drawablePadding="@dimen/large_space"
+                        android:visibility="gone"/>
 
                     <TextView
                         style="@style/Edittext_only_view_medium_lessPad"

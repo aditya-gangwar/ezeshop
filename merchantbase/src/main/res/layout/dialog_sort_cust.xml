@@ -19,7 +19,7 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="@dimen/medium_space"/>
+            android:layout_height="@dimen/XL_space"/>
 
         <RadioGroup
             android:layout_width="wrap_content"
@@ -38,9 +38,9 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/medium_space"/>
+                android:layout_height="@dimen/XL_space"/>
 
-            <LinearLayout
+            <!--LinearLayout
                 style="@style/LL_Horizontal_wrap">
 
                 <ImageView
@@ -74,7 +74,7 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/medium_space"/>
+                android:layout_height="@dimen/medium_space"/-->
 
             <LinearLayout
                 style="@style/LL_Vertical"
@@ -92,7 +92,7 @@
                         style="@style/Edittext_only_view_small"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
-                        android:text="Account (AC)"
+                        android:text="Account"
                         android:textStyle="bold"
                         android:textColor="@color/subheading"/>
                 </LinearLayout>
@@ -100,17 +100,17 @@
                 <RadioButton
                     style="@style/radio_button_medium"
                     android:id="@+id/balanceAcc"
-                    android:text="AC Balance" />
+                    android:text="Balance" />
 
                 <RadioButton
                     style="@style/radio_button_medium"
                     android:id="@+id/addAcc"
-                    android:text="AC Add" />
+                    android:text="Add" />
 
                 <RadioButton
                     style="@style/radio_button_medium"
                     android:id="@+id/debitAcc"
-                    android:text="AC Debit" />
+                    android:text="Debit" />
 
             </LinearLayout>
 

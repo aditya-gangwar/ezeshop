@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:textColor="@color/subheading"
+            android:paddingTop="0dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
@@ -31,11 +32,10 @@
         <TextView
             style="@style/Edittext_only_view_small_lessPad"
             android:id="@+id/txn_customer_id"
-            android:text="8800191535"
+            android:text="880xxx1535"
             android:layout_below="@id/txn_time"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:paddingTop="0dp"
             android:textColor="@color/secondary_text"/>
 
         <LinearLayout
@@ -43,6 +43,7 @@
             android:id="@+id/bill_layout"
             android:layout_width="wrap_content"
             android:layout_alignParentRight="true"
+            android:paddingBottom="0dp"
             android:clickable="false"
             android:focusable="false">
 
@@ -52,6 +53,7 @@
                 android:layout_height="match_parent"
                 android:layout_width="wrap_content"
                 android:text="Bill : "
+                android:paddingBottom="0dp"
                 android:textColor="@color/secondary_text"/>
 
             <TextView
@@ -60,6 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="+ \u20B9 99,999"
+                android:paddingBottom="0dp"
                 android:textColor="@color/green_positive"/>
 
         </LinearLayout>
@@ -70,7 +73,6 @@
             android:layout_width="wrap_content"
             android:layout_below="@id/bill_layout"
             android:layout_alignParentRight="true"
-            android:paddingTop="0dp"
             android:clickable="false"
             android:focusable="false">
 
@@ -79,7 +81,6 @@
                 android:id="@+id/txn_label_bill"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:paddingTop="0dp"
                 android:text="Cashback :"
                 android:textColor="@color/secondary_text" />
 
@@ -88,7 +89,6 @@
                 android:id="@+id/txn_cashback_award"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="0dp"
                 android:text="       \u20B9 9,999"/>
         </LinearLayout>
 
@@ -100,6 +100,7 @@
             android:layout_below="@id/cb_layout"
             android:layout_alignParentRight="true"
             android:paddingTop="0dp"
+            android:paddingBottom="0dp"
             android:clickable="false"
             android:focusable="false">
 
@@ -122,6 +123,54 @@
                 android:textColor="@color/red_negative"/>
 
         </LinearLayout>
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:id="@+id/layout_txn_icons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txn_customer_id"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
+            android:clickable="false"
+            android:focusable="false">
+
+            <ImageView
+                android:id="@+id/txn_ic_overdraft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_account_balance_wallet_white_18dp"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                android:tint="@color/red_negative"
+                android:layout_marginRight="@dimen/small_space"/>
+
+            <!--TextView
+                style="@style/Edittext_only_view_small_lessPad"
+                android:background="@drawable/round_rect_red"
+                android:id="@+id/overdraft_label"
+                android:text="Overdraft"
+                android:layout_below="@id/txn_customer_id"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textColor="@color/white"/-->
+
+            <TextView
+                style="@style/Edittext_only_view_small_lessPad"
+                android:visibility="gone"
+                android:background="@drawable/rounnd_rect_blue"
+                android:id="@+id/refund_label"
+                android:text="Refund"
+                android:layout_below="@id/txn_customer_id"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textColor="@color/white"
+                android:layout_marginRight="@dimen/small_space"/>
+
+        </LinearLayout>
+
 
     </RelativeLayout>
 

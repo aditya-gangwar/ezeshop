@@ -11,13 +11,13 @@
     <LinearLayout
         style="@style/LL_Vertical"
         android:layout_height="wrap_content"
-        android:background="@color/bg_customercare_data"
+        android:background="@color/bg_light_grey"
         android:id="@+id/layout_amounts"
         android:padding="@dimen/medium_space">
 
         <LinearLayout
             style="@style/LL_Horizontal_wrap"
-            android:id="@+id/layout_cash_amount">
+            android:id="@+id/layout_account">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -33,17 +33,47 @@
                 android:gravity="left"
                 android:layout_gravity="bottom"/>
             <EditText
-                style="@style/Edittext_only_view_small"
-                android:id="@+id/input_cash_amount"
+                style="@style/Edittext_only_view_medium"
+                android:id="@+id/input_account"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="+ \u20B9 9999"
+                android:text="- \u20B9 9999"
                 android:layout_weight="40"
                 android:gravity="right"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:textColor="@color/red_negative"/>
         </LinearLayout>
 
         <LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:id="@+id/layout_overdraft">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_account_balance_wallet_white_18dp"
+                android:tint="@color/red_negative"/>
+            <EditText
+                style="@style/Edittext_only_view_small"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:text="OVERDRAFT"
+                android:layout_weight="60"
+                android:gravity="left"
+                android:layout_gravity="bottom"/>
+            <EditText
+                style="@style/Edittext_only_view_medium"
+                android:id="@+id/input_overdraft"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="- \u20B9 9999"
+                android:layout_weight="40"
+                android:gravity="right"
+                android:textStyle="bold"
+                android:textColor="@color/red_negative"/>
+        </LinearLayout>
+
+        <!--LinearLayout
             style="@style/LL_Horizontal_wrap"
             android:id="@+id/layout_cashback_amount">
 
@@ -69,7 +99,7 @@
                 android:layout_weight="40"
                 android:gravity="right"
                 android:textStyle="bold"/>
-        </LinearLayout>
+        </LinearLayout-->
 
     </LinearLayout>
 
@@ -83,7 +113,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textStyle="italic"
-        android:text="Verify above amounts !!"
+        android:text="Verify above Amount !!"
         android:textColor="@color/accent2"/>
 
     <Space
