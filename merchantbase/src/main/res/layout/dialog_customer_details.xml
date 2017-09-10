@@ -258,16 +258,14 @@
                 <ImageView
                     style="@style/Imageview_Left_Column"
                     android:src="@drawable/ic_account_balance_wallet_white_18dp"
-                    android:visibility="invisible"
-                    android:paddingTop="0dp"/>
+                    android:visibility="invisible"/>
                 <TextView
                     style="@style/Edittext_only_view_small_lessPad"
                     android:layout_height="match_parent"
                     android:layout_width="0dp"
                     android:text="Total Add"
                     android:layout_weight="45"
-                    android:gravity="left|center_vertical"
-                    android:paddingTop="0dp"/>
+                    android:gravity="left|center_vertical"/>
                 <TextView
                     style="@style/Edittext_only_view_small_lessPad"
                     android:id="@+id/input_acc_add"
@@ -275,13 +273,12 @@
                     android:layout_height="match_parent"
                     android:text="+ \u20B9 NA"
                     android:layout_marginEnd="@dimen/medium_space"
-                    android:layout_marginRight="@dimen/medium_space"
-                    android:paddingTop="0dp"/>
+                    android:layout_marginRight="@dimen/medium_space"/>
             </LinearLayout>
             <LinearLayout
                 style="@style/LL_Horizontal_paddingSidesXL"
                 android:visibility="visible"
-                android:id="@+id/label_acc_debit">
+                android:id="@+id/layout_acc_cb">
 
                 <ImageView
                     style="@style/Imageview_Left_Column"
@@ -292,10 +289,68 @@
                     style="@style/Edittext_only_view_small_lessPad"
                     android:layout_height="match_parent"
                     android:layout_width="0dp"
+                    android:layout_weight="45"
+                    android:text="    |--- Cashback"
+                    android:gravity="left"
+                    android:paddingTop="0dp"
+                    android:textColor="@color/secondary_text"/>
+                <TextView
+                    style="@style/Edittext_only_view_small_lessPad"
+                    android:id="@+id/input_cb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="+ \u20B9 9,999"
+                    android:layout_marginEnd="@dimen/medium_space"
+                    android:layout_marginRight="@dimen/medium_space"
+                    android:paddingTop="0dp"
+                    android:textColor="@color/secondary_text"/>
+            </LinearLayout>
+            <LinearLayout
+                style="@style/LL_Horizontal_paddingSidesXL"
+                android:visibility="visible"
+                android:id="@+id/layout_acc_deposit">
+
+                <ImageView
+                    style="@style/Imageview_Left_Column"
+                    android:src="@drawable/ic_account_balance_wallet_white_18dp"
+                    android:visibility="invisible"
+                    android:paddingTop="0dp"/>
+                <TextView
+                    style="@style/Edittext_only_view_small_lessPad"
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="45"
+                    android:text="    |--- Deposit"
+                    android:gravity="left"
+                    android:paddingTop="0dp"
+                    android:textColor="@color/secondary_text"/>
+                <TextView
+                    style="@style/Edittext_only_view_small_lessPad"
+                    android:id="@+id/input_acc_deposit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="+ \u20B9 9,999"
+                    android:layout_marginEnd="@dimen/medium_space"
+                    android:layout_marginRight="@dimen/medium_space"
+                    android:paddingTop="0dp"
+                    android:textColor="@color/secondary_text"/>
+            </LinearLayout>
+            <LinearLayout
+                style="@style/LL_Horizontal_paddingSidesXL"
+                android:visibility="visible"
+                android:id="@+id/label_acc_debit">
+
+                <ImageView
+                    style="@style/Imageview_Left_Column"
+                    android:src="@drawable/ic_account_balance_wallet_white_18dp"
+                    android:visibility="invisible"/>
+                <TextView
+                    style="@style/Edittext_only_view_small_lessPad"
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
                     android:text="Total Debit"
                     android:layout_weight="45"
-                    android:gravity="left|center_vertical"
-                    android:paddingTop="0dp"/>
+                    android:gravity="left|center_vertical"/>
                 <TextView
                     style="@style/Edittext_only_view_small_lessPad"
                     android:id="@+id/input_acc_debit"
@@ -303,8 +358,7 @@
                     android:layout_height="match_parent"
                     android:text="- \u20B9 NA"
                     android:layout_marginEnd="@dimen/medium_space"
-                    android:layout_marginRight="@dimen/medium_space"
-                    android:paddingTop="0dp"/>
+                    android:layout_marginRight="@dimen/medium_space"/>
             </LinearLayout>
         </LinearLayout>
     

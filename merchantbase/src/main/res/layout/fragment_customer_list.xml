@@ -7,6 +7,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/list_header"
+        android:paddingLeft="@dimen/small_space"
+        android:paddingRight="@dimen/small_space"
         android:background="@color/bg_listWithCard_header">
 
         <EditText
@@ -14,39 +16,26 @@
             android:layout_width="wrap_content"
             android:id="@+id/list_header_id"
             android:layout_height="wrap_content"
-            android:text="Customer ID"
-            android:textColor="@color/white"
-            android:paddingBottom="0dp"/>
-
-        <EditText
-            style="@style/Edittext_only_view_small_lessPad"
-            android:layout_width="wrap_content"
-            android:id="@+id/list_header_cb"
-            android:layout_below="@id/list_header_id"
-            android:layout_height="wrap_content"
-            android:text="Cashback:  Add - Debit = Balance"
-            android:paddingTop="0dp"
+            android:text="Customer"
             android:textColor="@color/white"/>
-
-        <!--EditText
-            style="@style/Edittext_only_view_small_lessPad"
-            android:layout_width="wrap_content"
-            android:id="@+id/list_header_acc"
-            android:layout_below="@id/list_header_cb"
-            android:layout_height="wrap_content"
-            android:text="Account:  Add - Debit = Balance"
-            android:paddingTop="0dp"
-            android:paddingBottom="0dp"
-            android:textColor="@color/white"/-->
 
         <EditText
             style="@style/Edittext_only_view_small_lessPad"
             android:id="@+id/list_header_txnTime"
+            android:text="Account Balance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:textColor="@color/white"/>
+
+        <EditText
+            style="@style/Edittext_only_view_small_lessPad"
+            android:id="@+id/list_header_cb"
             android:text="▼Last Txn Time"
-            android:paddingBottom="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/list_header_id"
+            android:paddingTop="0dp"
             android:textColor="@color/white"/>
 
         <EditText

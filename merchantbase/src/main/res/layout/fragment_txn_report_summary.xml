@@ -88,24 +88,51 @@
                         android:padding="@dimen/small_space"/>
                 </FrameLayout>
 
-                <EditText
-                    style="@style/Edittext_only_view_small_lessPad"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:gravity="left|center_vertical"
-                    android:text="Total Transactions"
-                    android:padding="@dimen/medium_space"/>
+                <LinearLayout
+                    style="@style/LL_Vertical">
 
-                <EditText
-                    style="@style/Edittext_only_view_small_lessPad"
-                    android:layout_width="wrap_content"
-                    android:id="@+id/input_trans_count"
-                    android:text="25"
-                    android:textStyle="bold"
-                    android:layout_marginRight="@dimen/medium_space"/>
+                    <LinearLayout
+                        style="@style/LL_Horizontal_wrap">
+                        <EditText
+                            style="@style/Edittext_only_view_small_lessPad"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="left|center_vertical"
+                            android:text="Total Transactions"
+                            android:padding="@dimen/medium_space"/>
 
+                        <EditText
+                            style="@style/Edittext_only_view_small_lessPad"
+                            android:layout_width="wrap_content"
+                            android:id="@+id/input_trans_count"
+                            android:text="25"
+                            android:textStyle="bold"
+                            android:layout_marginRight="@dimen/medium_space"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/LL_Horizontal_wrap">
+                        <EditText
+                            style="@style/Edittext_only_view_small_lessPad"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="left|center_vertical"
+                            android:text="Total Overdraft Transactions"
+                            android:paddingLeft="@dimen/medium_space"
+                            android:paddingRight="@dimen/medium_space"
+                            android:paddingBottom="@dimen/medium_space"/>
+
+                        <EditText
+                            style="@style/Edittext_only_view_small_lessPad"
+                            android:layout_width="wrap_content"
+                            android:id="@+id/input_overdraft_count"
+                            android:text="5"
+                            android:textStyle="bold"
+                            android:layout_marginRight="@dimen/medium_space"/>
+                    </LinearLayout>
+
+                </LinearLayout>
             </LinearLayout>
-
         </android.support.v7.widget.CardView>
 
         <Space
@@ -184,14 +211,6 @@
                 <LinearLayout
                     style="@style/LL_Vertical">
 
-                    <EditText
-                        style="@style/Edittext_only_view_small_lessPad"
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="CASHBACK"
-                        android:textColor="@color/primary"/>
-
                     <LinearLayout
                         style="@style/LL_Horizontal_wrap">
 
@@ -200,34 +219,13 @@
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:gravity="left|center_vertical"
-                            android:text="Total Add"
+                            android:text="Total Cashback"
                             android:padding="@dimen/medium_space"/>
                         <EditText
                             style="@style/Edittext_only_view_small_lessPad"
                             android:layout_width="wrap_content"
                             android:id="@+id/input_trans_add_cb"
                             android:text="+ \u20B9 235"
-                            android:textStyle="bold"
-                            android:layout_marginRight="@dimen/medium_space"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        style="@style/LL_Horizontal_wrap">
-
-                        <EditText
-                            style="@style/Edittext_only_view_small_lessPad"
-                            android:layout_width="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="left|center_vertical"
-                            android:text="Total Debit"
-                            android:paddingLeft="@dimen/medium_space"
-                            android:paddingRight="@dimen/medium_space"
-                            android:paddingBottom="@dimen/medium_space"/>
-                        <EditText
-                            style="@style/Edittext_only_view_small_lessPad"
-                            android:layout_width="wrap_content"
-                            android:id="@+id/input_trans_redeem_cb"
-                            android:text="- \u20B9 235"
                             android:textStyle="bold"
                             android:layout_marginRight="@dimen/medium_space"/>
                     </LinearLayout>
@@ -316,6 +314,29 @@
                             android:text="- \u20B9 235"
                             android:textStyle="bold"
                             android:layout_marginRight="@dimen/medium_space"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/LL_Horizontal_wrap">
+
+                        <EditText
+                            style="@style/Edittext_only_view_small_lessPad"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="left|center_vertical"
+                            android:text="Total Overdraft"
+                            android:paddingLeft="@dimen/medium_space"
+                            android:paddingRight="@dimen/medium_space"
+                            android:paddingBottom="@dimen/medium_space"
+                            android:textColor="@color/red_negative"/>
+                        <EditText
+                            style="@style/Edittext_only_view_small_lessPad"
+                            android:layout_width="wrap_content"
+                            android:id="@+id/input_trans_overdraft"
+                            android:text="- \u20B9 235"
+                            android:textStyle="bold"
+                            android:layout_marginRight="@dimen/medium_space"
+                            android:textColor="@color/red_negative"/>
                     </LinearLayout>
 
                 </LinearLayout>

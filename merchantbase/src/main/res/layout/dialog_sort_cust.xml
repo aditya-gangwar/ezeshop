@@ -22,23 +22,28 @@
             android:layout_height="@dimen/XL_space"/>
 
         <RadioGroup
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/custSortRadioGroup">
 
             <RadioButton
                 style="@style/radio_button_medium"
                 android:id="@+id/lastTxnTime"
-                android:text="Last Txn Time" />
+                android:text="Last Transaction Time" />
 
             <RadioButton
                 style="@style/radio_button_medium"
                 android:id="@+id/billAmt"
-                android:text="Total Bill" />
+                android:text="Total Bill Amount" />
 
-            <Space
+            <RadioButton
+                style="@style/radio_button_medium"
+                android:id="@+id/accBalance"
+                android:text="Account Balance"/>
+
+            <!--Space
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/XL_space"/>
+                android:layout_height="@dimen/XL_space"/-->
 
             <!--LinearLayout
                 style="@style/LL_Horizontal_wrap">
@@ -76,7 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/medium_space"/-->
 
-            <LinearLayout
+            <!--LinearLayout
                 style="@style/LL_Vertical"
                 android:id="@+id/layout_acc">
 
@@ -112,7 +117,7 @@
                     android:id="@+id/debitAcc"
                     android:text="Debit" />
 
-            </LinearLayout>
+            </LinearLayout-->
 
         </RadioGroup>
 
