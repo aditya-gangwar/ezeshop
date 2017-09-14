@@ -78,9 +78,9 @@ public class CashbackActivity extends BaseActivity implements
 
     public static final String INTENT_EXTRA_USER_TOKEN = "extraUserToken";
 
-    private static final int RC_BARCODE_CAPTURE = 9001;
+    //private static final int RC_BARCODE_CAPTURE = 9001;
     private static final int RC_TXN_REPORT = 9005;
-    public static final int RC_BARCODE_CAPTURE_TXN_VERIFY = 9007;
+    //public static final int RC_BARCODE_CAPTURE_TXN_VERIFY = 9007;
 
     private static final String RETAINED_FRAGMENT = "workCashback";
     private static final String MOBILE_NUM_FRAGMENT = "MobileNumFragment";
@@ -94,10 +94,10 @@ public class CashbackActivity extends BaseActivity implements
     private static final String CUSTOMER_LIST_FRAG = "CustomerListFrag";
     private static final String MERCHANT_OPS_LIST_FRAG = "MerchantOpsListFrag";
     private static final String TXN_CONFIRM_FRAGMENT = "TxnConfirmFragment";
-    private static final String MCHNT_ORDERS_FRAGMENT = "MchntOrdersFragment";
+    //private static final String MCHNT_ORDERS_FRAGMENT = "MchntOrdersFragment";
 
     private static final String DIALOG_BACK_BUTTON = "dialogBackButton";
-    private static final String DIALOG_LOGOUT = "dialogLogout";
+    //private static final String DIALOG_LOGOUT = "dialogLogout";
     private static final String DIALOG_REG_CUSTOMER = "dialogRegCustomer";
     private static final String DIALOG_TXN_SUCCESS = "dialogSuccessTxn";
     private static final String DIALOG_PIN_CASH_TXN = "dialogPinTxn";
@@ -112,7 +112,7 @@ public class CashbackActivity extends BaseActivity implements
     private static final String DIALOG_CUSTOMER_DETAILS = "dialogCustomerDetails";
     private static final String DIALOG_MERCHANT_DETAILS = "dialogMerchantDetails";
     private static final String DIALOG_CUSTOMER_DATA = "dialogCustomerData";
-    private static final String DIALOG_CREATE_MCHNT_ORDER = "dialogCrtMchntOrder";
+    //private static final String DIALOG_CREATE_MCHNT_ORDER = "dialogCrtMchntOrder";
 
     private static final String DIALOG_SESSION_TIMEOUT = "dialogSessionTimeout";
     private static final String DIALOG_TXN_VERIFY_TYPE = "dialogTxnVerifyType";

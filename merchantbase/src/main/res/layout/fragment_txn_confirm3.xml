@@ -192,6 +192,7 @@
                 android:layout_width="match_parent"
                 android:text="\u20B9 999"
                 android:paddingBottom="@dimen/edittext_padding_less"
+                android:textColor="@color/accent2"
                 android:gravity="right" />
         </LinearLayout>
 
@@ -204,10 +205,11 @@
                 style="@style/Edittext_only_view_small"
                 android:layout_width="wrap_content"
                 android:id="@+id/input_cb_details"
-                android:text="\@ 5% of \u20B9 2345"
+                android:text="\@  5% of \u20B9 2345 + 10% of \u20B9 234"
                 android:textStyle="italic"
                 android:gravity="left"
-                android:paddingTop="0dp"/>
+                android:paddingTop="0dp"
+                android:textColor="@color/secondary_text"/>
         </LinearLayout>
 
         <!--View

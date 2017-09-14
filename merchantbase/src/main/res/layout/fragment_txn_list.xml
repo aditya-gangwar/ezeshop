@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:id="@+id/txnlist_header_time"
             android:layout_height="wrap_content"
-            android:text="Date Time"
+            android:text="@string/txnlist_header_datetime"
             android:paddingBottom="@dimen/edittext_padding_less"/>
         <EditText
             style="@style/Edittext_only_view_small"
@@ -27,7 +27,7 @@
             android:id="@+id/txnlist_header_customer_id"
             android:layout_below="@id/txnlist_header_time"
             android:layout_height="wrap_content"
-            android:text="Customer"
+            android:text="@string/txnlist_header_customer"
             android:paddingTop="0dp"
             android:paddingBottom="@dimen/edittext_padding_less"/>
 
@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="Bill Amount"
+            android:text="@string/txnlist_header_bill"
             android:paddingBottom="@dimen/edittext_padding_less"/>
         <EditText
             style="@style/Edittext_only_view_small"
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/txnlist_header_bill"
             android:layout_alignParentRight="true"
-            android:text="Cashback"
+            android:text="@string/txnlist_header_cb"
             android:paddingBottom="@dimen/edittext_padding_less"
             android:paddingTop="0dp"/>
         <EditText
@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/txnlist_header_cb"
             android:layout_alignParentRight="true"
-            android:text="Account Add/Debit"
+            android:text="@string/txnlist_header_acc"
             android:paddingBottom="@dimen/edittext_padding_less"
             android:paddingTop="0dp"/>
 

@@ -64,7 +64,7 @@ public class TxnListFragment extends BaseFragment {
     //private static final String CSV_HEADER = "Sl. No.,Date,Time,Transaction Id,Customer ID,Bill Amount,Cashback Add,Cashback Debit,Cashback Rate,Account Debit,Account Add,Extra Cashback Add,Extra Cashback Rate,Linked Invoice,Cancel Time,Comments";
     //private static final String CSV_HEADER_NO_ACC = "Sl. No.,Date,Time,Transaction Id,Customer ID,Bill Amount,Cashback Add,Cashback Debit,Cashback Rate,Linked Invoice,Cancel Time,Comments";
     private static final String CSV_HEADER = "Sl. No.,Date,Time,Transaction Id,Customer ID,Bill Amount,Cashback Add,Cashback Debit,Cashback Rate,Account Debit,Account Add,Extra Cashback Add,Extra Cashback Rate,Linked Invoice,Comments";
-    private static final String CSV_HEADER_NO_ACC = "Sl. No.,Date,Time,Transaction Id,Customer ID,Bill Amount,Cashback Add,Cashback Debit,Cashback Rate,Linked Invoice,Comments";
+    //private static final String CSV_HEADER_NO_ACC = "Sl. No.,Date,Time,Transaction Id,Customer ID,Bill Amount,Cashback Add,Cashback Debit,Cashback Rate,Linked Invoice,Comments";
     // 5+10+10+10+10+10+5+5+5+5 = 75
     private static final int CSV_RECORD_MAX_CHARS = 100;
     //TODO: change this to 100 in production
@@ -84,9 +84,11 @@ public class TxnListFragment extends BaseFragment {
     private SimpleDateFormat mSdfOnlyTimeCSV;
 
     private RecyclerView mTxnRecyclerView;
-    private EditText mHeaderBill;
-    private EditText mHeaderAmts;
     private EditText mHeaderTime;
+    private EditText mHeaderCustomer;
+    private EditText mHeaderBill;
+    private EditText mHeaderCb;
+    private EditText mHeaderAcc;
 
     private MyRetainedFragment mRetainedFragment;
     private TxnListFragmentIf mCallback;
@@ -159,15 +161,15 @@ public class TxnListFragment extends BaseFragment {
             case SortTxnDialog.TXN_SORT_CB_AWARD:
                 Collections.sort(mRetainedFragment.mLastFetchTransactions, new MyTransaction.TxnCbAwardComparator());
                 break;
-            case SortTxnDialog.TXN_SORT_CB_REDEEM:
-                Collections.sort(mRetainedFragment.mLastFetchTransactions, new MyTransaction.TxnCbRedeemComparator());
+            case SortTxnDialog.TXN_SORT_ACC_AMT:
+                Collections.sort(mRetainedFragment.mLastFetchTransactions, new MyTransaction.TxnAccAmtComparator());
                 break;
-            case SortTxnDialog.TXN_SORT_ACC_ADD:
-                Collections.sort(mRetainedFragment.mLastFetchTransactions, new MyTransaction.TxnAccAddComparator());
+            /*case SortTxnDialog.TXN_SORT_CB_REDEEM:
+                Collections.sort(mRetainedFragment.mLastFetchTransactions, new MyTransaction.TxnCbRedeemComparator());
                 break;
             case SortTxnDialog.TXN_SORT_ACC_DEBIT:
                 Collections.sort(mRetainedFragment.mLastFetchTransactions, new MyTransaction.TxnAccDebitComparator());
-                break;
+                break;*/
         }
         // Make it in decreasing order
         Collections.reverse(mRetainedFragment.mLastFetchTransactions);
@@ -175,19 +177,20 @@ public class TxnListFragment extends BaseFragment {
         // Remove arrow as per old sort type
         switch (mSelectedSortType) {
             case SortTxnDialog.TXN_SORT_DATE_TIME:
-                mHeaderTime.setText("Date Time");
+                mHeaderTime.setText(R.string.txnlist_header_datetime);
                 mHeaderTime.setTypeface(null, Typeface.NORMAL);
                 break;
-            case SortTxnDialog.TXN_SORT_CB_AWARD:
             case SortTxnDialog.TXN_SORT_bILL_AMT:
-                mHeaderBill.setText("Total Bill  |  Cashback @ x%");
+                mHeaderTime.setText(R.string.txnlist_header_bill);
                 mHeaderBill.setTypeface(null, Typeface.NORMAL);
                 break;
-            case SortTxnDialog.TXN_SORT_CB_REDEEM:
-            case SortTxnDialog.TXN_SORT_ACC_ADD:
-            case SortTxnDialog.TXN_SORT_ACC_DEBIT:
-                mHeaderAmts.setText("Account |  Cashback Redeem");
-                mHeaderAmts.setTypeface(null, Typeface.NORMAL);
+            case SortTxnDialog.TXN_SORT_CB_AWARD:
+                mHeaderTime.setText(R.string.txnlist_header_cb);
+                mHeaderBill.setTypeface(null, Typeface.NORMAL);
+                break;
+            case SortTxnDialog.TXN_SORT_ACC_AMT:
+                mHeaderTime.setText(R.string.txnlist_header_acc);
+                mHeaderBill.setTypeface(null, Typeface.NORMAL);
                 break;
         }
 
@@ -195,31 +198,35 @@ public class TxnListFragment extends BaseFragment {
         String text = null;
         switch (sortType) {
             case SortTxnDialog.TXN_SORT_DATE_TIME:
-                text = AppConstants.SYMBOL_DOWN_ARROW + "Date Time";
+                text = AppConstants.SYMBOL_DOWN_ARROW + getString(R.string.txnlist_header_datetime);
                 mHeaderTime.setText(text);
                 mHeaderTime.setTypeface(null, Typeface.BOLD);
                 break;
             case SortTxnDialog.TXN_SORT_bILL_AMT:
-                text = AppConstants.SYMBOL_DOWN_ARROW + "Total Bill  |  Cashback @ x%";
+                text = AppConstants.SYMBOL_DOWN_ARROW + getString(R.string.txnlist_header_bill);
                 mHeaderBill.setText(text);
                 mHeaderBill.setTypeface(null, Typeface.BOLD);
                 break;
             case SortTxnDialog.TXN_SORT_CB_AWARD:
-                text = "Total Bill  | "+AppConstants.SYMBOL_DOWN_ARROW+"Cashback @ x%";
+                text = AppConstants.SYMBOL_DOWN_ARROW + getString(R.string.txnlist_header_cb);
                 mHeaderBill.setText(text);
                 mHeaderBill.setTypeface(null, Typeface.BOLD);
                 break;
-            case SortTxnDialog.TXN_SORT_CB_REDEEM:
+            case SortTxnDialog.TXN_SORT_ACC_AMT:
+                text = AppConstants.SYMBOL_DOWN_ARROW + getString(R.string.txnlist_header_acc);
+                mHeaderBill.setText(text);
+                mHeaderBill.setTypeface(null, Typeface.BOLD);
+                break;
+            /*case SortTxnDialog.TXN_SORT_CB_REDEEM:
                 text = "Account  | "+AppConstants.SYMBOL_DOWN_ARROW+"Cashback Redeem";
                 mHeaderAmts.setText(text);
                 mHeaderAmts.setTypeface(null, Typeface.BOLD);
                 break;
-            case SortTxnDialog.TXN_SORT_ACC_ADD:
             case SortTxnDialog.TXN_SORT_ACC_DEBIT:
                 text = AppConstants.SYMBOL_DOWN_ARROW+"Account  |  Cashback Redeem";
                 mHeaderAmts.setText(text);
                 mHeaderAmts.setTypeface(null, Typeface.BOLD);
-                break;
+                break;*/
         }
 
         // store existing sortType
@@ -235,8 +242,10 @@ public class TxnListFragment extends BaseFragment {
         mTxnRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mHeaderTime = (EditText) view.findViewById(R.id.txnlist_header_time);
-        mHeaderAmts = (EditText) view.findViewById(R.id.txnlist_header_amts);
+        mHeaderCustomer = (EditText) view.findViewById(R.id.txnlist_header_customer_id);
         mHeaderBill = (EditText) view.findViewById(R.id.txnlist_header_bill);
+        mHeaderCb = (EditText) view.findViewById(R.id.txnlist_header_cb);
+        mHeaderAcc = (EditText) view.findViewById(R.id.txnlist_header_acc);
 
         return view;
     }
@@ -260,7 +269,8 @@ public class TxnListFragment extends BaseFragment {
             } else if (i == R.id.action_email) {
                 emailReport();
             } else if (i == R.id.action_sort) {
-                SortTxnDialog dialog = SortTxnDialog.newInstance(mSelectedSortType, anyAccTxnPresent());
+                //SortTxnDialog dialog = SortTxnDialog.newInstance(mSelectedSortType, anyAccTxnPresent());
+                SortTxnDialog dialog = SortTxnDialog.newInstance(mSelectedSortType);
                 dialog.setTargetFragment(this, REQ_SORT_TXN_TYPES);
                 dialog.show(getFragmentManager(), DIALOG_SORT_TXN_TYPES);
             }
@@ -272,7 +282,7 @@ public class TxnListFragment extends BaseFragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private boolean anyAccTxnPresent() {
+    /*private boolean anyAccTxnPresent() {
         // loop and check if there's any txn with acc credit/debit
         boolean accFigures = false;
         for (Transaction txn :
@@ -283,7 +293,7 @@ public class TxnListFragment extends BaseFragment {
             }
         }
         return accFigures;
-    }
+    }*/
 
     private void downloadReport() {
         File file = createCsvReport();
