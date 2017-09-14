@@ -9,33 +9,56 @@ import java.io.Serializable;
 
 public class Transaction implements Serializable
 {
-  private String cust_private_id;
-  //private String canImgFileName;
-  //private String usedCardId;
-  private Integer cl_debit;
-  private Integer total_billed;
-  private Integer cl_credit;
   private String trans_id;
-  private Integer cb_billed;
-  private String objectId;
   private java.util.Date create_time;
-  private String cpin;
+  private String cust_private_id;
   private String merchant_id;
-  private Boolean archived;
-  //private String imgFileName;
-  private java.util.Date created;
-  private String merchant_name;
-  private String ownerId;
-  private Integer cb_debit;
-  private String cust_mobile;
+
+  private Integer total_billed;
+  private Integer cb_eligible_amt;
+
   private String cb_percent;
-  private String invoiceNum;
-  //private java.util.Date cancelTime;
   private Integer cb_credit;
-  private java.util.Date updated;
-  private Cashback cashback;
+
+  private Integer cl_credit;
+  private Integer cl_debit;
+  private Integer cl_overdraft;
+
   private String extra_cb_percent;
   private Integer extra_cb_credit;
+
+  //private Integer cb_billed;
+  //private String imgFileName;
+  private String merchant_name;
+  private String cust_mobile;
+  private String cpin;
+  private Boolean archived;
+  private String objectId;
+  private java.util.Date created;
+  private String ownerId;
+  //private Integer cb_debit;
+  private String invoiceNum;
+  //private java.util.Date cancelTime;
+  private java.util.Date updated;
+  private Cashback cashback;
+  //private String canImgFileName;
+  //private String usedCardId;
+
+  public Integer getCl_overdraft() {
+    return cl_overdraft;
+  }
+
+  public void setCl_overdraft(Integer cl_overdraft) {
+    this.cl_overdraft = cl_overdraft;
+  }
+
+  public Integer getCb_eligible_amt() {
+    return cb_eligible_amt;
+  }
+
+  public void setCb_eligible_amt(Integer cb_eligible_amt) {
+    this.cb_eligible_amt = cb_eligible_amt;
+  }
 
   public String getExtra_cb_percent() {
     return extra_cb_percent;
@@ -123,7 +146,7 @@ public class Transaction implements Serializable
     this.trans_id = trans_id;
   }
 
-  public Integer getCb_billed()
+  /*public Integer getCb_billed()
   {
     return cb_billed;
   }
@@ -131,7 +154,7 @@ public class Transaction implements Serializable
   public void setCb_billed( Integer cb_billed )
   {
     this.cb_billed = cb_billed;
-  }
+  }*/
 
   public String getObjectId()
   {
@@ -208,7 +231,7 @@ public class Transaction implements Serializable
     return ownerId;
   }
 
-  public Integer getCb_debit()
+  /*public Integer getCb_debit()
   {
     return cb_debit;
   }
@@ -216,7 +239,7 @@ public class Transaction implements Serializable
   public void setCb_debit( Integer cb_debit )
   {
     this.cb_debit = cb_debit;
-  }
+  }*/
 
   public String getCust_mobile()
   {

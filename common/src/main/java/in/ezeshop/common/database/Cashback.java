@@ -9,25 +9,37 @@ import java.util.Date;
 
 public class Cashback
 {
-  private Integer cb_debit;
-  private String ownerId;
-  private String objectId;
-  private Integer cl_credit;
-  private Date updated;
-  private Integer cb_credit;
-  private Integer cl_debit;
-  private Date created;
-  //private String rowid_card;
-  private Integer total_billed;
   private String rowid;
   private String cust_private_id;
-  private String other_details;
   private String merchant_id;
+
+  private Integer total_billed;
   private Integer cb_billed;
+  private Integer cb_credit;
+
+  private Integer cl_credit;
+  private Integer cl_debit;
+  private Integer cl_overdraft;
+
+  //private Integer cb_debit;
+  private String ownerId;
+  private String objectId;
+  private Date updated;
+  private Date created;
+  //private String rowid_card;
+  private String other_details;
   private Customers customer;
   //private Merchants merchant;
   private Date lastTxnTime;
   private String lastTxnId;
+
+  public Integer getCl_overdraft() {
+    return cl_overdraft;
+  }
+
+  public void setCl_overdraft(Integer cl_overdraft) {
+    this.cl_overdraft = cl_overdraft;
+  }
 
   public Date getLastTxnTime() {
     return lastTxnTime;
@@ -108,7 +120,7 @@ public class Cashback
     this.objectId = objectId;
   }
 
-  public Integer getCb_debit()
+  /*public Integer getCb_debit()
   {
     return cb_debit;
   }
@@ -116,7 +128,7 @@ public class Cashback
   public void setCb_debit( Integer cb_debit )
   {
     this.cb_debit = cb_debit;
-  }
+  }*/
 
   public String getOwnerId()
   {
