@@ -32,8 +32,9 @@ public class TxnPinInputDialog extends DialogFragment
     private static final String TAG = "MchntApp-TxnPinInputDialog";
     private static final String ARG_CASH_CREDIT = "cashCredit";
     private static final String ARG_CASH_DEBIT = "cashDebit";
-    private static final String ARG_CASHBACK_DEBIT = "cashbackDebit";
-    private static final String ARG_CANCEL_TXNID = "cancelTxnId";
+    //private static final String ARG_CASHBACK_DEBIT = "cashbackDebit";
+    private static final String ARG_OVERDRAFT = "accOverdraft";
+    //private static final String ARG_CANCEL_TXNID = "cancelTxnId";
     private static final String ARG_ASK_OTP = "mAskOtp";
 
     //private static Integer[] keys = {0,1,2,3,4,5,6,7,8,9};
@@ -47,14 +48,15 @@ public class TxnPinInputDialog extends DialogFragment
     }
 
 
-    public static TxnPinInputDialog newInstance(int cashCredit, int cashDebit, int cashbackDebit, String cancelTxnId, boolean argAskOtp) {
+    public static TxnPinInputDialog newInstance(int cashCredit, int cashDebit, int overdraft, boolean argAskOtp) {
         Bundle args = new Bundle();
         args.putInt(ARG_CASH_CREDIT, cashCredit);
         args.putInt(ARG_CASH_DEBIT, cashDebit);
-        args.putInt(ARG_CASHBACK_DEBIT, cashbackDebit);
-        if(cancelTxnId!=null && !cancelTxnId.isEmpty()) {
+        //args.putInt(ARG_CASHBACK_DEBIT, cashbackDebit);
+        args.putInt(ARG_OVERDRAFT, overdraft);
+        /*if(cancelTxnId!=null && !cancelTxnId.isEmpty()) {
             args.putString(ARG_CANCEL_TXNID, cancelTxnId);
-        }
+        }*/
         args.putBoolean(ARG_ASK_OTP, argAskOtp);
 
         TxnPinInputDialog fragment = new TxnPinInputDialog();
@@ -88,16 +90,17 @@ public class TxnPinInputDialog extends DialogFragment
         }
 
         // set values
-        String cancelTxnId = getArguments().getString(ARG_CANCEL_TXNID);
+        /*String cancelTxnId = getArguments().getString(ARG_CANCEL_TXNID);
         if(cancelTxnId!=null) {
             mLayoutAmts.setVisibility(View.GONE);
             String msg = "Cancel Transaction "+cancelTxnId+" ?";
             mLabelInfo.setText(msg);
 
-        } else {
+        } else {*/
             int cashCredit = getArguments().getInt(ARG_CASH_CREDIT);
             int cashDebit = getArguments().getInt(ARG_CASH_DEBIT);
-            int cashbackDebit = getArguments().getInt(ARG_CASHBACK_DEBIT);
+            int overdraft = getArguments().getInt(ARG_OVERDRAFT);
+            //int cashbackDebit = getArguments().getInt(ARG_CASHBACK_DEBIT);
 
             mAskOtp = getArguments().getBoolean(ARG_ASK_OTP);
             if(mAskOtp) {
@@ -111,17 +114,23 @@ public class TxnPinInputDialog extends DialogFragment
             } else if (cashDebit > 0) {
                 mInputCashAmount.setText(AppCommonUtil.getSignedAmtStr(cashDebit, false));
                 mInputCashAmount.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
+            } /*else {
+                mLayoutAmts.setVisibility(View.GONE);
+            }*/
+
+            if(overdraft > 0) {
+                mInputOverdraft.setText(AppCommonUtil.getSignedAmtStr(overdraft, false));
             } else {
-                mLayoutCashAmount.setVisibility(View.GONE);
+                mLayoutOverdraft.setVisibility(View.GONE);
             }
 
-            if (cashbackDebit > 0) {
+            /*if (cashbackDebit > 0) {
                 mInputCashbackAmount.setText(AppCommonUtil.getSignedAmtStr(cashbackDebit, false));
                 mInputCashAmount.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
             } else {
                 mLayoutCashbackAmount.setVisibility(View.GONE);
-            }
-        }
+            }*/
+        //}
 
         initKeyboard();
 
@@ -289,12 +298,14 @@ public class TxnPinInputDialog extends DialogFragment
     }
 
     private EditText mTitle;
-    private View mLayoutAmts;
+    //private View mLayoutAmts;
     private EditText mInputCashAmount;
-    private EditText mInputCashbackAmount;
-    private LinearLayout mLayoutCashAmount;
-    private LinearLayout mLayoutCashbackAmount;
-    private EditText mLabelInfo;
+    private View mLayoutOverdraft;
+    private EditText mInputOverdraft;
+    //private EditText mInputCashbackAmount;
+    //private LinearLayout mLayoutCashAmount;
+    //private LinearLayout mLayoutCashbackAmount;
+    //private EditText mLabelInfo;
     private EditText mInputSecretPin;
 
     private AppCompatButton mKeys[];
@@ -303,13 +314,16 @@ public class TxnPinInputDialog extends DialogFragment
 
     private void bindUiResources(View v) {
         mTitle = (EditText) v.findViewById(R.id.label_title);
-        mLayoutAmts = v.findViewById(R.id.layout_amounts);
-        mInputCashAmount = (EditText) v.findViewById(R.id.input_cash_amount);
-        mInputCashbackAmount = (EditText) v.findViewById(R.id.input_cashback_amount);
-        mLayoutCashAmount = (LinearLayout) v.findViewById(R.id.layout_cash_amount);
-        mLayoutCashbackAmount = (LinearLayout) v.findViewById(R.id.layout_cashback_amount);
+        //mLayoutAmts = v.findViewById(R.id.layout_amounts);
 
-        mLabelInfo = (EditText) v.findViewById(R.id.label_information);
+        mInputCashAmount = (EditText) v.findViewById(R.id.input_account);
+        mLayoutOverdraft = v.findViewById(R.id.layout_account);;
+        mInputOverdraft = (EditText) v.findViewById(R.id.input_overdraft);
+        /*mInputCashbackAmount = (EditText) v.findViewById(R.id.input_cashback_amount);
+        mLayoutCashAmount = (LinearLayout) v.findViewById(R.id.layout_cash_amount);
+        mLayoutCashbackAmount = (LinearLayout) v.findViewById(R.id.layout_cashback_amount);*/
+
+        //mLabelInfo = (EditText) v.findViewById(R.id.label_information);
         mInputSecretPin = (EditText) v.findViewById(R.id.input_secret_pin);
 
         mKeys = new AppCompatButton[10];

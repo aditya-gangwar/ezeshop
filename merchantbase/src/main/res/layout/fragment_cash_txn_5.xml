@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<android.support.design.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/myCoordinatorLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/root_cashTxnFragment"
@@ -184,6 +184,50 @@
             <Space
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="20"/>
+
+            <LinearLayout
+                style="@style/LL_Horizontal_wrap"
+                android:id="@+id/layout_overdraft"
+                android:paddingLeft="@dimen/small_space"
+                android:paddingRight="@dimen/small_space"
+                android:paddingTop="@dimen/small_space"
+                android:paddingBottom="@dimen/small_space"
+                android:clickable="true"
+                android:background="@drawable/round_rect_border_disabled"
+                android:alpha="0.65">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_account_balance_wallet_white_24dp"
+                    android:id="@+id/ct_img_overdraft"
+                    android:layout_marginRight="@dimen/small_space"
+                    android:tint="@color/disabled"/>
+
+                <EditText
+                    style="@style/Edittext_only_view_medium"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="60"
+                    android:gravity="left|center_vertical"
+                    android:text="Overdraft"
+                    android:id="@+id/ct_label_overdraft"
+                    android:textColor="@color/disabled"/>
+                <EditText
+                    style="@style/Edittext_only_view_medium"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/ct_input_overdraft"
+                    android:text="- \u20B9 0"
+                    android:gravity="right|center_vertical"
+                    android:layout_weight="30"
+                    android:textColor="@color/disabled"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="30"/>
 
             <include layout="@layout/cash_paid5"/>
@@ -211,7 +255,8 @@
                     android:text="\u20B9 0"
                     android:gravity="right|center_vertical"
                     android:layout_weight="30"
-                    android:textStyle="italic"/>
+                    android:textStyle="italic"
+                    android:textColor="@color/accent2"/>
             </LinearLayout>
 
             <!--EditText
@@ -229,48 +274,7 @@
             <Space
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="25"/>
-
-            <LinearLayout
-                style="@style/LL_Horizontal_wrap"
-                android:id="@+id/layout_overdraft"
-                android:paddingLeft="@dimen/small_space"
-                android:paddingRight="@dimen/small_space"
-                android:paddingTop="@dimen/small_space"
-                android:paddingBottom="@dimen/small_space"
-                android:clickable="true"
-                android:background="@drawable/round_rect_border_red">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_account_balance_wallet_white_24dp"
-                    android:id="@+id/ct_img_overdraft"
-                    android:layout_marginRight="@dimen/small_space"
-                    android:tint="@color/red_negative"/>
-
-                <EditText
-                    style="@style/Edittext_only_view_medium"
-                    android:layout_width="wrap_content"
-                    android:layout_weight="60"
-                    android:gravity="left|center_vertical"
-                    android:text="Overdraft"
-                    android:id="@+id/ct_label_overdraft"/>
-                <EditText
-                    style="@style/Edittext_only_view_medium"
-                    android:layout_width="wrap_content"
-                    android:id="@+id/ct_input_overdraft"
-                    android:text="- \u20B9 0"
-                    android:gravity="right|center_vertical"
-                    android:layout_weight="30"
-                    android:textColor="@color/red_negative"
-                    android:textStyle="bold"/>
-            </LinearLayout>
-
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="22.5"/>
+                android:layout_weight="27.5"/>
 
         </LinearLayout>
     </RelativeLayout>

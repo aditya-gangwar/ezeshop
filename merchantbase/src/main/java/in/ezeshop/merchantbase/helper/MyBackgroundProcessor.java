@@ -468,19 +468,24 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
             Cashback cashback = MerchantUser.getInstance().registerCustomer(data.mobileNum, data.dob, data.sex, data.qrCode,
                     data.otp, data.firstName, data.lastName);
 
-            mRetainedFragment.mCurrCashback = new MyCashback();
-            mRetainedFragment.mCurrCashback.init(cashback, true);
+            /*mRetainedFragment.mCurrCashback = new MyCashback();
+            mRetainedFragment.mCurrCashback.init(cashback, true);*/
+            mRetainedFragment.mCurrCashback = new MyCashback(cashback, true);
             mRetainedFragment.mCurrCustomer = mRetainedFragment.mCurrCashback.getCustomer();
 
-        } catch (BackendlessException e) {
+        } catch (Exception e) {
             mRetainedFragment.mCurrCashback = null;
             mRetainedFragment.mCurrCustomer = null;
 
-            int error = AppCommonUtil.getLocalErrorCode(e);
-            if(error!=ErrorCodes.OTP_GENERATED) {
-                LogMy.e(TAG, "Exception in registerCustomer: "+ e.toString());
+            if(e instanceof BackendlessException) {
+                int error = AppCommonUtil.getLocalErrorCode((BackendlessException)e);
+                if(error!=ErrorCodes.OTP_GENERATED) {
+                    LogMy.e(TAG, "Exception in registerCustomer: "+ e.toString());
+                }
+                return error;
+            } else {
+                return ErrorCodes.GENERAL_ERROR;
             }
-            return error;
         }
         return ErrorCodes.NO_ERROR;
     }
@@ -492,16 +497,21 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
         try {
             Cashback cashback = MerchantUser.getInstance().fetchCashback(custId);
 
-            mRetainedFragment.mCurrCashback = new MyCashback();
-            mRetainedFragment.mCurrCashback.init(cashback, true);
+            /*mRetainedFragment.mCurrCashback = new MyCashback();
+            mRetainedFragment.mCurrCashback.init(cashback, true);*/
+            mRetainedFragment.mCurrCashback = new MyCashback(cashback, true);
             mRetainedFragment.mCurrCustomer = mRetainedFragment.mCurrCashback.getCustomer();
 
-        } catch (BackendlessException e) {
+        } catch (Exception e) {
             mRetainedFragment.mCurrCashback = null;
             mRetainedFragment.mCurrCustomer = null;
 
             LogMy.e(TAG, "Exception in getCashback: "+ e.toString());
-            return AppCommonUtil.getLocalErrorCode(e);
+            if(e instanceof BackendlessException) {
+                return AppCommonUtil.getLocalErrorCode((BackendlessException) e);
+            } else {
+                return ErrorCodes.GENERAL_ERROR;
+            }
         }
         return ErrorCodes.NO_ERROR;
     }

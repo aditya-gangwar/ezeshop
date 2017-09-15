@@ -1091,8 +1091,9 @@ public class CashbackActivity extends BaseActivity implements
                         TxnPinInputDialog dialog = TxnPinInputDialog.newInstance(
                                 mWorkFragment.mCurrTransaction.getTransaction().getCl_credit(),
                                 mWorkFragment.mCurrTransaction.getTransaction().getCl_debit(),
-                                mWorkFragment.mCurrTransaction.getTransaction().getCb_debit(),
-                                null, true);
+                                //mWorkFragment.mCurrTransaction.getTransaction().getCb_debit(),
+                                mWorkFragment.mCurrTransaction.getTransaction().getCl_overdraft(),
+                                true);
                         dialog.show(mFragMgr, DIALOG_OTP_CASH_TXN);
                     } else {
                         DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
@@ -1463,8 +1464,9 @@ public class CashbackActivity extends BaseActivity implements
             TxnPinInputDialog dialog = TxnPinInputDialog.newInstance(
                     mWorkFragment.mCurrTransaction.getTransaction().getCl_credit(),
                     mWorkFragment.mCurrTransaction.getTransaction().getCl_debit(),
-                    mWorkFragment.mCurrTransaction.getTransaction().getCb_debit(),
-                    null, false);
+                    //mWorkFragment.mCurrTransaction.getTransaction().getCb_debit(),
+                    mWorkFragment.mCurrTransaction.getTransaction().getCl_overdraft(),
+                    false);
             dialog.show(mFragMgr, DIALOG_PIN_CASH_TXN);
 
         } else if(verifyType==AppConstants.TXN_VERIFY_OTP) {
