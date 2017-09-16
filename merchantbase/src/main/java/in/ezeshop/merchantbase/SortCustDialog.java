@@ -26,7 +26,6 @@ public class SortCustDialog extends BaseDialog {
     public static final String TAG = "MchntApp-SortCustDialog";
 
     public static final String ARG_SELECTED = "argSelected";
-    public static final String ARG_SHOW_ACC = "argShowAcc";
     public static final String EXTRA_SELECTION = "extraSelected";
 
     //private SortCustDialogIf mListener;
@@ -36,11 +35,10 @@ public class SortCustDialog extends BaseDialog {
         void onCustSortType(int sortType);
     }*/
 
-    public static SortCustDialog newInstance(int selectedSortType, boolean showAcc) {
+    public static SortCustDialog newInstance(int selectedSortType) {
         LogMy.d(TAG, "Creating new SortCustDialog instance: "+selectedSortType);
         Bundle args = new Bundle();
         args.putInt(ARG_SELECTED, selectedSortType);
-        args.putBoolean(ARG_SHOW_ACC, showAcc);
 
         SortCustDialog fragment = new SortCustDialog();
         fragment.setArguments(args);
@@ -72,7 +70,7 @@ public class SortCustDialog extends BaseDialog {
             case MyCashback.CB_CMP_TYPE_ACC_BALANCE:
                 mSortCustRadioGroup.check(mBalanceAcc.getId());
                 break;
-            case MyCashback.CB_CMP_TYPE_ACC_ADD:
+            /*case MyCashback.CB_CMP_TYPE_ACC_ADD:
                 mSortCustRadioGroup.check(mAddAcc.getId());
                 break;
             case MyCashback.CB_CMP_TYPE_ACC_DEBIT:
@@ -86,12 +84,12 @@ public class SortCustDialog extends BaseDialog {
                 break;
             case MyCashback.CB_CMP_TYPE_CB_DEBIT:
                 mSortCustRadioGroup.check(mRedeemCb.getId());
-                break;
+                break;*/
         }
 
-        if(!getArguments().getBoolean(ARG_SHOW_ACC)) {
+        /*if(!getArguments().getBoolean(ARG_SHOW_ACC)) {
             mLayoutAcc.setVisibility(View.GONE);
-        }
+        }*/
     }
 
     @Override
@@ -127,7 +125,10 @@ public class SortCustDialog extends BaseDialog {
                         } else if (selectedId == R.id.billAmt) {
                             selectedSortType = MyCashback.CB_CMP_TYPE_BILL_AMT;
 
-                        } else if (selectedId == R.id.balanceCb) {
+                        } else if (selectedId == R.id.accBalance) {
+                            selectedSortType = MyCashback.CB_CMP_TYPE_ACC_BALANCE;
+
+                        }/*else if (selectedId == R.id.balanceCb) {
                             selectedSortType = MyCashback.CB_CMP_TYPE_CB_BALANCE;
 
                         } else if (selectedId == R.id.awardCb) {
@@ -144,7 +145,7 @@ public class SortCustDialog extends BaseDialog {
 
                         } else if (selectedId == R.id.debitAcc) {
                             selectedSortType = MyCashback.CB_CMP_TYPE_ACC_DEBIT;
-                        }
+                        }*/
 
                         Intent intent = new Intent();
                         intent.putExtra(EXTRA_SELECTION,selectedSortType);
@@ -196,8 +197,9 @@ public class SortCustDialog extends BaseDialog {
     private RadioGroup mSortCustRadioGroup;
     private RadioButton mUpdateTime;
     private RadioButton mBillAmt;
+    private RadioButton mBalanceAcc;
 
-    private RadioButton mBalanceCb;
+    /*private RadioButton mBalanceCb;
     private RadioButton mAwardCb;
     private RadioButton mRedeemCb;
 
@@ -205,14 +207,15 @@ public class SortCustDialog extends BaseDialog {
     private RadioButton mAddAcc;
     private RadioButton mDebitAcc;
 
-    private View mLayoutAcc;
+    private View mLayoutAcc;*/
 
     private void initUiResources(View v) {
         mSortCustRadioGroup = (RadioGroup) v.findViewById(R.id.custSortRadioGroup);
         mUpdateTime = (RadioButton) v.findViewById(R.id.lastTxnTime);
         mBillAmt = (RadioButton) v.findViewById(R.id.billAmt);
+        mBalanceAcc = (RadioButton) v.findViewById(R.id.accBalance);
 
-        mBalanceCb = (RadioButton) v.findViewById(R.id.balanceCb);
+        /*mBalanceCb = (RadioButton) v.findViewById(R.id.balanceCb);
         mAwardCb = (RadioButton) v.findViewById(R.id.awardCb);
         mRedeemCb = (RadioButton) v.findViewById(R.id.redeemCb);
 
@@ -220,6 +223,6 @@ public class SortCustDialog extends BaseDialog {
         mAddAcc = (RadioButton) v.findViewById(R.id.addAcc);
         mDebitAcc = (RadioButton) v.findViewById(R.id.debitAcc);
 
-        mLayoutAcc = v.findViewById(R.id.layout_acc);
+        mLayoutAcc = v.findViewById(R.id.layout_acc);*/
     }
 }

@@ -158,12 +158,33 @@ public class TxnConfirmFragment extends BaseFragment {
         //int total = 0;
         //mInputCustomer.setText(curTransaction.getCustomer_id());
 
-        int toPay = 0;
-        int returnCash = 0;
-        boolean anyDebit = false;
+        //int toPay = 0;
+        //int returnCash = 0;
+        //boolean anyDebit = false;
+
+        int value = curTransaction.getTotal_billed();
+        mInputBillAmt.setText(AppCommonUtil.getSignedAmtStr(value, true));
+
+        value = curTransaction.getCl_credit();
+        if(value > 0) {
+            mInputAcc.setText(AppCommonUtil.getSignedAmtStr(value, true));
+            mInputAcc.setTextColor(ContextCompat.getColor(getActivity(), R.color.green_positive));
+        } else {
+            mInputAcc.setText(AppCommonUtil.getSignedAmtStr(value, false));
+            mInputAcc.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
+
+            if(curTransaction.getCl_overdraft() > 0) {
+                mLayoutOverdraft.setVisibility(View.VISIBLE);
+                mInputOverdraft.setText(AppCommonUtil.getSignedAmtStr(curTransaction.getCl_overdraft(), false));
+            } else {
+                mLayoutOverdraft.setVisibility(View.GONE);
+            }
+        }
+
+        mInputPayment.setText(AppCommonUtil.getAmtStr(cashPaid));
 
         // Bill amount
-        int value = curTransaction.getTotal_billed();
+        /*int value = curTransaction.getTotal_billed();
         if(value <= 0) {
             mLayoutBillAmt.setVisibility(View.GONE);
             // no point of any debit when no bill amount
@@ -238,21 +259,21 @@ public class TxnConfirmFragment extends BaseFragment {
             mLabelReturnCash.setText("BALANCE");
             mInputReturnCash.setText(AppCommonUtil.getSignedAmtStr(Math.abs(returnCash), true));
             mLayoutReturnCash.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.bg_light_grey));
-        }
+        }*/
 
         // add cashback
         //value = curTransaction.getCb_credit();
         value = curTransaction.getCb_credit() + curTransaction.getExtra_cb_credit();
-        if(value == 0) {
+        /*if(value == 0) {
             mLayoutAddCb.setVisibility(View.GONE);
             mLayoutCbDetails.setVisibility(View.GONE);
         } else {
             mLayoutAddCb.setVisibility(View.VISIBLE);
-            mLayoutCbDetails.setVisibility(View.VISIBLE);
+            mLayoutCbDetails.setVisibility(View.VISIBLE);*/
 
             mInputAddCb.setText(AppCommonUtil.getAmtStr(value));
             mInputCbDetails.setText(MyTransaction.getCbDetailStr(curTransaction));
-        }
+        //}
 
         if(mMerchant.isInvoiceNumAsk()) {
             mLayoutExtraDetails.setVisibility(View.VISIBLE);
@@ -268,9 +289,15 @@ public class TxnConfirmFragment extends BaseFragment {
 
     //private EditText mInputCustomer;
 
-    private LinearLayout mLayoutBillAmt;
     private EditText mInputBillAmt;
-    //private Space mSpaceBillAmt;
+    private EditText mInputAcc;
+
+    private LinearLayout mLayoutOverdraft;
+    private EditText mInputOverdraft;
+    private EditText mInputPayment;
+
+    /*private LinearLayout mLayoutBillAmt;
+    private EditText mInputBillAmt;
 
     private LinearLayout mLayoutDebitCl;
     private EditText mInputDebitCl;
@@ -294,12 +321,12 @@ public class TxnConfirmFragment extends BaseFragment {
 
     private LinearLayout mLayoutReturnCash;
     private EditText mLabelReturnCash;
-    private EditText mInputReturnCash;
+    private EditText mInputReturnCash;*/
 
-    private LinearLayout mLayoutAddCb;
+    //private LinearLayout mLayoutAddCb;
     private EditText mInputAddCb;
 
-    private View mLayoutCbDetails;
+    //private View mLayoutCbDetails;
     private EditText mInputCbDetails;
 
     private View mLayoutExtraDetails;
@@ -312,11 +339,16 @@ public class TxnConfirmFragment extends BaseFragment {
     private void bindUiResources(View v) {
         //mInputCustomer = (EditText) v.findViewById(R.id.input_customer);
 
-        mLayoutBillAmt = (LinearLayout) v.findViewById(R.id.layout_bill_amt);
+        //mLayoutBillAmt = (LinearLayout) v.findViewById(R.id.layout_bill_amt);
         mInputBillAmt = (EditText) v.findViewById(R.id.input_bill_amt);
         //mSpaceBillAmt = (Space) v.findViewById(R.id.space_bill_amt);
 
-        mLayoutDebitCl = (LinearLayout) v.findViewById(R.id.layout_debit_account);
+        mInputAcc = (EditText) v.findViewById(R.id.input_account);
+        mLayoutOverdraft = (LinearLayout) v.findViewById(R.id.layout_overdraft);
+        mInputOverdraft = (EditText) v.findViewById(R.id.input_overdraft);
+        mInputPayment = (EditText) v.findViewById(R.id.input_cash_paid);
+
+        /*mLayoutDebitCl = (LinearLayout) v.findViewById(R.id.layout_debit_account);
         mInputDebitCl = (EditText) v.findViewById(R.id.input_debit_account);
 
         mLayoutDebitCb = (LinearLayout) v.findViewById(R.id.layout_redeem_cb);
@@ -338,12 +370,12 @@ public class TxnConfirmFragment extends BaseFragment {
 
         mLayoutReturnCash = (LinearLayout) v.findViewById(R.id.layout_return_cash);
         mLabelReturnCash = (EditText) v.findViewById(R.id.label_cash_to_pay);
-        mInputReturnCash = (EditText) v.findViewById(R.id.input_return_cash);
+        mInputReturnCash = (EditText) v.findViewById(R.id.input_return_cash);*/
 
-        mLayoutAddCb = (LinearLayout) v.findViewById(R.id.layout_add_cb);
+        //mLayoutAddCb = (LinearLayout) v.findViewById(R.id.layout_add_cb);
         mInputAddCb = (EditText) v.findViewById(R.id.input_add_cb);
 
-        mLayoutCbDetails = v.findViewById(R.id.layout_cb_details);
+        //mLayoutCbDetails = v.findViewById(R.id.layout_cb_details);
         mInputCbDetails = (EditText) v.findViewById(R.id.input_cb_details);
 
         mLayoutExtraDetails = v.findViewById(R.id.layout_extra_details);

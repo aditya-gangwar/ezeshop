@@ -16,13 +16,13 @@
             android:layout_width="wrap_content"
             android:id="@+id/list_header_id"
             android:layout_height="wrap_content"
-            android:text="Customer"
+            android:text="@string/custlist_header_customer"
             android:textColor="@color/white"/>
 
         <EditText
             style="@style/Edittext_only_view_small_lessPad"
-            android:id="@+id/list_header_txnTime"
-            android:text="Account Balance"
+            android:id="@+id/list_header_acc"
+            android:text="@string/custlist_header_acc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -30,8 +30,8 @@
 
         <EditText
             style="@style/Edittext_only_view_small_lessPad"
-            android:id="@+id/list_header_cb"
-            android:text="▼Last Txn Time"
+            android:id="@+id/list_header_txnTime"
+            android:text="@string/custlist_header_lastTxnTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/list_header_id"
@@ -43,17 +43,16 @@
             android:id="@+id/list_header_bill"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/list_header_txnTime"
+            android:layout_below="@id/list_header_acc"
             android:layout_alignParentRight="true"
-            android:text="Total Bill"
+            android:text="@string/custlist_header_bill"
             android:paddingTop="0dp"
-            android:paddingBottom="0dp"
             android:textColor="@color/white"/>
 
         <View
             style="@style/Divider_horizontal_Large"
             android:id="@+id/list_divider_1"
-            android:layout_below="@id/list_header_cb"/>
+            android:layout_below="@id/list_header_bill"/>
 
     </RelativeLayout>
 

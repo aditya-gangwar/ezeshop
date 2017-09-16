@@ -25,7 +25,6 @@ import android.widget.TextView;
 
 import in.ezeshop.appbase.BaseFragment;
 import in.ezeshop.appbase.constants.AppConstants;
-import in.ezeshop.common.CommonUtils;
 import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.DbConstants;
 import in.ezeshop.common.constants.ErrorCodes;
@@ -61,8 +60,9 @@ public class CustomerListFragment extends BaseFragment {
 
     //private static final String CSV_HEADER = "Sl.No.,Customer ID,Mobile No.,Card ID,Status,Cashback Balance,Cashback Add,Cashback Debit,Account Balance,Account Add,Account Debit,Total Bill,Last Txn here,First Txn here";
     //private static final String CSV_HEADER_NO_ACC = "Sl.No.,Customer ID,Mobile No.,Card ID,Status,Cashback Balance,Cashback Add,Cashback Debit,Total Bill,Last Txn here,First Txn here";
-    private static final String CSV_HEADER = "Sl.No.,Customer ID,Mobile No.,Status,Cashback Balance,Cashback Add,Cashback Debit,Account Balance,Account Add,Account Debit,Total Bill,Last Txn here,First Txn here";
-    private static final String CSV_HEADER_NO_ACC = "Sl.No.,Customer ID,Mobile No.,Status,Cashback Balance,Cashback Add,Cashback Debit,Total Bill,Last Txn here,First Txn here";
+    //private static final String CSV_HEADER = "Sl.No.,Customer ID,Mobile No.,Status,Cashback Balance,Cashback Add,Cashback Debit,Account Balance,Account Add,Account Debit,Total Bill,Last Txn here,First Txn here";
+    private static final String CSV_HEADER = "Sl.No.,Mobile No.,Status,Account Balance,Account Add,Cashback,Deposit,Account Debit,Total Bill,Last Txn here,First Txn here";
+    //private static final String CSV_HEADER_NO_ACC = "Sl.No.,Customer ID,Mobile No.,Status,Cashback Balance,Cashback Add,Cashback Debit,Total Bill,Last Txn here,First Txn here";
     // 5+10+10+10+10+5+5+5+5+5+5+5+5+10+10 = 105
     private static final int CSV_RECORD_MAX_CHARS = 128;
     private static final int CSV_LINES_BUFFER = 100;
@@ -88,8 +88,8 @@ public class CustomerListFragment extends BaseFragment {
     private RecyclerView mCustRecyclerView;
     private EditText mLabelTxnTime;
     private EditText mLabelBill;
-    //private EditText mLabelAcc;
-    private EditText mLabelCb;
+    private EditText mLabelAcc;
+    //private EditText mLabelCb;
     private EditText mUpdated;
     private EditText mUpdatedDetail;
     
@@ -170,46 +170,51 @@ public class CustomerListFragment extends BaseFragment {
         // Remove arrow as per old sort type
         switch (mSelectedSortType) {
             case MyCashback.CB_CMP_TYPE_UPDATE_TIME:
-                mLabelTxnTime.setText("Last Txn Time");
+                mLabelTxnTime.setText(R.string.custlist_header_lastTxnTime);
                 mLabelTxnTime.setTypeface(null, Typeface.NORMAL);
                 break;
             case MyCashback.CB_CMP_TYPE_BILL_AMT:
-                mLabelBill.setText("Total Bill");
+                mLabelTxnTime.setText(R.string.custlist_header_bill);
                 mLabelBill.setTypeface(null, Typeface.NORMAL);
                 break;
+            case MyCashback.CB_CMP_TYPE_ACC_BALANCE:
+                mLabelTxnTime.setText(R.string.custlist_header_acc);
+                mLabelBill.setTypeface(null, Typeface.NORMAL);
+                break;
+
             /*case MyCashback.CB_CMP_TYPE_ACC_BALANCE:
             case MyCashback.CB_CMP_TYPE_ACC_ADD:
             case MyCashback.CB_CMP_TYPE_ACC_DEBIT:
                 mLabelAcc.setText("Account:  Add - Used = Balance");
                 mLabelAcc.setTypeface(null, Typeface.NORMAL);
-                break;*/
+                break;
             case MyCashback.CB_CMP_TYPE_CB_BALANCE:
             case MyCashback.CB_CMP_TYPE_CB_ADD:
             case MyCashback.CB_CMP_TYPE_CB_DEBIT:
                 mLabelCb.setText("Cashback:  Add - Used = Balance");
                 mLabelCb.setTypeface(null, Typeface.NORMAL);
-                break;
+                break;*/
         }
 
         // Add arrow in header as per new sort type
         String text = null;
         switch (sortType) {
             case MyCashback.CB_CMP_TYPE_UPDATE_TIME:
-                text = AppConstants.SYMBOL_DOWN_ARROW + mLabelTxnTime.getText().toString();
+                text = AppConstants.SYMBOL_DOWN_ARROW + getString(R.string.custlist_header_lastTxnTime);
                 mLabelTxnTime.setText(text);
                 mLabelTxnTime.setTypeface(null, Typeface.BOLD);
                 break;
             case MyCashback.CB_CMP_TYPE_BILL_AMT:
-                text = AppConstants.SYMBOL_DOWN_ARROW + mLabelBill.getText().toString();
+                text = AppConstants.SYMBOL_DOWN_ARROW + getString(R.string.custlist_header_bill);
                 mLabelBill.setText(text);
                 mLabelBill.setTypeface(null, Typeface.BOLD);
                 break;
-            /*case MyCashback.CB_CMP_TYPE_ACC_BALANCE:
-                text = "Account:  Add - Used = "+AppConstants.SYMBOL_DOWN_ARROW+"Balance";
+            case MyCashback.CB_CMP_TYPE_ACC_BALANCE:
+                text = AppConstants.SYMBOL_DOWN_ARROW + getString(R.string.custlist_header_acc);
                 mLabelAcc.setText(text);
                 mLabelAcc.setTypeface(null, Typeface.BOLD);
                 break;
-            case MyCashback.CB_CMP_TYPE_ACC_ADD:
+            /*case MyCashback.CB_CMP_TYPE_ACC_ADD:
                 text = "Account: "+AppConstants.SYMBOL_DOWN_ARROW+"Add - Used = Balance";
                 mLabelAcc.setText(text);
                 mLabelAcc.setTypeface(null, Typeface.BOLD);
@@ -218,7 +223,7 @@ public class CustomerListFragment extends BaseFragment {
                 text = "Account:  Add - "+AppConstants.SYMBOL_DOWN_ARROW+"Used = Balance";
                 mLabelAcc.setText(text);
                 mLabelAcc.setTypeface(null, Typeface.BOLD);
-                break;*/
+                break;
             case MyCashback.CB_CMP_TYPE_CB_BALANCE:
                 text = "Cashback:  Add - Used = "+AppConstants.SYMBOL_DOWN_ARROW+"Balance";
                 mLabelCb.setText(text);
@@ -233,7 +238,7 @@ public class CustomerListFragment extends BaseFragment {
                 text = "Cashback:  Add - "+AppConstants.SYMBOL_DOWN_ARROW+"Used = Balance";
                 mLabelCb.setText(text);
                 mLabelCb.setTypeface(null, Typeface.BOLD);
-                break;
+                break;*/
         }
 
         // store existing sortType
@@ -250,8 +255,8 @@ public class CustomerListFragment extends BaseFragment {
 
         mLabelTxnTime = (EditText) view.findViewById(R.id.list_header_txnTime);
         mLabelBill = (EditText) view.findViewById(R.id.list_header_bill);
-        //mLabelAcc = (EditText) view.findViewById(R.id.list_header_acc);
-        mLabelCb = (EditText) view.findViewById(R.id.list_header_cb);
+        mLabelAcc = (EditText) view.findViewById(R.id.list_header_acc);
+        //mLabelCb = (EditText) view.findViewById(R.id.list_header_cb);
 
         mUpdated = (EditText) view.findViewById(R.id.input_updated_time);
         mUpdatedDetail = (EditText) view.findViewById(R.id.updated_time_details);
@@ -294,8 +299,7 @@ public class CustomerListFragment extends BaseFragment {
     }
 
     private void processCbCsvRecord(String csvString) {
-        MyCashback cb = new MyCashback();
-        cb.init(csvString, true);
+        MyCashback cb = new MyCashback(csvString, true);
         mRetainedFragment.mLastFetchCashbacks.add(cb);
         LogMy.d(TAG,"Added new item in mLastFetchCashbacks: "+mRetainedFragment.mLastFetchCashbacks.size());
     }
@@ -357,7 +361,8 @@ public class CustomerListFragment extends BaseFragment {
                     emailReport();
 
                 } else if (i == R.id.action_sort) {
-                    SortCustDialog dialog = SortCustDialog.newInstance(mSelectedSortType, anyCustUsingAcc());
+                    //SortCustDialog dialog = SortCustDialog.newInstance(mSelectedSortType, anyCustUsingAcc());
+                    SortCustDialog dialog = SortCustDialog.newInstance(mSelectedSortType);
                     dialog.setTargetFragment(this, REQ_SORT_CUST_TYPES);
                     dialog.show(getFragmentManager(), DIALOG_SORT_CUST_TYPES);
                 }
@@ -374,7 +379,7 @@ public class CustomerListFragment extends BaseFragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private boolean anyCustUsingAcc() {
+    /*private boolean anyCustUsingAcc() {
         // loop and check if there's any customer with acc credit/debit
         boolean accFigures = false;
         for (MyCashback cb :
@@ -385,7 +390,7 @@ public class CustomerListFragment extends BaseFragment {
             }
         }
         return accFigures;
-    }
+    }*/
 
     private void downloadReport() throws IOException {
         File file = createCsvReport();
@@ -445,12 +450,13 @@ public class CustomerListFragment extends BaseFragment {
             // +10 to cover for headers
             StringBuilder sb = new StringBuilder(CSV_RECORD_MAX_CHARS*(CSV_LINES_BUFFER+10));
 
-            boolean showAccFields = anyCustUsingAcc();
+            sb.append(CSV_HEADER).append(CommonConstants.NEWLINE_SEP);
+            /*boolean showAccFields = anyCustUsingAcc();
             if(showAccFields) {
                 sb.append(CSV_HEADER).append(CommonConstants.NEWLINE_SEP);
             } else {
                 sb.append(CSV_HEADER_NO_ACC).append(CommonConstants.NEWLINE_SEP);
-            }
+            }*/
 
             int cnt = mRetainedFragment.mLastFetchCashbacks.size();
             for(int i=0; i<cnt; i++) {
@@ -462,8 +468,8 @@ public class CustomerListFragment extends BaseFragment {
                 MyCashback cb = mRetainedFragment.mLastFetchCashbacks.get(i);
                 MyCustomer cust = cb.getCustomer();
                 // Append CSV record for this txn
-                sb.append(i+1).append(CommonConstants.CSV_DELIMETER);
-                sb.append(cust.getPrivateId()).append(CommonConstants.CSV_DELIMETER);
+                sb.append(i+1).append(CommonConstants.CSV_DELIMETER); // serial  num
+                //sb.append(cust.getPrivateId()).append(CommonConstants.CSV_DELIMETER);
                 sb.append(cust.getMobileNum()).append(CommonConstants.CSV_DELIMETER);
                 /*if(cust.getCardId()==null || cust.getCardId().isEmpty()) {
                     sb.append(CommonConstants.CSV_DELIMETER);
@@ -472,15 +478,21 @@ public class CustomerListFragment extends BaseFragment {
                 }*/
                 sb.append(DbConstants.userStatusDesc[cust.getStatus()]).append(CommonConstants.CSV_DELIMETER);
 
-                sb.append(cb.getCurrCbBalance()).append(CommonConstants.CSV_DELIMETER);
+                sb.append(cb.getCurrAccBalance()).append(CommonConstants.CSV_DELIMETER);
+                sb.append(cb.getCurrAccTotalAdd()).append(CommonConstants.CSV_DELIMETER);
+                sb.append(cb.getCurrAccTotalCb()).append(CommonConstants.CSV_DELIMETER);
+                sb.append(cb.getClCredit()).append(CommonConstants.CSV_DELIMETER);
+                sb.append(cb.getCurrAccTotalDebit()).append(CommonConstants.CSV_DELIMETER);
+
+                /*sb.append(cb.getCurrCbBalance()).append(CommonConstants.CSV_DELIMETER);
                 sb.append(cb.getCbCredit()).append(CommonConstants.CSV_DELIMETER);
                 sb.append(cb.getCbRedeem()).append(CommonConstants.CSV_DELIMETER);
 
                 if(showAccFields) {
-                    sb.append(cb.getCurrClBalance()).append(CommonConstants.CSV_DELIMETER);
+                    sb.append(cb.getCurrAccBalance()).append(CommonConstants.CSV_DELIMETER);
                     sb.append(cb.getClCredit()).append(CommonConstants.CSV_DELIMETER);
                     sb.append(cb.getClDebit()).append(CommonConstants.CSV_DELIMETER);
-                }
+                }*/
 
                 sb.append(cb.getBillAmt()).append(CommonConstants.CSV_DELIMETER);
                 sb.append(mSdfDateWithTime.format(cb.getLastTxnTime())).append(CommonConstants.CSV_DELIMETER);
@@ -526,15 +538,15 @@ public class CustomerListFragment extends BaseFragment {
         //public View mLayoutBill;
         public TextView mBillAmt;
 
-        public View mLayoutAcc;
-        public TextView mAccAdd;
-        public TextView mAccDebit;
+        //public View mLayoutAcc;
+        //public TextView mAccAdd;
+        //public TextView mAccDebit;
         public TextView mAccBalance;
 
         //public View mLayoutCb;
-        public TextView mCbAdd;
-        public TextView mCbDebit;
-        public TextView mCbBalance;
+        //public TextView mCbAdd;
+        //public TextView mCbDebit;
+        //public TextView mCbBalance;
 
         public View mLayout;
 
@@ -547,15 +559,15 @@ public class CustomerListFragment extends BaseFragment {
             //mLayoutBill = itemView.findViewById(R.id.layout_bill);
             mBillAmt = (TextView) itemView.findViewById(R.id.cust_bill_amt);
 
-            mLayoutAcc = itemView.findViewById(R.id.layout_account);
-            mAccAdd = (TextView) itemView.findViewById(R.id.cust_acc_credit);
-            mAccDebit = (TextView) itemView.findViewById(R.id.cust_acc_debit);
+            //mLayoutAcc = itemView.findViewById(R.id.layout_account);
+            //mAccAdd = (TextView) itemView.findViewById(R.id.cust_acc_credit);
+            //mAccDebit = (TextView) itemView.findViewById(R.id.cust_acc_debit);
             mAccBalance = (TextView) itemView.findViewById(R.id.cust_acc_balance);
 
             //mLayoutCb = itemView.findViewById(R.id.layout_cashback);
-            mCbAdd = (TextView) itemView.findViewById(R.id.cust_cb_credit);
-            mCbDebit = (TextView) itemView.findViewById(R.id.cust_cb_debit);
-            mCbBalance = (TextView) itemView.findViewById(R.id.cust_cb_balance);
+            //mCbAdd = (TextView) itemView.findViewById(R.id.cust_cb_credit);
+            //mCbDebit = (TextView) itemView.findViewById(R.id.cust_cb_debit);
+            //mCbBalance = (TextView) itemView.findViewById(R.id.cust_cb_balance);
 
             /*mCustId.setOnTouchListener(this);
             mLastTxnTime.setOnTouchListener(this);
@@ -620,19 +632,20 @@ public class CustomerListFragment extends BaseFragment {
             mCustId.setText(customer.getPrivateId());
             mLastTxnTime.setText(mSdfDateWithTime.format(cb.getLastTxnTime()));
             mBillAmt.setText(AppCommonUtil.getAmtStr(cb.getBillAmt()));
+            mAccBalance.setText(AppCommonUtil.getAmtStr(mCb.getCurrAccBalance()));
 
-            if(cb.getClCredit()==0 && cb.getClDebit()==0) {
+            /*if(cb.getClCredit()==0 && cb.getClDebit()==0) {
                 mLayoutAcc.setVisibility(View.GONE);
             } else {
                 mLayoutAcc.setVisibility(View.VISIBLE);
                 mAccAdd.setText(AppCommonUtil.getAmtStr(cb.getClCredit()));
                 mAccDebit.setText(AppCommonUtil.getAmtStr(cb.getClDebit()));
-                mAccBalance.setText(AppCommonUtil.getAmtStr(mCb.getCurrClBalance()));
+                mAccBalance.setText(AppCommonUtil.getAmtStr(mCb.getCurrAccBalance()));
             }
 
             mCbAdd.setText(AppCommonUtil.getAmtStr(cb.getCbCredit()));
             mCbDebit.setText(AppCommonUtil.getAmtStr(cb.getCbRedeem()));
-            mCbBalance.setText(AppCommonUtil.getAmtStr(mCb.getCurrCbBalance()));
+            mCbBalance.setText(AppCommonUtil.getAmtStr(mCb.getCurrCbBalance()));*/
         }
     }
 

@@ -136,7 +136,7 @@ public class MyRetainedFragment extends RetainedFragment {
         toDeleteTrustedDeviceIndex = -1;
 
         mOrderItems = null;
-        mCbExcludedTotal = 0;
+        //mCbExcludedTotal = 0;
         mBillTotal = 0;
 
         mCustomerOp= null;

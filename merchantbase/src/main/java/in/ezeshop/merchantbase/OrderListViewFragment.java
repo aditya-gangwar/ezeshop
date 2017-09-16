@@ -1,5 +1,6 @@
 package in.ezeshop.merchantbase;
 
+/*
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.ListFragment;
@@ -22,9 +23,6 @@ import in.ezeshop.merchantbase.adapter.OrderListViewAdapter;
 import in.ezeshop.merchantbase.entities.OrderItem;
 import in.ezeshop.merchantbase.helper.MyRetainedFragment;
 
-/**
- * Created by adgangwa on 04-03-2016.
- */
 public class OrderListViewFragment extends ListFragment implements OrderListViewAdapter.OrderListViewIf {
 
     private static final String TAG = "MchntApp-OrderListViewFragment";
@@ -230,23 +228,6 @@ public class OrderListViewFragment extends ListFragment implements OrderListView
         }
     }
 
-    /*@Override
-    public void onClick(View v) {
-        if(!mCallback.getRetainedFragment().getResumeOk())
-            return;
-
-        try {
-            int id = v.getId();
-            if (id == R.id.btn_bill_total) {
-                mCallback.onTotalBillFromOrderList();
-            }
-        } catch (Exception e) {
-            LogMy.e(TAG, "Exception in Fragment: ", e);
-            DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), true, true)
-                    .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
-        }
-    }*/
-
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         LogMy.d(TAG, "In onActivityCreated");
@@ -266,3 +247,4 @@ public class OrderListViewFragment extends ListFragment implements OrderListView
         outState.putInt("mChangePosition", mChangePosition);
     }
 }
+*/

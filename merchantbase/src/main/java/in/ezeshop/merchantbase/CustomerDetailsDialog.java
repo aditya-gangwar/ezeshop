@@ -36,6 +36,8 @@ public class CustomerDetailsDialog extends BaseDialog {
     private CustomerDetailsDialogIf mCallback;
     private SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.DATE_LOCALE);
 
+    private String mCustPrivateId;
+
     public interface CustomerDetailsDialogIf {
         MyRetainedFragment getRetainedFragment();
         void getCustTxns(String id);
@@ -68,6 +70,7 @@ public class CustomerDetailsDialog extends BaseDialog {
         int position = getArguments().getInt(ARG_CB_POSITION, -1);
         if(position>=0) {
             cb = mCallback.getRetainedFragment().mLastFetchCashbacks.get(position);
+            mCustPrivateId = cb.getCustomer().getPrivateId();
             //cust = cb.getCustomer();
         }
         initDialogView(cb);
@@ -83,7 +86,7 @@ public class CustomerDetailsDialog extends BaseDialog {
                 dialog.dismiss();
                 break;
             case DialogInterface.BUTTON_NEUTRAL:
-                mCallback.getCustTxns(mInputCustomerId.getText().toString());
+                mCallback.getCustTxns(mCustPrivateId);
                 dialog.dismiss();
                 break;
         }
@@ -99,6 +102,10 @@ public class CustomerDetailsDialog extends BaseDialog {
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_customer_details, null);
 
         bindUiResources(v);
+        if(savedInstanceState!=null) {
+            LogMy.d(TAG,"Restoring");
+            mCustPrivateId = savedInstanceState.getString("mCustPrivateId");
+        }
 
         boolean showGetTxns = getArguments().getBoolean(ARG_GETTXNS_BTN, true);
 
@@ -127,7 +134,7 @@ public class CustomerDetailsDialog extends BaseDialog {
         MyCustomer cust = cb.getCustomer();
 
         if(cust != null) {
-            mInputCustomerId.setText(cust.getPrivateId());
+            //mInputCustomerId.setText(cust.getPrivateId());
             mInputMobileNum.setText(CommonUtils.getPartialVisibleStr(cust.getMobileNum()));
             if(cb.getLastTxnTime()!=null) {
                 mLastUsedHere.setText(mSdfDateWithTime.format(cb.getLastTxnTime()));
@@ -181,18 +188,20 @@ public class CustomerDetailsDialog extends BaseDialog {
             mInputTotalBill.setText(AppCommonUtil.getAmtStr(cb.getBillAmt()));
             //mInputCbBill.setText(AppCommonUtil.getAmtStr(cb.getCbBillAmt()));
 
-            if(cb.getClCredit()==0 && cb.getClDebit()==0) {
+            /*if(cb.getClCredit()==0 && cb.getClDebit()==0) {
                 mLayoutAccBalance.setVisibility(View.GONE);
             } else {
-                mLayoutAccBalance.setVisibility(View.VISIBLE);
-                mInputAccAvailable.setText(AppCommonUtil.getAmtStr(cb.getCurrClBalance()));
-                mInputAccTotalAdd.setText(AppCommonUtil.getAmtStr(cb.getClCredit()));
-                mInputAccTotalDebit.setText(AppCommonUtil.getAmtStr(cb.getClDebit()));
-            }
+                mLayoutAccBalance.setVisibility(View.VISIBLE);*/
+                mInputAccBalance.setText(AppCommonUtil.getAmtStr(cb.getCurrAccBalance()));
+                mInputAccTotalAdd.setText(AppCommonUtil.getAmtStr(cb.getCurrAccTotalAdd()));
+            mInputAccAddCb.setText(AppCommonUtil.getAmtStr(cb.getCurrAccTotalCb()));
+            mInputAccDeposit.setText(AppCommonUtil.getAmtStr(cb.getClCredit()));
+                mInputAccTotalDebit.setText(AppCommonUtil.getAmtStr(cb.getCurrAccTotalDebit()));
+            //}
 
-            mInputCbAvailable.setText(AppCommonUtil.getAmtStr(cb.getCurrCbBalance()));
+            /*mInputCbAvailable.setText(AppCommonUtil.getAmtStr(cb.getCurrCbBalance()));
             mInputCbTotalAward.setText(AppCommonUtil.getAmtStr(cb.getCbCredit()));
-            mInputCbTotalRedeem.setText(AppCommonUtil.getAmtStr(cb.getCbRedeem()));
+            mInputCbTotalRedeem.setText(AppCommonUtil.getAmtStr(cb.getCbRedeem()));*/
 
             /*if(mCallback.getRetainedFragment().mMerchantUser.isPseudoLoggedIn()) {
                 // set cust care specific fields too
@@ -215,7 +224,7 @@ public class CustomerDetailsDialog extends BaseDialog {
         }
     }
 
-    private TextView mInputCustomerId;
+    //private TextView mInputCustomerId;
     private TextView mInputMobileNum;
     // TextView mName;
     private TextView mLastUsedHere;
@@ -238,26 +247,28 @@ public class CustomerDetailsDialog extends BaseDialog {
     private TextView mInputTotalBill;
     //private TextView mInputCbBill;
 
-    private TextView mInputAccAvailable;
+    private TextView mInputAccBalance;
     private TextView mInputAccTotalAdd;
+    private TextView mInputAccAddCb;
+    private TextView mInputAccDeposit;
     private TextView mInputAccTotalDebit;
 
-    private TextView mInputCbAvailable;
+    /*private TextView mInputCbAvailable;
     private TextView mInputCbTotalAward;
-    private TextView mInputCbTotalRedeem;
+    private TextView mInputCbTotalRedeem;*/
 
     // layouts for optional fields
     //private View mLayoutName;
-    private View mLayoutCreated;
-    private View mLayoutFirstLogin;
+    //private View mLayoutCreated;
+    //private View mLayoutFirstLogin;
     //private View mLayoutRemarks;
     //private View mLayoutCardStatusDate;
-    private View mLayoutAccBalance;
+    //private View mLayoutAccBalance;
     //private View mLayoutCard;
 
     private void bindUiResources(View v) {
 
-        mInputCustomerId = (TextView) v.findViewById(R.id.input_customer_id);;
+        //mInputCustomerId = (TextView) v.findViewById(R.id.input_customer_id);;
         mInputMobileNum = (TextView) v.findViewById(R.id.input_customer_mobile);
         //mName = (TextView) v.findViewById(R.id.input_cust_name);;
         mLastUsedHere = (TextView) v.findViewById(R.id.input_cust_last_activity);;
@@ -281,13 +292,15 @@ public class CustomerDetailsDialog extends BaseDialog {
         mInputTotalBill = (TextView) v.findViewById(R.id.input_total_bill);
         //mInputCbBill = (TextView) v.findViewById(R.id.input_cb_bill);
 
-        mInputAccAvailable = (TextView) v.findViewById(R.id.input_acc_balance);
+        mInputAccBalance = (TextView) v.findViewById(R.id.input_acc_balance);
         mInputAccTotalAdd = (TextView) v.findViewById(R.id.input_acc_add);
+        mInputAccAddCb = (TextView) v.findViewById(R.id.input_cb);
+        mInputAccDeposit = (TextView) v.findViewById(R.id.input_acc_deposit);
         mInputAccTotalDebit = (TextView) v.findViewById(R.id.input_acc_debit);
 
-        mInputCbAvailable = (TextView) v.findViewById(R.id.input_cb_balance);
+        /*mInputCbAvailable = (TextView) v.findViewById(R.id.input_cb_balance);
         mInputCbTotalAward = (TextView) v.findViewById(R.id.input_cb_award);
-        mInputCbTotalRedeem = (TextView) v.findViewById(R.id.input_cb_redeem);
+        mInputCbTotalRedeem = (TextView) v.findViewById(R.id.input_cb_redeem);*/
 
         // layouts for optional fields
         //mLayoutName = v.findViewById(R.id.layout_cust_name);
@@ -295,7 +308,13 @@ public class CustomerDetailsDialog extends BaseDialog {
         //mLayoutFirstLogin = v.findViewById(R.id.layout_first_login);
         //mLayoutRemarks = v.findViewById(R.id.layout_status_remarks);
         //mLayoutCardStatusDate = v.findViewById(R.id.layout_card_status_date);
-        mLayoutAccBalance = v.findViewById(R.id.layout_acc_balance);
+        //mLayoutAccBalance = v.findViewById(R.id.layout_acc_balance);
 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("mCustPrivateId", mCustPrivateId);
     }
 }

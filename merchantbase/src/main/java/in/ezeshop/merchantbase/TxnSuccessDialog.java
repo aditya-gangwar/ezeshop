@@ -24,9 +24,9 @@ public class TxnSuccessDialog extends BaseDialog {
     private static final String ARG_MOBILE_NUM = "mobile_num";
     private static final String ARG_TXN_ID = "txnId";
     private static final String ARG_CL_BALANCE = "cl_balance";
-    private static final String ARG_CB_BALANCE = "cb_balance";
+    //private static final String ARG_CB_BALANCE = "cb_balance";
     private static final String ARG_CL_BALANCE_OLD = "cl_balance_old";
-    private static final String ARG_CB_BALANCE_OLD = "cb_balance_old";
+    //private static final String ARG_CB_BALANCE_OLD = "cb_balance_old";
 
     private TxnSuccessDialogIf mListener;
 
@@ -34,14 +34,14 @@ public class TxnSuccessDialog extends BaseDialog {
         void onTxnSuccess();
     }
 
-    public static TxnSuccessDialog newInstance(String custId, String txnId, int clBalance, int cbBalance, int clBalanceOld, int cbBalanceOld) {
+    public static TxnSuccessDialog newInstance(String custId, String txnId, int clBalance, int clBalanceOld) {
         Bundle args = new Bundle();
         args.putString(ARG_MOBILE_NUM, custId);
         args.putString(ARG_TXN_ID, txnId);
         args.putInt(ARG_CL_BALANCE, clBalance);
-        args.putInt(ARG_CB_BALANCE, cbBalance);
+        //args.putInt(ARG_CB_BALANCE, cbBalance);
         args.putInt(ARG_CL_BALANCE_OLD, clBalanceOld);
-        args.putInt(ARG_CB_BALANCE_OLD, cbBalanceOld);
+        //args.putInt(ARG_CB_BALANCE_OLD, cbBalanceOld);
 
         TxnSuccessDialog fragment = new TxnSuccessDialog();
         fragment.setArguments(args);
@@ -66,9 +66,9 @@ public class TxnSuccessDialog extends BaseDialog {
         String mobileNum = getArguments().getString(ARG_MOBILE_NUM, null);
         String txnId = getArguments().getString(ARG_TXN_ID, null);
         int clbalance = getArguments().getInt(ARG_CL_BALANCE);
-        int cbBalance = getArguments().getInt(ARG_CB_BALANCE);
+        //int cbBalance = getArguments().getInt(ARG_CB_BALANCE);
         int clbalanceOld = getArguments().getInt(ARG_CL_BALANCE_OLD);
-        int cbBalanceOld = getArguments().getInt(ARG_CB_BALANCE_OLD);
+        //int cbBalanceOld = getArguments().getInt(ARG_CB_BALANCE_OLD);
 
         View v = LayoutInflater.from(getActivity())
                 .inflate(R.layout.dialog_txn_success, null);
@@ -81,16 +81,16 @@ public class TxnSuccessDialog extends BaseDialog {
             String txt = "Txn ID: " + txnId;
             mInputTxnId.setText(txt);
         }
-        mInputCbBalance.setText(AppCommonUtil.getAmtStr(cbBalance));
-        mInputCbBalanceOld.setText(AppCommonUtil.getAmtStr(cbBalanceOld));
+        //mInputCbBalance.setText(AppCommonUtil.getAmtStr(cbBalance));
+        //mInputCbBalanceOld.setText(AppCommonUtil.getAmtStr(cbBalanceOld));
 
-        if(clbalance==0 && clbalanceOld==0) {
+        /*if(clbalance==0 && clbalanceOld==0) {
             mLayoutAccNew.setVisibility(View.GONE);
             mLayoutAccOld.setVisibility(View.GONE);
-        } else {
+        } else {*/
             mInputCashBalance.setText(AppCommonUtil.getAmtStr(clbalance));
             mInputCashBalanceOld.setText(AppCommonUtil.getAmtStr(clbalanceOld));
-        }
+        //}
 
         //displayTransactionValues();
 
@@ -150,24 +150,24 @@ public class TxnSuccessDialog extends BaseDialog {
     private EditText mInputCustomer;
     private EditText mInputTxnId;
     private EditText mInputCashBalance;
-    private EditText mInputCbBalance;
+    //private EditText mInputCbBalance;
     private EditText mInputCashBalanceOld;
-    private EditText mInputCbBalanceOld;
+    //private EditText mInputCbBalanceOld;
 
-    private View mLayoutAccNew;
-    private View mLayoutAccOld;
+    //private View mLayoutAccNew;
+    //private View mLayoutAccOld;
 
     private void bindUiResources(View v) {
         mInputCustomer = (EditText) v.findViewById(R.id.input_cust_id);
 
         mInputTxnId = (EditText) v.findViewById(R.id.input_txn_id);
-        mInputCashBalance = (EditText) v.findViewById(R.id.input_account_balance);
-        mInputCbBalance = (EditText) v.findViewById(R.id.input_cb_balance);
+        mInputCashBalance = (EditText) v.findViewById(R.id.input_acc_new);
+        //mInputCbBalance = (EditText) v.findViewById(R.id.input_cb_balance);
 
-        mInputCashBalanceOld = (EditText) v.findViewById(R.id.input_account_balance_old);
-        mInputCbBalanceOld = (EditText) v.findViewById(R.id.input_cb_balance_old);
+        mInputCashBalanceOld = (EditText) v.findViewById(R.id.input_acc_old);
+        //mInputCbBalanceOld = (EditText) v.findViewById(R.id.input_cb_balance_old);
 
-        mLayoutAccNew = v.findViewById(R.id.layout_acc_new);
-        mLayoutAccOld = v.findViewById(R.id.layout_acc_old);
+        //mLayoutAccNew = v.findViewById(R.id.layout_acc_new);
+        //mLayoutAccOld = v.findViewById(R.id.layout_acc_old);
     }
 }

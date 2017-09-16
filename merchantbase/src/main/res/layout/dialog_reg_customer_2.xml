@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_marginBottom="@dimen/XXL_space"
+    android:background="?android:attr/windowBackground">
+
+    <EditText
+        style="@style/Dialog_title"
+        android:id="@+id/label_title"
+        android:text="REGISTER  CUSTOMER"/>
+
+    <LinearLayout
+        style="@style/LL_Vertical"
+        android:layout_below="@+id/label_title"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/XL_space">
+
+        <EditText
+            style="@style/Edittext_only_view_small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/label_info_age"
+            android:text="*  FOR PEOPLE ABOVE 18 YEARS ONLY  *"
+            android:textStyle="bold"
+            android:textColor="@color/secondary_text"
+            android:layout_marginBottom="@dimen/medium_space"/>
+
+        <EditText
+            style="@style/Edittext_only_view_small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/label_info_otp"
+            android:text="Enter received OTP and submit the request again."
+            android:textStyle="italic"
+            android:textColor="@color/accent2"/>
+
+        <LinearLayout
+            style="@style/LL_Horizontal_paddingSidesXL"
+            android:layout_marginTop="@dimen/XXXL_space">
+
+            <ImageView
+                style="@style/Imageview_Left_Column"
+                android:id="@+id/image_mobile"
+                android:src="@drawable/ic_phone_android_white_24dp"/>
+            <EditText
+                style="@style/Edittext_only_view_medium"
+                android:id="@+id/label_mobile"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:text="Mobile*"
+                android:layout_weight="40"
+                android:gravity="left"/>
+            <EditText
+                style="@style/MyEdittext_Medium"
+                android:id="@+id/input_customer_mobile"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="10 digit"
+                android:inputType="phone"
+                android:maxLength="@string/mobile_char_limit"
+                android:layout_weight="60"
+                android:gravity="left"
+                android:imeOptions="actionDone"/>
+        </LinearLayout>
+        <LinearLayout
+            style="@style/LL_Horizontal_paddingSidesXL">
+
+            <ImageView
+                style="@style/Imageview_Left_Column"
+                android:src="@drawable/ic_phone_android_white_24dp"
+                android:visibility="invisible"/>
+            <EditText
+                style="@style/Edittext_only_view_small"
+                android:id="@+id/label_info_mobile"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:text="(OTP will be sent on this number)"
+                android:layout_weight="40"
+                android:textColor="@color/secondary_text"
+                android:gravity="left"/>
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/LL_Horizontal_paddingSidesXL"
+            android:id="@+id/layout_sex"
+            android:layout_marginTop="@dimen/XXXL_space"
+            android:background="@color/bg_light_grey">
+
+            <ImageView
+                style="@style/Imageview_Left_Column"
+                android:src="@drawable/ic_perm_identity_white_24dp"/>
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/radioGroupSex"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    style="@style/radio_button_medium"
+                    android:id="@+id/radioMale"
+                    android:text="Male"
+                    android:layout_weight="1"
+                    android:checked="false"/>
+
+                <RadioButton
+                    style="@style/radio_button_medium"
+                    android:id="@+id/radioFemale"
+                    android:text="Female"
+                    android:layout_weight="1"
+                    android:checked="false"/>
+            </RadioGroup>
+
+        </LinearLayout>
+
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/XXXXL_space"/>
+
+        <LinearLayout
+            style="@style/LL_Horizontal_paddingSidesXL"
+            android:id="@+id/layout_otp"
+            android:layout_marginBottom="@dimen/XXXXL_space">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/image_otp"
+                android:src="@drawable/ic_security_white_24dp"
+                android:tint="@color/primary"/>
+
+            <EditText
+                style="@style/Edittext_only_view_medium"
+                android:id="@+id/label_otp"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:text="OTP"
+                android:layout_weight="40"
+                android:gravity="left|bottom"
+                android:layout_gravity="bottom"/>
+
+            <EditText
+                style="@style/MyEdittext_Medium"
+                android:id="@+id/input_otp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Enter OTP"
+                android:layout_weight="60"
+                android:gravity="left"
+                android:inputType="number"
+                android:maxLength="@string/otp_char_limit"
+                android:imeOptions="actionDone"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

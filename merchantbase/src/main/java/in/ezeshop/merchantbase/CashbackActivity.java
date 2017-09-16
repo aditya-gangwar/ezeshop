@@ -31,7 +31,6 @@ import com.crashlytics.android.Crashlytics;
 import com.helpshift.support.Support;
 
 import in.ezeshop.appbase.*;
-import in.ezeshop.appbase.barcodeReader.BarcodeCaptureActivity;
 import in.ezeshop.appbase.constants.AppConstants;
 
 import in.ezeshop.common.CommonUtils;
@@ -39,13 +38,11 @@ import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.DbConstants;
 import in.ezeshop.common.constants.ErrorCodes;
 import in.ezeshop.common.MyGlobalSettings;
-import in.ezeshop.common.constants.GlobalSettingConstants;
 import in.ezeshop.common.database.Merchants;
 import in.ezeshop.appbase.utilities.AppAlarms;
 import in.ezeshop.appbase.utilities.AppCommonUtil;
 import in.ezeshop.appbase.utilities.DialogFragmentWrapper;
 import in.ezeshop.appbase.utilities.LogMy;
-import in.ezeshop.appbase.utilities.ValidationHelper;
 import in.ezeshop.merchantbase.entities.MyCustomerOps;
 import in.ezeshop.merchantbase.entities.MerchantUser;
 import in.ezeshop.merchantbase.entities.MyMerchantStats;
@@ -54,7 +51,6 @@ import in.ezeshop.merchantbase.helper.MyRetainedFragment;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -135,7 +131,7 @@ public class CashbackActivity extends BaseActivity implements
     private EditText mTbTitle2;
     private LinearLayout mTbLayoutSubhead1;
     private TextView mTbSubhead1Text1;
-    private TextView mTbSubhead1Text2;
+    //private TextView mTbSubhead1Text2;
 
     private MerchantUser mMerchantUser;
     private Merchants mMerchant;
@@ -534,16 +530,16 @@ public class CashbackActivity extends BaseActivity implements
             }
         }*/
 
-        int curAccBal = mWorkFragment.mCurrCashback.getCurrClBalance();
+        int curAccBal = mWorkFragment.mCurrCashback.getCurrAccBalance();
         if(curAccBal==0 && !mMerchant.getCl_add_enable()) {
             mTbSubhead1Text1.setVisibility(View.GONE);
         } else {
             mTbSubhead1Text1.setVisibility(View.VISIBLE);
-            mTbSubhead1Text1.setText(AppCommonUtil.getAmtStr(mWorkFragment.mCurrCashback.getCurrClBalance()));
+            mTbSubhead1Text1.setText(AppCommonUtil.getAmtStr(mWorkFragment.mCurrCashback.getCurrAccBalance()));
         }
         //mTbSubhead1Divider.setVisibility(View.VISIBLE);
         //mTbSubhead1Text2.setVisibility(View.VISIBLE);
-        mTbSubhead1Text2.setText(AppCommonUtil.getAmtStr(mWorkFragment.mCurrCashback.getCurrCbBalance()));
+        //mTbSubhead1Text2.setText(AppCommonUtil.getAmtStr(mWorkFragment.mCurrCashback.getCurrCbBalance()));
     }
 
     public void updateTbForMerchant() {
@@ -587,7 +583,7 @@ public class CashbackActivity extends BaseActivity implements
         mTbLayoutSubhead1 = (LinearLayout) mToolbar.findViewById(R.id.tb_layout_subhead1) ;
         mTbSubhead1Text1 = (TextView) mToolbar.findViewById(R.id.tb_curr_cashload) ;
         //mTbSubhead1Divider = mToolbar.findViewById(R.id.tb_view_1) ;
-        mTbSubhead1Text2 = (TextView) mToolbar.findViewById(R.id.tb_curr_cashback) ;
+        //mTbSubhead1Text2 = (TextView) mToolbar.findViewById(R.id.tb_curr_cashback) ;
     }
 
     private void askAndRegisterCustomer(int status) {
@@ -1534,10 +1530,11 @@ public class CashbackActivity extends BaseActivity implements
             TxnSuccessDialog dialog = TxnSuccessDialog.newInstance(
                     mWorkFragment.mCurrTransaction.getTransaction().getCust_mobile(),
                     mWorkFragment.mCurrTransaction.getTransaction().getTrans_id(),
-                    mWorkFragment.mCurrCashback.getCurrClBalance(),
-                    mWorkFragment.mCurrCashback.getCurrCbBalance(),
-                    mWorkFragment.mCurrCashback.getOldClBalance(),
-                    mWorkFragment.mCurrCashback.getOldCbBalance());
+                    mWorkFragment.mCurrCashback.getCurrAccBalance(),
+                    //mWorkFragment.mCurrCashback.getCurrCbBalance(),
+                    mWorkFragment.mCurrCashback.getOldClBalance()
+                    //mWorkFragment.mCurrCashback.getOldCbBalance()
+            );
             dialog.show(mFragMgr, DIALOG_TXN_SUCCESS);
 
             // if required, start upload of txn image file in background thread
@@ -1842,7 +1839,7 @@ public class CashbackActivity extends BaseActivity implements
         }
     }
 
-    private void startOrderListFragment() {
+    /*private void startOrderListFragment() {
         //mTbCalculator.setVisibility(View.GONE);
 
         Fragment fragment = mFragMgr.findFragmentByTag(ORDER_LIST_FRAGMENT);
@@ -1859,7 +1856,7 @@ public class CashbackActivity extends BaseActivity implements
             // Commit the transaction
             transaction.commit();
         }
-    }
+    }*/
 
     private void startCashTransFragment() {
         //mTbCalculator.setVisibility(View.GONE);
@@ -2034,10 +2031,10 @@ public class CashbackActivity extends BaseActivity implements
         onBackPressed();
     }
 
-    @Override
+    /*@Override
     public void onViewOrderList() {
         startOrderListFragment();
-    }
+    }*/
 
     @Override
     public void onBackPressed() {

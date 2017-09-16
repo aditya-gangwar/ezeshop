@@ -34,7 +34,7 @@
             <RadioButton
                 style="@style/radio_button_medium"
                 android:id="@+id/billAmt"
-                android:text="Total Bill Amount" />
+                android:text="Total Bill" />
 
             <RadioButton
                 style="@style/radio_button_medium"
