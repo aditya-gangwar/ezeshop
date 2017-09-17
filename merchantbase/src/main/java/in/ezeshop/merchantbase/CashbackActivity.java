@@ -58,7 +58,7 @@ import java.util.Map;
 public class CashbackActivity extends BaseActivity implements
         MyRetainedFragment.RetainedFragmentIf, MobileNumberFragment.MobileFragmentIf,
         BillingFragment2.BillingFragment2If, CashTransactionFragment_2.CashTransactionFragmentIf,
-        DialogFragmentWrapper.DialogFragmentWrapperIf, OrderListViewFragment.OrderListViewFragmentIf,
+        DialogFragmentWrapper.DialogFragmentWrapperIf,
         CustomerRegDialog.CustomerRegFragmentIf, TxnSuccessDialog.TxnSuccessDialogIf,
         CustomerOpDialog.CustomerOpDialogIf, OtpPinInputDialog.OtpPinInputDialogIf,
         PasswordPreference.PasswordPreferenceIf, TrustedDevicesFragment.TrustedDevicesFragmentIf,
@@ -2025,13 +2025,13 @@ public class CashbackActivity extends BaseActivity implements
         startCashTransFragment();
     }
 
-    @Override
+    /*@Override
     public void onTotalBillFromOrderList() {
         //startCashTransFragment();
         onBackPressed();
     }
 
-    /*@Override
+    @Override
     public void onViewOrderList() {
         startOrderListFragment();
     }*/

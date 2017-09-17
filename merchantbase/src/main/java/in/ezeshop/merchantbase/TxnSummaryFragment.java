@@ -94,33 +94,38 @@ public class TxnSummaryFragment extends BaseFragment {
         int[] summary = getArguments().getIntArray(ARG_SUMMARY);
 
         input_values[AppConstants.INDEX_TXN_COUNT].setText(String.valueOf(summary[AppConstants.INDEX_TXN_COUNT]));
+        input_values[AppConstants.INDEX_OVERDRAFT_TXN_COUNT].setText(String.valueOf(summary[AppConstants.INDEX_OVERDRAFT_TXN_COUNT]));
         input_values[AppConstants.INDEX_BILL_AMOUNT].setText(AppCommonUtil.getSignedAmtStr(summary[AppConstants.INDEX_BILL_AMOUNT], true));
-        if(summary[AppConstants.INDEX_ADD_ACCOUNT]==0) {
-            layoutAcc.setVisibility(View.GONE);
-        } else {
-            input_values[AppConstants.INDEX_ADD_ACCOUNT].setText(AppCommonUtil.getSignedAmtStr(summary[AppConstants.INDEX_ADD_ACCOUNT], true));
-        }
-        input_values[AppConstants.INDEX_DEBIT_ACCOUNT].setText(AppCommonUtil.getSignedAmtStr(summary[AppConstants.INDEX_DEBIT_ACCOUNT], false));
         input_values[AppConstants.INDEX_CASHBACK].setText(AppCommonUtil.getSignedAmtStr(summary[AppConstants.INDEX_CASHBACK], true));
-        input_values[AppConstants.INDEX_DEBIT_CASHBACK].setText(AppCommonUtil.getSignedAmtStr(summary[AppConstants.INDEX_DEBIT_CASHBACK], true));
+        input_values[AppConstants.INDEX_ADD_ACCOUNT].setText(AppCommonUtil.getSignedAmtStr(summary[AppConstants.INDEX_ADD_ACCOUNT], true));
+        input_values[AppConstants.INDEX_DEBIT_ACCOUNT].setText(AppCommonUtil.getSignedAmtStr(summary[AppConstants.INDEX_DEBIT_ACCOUNT], false));
+        if(summary[AppConstants.INDEX_OVERDRAFT] > 0) {
+            layoutOverdraft.setVisibility(View.VISIBLE);
+            input_values[AppConstants.INDEX_OVERDRAFT].setText(AppCommonUtil.getSignedAmtStr(summary[AppConstants.INDEX_OVERDRAFT], true));
+        } else {
+            layoutOverdraft.setVisibility(View.GONE);
+        }
     }
 
     EditText input_values[] = new EditText[AppConstants.INDEX_SUMMARY_MAX_VALUE];
     EditText dates;
     AppCompatButton detailsButton;
-    View layoutAcc;
+    //View layoutAcc;
+    View layoutOverdraft;
 
     protected void bindUiResources(View view) {
         dates = (EditText) view.findViewById(R.id.txnlist_filter_duration);
         input_values[AppConstants.INDEX_TXN_COUNT] = (EditText) view.findViewById(R.id.input_trans_count);
+        input_values[AppConstants.INDEX_OVERDRAFT_TXN_COUNT] = (EditText) view.findViewById(R.id.input_overdraft_count);
         input_values[AppConstants.INDEX_BILL_AMOUNT] = (EditText) view.findViewById(R.id.input_trans_bill_amt);
+        input_values[AppConstants.INDEX_CASHBACK] = (EditText) view.findViewById(R.id.input_trans_add_cb);
         input_values[AppConstants.INDEX_ADD_ACCOUNT] = (EditText) view.findViewById(R.id.input_trans_add_account);
         input_values[AppConstants.INDEX_DEBIT_ACCOUNT] = (EditText) view.findViewById(R.id.input_trans_debit_account);
-        input_values[AppConstants.INDEX_CASHBACK] = (EditText) view.findViewById(R.id.input_trans_add_cb);
-        input_values[AppConstants.INDEX_DEBIT_CASHBACK] = (EditText) view.findViewById(R.id.input_trans_redeem_cb);
+        input_values[AppConstants.INDEX_OVERDRAFT] = (EditText) view.findViewById(R.id.input_trans_overdraft);
 
         detailsButton = (AppCompatButton) view.findViewById(R.id.details_btn);
-        layoutAcc = view.findViewById(R.id.layout_account);
+        //layoutAcc = view.findViewById(R.id.layout_account);
+        layoutOverdraft = view.findViewById(R.id.layout_trans_overdraft);
     }
 
     @Override

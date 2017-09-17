@@ -317,7 +317,8 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        style="@style/LL_Horizontal_wrap">
+                        style="@style/LL_Horizontal_wrap"
+                        android:id="@+id/layout_trans_overdraft">
 
                         <EditText
                             style="@style/Edittext_only_view_small_lessPad"

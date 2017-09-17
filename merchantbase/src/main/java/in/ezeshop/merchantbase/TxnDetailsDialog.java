@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -101,11 +102,11 @@ public class TxnDetailsDialog extends BaseDialog {
             case DialogInterface.BUTTON_NEGATIVE:
                 dialog.dismiss();
                 break;
-            case DialogInterface.BUTTON_NEUTRAL:
+            /*case DialogInterface.BUTTON_NEUTRAL:
                 //Do nothing here because we override this button later to change the close behaviour.
                 //However, we still need this because on older versions of Android unless we
                 //pass a handler the button doesn't get instantiated
-                break;
+                break;*/
         }
     }
 
@@ -118,75 +119,9 @@ public class TxnDetailsDialog extends BaseDialog {
         LogMy.d(TAG,"Entering initDialogView");
         final Transaction txn = mCallback.getRetainedFragment().mLastFetchTransactions.get(position);
 
-        // hide fields for customer care logins only
-        /*if(mCallback.getRetainedFragment().mMerchantUser.isPseudoLoggedIn()) {
-
-            // check if file locally available - will be after the call to showTxnImg()
-            // if not, set the listener
-            Bitmap image = mCallback.getRetainedFragment().mLastFetchedImage;
-            if(image != null) {
-                int radiusInDp = (int) getResources().getDimension(R.dimen.txn_img_image_width);
-                int radiusInPixels = AppCommonUtil.dpToPx(radiusInDp);
-                Bitmap scaledImg = Bitmap.createScaledBitmap(image,radiusInPixels,radiusInPixels,true);
-
-                mTxnImage.setVisibility(View.VISIBLE);
-                mTxnImage.setImageBitmap(scaledImg);
-
-            } else {
-                mTxnImage.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(txn.getImgFileName()==null || txn.getImgFileName().isEmpty()) {
-                            AppCommonUtil.toast(getActivity(), "Card image was not required for this txn");
-                        } else {
-                            // start file download
-                            // pass index of current shown txn - so as this dialog can be started again to show the same txn
-                            mCallback.showTxnImg(position);
-                            getDialog().dismiss();
-                        }
-                    }
-                });
-            }
-        } else {
-            mTxnImage.setVisibility(View.GONE);
-        }*/
-
         if(txn != null) {
-            //mLayoutCancelled.setVisibility(View.GONE);
-
-            mInputTxnId.setText(txn.getTrans_id());
-            mInputTxnTime.setText(mSdfDateWithTime.format(txn.getCreate_time()));
-
-            if(txn.getInvoiceNum()==null || txn.getInvoiceNum().isEmpty()) {
-                mLayoutInvNum.setVisibility(View.GONE);
-            } else {
-                mLayoutInvNum.setVisibility(View.VISIBLE);
-                mInvoiceNum.setText(txn.getInvoiceNum());
-            }
-
-            /*if(mCallback.getRetainedFragment().mMerchantUser.isPseudoLoggedIn()) {
-                // For CC user - show full card#
-                mCardUsed.setText(txn.getUsedCardId());
-            } else {
-                mCardUsed.setText(CommonUtils.getPartialVisibleStr(txn.getUsedCardId()));
-            }*/
-            mPinUsed.setText(txn.getCpin());
-
-            int noCbBill = txn.getTotal_billed() - txn.getCb_billed();
-            if(noCbBill > 0) {
-                String str = "* "+AppCommonUtil.getAmtStr(txn.getTotal_billed());
-                mInputTotalBill.setText(str);
-
-                mLayoutCbBill.setVisibility(View.VISIBLE);
-                str = "(* " + AppCommonUtil.getAmtStr(noCbBill) + " Bill for No Cashback Items)";
-                mInputCbBill.setText(str);
-            } else {
-                mInputTotalBill.setText(AppCommonUtil.getAmtStr(txn.getTotal_billed()));
-                mLayoutCbBill.setVisibility(View.GONE);
-            }
-
-            LogMy.d(TAG,"Mid check 1");
-            mInputCustomerId.setOnTouchListener(new View.OnTouchListener() {
+            mInputMobileNum.setText(Html.fromHtml("<u>"+CommonUtils.getPartialVisibleStr(txn.getCust_mobile())+"</u>"));
+            mInputMobileNum.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
                     if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
@@ -197,70 +132,45 @@ public class TxnDetailsDialog extends BaseDialog {
                     return false;
                 }
             });
-            LogMy.d(TAG,"Mid check 2");
-            mInputCustomerId.setText(Html.fromHtml("<u>"+txn.getCust_private_id()+"</u>"));
-            mInputMobileNum.setText(CommonUtils.getPartialVisibleStr(txn.getCust_mobile()));
+            mInputTxnTime.setText(mSdfDateWithTime.format(txn.getCreate_time()));
 
-            int totalCb = txn.getCb_credit() + txn.getExtra_cb_credit();
-            String detailStr = MyTransaction.getCbDetailStr(txn);
-
-            if( txn.getCb_credit()>0 && txn.getExtra_cb_credit()>0) {
-                // both CB applicable - this long details - show in seperate line
-                mInputCbAward.setText(AppCommonUtil.getAmtStr(totalCb));
-                mLayoutCbDetails.setVisibility(View.VISIBLE);
-                mInputCbDetails.setText(detailStr);
-
+            mInputTotalBill.setText(AppCommonUtil.getAmtStr(txn.getTotal_billed()));
+            // set account add/debit amount
+            int value = txn.getCl_credit();
+            if(value > 0) {
+                mInputAcc.setText(AppCommonUtil.getSignedAmtStr(value, true));
+                mInputAcc.setTextColor(ContextCompat.getColor(getActivity(), R.color.green_positive));
             } else {
-                // single CB type - thus show in same line
-                mLayoutCbDetails.setVisibility(View.GONE);
-                String str2 = AppCommonUtil.getAmtStr(totalCb) + " " + detailStr;
-                mInputCbAward.setText(str2);
+                value = txn.getCl_debit();
+                mInputAcc.setText(AppCommonUtil.getSignedAmtStr(value, false));
+                if(value>0) {
+                    mInputAcc.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
+                } else {
+                    mInputAcc.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
+                }
+
+                if(txn.getCl_overdraft() > 0) {
+                    mLayoutOverdraft.setVisibility(View.VISIBLE);
+                    mInputOverdraft.setText(AppCommonUtil.getSignedAmtStr(txn.getCl_overdraft(), false));
+                } else {
+                    mLayoutOverdraft.setVisibility(View.GONE);
+                }
             }
 
-            //String cbData = AppCommonUtil.getAmtStr(txn.getCb_credit())+" @ "+txn.getCb_percent()+"%";
-            //mInputCbAward.setText(cbData);
+            mInputPayment.setText(AppCommonUtil.getAmtStr(txn.getPaymentAmt()));
+            value = txn.getCb_credit() + txn.getExtra_cb_credit();
+            mInputCbAward.setText(AppCommonUtil.getAmtStr(value));
+            mInputCbDetails.setText(MyTransaction.getCbDetailStr(txn));
 
-            mInputCbRedeem.setText(AppCommonUtil.getAmtStr(txn.getCb_debit()));
+            mInputTxnId.setText(txn.getTrans_id());
+            mPinUsed.setText(txn.getCpin());
 
-            if(txn.getCl_credit()==0 && txn.getCl_debit()==0) {
-                mLabelAcc.setVisibility(View.GONE);
-                mLayoutAccAdd.setVisibility(View.GONE);
-                mLayoutAccDebit.setVisibility(View.GONE);
+            if(txn.getInvoiceNum()==null || txn.getInvoiceNum().isEmpty()) {
+                mLayoutInvNum.setVisibility(View.GONE);
             } else {
-                mInputAccAdd.setText(AppCommonUtil.getAmtStr(txn.getCl_credit()));
-                mInputAccDebit.setText(AppCommonUtil.getAmtStr(txn.getCl_debit()));
+                mLayoutInvNum.setVisibility(View.VISIBLE);
+                mInvoiceNum.setText(txn.getInvoiceNum());
             }
-
-            // Changes if cancelled txn
-            mInputCbAward2.setVisibility(View.GONE);
-            /*if(txn.getCancelTime()!=null) {
-                mLayoutCancelled.setVisibility(View.VISIBLE);
-                mInputCancelTime.setText(mSdfDateWithTime.format(txn.getCancelTime()));
-
-                if(txn.getTotal_billed()>0) {
-                    mInputTotalBill.setPaintFlags(mInputTotalBill.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                }
-                if(txn.getCb_billed() > 0) {
-                    mInputCbBill.setPaintFlags(mInputCbBill.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                }
-
-                if(txn.getCb_credit() > 0) {
-                    mInputCbAward.setPaintFlags(mInputCbAward.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    if(txn.getExtra_cb_credit() > 0) {
-                        mInputCbAward2.setVisibility(View.VISIBLE);
-                        mInputCbAward2.setText(AppCommonUtil.getAmtStr(txn.getExtra_cb_credit()));
-                    }
-                }
-
-                if(txn.getCb_debit()>0) {
-                    mInputCbRedeem.setPaintFlags(mInputCbRedeem.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                }
-
-                if(txn.getCl_debit()>0) {
-                    mInputAccDebit.setPaintFlags(mInputAccDebit.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                }
-            }*/
-
         } else {
             LogMy.wtf(TAG, "Txn object is null !!");
             getDialog().dismiss();
@@ -308,26 +218,34 @@ public class TxnDetailsDialog extends BaseDialog {
     public void onDestroyView() {
         super.onDestroyView();
         // reset it
-        mCallback.getRetainedFragment().mLastFetchedImage = null;
+        //mCallback.getRetainedFragment().mLastFetchedImage = null;
     }
 
     //private View mLayoutCancelled;
     //private TextView mInputCancelTime;
 
-    private TextView mInputTxnId;
+    private TextView mInputMobileNum;
     private TextView mInputTxnTime;
 
+    private TextView mInputTotalBill;
+    private TextView mInputAcc;
+    private View mLayoutOverdraft;
+    private TextView mInputOverdraft;
+
+    private TextView mInputPayment;
+    private TextView mInputCbAward;
+    private TextView mInputCbDetails;
+
+    private TextView mInputTxnId;
+    private TextView mPinUsed;
     private View mLayoutInvNum;
     private TextView mInvoiceNum;
 
-    private TextView mInputTotalBill;
-    private View mLayoutCbBill;
+    /*private View mLayoutCbBill;
     private TextView mInputCbBill;
 
-    private EditText mInputCustomerId;
-    private TextView mInputMobileNum;
+    //private EditText mInputCustomerId;
     //private TextView mCardUsed;
-    private TextView mPinUsed;
 
     private TextView mInputCbAward;
     private TextView mInputCbAward2;
@@ -341,7 +259,7 @@ public class TxnDetailsDialog extends BaseDialog {
 
     private View mLabelAcc;
     private View mLayoutAccDebit;
-    private View mLayoutAccAdd;
+    private View mLayoutAccAdd;*/
 
     //private ImageView mTxnImage;
 
@@ -350,20 +268,28 @@ public class TxnDetailsDialog extends BaseDialog {
         //mLayoutCancelled = v.findViewById(R.id.layout_cancelled);
         //mInputCancelTime = (TextView) v.findViewById(R.id.input_cancel_time);
 
-        mInputTxnId = (TextView) v.findViewById(R.id.input_txn_id);
+        mInputMobileNum = (TextView) v.findViewById(R.id.input_customer_mobile);
         mInputTxnTime = (TextView) v.findViewById(R.id.input_txn_time);
 
+        mInputTotalBill = (TextView) v.findViewById(R.id.input_total_bill);
+        mInputAcc = (TextView) v.findViewById(R.id.input_account);
+        mLayoutOverdraft = v.findViewById(R.id.layout_overdraft);
+        mInputOverdraft = (TextView) v.findViewById(R.id.input_overdraft);
+
+        mInputPayment = (TextView) v.findViewById(R.id.input_payment);
+        mInputCbAward = (TextView) v.findViewById(R.id.input_add_cb);
+        mInputCbDetails = (TextView) v.findViewById(R.id.input_cb_details);
+
+        mInputTxnId = (TextView) v.findViewById(R.id.input_txn_id);
+        mPinUsed = (TextView) v.findViewById(R.id.input_pin_used);
         mLayoutInvNum = v.findViewById(R.id.layout_invoice_num);
         mInvoiceNum = (TextView) v.findViewById(R.id.input_invoice_num);
 
-        mInputTotalBill = (TextView) v.findViewById(R.id.input_total_bill);
-        mLayoutCbBill = v.findViewById(R.id.layout_cb_bill);
+        /*mLayoutCbBill = v.findViewById(R.id.layout_cb_bill);
         mInputCbBill = (TextView) v.findViewById(R.id.input_cb_bill);
 
         mInputCustomerId = (EditText) v.findViewById(R.id.input_customer_id);;
-        mInputMobileNum = (TextView) v.findViewById(R.id.input_customer_mobile);
         //mCardUsed = (TextView) v.findViewById(R.id.input_card_used);
-        mPinUsed = (TextView) v.findViewById(R.id.input_pin_used);
 
         mLabelAcc = v.findViewById(R.id.label_acc);
         mLayoutAccDebit = v.findViewById(R.id.layout_acc_debit);
@@ -379,7 +305,7 @@ public class TxnDetailsDialog extends BaseDialog {
 
         mInputCbRedeem = (TextView) v.findViewById(R.id.input_cb_redeem);
 
-        //mTxnImage = (ImageView) v.findViewById(R.id.txnImage);
+        //mTxnImage = (ImageView) v.findViewById(R.id.txnImage);*/
 
     }
 }

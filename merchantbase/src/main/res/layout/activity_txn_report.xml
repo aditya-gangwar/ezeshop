@@ -125,7 +125,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/space_customer_id"
-            android:layout_weight="10"/>
+            android:layout_weight="15"/>
 
         <EditText
             style="@style/Edittext_only_view_small"
@@ -182,7 +182,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/space_end"
-            android:layout_weight="50"/>
+            android:layout_weight="45"/>
 
     </LinearLayout>
 

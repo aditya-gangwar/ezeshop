@@ -529,6 +529,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
         trans.setTotal_billed(mRetainedFragment.mBillTotal);
         trans.setCb_eligible_amt(mCbEligibleAmt);
         trans.setExtracb_eligible_amt(mExtraCbEligibleAmt);
+        trans.setPaymentAmt(mCashPaid);
 
         trans.setCl_credit(mAddCashload);
         trans.setCb_credit(mAddCbNormal);

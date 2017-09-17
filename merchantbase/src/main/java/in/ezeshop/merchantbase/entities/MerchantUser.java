@@ -380,7 +380,7 @@ public class MerchantUser
         int errCode = ErrorCodes.NO_ERROR;
         int txnDone = 0;
 
-        try {
+        /*try {
             Transaction trans = new Transaction();
             trans.setCust_private_id(customerId);
             //trans.setUsedCardId("");
@@ -450,7 +450,7 @@ public class MerchantUser
             errCode = AppCommonUtil.getLocalErrorCode(e);
         }
 
-        LogMy.d(TAG,"Committed "+txnDone+" txns");
+        LogMy.d(TAG,"Committed "+txnDone+" txns");*/
         return errCode;
     }
 

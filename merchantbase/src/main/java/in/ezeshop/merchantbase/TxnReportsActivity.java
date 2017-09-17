@@ -67,7 +67,7 @@ public class TxnReportsActivity extends BaseActivity implements
     private static final String TAG = "MchntApp-TxnReportsActivity";
 
     public static final String EXTRA_CUSTOMER_ID = "extraCustId";
-    public static final int RC_BARCODE_CAPTURE_TXN_VERIFY = 9007;
+    //public static final int RC_BARCODE_CAPTURE_TXN_VERIFY = 9007;
 
     private static final String RETAINED_FRAGMENT = "retainedFragReports";
     private static final String DIALOG_DATE_FROM = "DialogDateFrom";
@@ -612,21 +612,26 @@ public class TxnReportsActivity extends BaseActivity implements
 
         // reset first
         summary[AppConstants.INDEX_TXN_COUNT] = 0;
+        summary[AppConstants.INDEX_OVERDRAFT_TXN_COUNT] = 0;
         summary[AppConstants.INDEX_BILL_AMOUNT] = 0;
+        summary[AppConstants.INDEX_CASHBACK] = 0;
         summary[AppConstants.INDEX_ADD_ACCOUNT] = 0;
         summary[AppConstants.INDEX_DEBIT_ACCOUNT] = 0;
-        summary[AppConstants.INDEX_CASHBACK] = 0;
-        summary[AppConstants.INDEX_DEBIT_CASHBACK] = 0;
+        summary[AppConstants.INDEX_OVERDRAFT] = 0;
 
         for (Transaction txn : txns) {
             summary[AppConstants.INDEX_TXN_COUNT]++;
+            if(txn.getCl_overdraft()>0) {
+                summary[AppConstants.INDEX_OVERDRAFT_TXN_COUNT]++;
+            }
+            summary[AppConstants.INDEX_BILL_AMOUNT] = summary[AppConstants.INDEX_BILL_AMOUNT] + txn.getTotal_billed();
+            summary[AppConstants.INDEX_CASHBACK] = summary[AppConstants.INDEX_CASHBACK] + txn.getCb_credit() + txn.getExtra_cb_credit();
             summary[AppConstants.INDEX_ADD_ACCOUNT] = summary[AppConstants.INDEX_ADD_ACCOUNT] + txn.getCl_credit();
+            summary[AppConstants.INDEX_DEBIT_ACCOUNT] = summary[AppConstants.INDEX_DEBIT_ACCOUNT] + txn.getCl_debit();
+            summary[AppConstants.INDEX_OVERDRAFT] = summary[AppConstants.INDEX_OVERDRAFT] + txn.getCl_overdraft();
 
             //if(txn.getCancelTime()==null) {
-                summary[AppConstants.INDEX_BILL_AMOUNT] = summary[AppConstants.INDEX_BILL_AMOUNT] + txn.getTotal_billed();
-                summary[AppConstants.INDEX_DEBIT_ACCOUNT] = summary[AppConstants.INDEX_DEBIT_ACCOUNT] + txn.getCl_debit();
-                summary[AppConstants.INDEX_CASHBACK] = summary[AppConstants.INDEX_CASHBACK] + txn.getCb_credit() + txn.getExtra_cb_credit();
-                summary[AppConstants.INDEX_DEBIT_CASHBACK] = summary[AppConstants.INDEX_DEBIT_CASHBACK] + txn.getCb_debit();
+                //summary[AppConstants.INDEX_DEBIT_CASHBACK] = summary[AppConstants.INDEX_DEBIT_CASHBACK] + txn.getCb_debit();
             //}
         }
     }
