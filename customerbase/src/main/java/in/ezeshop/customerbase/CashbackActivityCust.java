@@ -371,7 +371,7 @@ public class CashbackActivityCust extends AppCompatActivity implements
             }
         }*/
 
-        //mTbSubhead1Text1.setText(AppCommonUtil.getAmtStr(mRetainedFragment.mCurrCashback.getCurrClBalance()));
+        //mTbSubhead1Text1.setText(AppCommonUtil.getAmtStr(mRetainedFragment.mCurrCashback.getCurrAccBalance()));
         //mTbSubhead1Divider.setVisibility(View.VISIBLE);
         //mTbSubhead1Text2.setVisibility(View.VISIBLE);
         //mTbSubhead1Text2.setText(AppCommonUtil.getAmtStr(mRetainedFragment.mCurrCashback.getCurrCbBalance()));

@@ -395,11 +395,11 @@ public class CashbackListFragment extends BaseFragment {
             mCategoryNdCity.setText(txt);
             String str = "Last: "+mSdfDateWithTime.format(cb.getLastTxnTime());
             mLastTxnTime.setText(str);
-            if(mCb.getCurrClBalance()==0) {
+            if(mCb.getCurrAccBalance()==0) {
                 mLayoutAcc.setVisibility(View.GONE);
             } else {
                 mLayoutAcc.setVisibility(View.VISIBLE);
-                mAccBalance.setText(AppCommonUtil.getAmtStr(mCb.getCurrClBalance()));
+                mAccBalance.setText(AppCommonUtil.getAmtStr(mCb.getCurrAccBalance()));
             }
             mCbBalance.setText(AppCommonUtil.getAmtStr(mCb.getCurrCbBalance()));
         }

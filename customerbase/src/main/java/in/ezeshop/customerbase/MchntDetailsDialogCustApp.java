@@ -173,7 +173,7 @@ public class MchntDetailsDialogCustApp extends BaseDialog {
                 mLayoutAddAcc.setVisibility(View.GONE);
                 mLayoutDebitAcc.setVisibility(View.GONE);
             } else {
-                mInputAccAvailable.setText(AppCommonUtil.getAmtStr(cb.getCurrClBalance()));
+                mInputAccAvailable.setText(AppCommonUtil.getAmtStr(cb.getCurrAccBalance()));
                 mInputAccTotalAdd.setText(AppCommonUtil.getAmtStr(cb.getClCredit()));
                 mInputAccTotalDebit.setText(AppCommonUtil.getAmtStr(cb.getClDebit()));
             }

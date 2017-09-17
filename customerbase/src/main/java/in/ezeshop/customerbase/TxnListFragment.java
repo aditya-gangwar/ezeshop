@@ -218,7 +218,7 @@ public class TxnListFragment extends BaseFragment {
             case SortTxnDialog.TXN_SORT_CB_REDEEM:
                 Collections.sort(mRetainedFragment.mLastFetchTransactions, new MyTransaction.TxnCbRedeemComparator());
                 break;
-            case SortTxnDialog.TXN_SORT_ACC_ADD:
+            case SortTxnDialog.TXN_SORT_ACC_AMT:
                 Collections.sort(mRetainedFragment.mLastFetchTransactions, new MyTransaction.TxnAccAddComparator());
                 break;
             case SortTxnDialog.TXN_SORT_ACC_DEBIT:
@@ -240,7 +240,7 @@ public class TxnListFragment extends BaseFragment {
                 mHeaderBill.setTypeface(null, Typeface.NORMAL);
                 break;
             case SortTxnDialog.TXN_SORT_CB_REDEEM:
-            case SortTxnDialog.TXN_SORT_ACC_ADD:
+            case SortTxnDialog.TXN_SORT_ACC_AMT:
             case SortTxnDialog.TXN_SORT_ACC_DEBIT:
                 mHeaderAmts.setText("Account |  Cashback Redeem");
                 mHeaderAmts.setTypeface(null, Typeface.NORMAL);
@@ -270,7 +270,7 @@ public class TxnListFragment extends BaseFragment {
                 mHeaderAmts.setText(text);
                 mHeaderAmts.setTypeface(null, Typeface.BOLD);
                 break;
-            case SortTxnDialog.TXN_SORT_ACC_ADD:
+            case SortTxnDialog.TXN_SORT_ACC_AMT:
             case SortTxnDialog.TXN_SORT_ACC_DEBIT:
                 text = AppConstants.SYMBOL_DOWN_ARROW+"Account  |  Cashback Redeem";
                 mHeaderAmts.setText(text);
@@ -304,7 +304,8 @@ public class TxnListFragment extends BaseFragment {
             } else if (i == R.id.action_email) {
                 emailReport();
             } else if (i == R.id.action_sort) {
-                SortTxnDialog dialog = SortTxnDialog.newInstance(mSelectedSortType, anyAccTxn());
+                //SortTxnDialog dialog = SortTxnDialog.newInstance(mSelectedSortType, anyAccTxn());
+                SortTxnDialog dialog = SortTxnDialog.newInstance(mSelectedSortType);
                 dialog.setTargetFragment(this, REQ_SORT_TXN_TYPES);
                 dialog.show(getFragmentManager(), DIALOG_SORT_TXN_TYPES);
             }
@@ -317,7 +318,7 @@ public class TxnListFragment extends BaseFragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private boolean anyAccTxn() {
+    /*private boolean anyAccTxn() {
         // loop and check if there's any txn with acc credit/debit
         boolean accFigures = false;
         for (Transaction txn :
@@ -328,7 +329,7 @@ public class TxnListFragment extends BaseFragment {
             }
         }
         return accFigures;
-    }
+    }*/
 
     private void downloadReport() {
         File file = createCsvReport();
