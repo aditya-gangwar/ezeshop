@@ -14,10 +14,13 @@ public class Cashback
   private String merchant_id;
 
   private Integer total_billed;
-  private Integer cb_billed;
-  private Integer cb_credit;
+  //private Integer cb_eligible_amt;
+  //private Integer extracb_eligible_amt;
 
   private Integer cl_credit;
+  private Integer cb_credit;
+  private Integer extra_cb_credit;
+
   private Integer cl_debit;
   private Integer cl_overdraft;
 
@@ -32,6 +35,30 @@ public class Cashback
   //private Merchants merchant;
   private Date lastTxnTime;
   private String lastTxnId;
+
+  /*public Integer getCb_eligible_amt() {
+    return cb_eligible_amt;
+  }
+
+  public void setCb_eligible_amt(Integer cb_eligible_amt) {
+    this.cb_eligible_amt = cb_eligible_amt;
+  }
+
+  public Integer getExtracb_eligible_amt() {
+    return extracb_eligible_amt;
+  }
+
+  public void setExtracb_eligible_amt(Integer extracb_eligible_amt) {
+    this.extracb_eligible_amt = extracb_eligible_amt;
+  }*/
+
+  public Integer getExtra_cb_credit() {
+    return extra_cb_credit;
+  }
+
+  public void setExtra_cb_credit(Integer extra_cb_credit) {
+    this.extra_cb_credit = extra_cb_credit;
+  }
 
   public Integer getCl_overdraft() {
     return cl_overdraft;
@@ -83,14 +110,14 @@ public class Cashback
   public void setMerchant( Merchants merchant )
   {
     this.merchant = merchant;
-  }*/
+  }
   public Integer getCb_billed() {
     return cb_billed;
   }
 
   public void setCb_billed(Integer cb_billed) {
     this.cb_billed = cb_billed;
-  }
+  }*/
 
   public String getMerchant_id() {
     return merchant_id;

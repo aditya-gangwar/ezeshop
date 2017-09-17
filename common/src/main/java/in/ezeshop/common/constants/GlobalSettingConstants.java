@@ -25,6 +25,7 @@ public class GlobalSettingConstants {
     public static final String SETTINGS_STATS_NO_REFRESH_MINS = "Mchnt_Stats_Refresh_Mins";
     public static final String SETTINGS_CUSTOMER_NO_REFRESH_MINS = "Cust_Data_Refresh_Mins";
     public static final String SETTINGS_CUSTOMER_CASH_LIMIT = "AC_Max_Cash_Limit";
+    public static final String SETTINGS_CUSTOMER_OVERDRAFT_LIMIT = "AC_Max_Overdraft_Limit";
     public static final String SETTINGS_MCHNT_REMOVAL_EXPIRY_DAYS = "Mchnt_Removal_Expiry_Days";
     public static final String SETTINGS_CUST_ACC_LIMIT_MODE_MINS = "Cust_Limited_Mode_Mins";
     public static final String SETTINGS_WRONG_ATTEMPT_RESET_MINS = "Wrong_Verify_Reset_Mins";
@@ -102,6 +103,7 @@ public class GlobalSettingConstants {
         // which effectively means - PIN will never be required for credit
         aMap.put(SETTINGS_CB_REDEEM_LIMIT,"200");
         aMap.put(SETTINGS_CUSTOMER_CASH_LIMIT,"4000");
+        aMap.put(SETTINGS_CUSTOMER_OVERDRAFT_LIMIT,"4000");
         aMap.put(SETTINGS_CL_CREDIT_LIMIT_FOR_PIN,"4000");
         aMap.put(SETTINGS_CL_DEBIT_LIMIT_FOR_PIN,"0");
         aMap.put(SETTINGS_CB_DEBIT_LIMIT_FOR_PIN,"0");
@@ -186,6 +188,7 @@ public class GlobalSettingConstants {
         aMap.put(SETTINGS_STATS_NO_REFRESH_MINS, "Dashboard and Customer List in 'Merchant App' will be refreshed only once in this duration.");
         aMap.put(SETTINGS_CUSTOMER_NO_REFRESH_MINS, "Merchant List in the 'Customer App' will be refreshed only once in this duration.");
         aMap.put(SETTINGS_CUSTOMER_CASH_LIMIT, "Customer: Maximum amount that can be kept in any account of single merchant.");
+        aMap.put(SETTINGS_CUSTOMER_OVERDRAFT_LIMIT, "Customer: Maximum amount that can be overdraft from any account of single merchant.");
         aMap.put(SETTINGS_MCHNT_REMOVAL_EXPIRY_DAYS, "Notice Period for Merchant, if he decides to leave MyeCash program. No Credit Txns will be allowed in this duration.");
         aMap.put(SETTINGS_CUST_ACC_LIMIT_MODE_MINS, "Customer: Minutes for which account is kept in Limited Mode. Enabled automatically after this.");
         aMap.put(SETTINGS_WRONG_ATTEMPT_RESET_MINS, "Number of minutes after which 'wrong attempts' count is reset.");
@@ -236,6 +239,7 @@ public class GlobalSettingConstants {
         aMap.put(SETTINGS_CB_DEBIT_LIMIT_FOR_PIN, DATATYPE_INT);
         aMap.put(SETTINGS_STATS_NO_REFRESH_MINS, DATATYPE_INT);
         aMap.put(SETTINGS_CUSTOMER_CASH_LIMIT, DATATYPE_INT);
+        aMap.put(SETTINGS_CUSTOMER_OVERDRAFT_LIMIT, DATATYPE_INT);
         aMap.put(SETTINGS_MCHNT_REMOVAL_EXPIRY_DAYS, DATATYPE_INT);
         aMap.put(SETTINGS_CUST_ACC_LIMIT_MODE_MINS, DATATYPE_INT);
         aMap.put(SETTINGS_WRONG_ATTEMPT_RESET_MINS, DATATYPE_INT);

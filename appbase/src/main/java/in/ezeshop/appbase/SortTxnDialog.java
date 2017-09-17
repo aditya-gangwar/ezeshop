@@ -23,16 +23,16 @@ public class SortTxnDialog extends BaseDialog {
     public static final String TAG = "BaseApp-SortTxnDialog";
 
     public static final String ARG_SELECTED = "argSelected";
-    public static final String ARG_SHOW_ACC = "argShowAcc";
+    //public static final String ARG_SHOW_ACC = "argShowAcc";
     public static final String EXTRA_SELECTION = "extraSelected";
 
     // Txn sort parameter types
     public static final int TXN_SORT_DATE_TIME = 0;
     public static final int TXN_SORT_bILL_AMT = 1;
     public static final int TXN_SORT_CB_AWARD = 2;
-    public static final int TXN_SORT_CB_REDEEM = 3;
-    public static final int TXN_SORT_ACC_ADD = 4;
-    public static final int TXN_SORT_ACC_DEBIT = 5;
+    //public static final int TXN_SORT_CB_REDEEM = 3;
+    public static final int TXN_SORT_ACC_AMT = 4;
+    //public static final int TXN_SORT_ACC_DEBIT = 5;
 
     /*
     private SortTxnDialogIf mListener;
@@ -41,11 +41,10 @@ public class SortTxnDialog extends BaseDialog {
         void onTxnSortType(int sortType);
     }*/
 
-    public static SortTxnDialog newInstance(int selectedSortType, boolean showAcc) {
+    public static SortTxnDialog newInstance(int selectedSortType) {
         LogMy.d(TAG, "Creating new SortTxnDialog instance: "+selectedSortType);
         Bundle args = new Bundle();
         args.putInt(ARG_SELECTED, selectedSortType);
-        args.putBoolean(ARG_SHOW_ACC, showAcc);
 
         SortTxnDialog fragment = new SortTxnDialog();
         fragment.setArguments(args);
@@ -83,23 +82,23 @@ public class SortTxnDialog extends BaseDialog {
             case TXN_SORT_CB_AWARD:
                 mSortTxnRadioGroup.check(mAwardCb.getId());
                 break;
-            case TXN_SORT_CB_REDEEM:
-                mSortTxnRadioGroup.check(mRedeemCb.getId());
+            case TXN_SORT_ACC_AMT:
+                mSortTxnRadioGroup.check(mAddAmt.getId());
                 break;
-            case TXN_SORT_ACC_ADD:
-                mSortTxnRadioGroup.check(mAddAcc.getId());
+            /*case TXN_SORT_CB_REDEEM:
+                mSortTxnRadioGroup.check(mRedeemCb.getId());
                 break;
             case TXN_SORT_ACC_DEBIT:
                 mSortTxnRadioGroup.check(mDebitAcc.getId());
-                break;
+                break;*/
         }
 
-        boolean showAcc = getArguments().getBoolean(ARG_SHOW_ACC, true);
+        /*boolean showAcc = getArguments().getBoolean(ARG_SHOW_ACC, true);
         if(!showAcc) {
             mLabelAcc.setVisibility(View.GONE);
-            mAddAcc.setVisibility(View.GONE);
+            mAddAmt.setVisibility(View.GONE);
             mDebitAcc.setVisibility(View.GONE);
-        }
+        }*/
 
         // return new dialog
         final AlertDialog alertDialog =  new AlertDialog.Builder(getActivity()).setView(v)
@@ -129,16 +128,16 @@ public class SortTxnDialog extends BaseDialog {
                         } else if (selectedId == R.id.awardCb) {
                             selectedSortType = TXN_SORT_CB_AWARD;
 
-                        } else if (selectedId == R.id.redeemCb) {
-                            selectedSortType = TXN_SORT_CB_REDEEM;
+                        } else if (selectedId == R.id.accAmount) {
+                            selectedSortType = TXN_SORT_ACC_AMT;
 
-                        } else if (selectedId == R.id.addAcc) {
-                            selectedSortType = TXN_SORT_ACC_ADD;
+                        } /*else if (selectedId == R.id.redeemCb) {
+                            selectedSortType = TXN_SORT_CB_REDEEM;
 
                         } else if (selectedId == R.id.debitAcc) {
                             selectedSortType = TXN_SORT_ACC_DEBIT;
 
-                        }
+                        }*/
 
                         Intent intent = new Intent();
                         intent.putExtra(EXTRA_SELECTION,selectedSortType);
@@ -192,19 +191,19 @@ public class SortTxnDialog extends BaseDialog {
     private RadioButton mBillAmt;
     private RadioButton mAwardCb;
     private RadioButton mRedeemCb;
-    private View mLabelAcc;
-    private RadioButton mAddAcc;
-    private RadioButton mDebitAcc;
+    //private View mLabelAcc;
+    private RadioButton mAddAmt;
+    //private RadioButton mDebitAcc;
 
     private void initUiResources(View v) {
         mSortTxnRadioGroup = (RadioGroup) v.findViewById(R.id.txnSortRadioGroup);
         mDateTime = (RadioButton) v.findViewById(R.id.dateTime);
         mBillAmt = (RadioButton) v.findViewById(R.id.billAmt);
         mAwardCb = (RadioButton) v.findViewById(R.id.awardCb);
-        mRedeemCb = (RadioButton) v.findViewById(R.id.redeemCb);
-        mLabelAcc = v.findViewById(R.id.labelAcc);
-        mAddAcc = (RadioButton) v.findViewById(R.id.addAcc);
-        mDebitAcc = (RadioButton) v.findViewById(R.id.debitAcc);
+        //mRedeemCb = (RadioButton) v.findViewById(R.id.redeemCb);
+        //mLabelAcc = v.findViewById(R.id.labelAcc);
+        mAddAmt = (RadioButton) v.findViewById(R.id.accAmount);
+        //mDebitAcc = (RadioButton) v.findViewById(R.id.debitAcc);
     }
 }
 

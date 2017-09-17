@@ -90,6 +90,9 @@ public class MyGlobalSettings
     public static Integer getCashAccLimit() {
         return (Integer) getValue(GlobalSettingConstants.SETTINGS_CUSTOMER_CASH_LIMIT);
     }
+    public static Integer getAccOverdraftLimit() {
+        return (Integer) getValue(GlobalSettingConstants.SETTINGS_CUSTOMER_OVERDRAFT_LIMIT);
+    }
     public static Integer getMchntExpiryDays() {
         return (Integer) getValue(GlobalSettingConstants.SETTINGS_MCHNT_REMOVAL_EXPIRY_DAYS);
     }

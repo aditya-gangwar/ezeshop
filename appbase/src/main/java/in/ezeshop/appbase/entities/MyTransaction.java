@@ -84,7 +84,7 @@ public class MyTransaction {
         mCurrTransaction = Backendless.Persistence.save( mCurrTransaction );
     }
 
-    public static String getCbDetailStr(Transaction txn) {
+    /*public static String getCbDetailStr(Transaction txn) {
 
         String detail = "";
         int cbEligibleAmt = txn.getCb_billed() - txn.getCb_debit();
@@ -103,6 +103,15 @@ public class MyTransaction {
             }
         }
         return detail;
+    }*/
+
+    public static String getCbDetailStr(Transaction txn) {
+        String str = "@  " + txn.getCb_percent() + "% of " + AppCommonUtil.getAmtStr(txn.getCb_eligible_amt());
+        if(txn.getExtra_cb_credit() > 0) {
+            str = str + " + " + txn.getExtra_cb_percent() + "% of " + AppCommonUtil.getAmtStr(txn.getExtracb_eligible_amt());
+        }
+
+        return str;
     }
 
     /*
@@ -136,7 +145,32 @@ public class MyTransaction {
         @Override
         public int compare(Transaction lhs, Transaction rhs) {
             // TODO: Handle null x or y values
+            //return compare( (lhs.getCb_credit()+lhs.getExtra_cb_credit()), (rhs.getCb_credit()+rhs.getExtra_cb_credit()) );
             return compare( (lhs.getCb_credit()+lhs.getExtra_cb_credit()), (rhs.getCb_credit()+rhs.getExtra_cb_credit()) );
+        }
+        private static int compare(int a, int b) {
+            return a < b ? -1
+                    : a > b ? 1
+                    : 0;
+        }
+    }
+    public static class TxnAccAmtComparator implements Comparator<Transaction> {
+        @Override
+        public int compare(Transaction lhs, Transaction rhs) {
+            // TODO: Handle null x or y values
+            return compare( (lhs.getCl_credit()-lhs.getCl_debit()-lhs.getCl_overdraft()), (rhs.getCl_credit()-rhs.getCl_debit()-rhs.getCl_overdraft()) );
+        }
+        private static int compare(int a, int b) {
+            return a < b ? -1
+                    : a > b ? 1
+                    : 0;
+        }
+    }
+    /*public static class TxnAccAddComparator implements Comparator<Transaction> {
+        @Override
+        public int compare(Transaction lhs, Transaction rhs) {
+            // TODO: Handle null x or y values
+            return compare(lhs.getCl_credit(), rhs.getCl_credit());
         }
         private static int compare(int a, int b) {
             return a < b ? -1
@@ -156,18 +190,6 @@ public class MyTransaction {
                     : 0;
         }
     }
-    public static class TxnAccAddComparator implements Comparator<Transaction> {
-        @Override
-        public int compare(Transaction lhs, Transaction rhs) {
-            // TODO: Handle null x or y values
-            return compare(lhs.getCl_credit(), rhs.getCl_credit());
-        }
-        private static int compare(int a, int b) {
-            return a < b ? -1
-                    : a > b ? 1
-                    : 0;
-        }
-    }
     public static class TxnAccDebitComparator implements Comparator<Transaction> {
         @Override
         public int compare(Transaction lhs, Transaction rhs) {
@@ -179,5 +201,5 @@ public class MyTransaction {
                     : a > b ? 1
                     : 0;
         }
-    }
+    }*/
 }

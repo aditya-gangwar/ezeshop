@@ -81,12 +81,13 @@ public class AppConstants {
 
     // Txn summary constants
     public static int INDEX_TXN_COUNT = 0;
-    public static int INDEX_BILL_AMOUNT = 1;
-    public static int INDEX_ADD_ACCOUNT = 2;
-    public static int INDEX_DEBIT_ACCOUNT = 3;
-    public static int INDEX_CASHBACK = 4;
-    public static int INDEX_DEBIT_CASHBACK = 5;
-    public static int INDEX_SUMMARY_MAX_VALUE = 6;
+    public static int INDEX_OVERDRAFT_TXN_COUNT = 1;
+    public static int INDEX_BILL_AMOUNT = 2;
+    public static int INDEX_CASHBACK = 3;
+    public static int INDEX_ADD_ACCOUNT = 4;
+    public static int INDEX_DEBIT_ACCOUNT = 5;
+    public static int INDEX_OVERDRAFT = 6;
+    public static int INDEX_SUMMARY_MAX_VALUE = 7;
 
     // shared preference keys
     public static final String PREF_LOGIN_ID = "successLoginId";

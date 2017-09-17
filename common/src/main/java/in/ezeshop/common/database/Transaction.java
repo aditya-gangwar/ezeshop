@@ -16,16 +16,21 @@ public class Transaction implements Serializable
 
   private Integer total_billed;
   private Integer cb_eligible_amt;
+  private Integer extracb_eligible_amt;
+  private Integer paymentAmt;
 
-  private String cb_percent;
-  private Integer cb_credit;
-
+  // 3 types of acc credit
   private Integer cl_credit;
+  private Integer cb_credit;
+  private Integer extra_cb_credit;
+
+  // 2 types acc debit
   private Integer cl_debit;
   private Integer cl_overdraft;
 
+  // 2 types cb rate
+  private String cb_percent;
   private String extra_cb_percent;
-  private Integer extra_cb_credit;
 
   //private Integer cb_billed;
   //private String imgFileName;
@@ -43,6 +48,23 @@ public class Transaction implements Serializable
   private Cashback cashback;
   //private String canImgFileName;
   //private String usedCardId;
+
+
+  public Integer getPaymentAmt() {
+    return paymentAmt;
+  }
+
+  public void setPaymentAmt(Integer paymentAmt) {
+    this.paymentAmt = paymentAmt;
+  }
+
+  public Integer getExtracb_eligible_amt() {
+    return extracb_eligible_amt;
+  }
+
+  public void setExtracb_eligible_amt(Integer extracb_eligible_amt) {
+    this.extracb_eligible_amt = extracb_eligible_amt;
+  }
 
   public Integer getCl_overdraft() {
     return cl_overdraft;

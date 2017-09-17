@@ -35,10 +35,12 @@ public class CsvConverter {
     private static int TXN_CSV_IDX_CUSTOMER_PVT_ID = 5;
     //private static int TXN_CSV_IDX_USED_CARD_ID = 6;
     private static int TXN_CSV_IDX_TOTAL_BILLED = 6;
-    private static int TXN_CSV_IDX_CB_BILLED = 7;
+    //private static int TXN_CSV_IDX_CB_BILLED = 7;
+    private static int TXN_CSV_IDX_ACC_CREDIT = 7;
     private static int TXN_CSV_IDX_ACC_DEBIT = 8;
-    private static int TXN_CSV_IDX_ACC_CREDIT = 9;
-    private static int TXN_CSV_IDX_CB_REDEEM = 10;
+    private static int TXN_CSV_IDX_ACC_OVERDRAFT = 9;
+    private static int TXN_CSV_IDX_PAYMENT = 10;
+    //private static int TXN_CSV_IDX_CB_REDEEM = 10;
     private static int TXN_CSV_IDX_CB_AWARD = 11;
     private static int TXN_CSV_IDX_CB_RATE = 12;
     private static int TXN_CSV_IDX_CUST_PIN = 13;
@@ -47,7 +49,9 @@ public class CsvConverter {
     //private static int TXN_CSV_IDX_CANCEL_TIME = 16;
     private static int TXN_CSV_IDX_EXT_CB_CREDIT = 15;
     private static int TXN_CSV_IDX_EXT_CB_RATE = 16;
-    private static int TXN_CSV_TOTAL_FIELDS = 17;
+    private static int TXN_CSV_IDX_CB_ELIGIBLE_AMT = 17;
+    private static int TXN_CSV_IDX_EXT_CB_ELIGIBLE_AMT = 18;
+    private static int TXN_CSV_TOTAL_FIELDS = 19;
 
     // Total size of above fields = 15*10 + 50;
     public static final int TXN_CSV_MAX_SIZE = 256;
@@ -72,10 +76,12 @@ public class CsvConverter {
         csvFields[TXN_CSV_IDX_CUSTOMER_PVT_ID] = txn.getCust_private_id();
         //csvFields[TXN_CSV_IDX_USED_CARD_ID] = (txn.getUsedCardId()==null)?"":txn.getUsedCardId();
         csvFields[TXN_CSV_IDX_TOTAL_BILLED] = String.valueOf(txn.getTotal_billed());
-        csvFields[TXN_CSV_IDX_CB_BILLED] = String.valueOf(txn.getCb_billed());
+        //csvFields[TXN_CSV_IDX_CB_BILLED] = String.valueOf(txn.getCb_billed());
         csvFields[TXN_CSV_IDX_ACC_DEBIT] = String.valueOf(txn.getCl_debit());
+        csvFields[TXN_CSV_IDX_ACC_OVERDRAFT] = String.valueOf(txn.getCl_overdraft());
+        csvFields[TXN_CSV_IDX_PAYMENT] = String.valueOf(txn.getPaymentAmt());
         csvFields[TXN_CSV_IDX_ACC_CREDIT] = String.valueOf(txn.getCl_credit());
-        csvFields[TXN_CSV_IDX_CB_REDEEM] = String.valueOf(txn.getCb_debit());
+        //csvFields[TXN_CSV_IDX_CB_REDEEM] = String.valueOf(txn.getCb_debit());
         csvFields[TXN_CSV_IDX_CB_AWARD] = String.valueOf(txn.getCb_credit());
         csvFields[TXN_CSV_IDX_CB_RATE] = txn.getCb_percent();
         csvFields[TXN_CSV_IDX_CUST_PIN] = txn.getCpin();
@@ -104,6 +110,8 @@ public class CsvConverter {
 
         csvFields[TXN_CSV_IDX_EXT_CB_CREDIT] = String.valueOf(txn.getExtra_cb_credit());
         csvFields[TXN_CSV_IDX_EXT_CB_RATE] = txn.getExtra_cb_percent();
+        csvFields[TXN_CSV_IDX_CB_ELIGIBLE_AMT] = String.valueOf(txn.getCb_eligible_amt());
+        csvFields[TXN_CSV_IDX_EXT_CB_ELIGIBLE_AMT] = String.valueOf(txn.getExtracb_eligible_amt());
 
         // join the fields in single CSV string
         StringBuilder sb = new StringBuilder(TXN_CSV_MAX_SIZE);
@@ -129,10 +137,12 @@ public class CsvConverter {
         txn.setCust_private_id(csvFields[TXN_CSV_IDX_CUSTOMER_PVT_ID]);
         //txn.setUsedCardId(csvFields[TXN_CSV_IDX_USED_CARD_ID]);
         txn.setTotal_billed(Integer.parseInt(csvFields[TXN_CSV_IDX_TOTAL_BILLED]));
-        txn.setCb_billed(Integer.parseInt(csvFields[TXN_CSV_IDX_CB_BILLED]));
+        //txn.setCb_billed(Integer.parseInt(csvFields[TXN_CSV_IDX_CB_BILLED]));
         txn.setCl_debit(Integer.parseInt(csvFields[TXN_CSV_IDX_ACC_DEBIT]));
+        txn.setCl_overdraft(Integer.parseInt(csvFields[TXN_CSV_IDX_ACC_OVERDRAFT]));
+        txn.setPaymentAmt(Integer.parseInt(csvFields[TXN_CSV_IDX_PAYMENT]));
         txn.setCl_credit(Integer.parseInt(csvFields[TXN_CSV_IDX_ACC_CREDIT]));
-        txn.setCb_debit(Integer.parseInt(csvFields[TXN_CSV_IDX_CB_REDEEM]));
+        //txn.setCb_debit(Integer.parseInt(csvFields[TXN_CSV_IDX_CB_REDEEM]));
         txn.setCb_credit(Integer.parseInt(csvFields[TXN_CSV_IDX_CB_AWARD]));
         txn.setCb_percent(csvFields[TXN_CSV_IDX_CB_RATE]);
         txn.setCpin(csvFields[TXN_CSV_IDX_CUST_PIN]);
@@ -145,7 +155,7 @@ public class CsvConverter {
         }*/
 
         // New fields added - shudn't break old CSV files
-        if(TXN_CSV_IDX_EXT_CB_CREDIT < csvFields.length &&
+        /*if(TXN_CSV_IDX_EXT_CB_CREDIT < csvFields.length &&
                 !csvFields[TXN_CSV_IDX_EXT_CB_CREDIT].isEmpty() &&
                 !csvFields[TXN_CSV_IDX_EXT_CB_CREDIT].equals("null")) {
             txn.setExtra_cb_credit(Integer.parseInt(csvFields[TXN_CSV_IDX_EXT_CB_CREDIT]));
@@ -158,7 +168,12 @@ public class CsvConverter {
             txn.setExtra_cb_percent(csvFields[TXN_CSV_IDX_EXT_CB_RATE]);
         } else {
             txn.setExtra_cb_percent("0");
-        }
+        }*/
+
+        txn.setExtra_cb_credit(Integer.parseInt(csvFields[TXN_CSV_IDX_EXT_CB_CREDIT]));
+        txn.setExtra_cb_percent(csvFields[TXN_CSV_IDX_EXT_CB_RATE]);
+        txn.setCb_eligible_amt(Integer.parseInt(csvFields[TXN_CSV_IDX_CB_ELIGIBLE_AMT]));
+        txn.setExtracb_eligible_amt(Integer.parseInt(csvFields[TXN_CSV_IDX_EXT_CB_ELIGIBLE_AMT]));
 
         return txn;
     }
@@ -176,10 +191,12 @@ public class CsvConverter {
     private static int CB_CSV_MCHNT_ID = 1;
     private static int CB_CSV_ACC_CR = 2;
     private static int CB_CSV_ACC_DB = 3;
-    private static int CB_CSV_CR = 4;
-    private static int CB_CSV_DB = 5;
-    private static int CB_CSV_TOTAL_BILL = 6;
-    private static int CB_CSV_BILL = 7;
+    private static int CB_CSV_ACC_OVERDRAFT = 4;
+    private static int CB_CSV_CB_CR = 5;
+    private static int CB_CSV_EXT_CB_CR = 6;
+    //private static int CB_CSV_DB = 5;
+    private static int CB_CSV_TOTAL_BILL = 7;
+    //private static int CB_CSV_BILL = 7;
     private static int CB_CSV_CREATE_TIME = 8;
     private static int CB_CSV_LAST_TXN_TIME = 9;
     private static int CB_CSV_OTHER_DETAILS = 10;
@@ -202,10 +219,12 @@ public class CsvConverter {
         cb.setMerchant_id(csvFields[CB_CSV_MCHNT_ID]);
         cb.setCl_credit(Integer.parseInt(csvFields[CB_CSV_ACC_CR]));
         cb.setCl_debit(Integer.parseInt(csvFields[CB_CSV_ACC_DB]));
-        cb.setCb_credit(Integer.parseInt(csvFields[CB_CSV_CR]));
-        cb.setCb_debit(Integer.parseInt(csvFields[CB_CSV_DB]));
+        cb.setCl_overdraft(Integer.parseInt(csvFields[CB_CSV_ACC_OVERDRAFT]));
+        cb.setCb_credit(Integer.parseInt(csvFields[CB_CSV_CB_CR]));
+        cb.setExtra_cb_credit(Integer.parseInt(csvFields[CB_CSV_EXT_CB_CR]));
+        //cb.setCb_debit(Integer.parseInt(csvFields[CB_CSV_DB]));
         cb.setTotal_billed(Integer.parseInt(csvFields[CB_CSV_TOTAL_BILL]));
-        cb.setCb_billed(Integer.parseInt(csvFields[CB_CSV_BILL]));
+        //cb.setCb_billed(Integer.parseInt(csvFields[CB_CSV_BILL]));
         cb.setCreated(new Date(Long.parseLong(csvFields[CB_CSV_CREATE_TIME])));
         if(!csvFields[CB_CSV_LAST_TXN_TIME].isEmpty()) {
             cb.setLastTxnTime(new Date(Long.parseLong(csvFields[CB_CSV_LAST_TXN_TIME])));
@@ -222,10 +241,12 @@ public class CsvConverter {
         csvFields[CB_CSV_MCHNT_ID] = String.valueOf(cb.getMerchant_id()) ;
         csvFields[CB_CSV_ACC_CR] = String.valueOf(cb.getCl_credit()) ;
         csvFields[CB_CSV_ACC_DB] = String.valueOf(cb.getCl_debit()) ;
-        csvFields[CB_CSV_CR] = String.valueOf(cb.getCb_credit()) ;
-        csvFields[CB_CSV_DB] = String.valueOf(cb.getCb_debit()) ;
+        csvFields[CB_CSV_ACC_OVERDRAFT] = String.valueOf(cb.getCl_overdraft()) ;
+        csvFields[CB_CSV_CB_CR] = String.valueOf(cb.getCb_credit()) ;
+        csvFields[CB_CSV_EXT_CB_CR] = String.valueOf(cb.getExtra_cb_credit()) ;
+        //csvFields[CB_CSV_DB] = String.valueOf(cb.getCb_debit()) ;
         csvFields[CB_CSV_TOTAL_BILL] = String.valueOf(cb.getTotal_billed()) ;
-        csvFields[CB_CSV_BILL] = String.valueOf(cb.getCb_billed()) ;
+        //csvFields[CB_CSV_BILL] = String.valueOf(cb.getCb_billed()) ;
         csvFields[CB_CSV_CREATE_TIME] = String.valueOf(cb.getCreated().getTime()) ;
         if(cb.getLastTxnTime()!=null) {
             csvFields[CB_CSV_LAST_TXN_TIME] = String.valueOf(cb.getLastTxnTime().getTime()) ;

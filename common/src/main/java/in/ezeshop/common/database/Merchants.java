@@ -12,6 +12,7 @@ public class  Merchants
   private String name;
   private String objectId;
   private Boolean cl_add_enable;
+  private Boolean cl_overdraft_enable;
   private String ownerId;
   private java.util.Date last_txn_archive;
   private Integer admin_status;
@@ -49,6 +50,14 @@ public class  Merchants
   private String prepaidCbRate;
   private Integer prepaidCbMinAmt;
   private String regFormNum;
+
+  public Boolean getCl_overdraft_enable() {
+    return cl_overdraft_enable;
+  }
+
+  public void setCl_overdraft_enable(Boolean cl_overdraft_enable) {
+    this.cl_overdraft_enable = cl_overdraft_enable;
+  }
 
   public String getRegFormNum() {
     return regFormNum;
