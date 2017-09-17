@@ -114,11 +114,12 @@ public class TxnPinInputDialog extends DialogFragment
             } else if (cashDebit > 0) {
                 mInputCashAmount.setText(AppCommonUtil.getSignedAmtStr(cashDebit, false));
                 mInputCashAmount.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
-            } /*else {
-                mLayoutAmts.setVisibility(View.GONE);
-            }*/
+            } else {
+                mLayoutAcc.setVisibility(View.GONE);
+            }
 
             if(overdraft > 0) {
+                mLayoutOverdraft.setVisibility(View.VISIBLE);
                 mInputOverdraft.setText(AppCommonUtil.getSignedAmtStr(overdraft, false));
             } else {
                 mLayoutOverdraft.setVisibility(View.GONE);
@@ -298,7 +299,7 @@ public class TxnPinInputDialog extends DialogFragment
     }
 
     private EditText mTitle;
-    //private View mLayoutAmts;
+    private View mLayoutAcc;
     private EditText mInputCashAmount;
     private View mLayoutOverdraft;
     private EditText mInputOverdraft;
@@ -316,8 +317,9 @@ public class TxnPinInputDialog extends DialogFragment
         mTitle = (EditText) v.findViewById(R.id.label_title);
         //mLayoutAmts = v.findViewById(R.id.layout_amounts);
 
+        mLayoutAcc = v.findViewById(R.id.layout_account);;
         mInputCashAmount = (EditText) v.findViewById(R.id.input_account);
-        mLayoutOverdraft = v.findViewById(R.id.layout_account);;
+        mLayoutOverdraft = v.findViewById(R.id.layout_overdraft);;
         mInputOverdraft = (EditText) v.findViewById(R.id.input_overdraft);
         /*mInputCashbackAmount = (EditText) v.findViewById(R.id.input_cashback_amount);
         mLayoutCashAmount = (LinearLayout) v.findViewById(R.id.layout_cash_amount);

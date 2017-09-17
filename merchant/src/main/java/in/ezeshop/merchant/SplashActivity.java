@@ -23,13 +23,14 @@ public class SplashActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        String naErrorStr = AppCommonUtil.isDownAsPerLocalData(SplashActivity.this);
+        //TODO: Uncomment in production
+        /*String naErrorStr = AppCommonUtil.isDownAsPerLocalData(SplashActivity.this);
         if(naErrorStr!=null) {
             DialogFragmentWrapper.createNotification(AppConstants.serviceNATitle, naErrorStr, false, true)
                     .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
-        } else {
+        } else {*/
             startLoginActivity();
-        }
+        //}
 
         /*if(savedInstanceState==null) {
             String naErrorStr = AppCommonUtil.isDownAsPerLocalData(SplashActivity.this);

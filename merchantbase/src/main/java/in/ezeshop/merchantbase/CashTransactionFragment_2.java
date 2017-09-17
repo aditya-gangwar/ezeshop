@@ -230,7 +230,13 @@ public class CashTransactionFragment_2 extends BaseFragment implements
     }
 
     private void displayInputBillAmt() {
-        mInputBillAmt.setText(AppCommonUtil.getSignedAmtStr(mRetainedFragment.mBillTotal, true));
+        if(mRetainedFragment.mBillTotal==0) {
+            mInputBillAmt.setText(AppConstants.SYMBOL_RS_0);
+            mLayoutBillAmt.setAlpha(0.4f);
+        } else {
+            mInputBillAmt.setText(AppCommonUtil.getSignedAmtStr(mRetainedFragment.mBillTotal, true));
+            mLayoutBillAmt.setAlpha(1.0f);
+        }
     }
 
     private void setAddCashload(int value) {
@@ -414,12 +420,17 @@ public class CashTransactionFragment_2 extends BaseFragment implements
     }
 
     private void calcMinCashToPay() {
-        // Min cash to pay = 'Bill amt' - 'all enabled debit amts'
-        // If 'any one or both combined enabled debit amount' > 'bill amt', then mMinCashToPay = 0
-        mMinCashToPay = mRetainedFragment.mBillTotal;
-        if(mDebitClStatus==STATUS_AUTO) {
-            mMinCashToPay = mMinCashToPay - Math.min(mClBalance, mMinCashToPay);
-        }
+        /*if(mMerchantUser.getMerchant().getCl_overdraft_enable()) {
+            // if overdraft allowed - min amount to pay will be 0
+            mMinCashToPay = 0;
+        } else {*/
+            // Min cash to pay = 'Bill amt' - 'all enabled debit amts'
+            // If 'any one or both combined enabled debit amount' > 'bill amt', then mMinCashToPay = 0
+            mMinCashToPay = mRetainedFragment.mBillTotal;
+            if (mDebitClStatus == STATUS_AUTO) {
+                mMinCashToPay = mMinCashToPay - Math.min(mClBalance, mMinCashToPay);
+            }
+        //}
         LogMy.d(TAG,"Exiting calcMinCashToPay: "+mMinCashToPay);
     }
 
@@ -485,10 +496,11 @@ public class CashTransactionFragment_2 extends BaseFragment implements
                     LogMy.d(TAG, "Received new cash paid amount.");
                     String newCashAmt = (String) data.getSerializableExtra(NumberInputDialog.EXTRA_INPUT_HUMBER);
                     if(mCashPaidHelper==null) {
-                        mCashPaidHelper = new CashPaid2(mMinCashToPay, mRetainedFragment.mBillTotal, this, getActivity());
+                        mCashPaidHelper = new CashPaid2(mMinCashToPay, (mOverdraftStatus==STATUS_AUTO),
+                                mRetainedFragment.mBillTotal, this, getActivity());
                     }
-                    mCashPaidHelper.onCustomAmtEnter(newCashAmt);
 
+                    mCashPaidHelper.onCustomAmtEnter(newCashAmt,(mOverdraftStatus==STATUS_AUTO));
                     break;
 
                 case REQ_NOTIFY_ERROR:
@@ -680,6 +692,9 @@ public class CashTransactionFragment_2 extends BaseFragment implements
                             if(mReturnCash==0) {
                                 AppCommonUtil.toast(getActivity(), "Balance Already Zero");
                             } else {
+                                // activating overdraft means activating cl_denit also
+                                // this as before calculating overdraft - any amount in account is need to be debit
+                                setDebitClStatus(STATUS_AUTO);
                                 setOverdraftStatus(STATUS_AUTO);
                                 calcAndSetAmts(false);
                             }
@@ -830,16 +845,20 @@ public class CashTransactionFragment_2 extends BaseFragment implements
         mOverdraftStatus = status;
 
         if(mOverdraftStatus != STATUS_AUTO) {
-            mLayoutOverdraft.setAlpha(0.5f);
+            mLayoutOverdraft.setAlpha(0.4f);
             mLayoutOverdraft.setBackgroundResource(R.drawable.round_rect_border_disabled);
-            mImgOverdraft.setColorFilter(R.color.disabled, PorterDuff.Mode.SRC_IN);
+            //mImgOverdraft.setColorFilter(R.color.disabled);
+            mImgOverdraft.setColorFilter(ContextCompat.getColor(getActivity(), R.color.disabled), PorterDuff.Mode.SRC_IN);
+            /*mImgOverdraft.setImageDrawable(AppCommonUtil.getTintedDrawable(getActivity(),
+                    R.drawable.ic_account_balance_wallet_white_24dp, R.color.disabled));*/
             mLabelOverdraft.setTextColor(ContextCompat.getColor(getActivity(), R.color.disabled));
             mInputOverdraft.setTextColor(ContextCompat.getColor(getActivity(), R.color.disabled));
         } else {
             mLayoutOverdraft.setAlpha(1.0f);
             mLayoutOverdraft.setBackgroundResource(R.drawable.round_rect_border_red);
-            mImgOverdraft.setColorFilter(R.color.red_negative, PorterDuff.Mode.SRC_IN);
-            mLabelOverdraft.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary));
+            //mImgOverdraft.setColorFilter(R.color.red_negative);
+            mImgOverdraft.setColorFilter(ContextCompat.getColor(getActivity(), R.color.red_negative), PorterDuff.Mode.SRC_IN);
+            mLabelOverdraft.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
             mInputOverdraft.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
         }
     }
@@ -861,6 +880,14 @@ public class CashTransactionFragment_2 extends BaseFragment implements
      */
     private void initAmtUiStates() {
         LogMy.d(TAG, "In initAmtUiStates");
+
+        // Cash Paid section
+        if(mCashPaidHelper==null) {
+            calcMinCashToPay();
+            mCashPaidHelper = new CashPaid2(mMinCashToPay, (mOverdraftStatus==STATUS_AUTO),
+                    mRetainedFragment.mBillTotal, this, getActivity());
+        }
+        mCashPaidHelper.initView(getView());
 
         // Init 'add cash' status
         if(mMerchantUser.getMerchant().getCl_add_enable()) {
@@ -887,7 +914,8 @@ public class CashTransactionFragment_2 extends BaseFragment implements
         // Init overdraft status
         if(mMerchantUser.getMerchant().getCl_overdraft_enable()) {
 
-            if(Math.abs(mRetainedFragment.mCurrCashback.getCurrAccBalance()) >= MyGlobalSettings.getAccOverdraftLimit()) {
+            int accBalance = mRetainedFragment.mCurrCashback.getCurrAccBalance();
+            if(accBalance<0 && Math.abs(accBalance) >= MyGlobalSettings.getAccOverdraftLimit()) {
                 setOverdraftStatus(STATUS_ACCOUNT_FULL);
             } else {
                 // by default, dont enable overdraft
@@ -905,12 +933,6 @@ public class CashTransactionFragment_2 extends BaseFragment implements
             setAddCbStatus(STATUS_DISABLED);
         }
 
-        // Cash Paid section
-        if(mCashPaidHelper==null) {
-            calcMinCashToPay();
-            mCashPaidHelper = new CashPaid2(mMinCashToPay, mRetainedFragment.mBillTotal, this, getActivity());
-        }
-        mCashPaidHelper.initView(getView());
     }
 
     /*
@@ -955,15 +977,16 @@ public class CashTransactionFragment_2 extends BaseFragment implements
             if(mRetainedFragment.mBillTotal <= 0) {
                 newStatus = STATUS_NO_BILL_AMT;
             } else {
-                newStatus = (mOverdraft == STATUS_AUTO) ? STATUS_AUTO : STATUS_CLEARED;
+                newStatus = (mOverdraftStatus == STATUS_AUTO) ? STATUS_AUTO : STATUS_CLEARED;
             }
             setOverdraftStatus(newStatus);
         }
     }
 
     // UI Resources data members
-    private View mCoordinatorLayout;
+    //private View mCoordinatorLayout;
 
+    private View mLayoutBillAmt;
     private ImageView mImgBill;
     private View mLabelBill;
     private EditText mInputBillAmt;
@@ -987,8 +1010,9 @@ public class CashTransactionFragment_2 extends BaseFragment implements
 
     private void bindUiResources(View v) {
 
-        mCoordinatorLayout = v.findViewById(R.id.myCoordinatorLayout);
+        //mCoordinatorLayout = v.findViewById(R.id.myCoordinatorLayout);
 
+        mLayoutBillAmt = v.findViewById(R.id.layout_bill_amt);
         mImgBill = (ImageView) v.findViewById(R.id.img_trans_bill_amt);
         mLabelBill = v.findViewById(R.id.label_trans_bill_amt);
         mInputBillAmt = (EditText) v.findViewById(R.id.input_trans_bill_amt);

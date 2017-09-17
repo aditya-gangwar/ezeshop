@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,10 +88,24 @@ public class TxnSuccessDialog extends BaseDialog {
         /*if(clbalance==0 && clbalanceOld==0) {
             mLayoutAccNew.setVisibility(View.GONE);
             mLayoutAccOld.setVisibility(View.GONE);
-        } else {*/
+        } else {
             mInputCashBalance.setText(AppCommonUtil.getAmtStr(clbalance));
             mInputCashBalanceOld.setText(AppCommonUtil.getAmtStr(clbalanceOld));
-        //}
+        }*/
+
+        if(clbalance < 0) {
+            mInputCashBalance.setText(AppCommonUtil.getSignedAmtStr(Math.abs(clbalance),false));
+            mInputCashBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
+        } else {
+            mInputCashBalance.setText(AppCommonUtil.getSignedAmtStr(clbalance,true));
+            mInputCashBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.green_positive));
+        }
+
+        if(clbalanceOld < 0) {
+            mInputCashBalanceOld.setText(AppCommonUtil.getSignedAmtStr(Math.abs(clbalanceOld),false));
+        } else {
+            mInputCashBalanceOld.setText(AppCommonUtil.getSignedAmtStr(clbalanceOld,true));
+        }
 
         //displayTransactionValues();
 

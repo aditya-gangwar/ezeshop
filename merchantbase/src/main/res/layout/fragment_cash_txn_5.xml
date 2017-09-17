@@ -67,6 +67,7 @@
 
                 <LinearLayout
                     style="@style/LL_Horizontal_wrap"
+                    android:id="@+id/layout_bill_amt"
                     android:layout_marginLeft="@dimen/small_space"
                     android:layout_marginRight="@dimen/small_space"
                     android:paddingTop="@dimen/medium_space"

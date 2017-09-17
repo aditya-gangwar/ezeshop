@@ -17,10 +17,11 @@ public class Cashback
   //private Integer cb_eligible_amt;
   //private Integer extracb_eligible_amt;
 
+  // 3 types of credit
   private Integer cl_credit;
   private Integer cb_credit;
   private Integer extra_cb_credit;
-
+  // 2 types of debit
   private Integer cl_debit;
   private Integer cl_overdraft;
 

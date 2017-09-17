@@ -25,7 +25,7 @@ import in.ezeshop.appbase.utilities.OnSingleClickListener;
  * Created by adgangwa on 28-03-2016.
  */
 public class NumberInputDialog extends BaseDialog implements View.OnClickListener {
-    public static final String TAG = "MchntApp-InputNumberDialog";
+    public static final String TAG = "MchntApp-NumberInputDialog";
 
     public static final String EXTRA_INPUT_HUMBER = "cashPaid";
     private static final String ARG_LABEL = "label";

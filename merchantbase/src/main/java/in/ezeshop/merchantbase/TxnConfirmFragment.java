@@ -52,7 +52,7 @@ public class TxnConfirmFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_txn_confirm, container, false);
+        View v = inflater.inflate(R.layout.fragment_txn_confirm3, container, false);
 
         try {
             bindUiResources(v);
@@ -142,13 +142,14 @@ public class TxnConfirmFragment extends BaseFragment {
         if(value > 0) {
             mInputAcc.setText(AppCommonUtil.getSignedAmtStr(value, true));
             mInputAcc.setTextColor(ContextCompat.getColor(getActivity(), R.color.green_positive));
+            mLayoutOverdraft.setVisibility(View.GONE);
         } else {
             value = curTransaction.getCl_debit();
-            mInputAcc.setText(AppCommonUtil.getSignedAmtStr(value, false));
             if(value>0) {
+                mInputAcc.setText(AppCommonUtil.getSignedAmtStr(value, false));
                 mInputAcc.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
             } else {
-                mInputAcc.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
+                mLayoutAcc.setVisibility(View.GONE);
             }
 
             if(curTransaction.getCl_overdraft() > 0) {
@@ -177,6 +178,7 @@ public class TxnConfirmFragment extends BaseFragment {
     }
 
     private EditText mInputBillAmt;
+    private LinearLayout mLayoutAcc;
     private EditText mInputAcc;
     private LinearLayout mLayoutOverdraft;
     private EditText mInputOverdraft;
@@ -193,6 +195,7 @@ public class TxnConfirmFragment extends BaseFragment {
 
     private void bindUiResources(View v) {
         mInputBillAmt = (EditText) v.findViewById(R.id.input_bill_amt);
+        mLayoutAcc = (LinearLayout) v.findViewById(R.id.layout_account);
         mInputAcc = (EditText) v.findViewById(R.id.input_account);
         mLayoutOverdraft = (LinearLayout) v.findViewById(R.id.layout_overdraft);
         mInputOverdraft = (EditText) v.findViewById(R.id.input_overdraft);

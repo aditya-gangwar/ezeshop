@@ -16,6 +16,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -82,7 +83,7 @@ public class CashbackActivity extends BaseActivity implements
     private static final String MOBILE_NUM_FRAGMENT = "MobileNumFragment";
     private static final String BILLING_FRAGMENT = "BillingFragment";
     private static final String CASH_TRANS_FRAGMENT = "CashTransFragment";
-    private static final String ORDER_LIST_FRAGMENT = "OrderListFragment";
+    //private static final String ORDER_LIST_FRAGMENT = "OrderListFragment";
     private static final String SETTINGS_FRAGMENT = "SettingsFragment";
     private static final String TRUSTED_DEVICES_FRAGMENT = "TrustedDevicesFragment";
     private static final String DASHBOARD_FRAGMENT = "DashboardFragment";
@@ -531,12 +532,24 @@ public class CashbackActivity extends BaseActivity implements
         }*/
 
         int curAccBal = mWorkFragment.mCurrCashback.getCurrAccBalance();
-        if(curAccBal==0 && !mMerchant.getCl_add_enable()) {
+
+        if(curAccBal < 0) {
+            mTbSubhead1Text1.setText(AppCommonUtil.getSignedAmtStr(Math.abs(curAccBal),false));
+            mTbSubhead1Text1.setTextColor(ContextCompat.getColor(this, R.color.red_negative));
+            AppCommonUtil.setLeftDrawable(mTbSubhead1Text1,
+                    AppCommonUtil.getTintedDrawable(this,R.drawable.ic_account_balance_wallet_white_18dp,R.color.red_negative));
+        } else {
+            mTbSubhead1Text1.setText(AppCommonUtil.getAmtStr(curAccBal));
+            mTbSubhead1Text1.setTextColor(ContextCompat.getColor(this, R.color.white));
+            AppCommonUtil.setLeftDrawable(mTbSubhead1Text1,
+                    ContextCompat.getDrawable(this, R.drawable.ic_account_balance_wallet_white_18dp));
+        }
+        /*if(curAccBal==0 && !mMerchant.getCl_add_enable()) {
             mTbSubhead1Text1.setVisibility(View.GONE);
         } else {
             mTbSubhead1Text1.setVisibility(View.VISIBLE);
             mTbSubhead1Text1.setText(AppCommonUtil.getAmtStr(mWorkFragment.mCurrCashback.getCurrAccBalance()));
-        }
+        }*/
         //mTbSubhead1Divider.setVisibility(View.VISIBLE);
         //mTbSubhead1Text2.setVisibility(View.VISIBLE);
         //mTbSubhead1Text2.setText(AppCommonUtil.getAmtStr(mWorkFragment.mCurrCashback.getCurrCbBalance()));

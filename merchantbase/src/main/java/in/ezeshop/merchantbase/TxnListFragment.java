@@ -617,6 +617,7 @@ public class TxnListFragment extends BaseFragment {
         //public TextView mCbAwardCancel;
         //public View mAccountIcon;
         public TextView mAccountAmt;
+        public View mImgOverdraft;
         //public View mTxnAmtDiv;
         //public View mCashbackIcon;
         //public TextView mCashbackAmt;
@@ -638,6 +639,7 @@ public class TxnListFragment extends BaseFragment {
             mBillAmount = (TextView) itemView.findViewById(R.id.bill_input);
             //mAccountIcon = itemView.findViewById(R.id.txn_account_icon);
             mAccountAmt = (TextView) itemView.findViewById(R.id.acc_input);
+            mImgOverdraft = itemView.findViewById(R.id.txn_ic_overdraft);
             //mTxnAmtDiv = itemView.findViewById(R.id.txn_amts_divider);
 
             //mCashbackIcon = itemView.findViewById(R.id.txn_cashback_icon);
@@ -718,12 +720,19 @@ public class TxnListFragment extends BaseFragment {
                 mAccountAmt.setText(String.format(paddingStr,AppCommonUtil.getSignedAmtStr(value, true)));
                 mAccountAmt.setTextColor(ContextCompat.getColor(getActivity(), R.color.green_positive));
             } else {
+                // Debit case
                 int totalDebit = txn.getCl_debit() + txn.getCl_overdraft();
                 mAccountAmt.setText(String.format(paddingStr,AppCommonUtil.getSignedAmtStr(totalDebit, false)));
-                if(value>0) {
+                /*if(value>0) {
                     mAccountAmt.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
                 } else {
                     mAccountAmt.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
+                }*/
+
+                if(txn.getCl_overdraft()>0) {
+                    mImgOverdraft.setVisibility(View.VISIBLE);
+                } else {
+                    mImgOverdraft.setVisibility(View.GONE);
                 }
             }
             // set cb amount
@@ -851,7 +860,7 @@ public class TxnListFragment extends BaseFragment {
         @Override
         public TxnHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            View view = layoutInflater.inflate(R.layout.txn_itemview, parent, false);
+            View view = layoutInflater.inflate(R.layout.txn_itemview_3, parent, false);
             //LogMy.d(TAG,"Root view: "+view.getId());
             //view.setOnClickListener(mListener);
             return new TxnHolder(view);

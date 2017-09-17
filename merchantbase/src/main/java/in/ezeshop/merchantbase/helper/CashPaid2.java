@@ -27,6 +27,7 @@ public class CashPaid2 implements Serializable, View.OnTouchListener {
     private static int[] currency = {10, 50, 100, 500, 2000};
 
     int mMinCashToPay;
+    boolean mNoMinCheck;
     int mBillAmt;
     Activity mActivity;
     CashPaid2If mCallback;
@@ -39,10 +40,11 @@ public class CashPaid2 implements Serializable, View.OnTouchListener {
         void collectCustomAmount(String curValue, int minValue);
     }
 
-    public CashPaid2(int minCashToPay, int billAmt, CashPaid2If callback, Activity activity) {
+    public CashPaid2(int minCashToPay, boolean noMinCheck, int billAmt, CashPaid2If callback, Activity activity) {
         mActivity = activity;
         mCallback = callback;
         mMinCashToPay = minCashToPay;
+        mNoMinCheck = noMinCheck;
         mBillAmt = billAmt;
         mValues = new TreeSet<>();
         mInputCashPay = new AppCompatButton[UI_SLOT_COUNT];
@@ -100,7 +102,8 @@ public class CashPaid2 implements Serializable, View.OnTouchListener {
         }
     }
 
-    public void onCustomAmtEnter(String newValue) {
+    public void onCustomAmtEnter(String newValue, boolean noMinCheck) {
+        mNoMinCheck = noMinCheck;
         setCustomAmtText(newValue);
         handleCustomAmtEnter();
     }
@@ -183,7 +186,11 @@ public class CashPaid2 implements Serializable, View.OnTouchListener {
                             //remove rupee symbol
                             uiVal = uiVal.replace(AppConstants.SYMBOL_RS, "");
                         }
-                        mCallback.collectCustomAmount(uiVal, mMinCashToPay);
+                        if(mNoMinCheck) {
+                            mCallback.collectCustomAmount(uiVal, 0);
+                        } else {
+                            mCallback.collectCustomAmount(uiVal, mMinCashToPay);
+                        }
                     }
                 }
                 return false;
@@ -240,7 +247,7 @@ public class CashPaid2 implements Serializable, View.OnTouchListener {
         }
 
         int value = Integer.parseInt(mInputAmt.getText().toString());
-        if(value >= mMinCashToPay) {
+        if(value >= mMinCashToPay || mNoMinCheck) {
             setCustomAmtText(AppCommonUtil.getAmtStr(value));
             markInputAmt(mInputAmt);
             mCallback.onAmountEnterFinal(value, false);
@@ -255,7 +262,7 @@ public class CashPaid2 implements Serializable, View.OnTouchListener {
             if(!anyFixedValueMarked()) {
                 mCallback.onAmountEnterFinal(0, true);
             }
-        }else {
+        } else {
             //mInputAmt.setCursorVisible(true);
             mInputAmt.setError("Minimum "+AppCommonUtil.getAmtStr(mMinCashToPay)+" required");
         }

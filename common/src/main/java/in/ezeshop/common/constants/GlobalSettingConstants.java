@@ -121,7 +121,7 @@ public class GlobalSettingConstants {
         aMap.put(SETTINGS_SERVICE_DISABLED_UNTIL,null);
         //aMap.put(SETTINGS_TXN_IMAGE_CAPTURE_MODE,String.valueOf(TXN_IMAGE_CAPTURE_CARD_REQUIRED));
         aMap.put(SETTINGS_DAILY_DOWNTIME_START_HOUR,"0");
-        aMap.put(SETTINGS_DAILY_DOWNTIME_END_HOUR,"7");
+        aMap.put(SETTINGS_DAILY_DOWNTIME_END_HOUR,"0");
         //URL to which App will redirect if backend is not available
         aMap.put(SETTINGS_SERVICE_NA_URL,"http://www.myecash.in/back-soon");
         aMap.put(SETTINGS_MCHNT_TERMS_URL, "http://www.myecash.in/terms");

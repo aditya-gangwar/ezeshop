@@ -31,7 +31,8 @@
             android:layout_height="match_parent"
             android:text="880xxx1535"
             android:layout_marginEnd="@dimen/medium_space"
-            android:layout_marginRight="@dimen/medium_space"/>
+            android:layout_marginRight="@dimen/medium_space"
+            android:textColor="@color/primary"/>
     </LinearLayout>
 
     <LinearLayout
@@ -87,8 +88,7 @@
         </LinearLayout>
 
         <LinearLayout
-            style="@style/LL_Horizontal_paddingSidesXL"
-            android:layout_marginTop="@dimen/medium_space">
+            style="@style/LL_Horizontal_paddingSidesXL">
 
             <ImageView
                 style="@style/Imageview_Left_Column"
@@ -221,7 +221,7 @@
                 android:layout_height="match_parent"
                 android:layout_width="wrap_content"
                 android:id="@+id/label_acc"
-                android:text="Account"
+                android:text="ACCOUNT"
                 android:textStyle="normal"
                 android:textColor="@color/subheading"
                 android:paddingLeft="@dimen/screen_side_padding_more" />
@@ -338,7 +338,8 @@
             <LinearLayout
                 style="@style/LL_Horizontal_paddingSidesXL"
                 android:visibility="visible"
-                android:id="@+id/label_acc_debit">
+                android:id="@+id/label_acc_debit"
+                android:layout_marginBottom="@dimen/XL_space">
 
                 <ImageView
                     style="@style/Imageview_Left_Column"

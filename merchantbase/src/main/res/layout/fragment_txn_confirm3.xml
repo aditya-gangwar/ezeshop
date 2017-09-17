@@ -88,6 +88,7 @@
 
             <ImageView
                 style="@style/Imageview_Left_Column"
+                android:id="@+id/img_account"
                 android:src="@drawable/ic_account_balance_wallet_white_18dp"/>
 
             <EditText
@@ -115,6 +116,7 @@
 
             <ImageView
                 style="@style/Imageview_Left_Column"
+                android:id="@+id/img_overdraft"
                 android:src="@drawable/ic_account_balance_wallet_white_18dp"
                 android:tint="@color/red_negative"/>
 
@@ -124,7 +126,8 @@
                 android:text="Overdraft"
                 android:layout_weight="1"
                 android:gravity="left"
-                android:id="@+id/label_overdraft" />
+                android:id="@+id/label_overdraft"
+                android:textColor="@color/red_negative"/>
 
             <EditText
                 style="@style/Edittext_only_view_medium"

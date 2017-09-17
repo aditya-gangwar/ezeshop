@@ -611,13 +611,13 @@ public class AppCommonUtil {
     public static Drawable getTintedDrawable(Context context, @DrawableRes int drawableResId, @ColorRes int colorResId) {
         Drawable drawable = ContextCompat.getDrawable(context, drawableResId);
         int color = ContextCompat.getColor(context, colorResId);
-        drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        drawable.mutate().setColorFilter(color, PorterDuff.Mode.SRC_IN);
         return drawable;
     }
 
     public static Drawable getTintedDrawable(Context context, Drawable drawable, @ColorRes int colorResId) {
         int color = ContextCompat.getColor(context, colorResId);
-        drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        drawable.mutate().setColorFilter(color, PorterDuff.Mode.SRC_IN);
         return drawable;
     }
 
@@ -627,6 +627,12 @@ public class AppCommonUtil {
         DrawableCompat.setTint(wrapDrawable, ContextCompat.getColor(context, colorResId));
 
         item.setIcon(wrapDrawable);
+    }
+
+    public static void setLeftDrawable(TextView et, Drawable drawable) {
+        Drawable[] drawables = et.getCompoundDrawables();
+        et.setCompoundDrawablesWithIntrinsicBounds(drawable,drawables[1],
+                drawables[2], drawables[3]);
     }
 
     public static void animateViewVisible(View view) {

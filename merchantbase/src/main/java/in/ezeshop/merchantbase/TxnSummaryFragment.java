@@ -101,7 +101,7 @@ public class TxnSummaryFragment extends BaseFragment {
         input_values[AppConstants.INDEX_DEBIT_ACCOUNT].setText(AppCommonUtil.getSignedAmtStr(summary[AppConstants.INDEX_DEBIT_ACCOUNT], false));
         if(summary[AppConstants.INDEX_OVERDRAFT] > 0) {
             layoutOverdraft.setVisibility(View.VISIBLE);
-            input_values[AppConstants.INDEX_OVERDRAFT].setText(AppCommonUtil.getSignedAmtStr(summary[AppConstants.INDEX_OVERDRAFT], true));
+            input_values[AppConstants.INDEX_OVERDRAFT].setText(AppCommonUtil.getSignedAmtStr(summary[AppConstants.INDEX_OVERDRAFT], false));
         } else {
             layoutOverdraft.setVisibility(View.GONE);
         }

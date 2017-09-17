@@ -632,7 +632,15 @@ public class CustomerListFragment extends BaseFragment {
             mCustId.setText(customer.getPrivateId());
             mLastTxnTime.setText(mSdfDateWithTime.format(cb.getLastTxnTime()));
             mBillAmt.setText(AppCommonUtil.getAmtStr(cb.getBillAmt()));
-            mAccBalance.setText(AppCommonUtil.getAmtStr(mCb.getCurrAccBalance()));
+
+            int accBalance = mCb.getCurrAccBalance();
+            if(accBalance<0) {
+                mAccBalance.setText(AppCommonUtil.getSignedAmtStr(Math.abs(accBalance),false));
+                mAccBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
+            } else {
+                mAccBalance.setText(AppCommonUtil.getSignedAmtStr(accBalance,true));
+                mAccBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.green_positive));
+            }
 
             /*if(cb.getClCredit()==0 && cb.getClDebit()==0) {
                 mLayoutAcc.setVisibility(View.GONE);
@@ -681,7 +689,7 @@ public class CustomerListFragment extends BaseFragment {
         public CbHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LogMy.d(TAG,"In CbHolder");
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            View view = layoutInflater.inflate(R.layout.customer_itemview, parent, false);
+            View view = layoutInflater.inflate(R.layout.customer_itemview2, parent, false);
             //view.setOnClickListener(mListener);
             return new CbHolder(view);
         }
