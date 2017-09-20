@@ -11,7 +11,7 @@
     <LinearLayout
         style="@style/LL_Vertical"
         android:layout_height="wrap_content"
-        android:background="@color/bg_light_grey"
+        android:background="@color/primary_highlight"
         android:id="@+id/layout_amounts"
         android:padding="@dimen/medium_space">
 

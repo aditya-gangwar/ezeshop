@@ -28,7 +28,7 @@
     </FrameLayout>
 
     <LinearLayout
-        style="@style/LL_Vertical_paddingSidesXL"
+        style="@style/LL_Vertical"
         android:id="@+id/layout_report_main"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar_report">
@@ -52,7 +52,7 @@
             android:layout_weight="7.5"/>
 
         <LinearLayout
-            style="@style/LL_Horizontal_wrap">
+            style="@style/LL_Horizontal_paddingSidesXL">
 
             <EditText
                 style="@style/Edittext_only_click_medium"
@@ -73,9 +73,10 @@
         </LinearLayout>
 
         <LinearLayout
-            style="@style/LL_Horizontal_wrap"
-            android:padding="@dimen/medium_space"
-            android:background="@color/bg_light_grey">
+            style="@style/LL_Horizontal_paddingSidesXL"
+            android:paddingTop="@dimen/medium_space"
+            android:paddingBottom="@dimen/medium_space"
+            android:background="@color/primary_highlight">
 
             <android.support.v7.widget.CardView
                 android:layout_gravity="center"
@@ -135,7 +136,7 @@
             android:inputType="textMultiLine"/>
 
         <LinearLayout
-            style="@style/LL_Horizontal_wrap"
+            style="@style/LL_Horizontal_paddingSidesXL"
             android:layout_marginTop="@dimen/medium_space">
 
             <ImageView
@@ -175,6 +176,8 @@
 
         <android.support.v7.widget.AppCompatButton
             style="@style/button_normal_thin"
+            android:layout_marginLeft="@dimen/screen_side_padding_more"
+            android:layout_marginRight="@dimen/screen_side_padding_more"
             android:id="@+id/btn_get_report"
             android:text="Get Transactions"/>
 

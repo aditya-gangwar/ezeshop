@@ -102,9 +102,9 @@ public class MyCashback {
     /*
      * Current cashback Getter methods
      */
-    public Cashback getCurrCashback() {
+    /*public Cashback getCurrCashback() {
         return mCurrCashback;
-    }
+    }*/
     public int getBillAmt() {
         return mCurrCashback.getTotal_billed();
     }
@@ -124,6 +124,10 @@ public class MyCashback {
 
     public int getCurrAccTotalDebit() {
         return (mCurrCashback.getCl_debit() + mCurrCashback.getCl_overdraft());
+    }
+
+    public int getCurrAccOverdraft() {
+        return mCurrCashback.getCl_overdraft();
     }
 
     /*public int getClDebit() { return mCurrCashback.getCl_debit(); }

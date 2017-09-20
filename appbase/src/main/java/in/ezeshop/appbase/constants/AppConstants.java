@@ -104,6 +104,9 @@ public class AppConstants {
     public static final String regConfirmTitle = "Merchant Registration";
     public static final String regConfirmMsg = "Are you sure all information given is correct ?";
 
+    public static final String overdraftConfirmTitle = "First Overdraft Confirmation";
+    public static final String overdraftConfirmMsg = "First Overdraft for this Customer.\nAre you sure ?";
+
     public static final String mchntRegSuccessMsg = "Registered Merchant Id is %s.\nPlease ask Merchant to use 'Forget Password' link to get password and proceed further.";
 
     //public static final String custOpNewCardSuccessMsg = "New Customer card registered successfully";

@@ -30,7 +30,7 @@
                     android:icon="@drawable/ic_dashboard_black_24dp" />
                 <item
                     android:id="@+id/menu_customers"
-                    android:title="Customer Data"
+                    android:title="Customer List"
                     android:icon="@drawable/ic_group_black_24dp" />
                 <item
                     android:id="@+id/menu_reports"

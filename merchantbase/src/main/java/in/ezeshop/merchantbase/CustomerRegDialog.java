@@ -2,27 +2,21 @@ package in.ezeshop.merchantbase;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import in.ezeshop.appbase.BaseDialog;
-import in.ezeshop.appbase.barcodeReader.BarcodeCaptureActivity;
 import in.ezeshop.appbase.utilities.OnSingleClickListener;
 import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.ErrorCodes;
 import in.ezeshop.appbase.utilities.AppCommonUtil;
-import in.ezeshop.appbase.utilities.LogMy;
 import in.ezeshop.appbase.utilities.ValidationHelper;
 import in.ezeshop.merchantbase.helper.MyRetainedFragment;
 
@@ -33,14 +27,15 @@ public class CustomerRegDialog extends BaseDialog {
 
     private static final String TAG = "MchntApp-CustomerRegDialog";
 
-    private static final String ARG_MOBILE_NUM = "mobile_num";
+    //private static final String ARG_NAME = "custRegName";
+    //private static final String ARG_MOBILE_NUM = "mobile_num";
     private static final String ARG_STATUS = "status";
 
     private CustomerRegFragmentIf mCallback;
     // saved state variables
     //private String scannedCardId;
     //private String mDob;
-    private int mSex;
+    //private int mSex;
 
     public interface CustomerRegFragmentIf {
         //void onCustomerRegOk(String mobileNum, String dob, int sex, String cardId, String otp, String firstName, String lastName);
@@ -56,11 +51,11 @@ public class CustomerRegDialog extends BaseDialog {
         /*if(mobileNo != null) {
             args.putString(ARG_MOBILE_NUM, mobileNo);
         }
+        if(name != null) {
+            args.putString(ARG_NAME, name);
+        }
         if(cardId != null) {
             args.putString(ARG_QRCODE, cardId);
-        }
-        if(firstName != null) {
-            args.putString(ARG_FIRST_NAME, firstName);
         }
         if(lastName != null) {
             args.putString(ARG_LAST_NAME, lastName);
@@ -119,18 +114,18 @@ public class CustomerRegDialog extends BaseDialog {
     private void setValuesinUi(Bundle savedInstanceState) {
         String mobileNum = mCallback.getRetainedFragment().mCustMobile;
         //String cardId = mCallback.getRetainedFragment().mCustCardId;
-        String firstName = mCallback.getRetainedFragment().mCustRegFirstName;
+        String firstName = mCallback.getRetainedFragment().mCustRegName;
         //mDob = mCallback.getRetainedFragment().mCustRegDob;
-        mSex = mCallback.getRetainedFragment().mCustSex;
+        //mSex = mCallback.getRetainedFragment().mCustSex;
         //String lastName = getArguments().getString(ARG_LAST_NAME, null);
         int status = getArguments().getInt(ARG_STATUS,ErrorCodes.NO_ERROR);
 
-        if(savedInstanceState!=null) {
+        /*if(savedInstanceState!=null) {
             LogMy.d(TAG,"Restoring scannedCardId");
             //scannedCardId = savedInstanceState.getString("scannedCardId");
             //mDob = savedInstanceState.getString("mDob");
             mSex = savedInstanceState.getInt("mSex");
-        }
+        }*/
 
         // null means OTP not generated yet
         //if(mobileNum==null || mobileNum.isEmpty() ||
@@ -205,7 +200,7 @@ public class CustomerRegDialog extends BaseDialog {
         }*/
 
         // Set name and make non-editable
-        /*if(firstName!=null && !firstName.isEmpty()) {
+        if(firstName!=null && !firstName.isEmpty()) {
             mInputFirstName.setText(firstName);
             AppCommonUtil.makeEditTextOnlyView(mInputFirstName);
             mInputFirstName.setEnabled(false);
@@ -219,7 +214,7 @@ public class CustomerRegDialog extends BaseDialog {
             mImageName.setAlpha(0.5f);
         }
 
-        if(mDob!=null && !mDob.isEmpty()) {
+        /*if(mDob!=null && !mDob.isEmpty()) {
             mDobDate.setEnabled(false); // just to use as check in validate()
             mDobDate.setText(mDob.substring(0,2));
             mDobMonth.setText(mDob.substring(2,4));
@@ -229,7 +224,7 @@ public class CustomerRegDialog extends BaseDialog {
             AppCommonUtil.makeEditTextOnlyView(mDobYear);
 
             mLayoutDob.setAlpha(0.5f);
-        }*/
+        }
 
         if(mSex==CommonConstants.SEX_MALE) {
             mRadioMale.setChecked(true);
@@ -252,7 +247,7 @@ public class CustomerRegDialog extends BaseDialog {
             mRadioFemale.setChecked(false);
             mRadioGrpSex.setEnabled(true);
             mLayoutSex.setAlpha(1.0f);
-        }
+        }*/
     }
 
     @Override
@@ -321,9 +316,9 @@ public class CustomerRegDialog extends BaseDialog {
                                 "");*/
                         mCallback.onCustomerRegOk(
                                 mInputMobileNum.getText().toString(),
-                                "", mSex,
+                                "", CommonConstants.SEX_UNKNOWN,
                                 mInputOtp.getText().toString(),
-                                "","");
+                                mInputFirstName.getText().toString(),"");
                         wantToCloseDialog = true;
                     }
 
@@ -339,7 +334,7 @@ public class CustomerRegDialog extends BaseDialog {
         boolean retValue = true;
         int errorCode;
 
-        if(mInputMobileNum.isEnabled()) {
+        /*if(mInputMobileNum.isEnabled()) {
             errorCode = ValidationHelper.validateMobileNo(mInputMobileNum.getText().toString());
             if (errorCode != ErrorCodes.NO_ERROR) {
                 mInputMobileNum.setError(AppCommonUtil.getErrorDesc(errorCode));
@@ -357,7 +352,7 @@ public class CustomerRegDialog extends BaseDialog {
                 AppCommonUtil.toast(getActivity(),"Set Male/Female");
                 retValue = false;
             }
-        }
+        }*/
 
         /*if(mDobDate.isEnabled()) {
             mDob = mDobDate.getText().toString()+mDobMonth.getText().toString()+mDobYear.getText().toString();
@@ -449,13 +444,13 @@ public class CustomerRegDialog extends BaseDialog {
         mCallback.restartTxn();
     }*/
 
-    //private EditText mInputFirstName;
+    private EditText mInputFirstName;
     //private EditText mInputLastName;
     private EditText mInputMobileNum;
     private EditText mInputOtp;
     //private EditText mInputQrCard;
 
-    //private EditText mLabelFirstName;
+    private EditText mLabelFirstName;
     //private EditText mLabelLastName;
 
     //private View mLayoutDob;
@@ -463,10 +458,10 @@ public class CustomerRegDialog extends BaseDialog {
     //private EditText mDobMonth;
     //private EditText mDobYear;
 
-    private View mLayoutSex;
+    /*private View mLayoutSex;
     private RadioGroup mRadioGrpSex;
     private RadioButton mRadioMale;
-    private RadioButton mRadioFemale;
+    private RadioButton mRadioFemale;*/
 
     private EditText mLabelMobile;
     //private EditText mLabelCard;
@@ -476,14 +471,14 @@ public class CustomerRegDialog extends BaseDialog {
 
     private View mImageMobile;
     //private View mImageCard;
-    //private View mImageName;
+    private View mImageName;
 
     private View mLayoutOtp;
 
     private void bindUiResources(View v) {
 
-        /*mInputFirstName = (EditText) v.findViewById(R.id.input_firstName);
-        mInputLastName = (EditText) v.findViewById(R.id.input_lastName);
+        mInputFirstName = (EditText) v.findViewById(R.id.input_firstName);
+        /*mInputLastName = (EditText) v.findViewById(R.id.input_lastName);
 
         mLayoutDob = v.findViewById(R.id.layout_dob);
         mDobDate = (EditText) v.findViewById(R.id.input_dobDate);
@@ -499,7 +494,7 @@ public class CustomerRegDialog extends BaseDialog {
         //mInputQrCard = (EditText) v.findViewById(R.id.input_qr_card);
         mInputOtp = (EditText) v.findViewById(R.id.input_otp);
 
-        //mLabelFirstName = (EditText) v.findViewById(R.id.label_firstName);
+        mLabelFirstName = (EditText) v.findViewById(R.id.label_firstName);
         //mLabelLastName = (EditText) v.findViewById(R.id.label_lastName);
         mLabelMobile = (EditText) v.findViewById(R.id.label_mobile);
         //mLabelCard = (EditText) v.findViewById(R.id.label_card);
@@ -509,7 +504,7 @@ public class CustomerRegDialog extends BaseDialog {
 
         mImageMobile = v.findViewById(R.id.image_mobile);
         //mImageCard = v.findViewById(R.id.image_card);
-        //mImageName = v.findViewById(R.id.image_name);
+        mImageName = v.findViewById(R.id.image_name);
 
         mLayoutOtp = v.findViewById(R.id.layout_otp);
     }
@@ -536,6 +531,6 @@ public class CustomerRegDialog extends BaseDialog {
         super.onSaveInstanceState(outState);
         //outState.putString("scannedCardId", scannedCardId);
         //outState.putString("mDob", mDob);
-        outState.putInt("mSex", mSex);
+        //outState.putInt("mSex", mSex);
     }
 }

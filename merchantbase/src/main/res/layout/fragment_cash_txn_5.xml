@@ -189,7 +189,7 @@
 
             <LinearLayout
                 style="@style/LL_Horizontal_wrap"
-                android:id="@+id/layout_overdraft"
+                android:id="@+id/ct_layout_overdraft"
                 android:paddingLeft="@dimen/small_space"
                 android:paddingRight="@dimen/small_space"
                 android:paddingTop="@dimen/small_space"

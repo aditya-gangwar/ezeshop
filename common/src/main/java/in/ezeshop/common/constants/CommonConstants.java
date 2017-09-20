@@ -71,8 +71,9 @@ public class CommonConstants {
     public static final int MILLISECS_IN_HOUR = 3600000;
     public static final int MILLISECS_IN_MINUTE = 60000;
 
+    public static final int SEX_UNKNOWN = 0;
+    public static final int SEX_FEMALE = 8;
     public static final int SEX_MALE = 11;
-    public static final int SEX_FEMALE = 12;
 
     /*
      * Size, Length and Limits

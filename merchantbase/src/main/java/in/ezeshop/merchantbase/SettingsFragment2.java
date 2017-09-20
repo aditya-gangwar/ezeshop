@@ -53,6 +53,7 @@ public class SettingsFragment2 extends PreferenceFragment
 
     public static final String KEY_CB_RATE = "settings_cb_rate";
     public static final String KEY_ADD_CL_ENABLED = "settings_cl_add_enabled";
+    public static final String KEY_OVERDRAFT_ENABLED = "settings_overdraft_enabled";
     public static final String KEY_PP_CB_RATE = "settings_ppcb_rate";
     public static final String KEY_PP_MIN_AMT = "settings_ppcb_amt";
 
@@ -112,9 +113,9 @@ public class SettingsFragment2 extends PreferenceFragment
         icon = AppCommonUtil.getTintedDrawable(getActivity(), R.drawable.ic_account_balance_wallet_white_24dp, R.color.primary);
         pref.setIcon(icon);
         //pref.setSelectable(false);
-        pref.setEnabled(false);
+        /*pref.setEnabled(false);
         pref.setShouldDisableView(true);
-        pref.setSummary("Not available in FREE plan. Contact Customer Care to Upgrade");
+        pref.setSummary("Not available in FREE plan. Contact Customer Care to Upgrade");*/
         /*pref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -145,6 +146,8 @@ public class SettingsFragment2 extends PreferenceFragment
         Preference pref = getPreferenceScreen().findPreference(KEY_CB_RATE);
         pref.setOnPreferenceChangeListener(this);
         pref = getPreferenceScreen().findPreference(KEY_ADD_CL_ENABLED);
+        pref.setOnPreferenceChangeListener(this);
+        pref = getPreferenceScreen().findPreference(KEY_OVERDRAFT_ENABLED);
         pref.setOnPreferenceChangeListener(this);
         pref = getPreferenceScreen().findPreference(KEY_PP_CB_RATE);
         pref.setOnPreferenceChangeListener(this);
@@ -252,9 +255,18 @@ public class SettingsFragment2 extends PreferenceFragment
 
             // as they depend on it
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            setPpCbRateSummary(prefs.getString(KEY_OVERDRAFT_ENABLED,null), !isAddClEnabled, isAddClEnabled);
             setPpCbRateSummary(prefs.getString(KEY_PP_CB_RATE,null), !isAddClEnabled, isAddClEnabled);
             setPpMinAmtSummary(prefs.getString(KEY_PP_MIN_AMT,null), !isAddClEnabled, isAddClEnabled);
             //}
+        } else if (key.equals(KEY_OVERDRAFT_ENABLED)) {
+            //boolean isAddClEnabled = sharedPreferences.getBoolean(KEY_ADD_CL_ENABLED, mMerchantUser.getMerchant().getCl_add_enable());
+            boolean overdraftEnabled = (boolean)o;
+            //if (isAddClEnabled != mMerchantUser.getMerchant().getCl_add_enable()) {
+            mMerchantUser.setNewOverdraftEnabled(overdraftEnabled);
+            mSettingsChanged = true;
+            setAddCashSummary(overdraftEnabled, false);
+
         } else if (key.equals(KEY_PP_CB_RATE)) {
             newValue = (String)o;
             errorCode = ValidationHelper.validateCbRate(newValue);
@@ -343,20 +355,21 @@ public class SettingsFragment2 extends PreferenceFragment
     private void setAllSummaries() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        boolean disablePref = false;
+        boolean disableDependentPref = false;
         if(mMerchantUser.getMerchant().getAdmin_status()== DbConstants.USER_STATUS_UNDER_CLOSURE) {
-            disablePref = true;
+            disableDependentPref = true;
         }
 
-        setCbRateSummary(prefs.getString(KEY_CB_RATE,null), disablePref);
-        setAddCashSummary(prefs.getBoolean(KEY_ADD_CL_ENABLED, false), disablePref);
+        setCbRateSummary(prefs.getString(KEY_CB_RATE,null), disableDependentPref);
+        setAddCashSummary(prefs.getBoolean(KEY_ADD_CL_ENABLED, false), disableDependentPref);
 
-        if(!disablePref &&
+        if(!disableDependentPref &&
                 !prefs.getBoolean(KEY_ADD_CL_ENABLED, mMerchantUser.getMerchant().getCl_add_enable())) {
-            disablePref = true;
+            disableDependentPref = true;
         }
-        setPpCbRateSummary(prefs.getString(KEY_PP_CB_RATE,null), disablePref, null);
-        setPpMinAmtSummary(prefs.getString(KEY_PP_MIN_AMT,null), disablePref, null);
+        setPpCbRateSummary(prefs.getString(KEY_OVERDRAFT_ENABLED,null), disableDependentPref, null);
+        setPpCbRateSummary(prefs.getString(KEY_PP_CB_RATE,null), disableDependentPref, null);
+        setPpMinAmtSummary(prefs.getString(KEY_PP_MIN_AMT,null), disableDependentPref, null);
 
         setMobileNumSummary(prefs.getString(KEY_MOBILE_NUM, null));
         setContactPhoneSummary(prefs.getString(KEY_CONTACT_PHONE, null));
@@ -390,6 +403,29 @@ public class SettingsFragment2 extends PreferenceFragment
         }
     }
 
+    private void setOverdraftSummary(boolean value, boolean disable, Boolean addCashEnabled) {
+        Preference pref = findPreference(KEY_OVERDRAFT_ENABLED);
+        if(disable) {
+            if(addCashEnabled==null) {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                addCashEnabled = prefs.getBoolean(KEY_ADD_CL_ENABLED,
+                        mMerchantUser.getMerchant().getCl_add_enable());
+            }
+
+            if(addCashEnabled) {
+                pref.setSummary("Won't apply as Merchant under 'Expiry' Notice period.");
+            } else {
+                pref.setSummary("Won't apply as 'Add Money' is Disabled.");
+            }
+            pref.setEnabled(false);
+            pref.setSelectable(false);
+        } else {
+            String summary = String.format(getActivity().getString(R.string.overdraftSummary), value?"Disable":"Enable");
+            pref.setSummary(summary);
+            pref.setEnabled(true);
+        }
+    }
+
     private void setPpCbRateSummary(String value, boolean disable, Boolean addCashEnabled) {
         if(null==value) {
             return;
@@ -405,7 +441,7 @@ public class SettingsFragment2 extends PreferenceFragment
             if(addCashEnabled) {
                 pref.setSummary("Won't apply as Merchant under 'Expiry' Notice period.");
             } else {
-                pref.setSummary("Won't apply as 'Add Cash to Account' is Disabled.");
+                pref.setSummary("Won't apply as 'Add Money' is Disabled.");
             }
             pref.setEnabled(false);
             pref.setSelectable(false);
@@ -432,7 +468,7 @@ public class SettingsFragment2 extends PreferenceFragment
             if(addCashEnabled) {
                 pref.setSummary("Won't apply as Merchant under 'Expiry' Notice period.");
             } else {
-                pref.setSummary("Won't apply as 'Add Cash to Account' is Disabled.");
+                pref.setSummary("Won't apply as 'Add Money' is Disabled.");
             }
             pref.setEnabled(false);
             pref.setSelectable(false);

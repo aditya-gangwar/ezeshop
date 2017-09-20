@@ -82,10 +82,10 @@ public class MyRetainedFragment extends RetainedFragment {
     // this is used differently in different cases
     public String mTempStr;
 
-    public String mCustRegFirstName;
-    public String mCustRegLastName;
-    public String mCustRegDob; // DDMMYYYY format
-    public int mCustSex;
+    public String mCustRegName;
+    //public String mCustRegLastName;
+    //public String mCustRegDob; // DDMMYYYY format
+    //public int mCustSex;
 
     public MyCashback mCurrCashback;
     public MyCustomer mCurrCustomer;
@@ -144,10 +144,10 @@ public class MyRetainedFragment extends RetainedFragment {
         mNewMobileNum = null;
         mOtpMobileChange = null;
 
-        mCustRegFirstName = null;
-        mCustRegLastName = null;
-        mCustRegDob = null;
-        mCustSex = -1;
+        mCustRegName = null;
+        //mCustRegLastName = null;
+        //mCustRegDob = null;
+        //mCustSex = -1;
 
         if(AppConstants.USE_CRASHLYTICS) {
             Crashlytics.setString(AppConstants.CLTS_INPUT_CUST_MOBILE, "");

@@ -44,6 +44,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
 
     private static final int REQ_NEW_BILL_AMT = 3;
     private static final int REQ_CASH_PAID_AMT = 4;
+    private static final int REQ_CONFIRM_OVERDRAFT = 5;
     private static final int REQ_NOTIFY_ERROR = 7;
     private static final int REQ_NOTIFY_ERROR_EXIT = 8;
 
@@ -503,6 +504,15 @@ public class CashTransactionFragment_2 extends BaseFragment implements
                     mCashPaidHelper.onCustomAmtEnter(newCashAmt,(mOverdraftStatus==STATUS_AUTO));
                     break;
 
+                case REQ_CONFIRM_OVERDRAFT:
+                    if (resultCode != Activity.RESULT_OK) {
+                        return;
+                    }
+                    LogMy.d(TAG, "Received first overdraft confirmation.");
+                    setTransactionValues();
+                    mCallback.onTransactionSubmit(mCashPaid);
+                    break;
+
                 case REQ_NOTIFY_ERROR:
                     //mCallback.restartTxn();
                     // do nothing
@@ -789,26 +799,47 @@ public class CashTransactionFragment_2 extends BaseFragment implements
                     if ((mAddCbNormal + mAddCbExtra) <= 0 && mAddCashload <= 0 && mOverdraft <= 0 && mDebitCashload <= 0) {
                         //AppCommonUtil.toast(getActivity(), "No MyeCash data to process !!");
                         String msg;
-                        if (mRetainedFragment.mBillTotal <= 0) {
-                            msg = "All Credit/Debit amounts are 0, for both Cashback and Account";
-                        } else {
-                            msg = "'Award Cashback' is less than 1 Rupee. Other credit/debit amount are 0.";
-                        }
+                        //if (mRetainedFragment.mBillTotal <= 0) {
+                            msg = "All CAdd/Debit amounts are 0. Nothing to process.";
+                        //} else {
+                        //    msg = "'Award Cashback' is less than 1 Rupee. Other credit/debit amount are 0.";
+                        //}
                         DialogFragmentWrapper dialog = DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, msg, true, true);
                         dialog.setTargetFragment(CashTransactionFragment_2.this, REQ_NOTIFY_ERROR);
                         dialog.show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
                         return;
                     }
-                    if (mCashPaid >= 0) {
+
+                    if (mReturnCash != 0) {
+                        if (mCashPaid >= 0) {
+                            AppCommonUtil.toast(getActivity(), "Balance not 0");
+                        } else {
+                            AppCommonUtil.toast(getActivity(), "Set Payment done");
+                        }
+                    } else {
+                        // Balance is 0
+                        // Ask for confirmation - if first overdraft for this customer
+                        if (mOverdraft>0 && mRetainedFragment.mCurrCashback.getCurrAccOverdraft() <= 0) {
+                            DialogFragmentWrapper dialog = DialogFragmentWrapper.createConfirmationDialog(
+                                    AppConstants.overdraftConfirmTitle, AppConstants.overdraftConfirmMsg, true, false);
+                            dialog.setTargetFragment(CashTransactionFragment_2.this, REQ_CONFIRM_OVERDRAFT);
+                            dialog.show(getFragmentManager(), DialogFragmentWrapper.DIALOG_CONFIRMATION);
+                        } else {
+                            setTransactionValues();
+                            mCallback.onTransactionSubmit(mCashPaid);
+                        }
+                    }
+
+                    /*if (mCashPaid >= 0) {
                         if (mReturnCash != 0) {
-                            AppCommonUtil.toast(getActivity(), "Balance not 0 yet");
+                            AppCommonUtil.toast(getActivity(), "Balance not 0");
                         } else {
                             setTransactionValues();
                             mCallback.onTransactionSubmit(mCashPaid);
                         }
                     } else {
                         AppCommonUtil.toast(getActivity(), "Set Cash Paid");
-                    }
+                    }*/
                 } else {
                     AppCommonUtil.toast(getActivity(), "No MyeCash data to process !!");
                 }

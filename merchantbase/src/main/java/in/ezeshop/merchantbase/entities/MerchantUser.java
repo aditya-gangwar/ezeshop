@@ -52,6 +52,7 @@ public class MerchantUser
     // fields that can be changed during lifecycle
     private String mNewCbRate;
     private int mNewIsAddClEnabled;
+    private int mNewOverdraftEnabled;
     private String mNewEmail;
     private String mNewContactPhone;
     private Boolean mNewInvNumAsk;
@@ -75,6 +76,7 @@ public class MerchantUser
             LogMy.d(TAG, "Creating MerchantUser instance");
             mInstance = new MerchantUser();
             mInstance.mNewIsAddClEnabled = CommonConstants.BOOLEAN_VALUE_INVALID;
+            mInstance.mNewOverdraftEnabled = CommonConstants.BOOLEAN_VALUE_INVALID;
             mInstance.mPseudoLoggedIn = false;
         }
     }
@@ -247,6 +249,10 @@ public class MerchantUser
             if(mNewIsAddClEnabled != CommonConstants.BOOLEAN_VALUE_INVALID) {
                 newAddClEnabled = (mNewIsAddClEnabled==CommonConstants.BOOLEAN_VALUE_TRUE);
             }
+            boolean newOverdraftEnabled = mMerchant.getCl_overdraft_enable();
+            if( mNewOverdraftEnabled != CommonConstants.BOOLEAN_VALUE_INVALID) {
+                newOverdraftEnabled = (mNewOverdraftEnabled==CommonConstants.BOOLEAN_VALUE_TRUE);
+            }
             if(mNewEmail==null) {
                 mNewEmail = mMerchant.getEmail();
             }
@@ -269,7 +275,7 @@ public class MerchantUser
                 mNewPpMinAmt = mMerchant.getPrepaidCbMinAmt();
             }
 
-            mMerchant = MerchantServices.getInstance().updateSettings(mNewCbRate, newAddClEnabled, mNewEmail, mNewContactPhone,
+            mMerchant = MerchantServices.getInstance().updateSettings(mNewCbRate, newAddClEnabled, newOverdraftEnabled, mNewEmail, mNewContactPhone,
                     mNewInvNumAsk, mNewInvNumOptional, mNewInvNumOnlyNumbers,
                     mNewPpCbRate, mNewPpMinAmt);
             LogMy.d(TAG,"updateSettings success");
@@ -282,6 +288,7 @@ public class MerchantUser
         // reset new setting variables - for both error and success scenarios
         mNewCbRate = null;
         mNewIsAddClEnabled = CommonConstants.BOOLEAN_VALUE_INVALID;
+        mNewOverdraftEnabled = CommonConstants.BOOLEAN_VALUE_INVALID;
         mNewEmail = null;
         mNewInvNumAsk = null;
         mNewInvNumOptional = null;
@@ -312,6 +319,7 @@ public class MerchantUser
         // reset new setting variables - for both error and success scenarios
         mNewCbRate = null;
         mNewIsAddClEnabled = CommonConstants.BOOLEAN_VALUE_INVALID;
+        mNewOverdraftEnabled = CommonConstants.BOOLEAN_VALUE_INVALID;
         mNewEmail = null;
 
         return returnCode;
@@ -611,6 +619,10 @@ public class MerchantUser
 
     public void setNewIsAddClEnabled(boolean newIsAddClEnabled) {
         mNewIsAddClEnabled = newIsAddClEnabled ? CommonConstants.BOOLEAN_VALUE_TRUE : CommonConstants.BOOLEAN_VALUE_FALSE;
+    }
+
+    public void setNewOverdraftEnabled(boolean newOverdraftEnabled) {
+        mNewOverdraftEnabled = newOverdraftEnabled ? CommonConstants.BOOLEAN_VALUE_TRUE : CommonConstants.BOOLEAN_VALUE_FALSE;
     }
 
     public void setNewCbRate(String newCbRate) {

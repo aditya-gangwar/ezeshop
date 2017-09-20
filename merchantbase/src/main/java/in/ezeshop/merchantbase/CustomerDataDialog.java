@@ -1,5 +1,6 @@
 package in.ezeshop.merchantbase;
 
+/*
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -18,9 +19,6 @@ import in.ezeshop.appbase.utilities.AppCommonUtil;
 import in.ezeshop.appbase.utilities.LogMy;
 import in.ezeshop.appbase.utilities.ValidationHelper;
 
-/**
- * Created by adgangwa on 09-09-2016.
- */
 public class CustomerDataDialog extends BaseDialog {
     public static final String TAG = "MchntApp-CustomerDataDialog";
 
@@ -78,24 +76,6 @@ public class CustomerDataDialog extends BaseDialog {
                         }
                     }
                 });
-                /*
-                mGetCustData.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        AppCommonUtil.hideKeyboard(getDialog());
-                        String custId = mInputCustId.getText().toString();
-                        int error = ValidationHelper.validateCustInternalId(custId);
-                        if(error == ErrorCodes.NO_ERROR) {
-                            mListener.searchCustByInternalId(custId);
-                            getDialog().dismiss();
-                        } else if(error == ErrorCodes.EMPTY_VALUE) {
-                            mListener.generateAllCustData();
-                            getDialog().dismiss();
-                        } else {
-                            mInputCustId.setError(AppCommonUtil.getErrorDesc(error));
-                        }
-                    }
-                });*/
             }
         });
 
@@ -125,13 +105,6 @@ public class CustomerDataDialog extends BaseDialog {
         return false;
     }
 
-    /*@Override
-    public void onClick(DialogInterface dialog, int which) {
-        //Do nothing here because we override this button in OnShowListener to change the close behaviour.
-        //However, we still need this because on older versions of Android unless we
-        //pass a handler the button doesn't get instantiated
-    }*/
-
     @Override
     public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
@@ -145,4 +118,4 @@ public class CustomerDataDialog extends BaseDialog {
         mGetCustData = (AppCompatButton) v.findViewById(R.id.btn_cust_data);
     }
 }
-
+*/

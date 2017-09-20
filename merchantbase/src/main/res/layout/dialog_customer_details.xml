@@ -320,7 +320,7 @@
                     android:layout_height="match_parent"
                     android:layout_width="0dp"
                     android:layout_weight="45"
-                    android:text="    |--- Deposit"
+                    android:text="    |--- Money"
                     android:gravity="left"
                     android:paddingTop="0dp"
                     android:textColor="@color/secondary_text"/>

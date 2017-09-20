@@ -46,11 +46,11 @@ import in.ezeshop.common.database.Transaction;
         return Backendless.CustomService.invoke( SERVICE_NAME, SERVICE_VERSION_NAME, "changeMobile", args, Merchants.class );
     }
 
-    public Merchants updateSettings(java.lang.String cbRate, boolean addClEnabled, java.lang.String email, java.lang.String contactPhone,
+    public Merchants updateSettings(java.lang.String cbRate, boolean addClEnabled, boolean overdraftEnabled, java.lang.String email, java.lang.String contactPhone,
                                     boolean askLinkedInvNum, boolean linkedInvNumOptional, boolean invNumOnlyNmbrs,
                                     String ppCbRate, int ppMinAmt)
     {
-        Object[] args = new Object[]{cbRate, addClEnabled, email, contactPhone, askLinkedInvNum, linkedInvNumOptional, invNumOnlyNmbrs, ppCbRate, ppMinAmt};
+        Object[] args = new Object[]{cbRate, addClEnabled, overdraftEnabled, email, contactPhone, askLinkedInvNum, linkedInvNumOptional, invNumOnlyNmbrs, ppCbRate, ppMinAmt};
         return Backendless.CustomService.invoke( SERVICE_NAME, SERVICE_VERSION_NAME, "updateSettings", args, Merchants.class );
     }
 

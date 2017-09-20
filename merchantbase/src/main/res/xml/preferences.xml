@@ -9,7 +9,7 @@
             android:key="prefGrpCb">
 
             <EditTextPreference
-                android:title="Cashback on Bill"
+                android:title="Cashback Rate"
                 android:key="settings_cb_rate"
                 android:summary="@string/addCBSummary"
                 android:inputType="number"
@@ -24,14 +24,21 @@
             android:key="prefGrpAcc">
 
             <SwitchPreference
-                android:title="Add Cash to Account"
+                android:title="Add Money"
                 android:key="settings_cl_add_enabled"
                 android:summary="@string/addCashSummary"
                 android:disableDependentsState="true">
             </SwitchPreference>
 
+            <SwitchPreference
+                android:title="Overdraft"
+                android:key="settings_overdraft_enabled"
+                android:summary="@string/overdraftSummary"
+                android:disableDependentsState="true">
+            </SwitchPreference>
+
             <EditTextPreference
-                android:title="Extra Cashback on Add Cash"
+                android:title="Extra Cashback on Add Money"
                 android:key="settings_ppcb_rate"
                 android:summary="@string/addExtraCBSummary"
                 android:inputType="number"
@@ -40,7 +47,7 @@
             </EditTextPreference>
 
             <EditTextPreference
-                android:title="Minimum Cash for Extra Cashback"
+                android:title="Minimum Amount for Extra Cashback"
                 android:key="settings_ppcb_amt"
                 android:summary="@string/minCashExtraCBSummary"
                 android:inputType="number"

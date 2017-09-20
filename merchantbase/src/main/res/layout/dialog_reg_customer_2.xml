@@ -14,8 +14,7 @@
     <LinearLayout
         style="@style/LL_Vertical"
         android:layout_below="@+id/label_title"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/XL_space">
+        android:layout_height="wrap_content">
 
         <EditText
             style="@style/Edittext_only_view_small"
@@ -25,7 +24,9 @@
             android:text="*  FOR PEOPLE ABOVE 18 YEARS ONLY  *"
             android:textStyle="bold"
             android:textColor="@color/secondary_text"
-            android:layout_marginBottom="@dimen/medium_space"/>
+            android:paddingBottom="@dimen/medium_space"
+            android:paddingTop="@dimen/XL_space"
+            android:background="@color/primary_highlight"/>
 
         <EditText
             style="@style/Edittext_only_view_small"
@@ -34,7 +35,9 @@
             android:id="@+id/label_info_otp"
             android:text="Enter received OTP and submit the request again."
             android:textStyle="italic"
-            android:textColor="@color/accent2"/>
+            android:textColor="@color/accent2"
+            android:paddingBottom="@dimen/medium_space"
+            android:background="@color/primary_highlight"/>
 
         <LinearLayout
             style="@style/LL_Horizontal_paddingSidesXL"
@@ -84,13 +87,44 @@
 
         <LinearLayout
             style="@style/LL_Horizontal_paddingSidesXL"
-            android:id="@+id/layout_sex"
-            android:layout_marginTop="@dimen/XXXL_space"
-            android:background="@color/bg_light_grey">
+            android:layout_marginTop="@dimen/XXXL_space">
 
             <ImageView
                 style="@style/Imageview_Left_Column"
+                android:id="@+id/image_name"
                 android:src="@drawable/ic_perm_identity_white_24dp"/>
+            <EditText
+                style="@style/Edittext_only_view_medium"
+                android:id="@+id/label_firstName"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:text="Name"
+                android:layout_weight="40"
+                android:gravity="left"/>
+
+            <EditText
+                style="@style/MyEdittext_Medium"
+                android:id="@+id/input_firstName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="textCapWords"
+                android:maxLength="@string/customer_name_char_limit"
+                android:layout_weight="60"
+                android:gravity="left"
+                android:imeOptions="actionNext"
+                android:hint="Optional"/>
+        </LinearLayout>
+
+        <!--LinearLayout
+            style="@style/LL_Horizontal_paddingSidesXL"
+            android:id="@+id/layout_sex"
+            android:background="@color/bg_light_grey"
+            android:paddingTop="@dimen/large_space">
+
+            <ImageView
+                style="@style/Imageview_Left_Column"
+                android:src="@drawable/ic_perm_identity_white_24dp"
+                android:visibility="invisible"/>
 
             <RadioGroup
                 android:layout_width="match_parent"
@@ -113,7 +147,7 @@
                     android:checked="false"/>
             </RadioGroup>
 
-        </LinearLayout>
+        </LinearLayout-->
 
 
         <Space
@@ -126,11 +160,9 @@
             android:layout_marginBottom="@dimen/XXXXL_space">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                style="@style/Imageview_Left_Column"
                 android:id="@+id/image_otp"
-                android:src="@drawable/ic_security_white_24dp"
-                android:tint="@color/primary"/>
+                android:src="@drawable/ic_security_white_24dp"/>
 
             <EditText
                 style="@style/Edittext_only_view_medium"

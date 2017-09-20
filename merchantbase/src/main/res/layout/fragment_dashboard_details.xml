@@ -63,7 +63,7 @@
             android:layout_height="wrap_content">
 
             <TableRow
-                android:background="@color/sober_blue"
+                android:background="@color/bg_listWithCard_header"
                 android:id="@+id/table_row_title">
 
                 <EditText
@@ -95,7 +95,7 @@
             </TableRow>
 
             <TableRow
-                android:background="@color/iron2"
+                android:background="@color/bg_light_grey"
                 android:id="@+id/table_row_1">
 
                 <EditText
@@ -121,7 +121,7 @@
             </TableRow>
 
             <TableRow
-                android:background="@color/iron2"
+                android:background="@color/bg_light_grey"
                 android:id="@+id/table_row_2">
 
                 <EditText
@@ -147,7 +147,7 @@
             </TableRow>
 
             <TableRow
-                android:background="@color/iron2"
+                android:background="@color/bg_light_grey"
                 android:id="@+id/table_row_3">
 
                 <EditText
@@ -200,11 +200,11 @@
 
             <View
                 style="@style/Divider_horizontal_Medium"
-                android:background="@color/sober_blue"/>
+                android:background="@color/primary"/>
 
             <TableRow
                 android:background="@color/iron2"
-                android:id="@+id/table_row_total">
+                android:id="@+id/bg_light_grey">
 
                 <EditText
                     style="@style/Edittext_only_view_small_lessPad"

@@ -16,14 +16,14 @@
         android:layout_below="@id/label_title">
 
         <LinearLayout
-            style="@style/LL_Vertical_paddingSidesLarge">
+            style="@style/LL_Vertical">
 
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/XL_space"/>
 
             <LinearLayout
-                style="@style/LL_Horizontal_wrap"
+                style="@style/LL_Horizontal_paddingSidesXL"
                 android:id="@+id/layout_dob">
 
                 <ImageView
@@ -68,7 +68,8 @@
                 android:layout_height="@dimen/large_space"/>
 
             <LinearLayout
-                style="@style/LL_Horizontal_wrap">
+                style="@style/LL_Horizontal_paddingSidesXL"
+                android:background="@color/primary_highlight">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -94,14 +95,15 @@
                 android:inputType="phone"
                 android:hint="New Mobile"
                 android:maxLength="@string/mobile_char_limit"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:background="@color/primary_highlight"/>
 
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/medium_space"/>
 
             <LinearLayout
-                style="@style/LL_Horizontal_wrap">
+                style="@style/LL_Horizontal_paddingSidesXL">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -136,7 +138,8 @@
                 android:layout_height="@dimen/large_space"/>
 
             <LinearLayout
-                style="@style/LL_Horizontal_wrap">
+                style="@style/LL_Horizontal_paddingSidesXL"
+                android:background="@color/primary_highlight">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -162,7 +165,8 @@
                 android:hint="Enter OTP"
                 android:maxLength="@string/otp_char_limit"
                 android:gravity="center"
-                android:imeOptions="actionDone"/>
+                android:imeOptions="actionDone"
+                android:background="@color/primary_highlight"/>
 
         </LinearLayout>
     </ScrollView>

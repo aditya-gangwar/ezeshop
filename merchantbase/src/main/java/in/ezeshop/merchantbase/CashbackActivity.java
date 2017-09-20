@@ -65,7 +65,8 @@ public class CashbackActivity extends BaseActivity implements
         PasswordPreference.PasswordPreferenceIf, TrustedDevicesFragment.TrustedDevicesFragmentIf,
         TxnPinInputDialog.TxnPinInputDialogIf, MobileChangePreference.MobileChangePreferenceIf,
         DashboardTxnFragment.DashboardFragmentIf, DashboardFragment.DashboardSummaryFragmentIf,
-        CustomerDetailsDialog.CustomerDetailsDialogIf, CustomerDataDialog.CustomerDataDialogIf,
+        CustomerDetailsDialog.CustomerDetailsDialogIf,
+        //CustomerDataDialog.CustomerDataDialogIf,
         CustomerListFragment.CustomerListFragmentIf, MerchantOpListFrag.MerchantOpListFragIf,
         TxnConfirmFragment.TxnConfirmFragmentIf, SettingsFragment2.SettingsFragment2If,
         //MerchantOrderListFrag.MerchantOrderListFragIf, CreateMchntOrderDialog.CreateMchntOrderDialogIf,
@@ -283,8 +284,9 @@ public class CashbackActivity extends BaseActivity implements
                 }
 
             } else if (i == R.id.menu_customers) {
-                CustomerDataDialog dialog = new CustomerDataDialog();
-                dialog.show(mFragMgr, DIALOG_CUSTOMER_DATA);
+                /*CustomerDataDialog dialog = new CustomerDataDialog();
+                dialog.show(mFragMgr, DIALOG_CUSTOMER_DATA);*/
+                generateAllCustData();
 
             } else if (i == R.id.menu_reports) {
                 startTxnReportsActivity(null);
@@ -497,7 +499,10 @@ public class CashbackActivity extends BaseActivity implements
         mTbLayoutSubhead1.setVisibility(View.VISIBLE);
 
         // no error case: all cashback values available
+        //mTbTitle.setText(CommonUtils.getPartialVisibleStr(mWorkFragment.mCustMobile));
+        // This is the only place where complete mobile number is shown - everywhere else its partially hidden
         mTbTitle.setText(CommonUtils.getPartialVisibleStr(mWorkFragment.mCustMobile));
+
         // display image
         setTbImage(R.drawable.ic_account_circle_white_48dp, R.color.bg_light_green);
         mTbImageIsMerchant = false;
@@ -603,8 +608,11 @@ public class CashbackActivity extends BaseActivity implements
         LogMy.d(TAG, "In askAndRegisterCustomer");
         // Show user registration confirmation dialogue
         // confirm for registration
-        //CustomerRegDialog.newInstance(mWorkFragment.mCustMobile, mWorkFragment.mCustCardId,
-        //        mWorkFragment.mCustRegFirstName, mWorkFragment.mCustRegLastName, status).
+        /*CustomerRegDialog.newInstance(mWorkFragment.mCustMobile,
+                //mWorkFragment.mCustCardId,
+                mWorkFragment.mCustRegName,
+                //mWorkFragment.mCustRegLastName,
+                status);*/
         CustomerRegDialog.newInstance(status).show(mFragMgr, DIALOG_REG_CUSTOMER);
     }
 
@@ -616,7 +624,7 @@ public class CashbackActivity extends BaseActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
+    /*@Override
     public void searchCustByInternalId(String internalId) {
         int resultCode = AppCommonUtil.isNetworkAvailableAndConnected(this);
         if ( resultCode != ErrorCodes.NO_ERROR) {
@@ -627,9 +635,9 @@ public class CashbackActivity extends BaseActivity implements
             AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
             mWorkFragment.fetchCashback(internalId);
         }
-    }
+    }*/
 
-    @Override
+    //@Override
     public void generateAllCustData() {
         if(refreshStatsReq()) {
             AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
@@ -859,6 +867,7 @@ public class CashbackActivity extends BaseActivity implements
 
         prefs.putString(SettingsFragment2.KEY_CB_RATE, mMerchant.getCb_rate());
         prefs.putBoolean(SettingsFragment2.KEY_ADD_CL_ENABLED, mMerchant.getCl_add_enable());
+        prefs.putBoolean(SettingsFragment2.KEY_OVERDRAFT_ENABLED, mMerchant.getCl_overdraft_enable());
         prefs.putString(SettingsFragment2.KEY_PP_CB_RATE, mMerchant.getPrepaidCbRate());
         prefs.putString(SettingsFragment2.KEY_PP_MIN_AMT, String.valueOf(mMerchant.getPrepaidCbMinAmt()));
 
@@ -1650,10 +1659,10 @@ public class CashbackActivity extends BaseActivity implements
             //mWorkFragment.mCustCardId = cardId;
             //mWorkFragment.mCardPresented = true;
 
-            mWorkFragment.mCustRegFirstName = firstName;
-            mWorkFragment.mCustRegLastName = lastName;
-            mWorkFragment.mCustRegDob = dob;
-            mWorkFragment.mCustSex = sex;
+            mWorkFragment.mCustRegName = firstName;
+            //mWorkFragment.mCustRegLastName = lastName;
+            //mWorkFragment.mCustRegDob = dob;
+            //mWorkFragment.mCustSex = sex;
 
             if(AppConstants.USE_CRASHLYTICS) {
                 Crashlytics.setString(AppConstants.CLTS_INPUT_CUST_MOBILE, mobileNum);
@@ -1669,10 +1678,10 @@ public class CashbackActivity extends BaseActivity implements
         mWorkFragment.mCustMobile = null;
         //mWorkFragment.mCustCardId = null;
         //mWorkFragment.mCardPresented = false;
-        mWorkFragment.mCustRegLastName = null;
-        mWorkFragment.mCustRegFirstName = null;
-        mWorkFragment.mCustRegDob = null;
-        mWorkFragment.mCustSex = -1;
+        //mWorkFragment.mCustRegLastName = null;
+        mWorkFragment.mCustRegName = null;
+        //mWorkFragment.mCustRegDob = null;
+        //mWorkFragment.mCustSex = -1;
 
         askAndRegisterCustomer(ErrorCodes.NO_ERROR);
     }

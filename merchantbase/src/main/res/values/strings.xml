@@ -13,5 +13,16 @@
     <string name="custlist_header_bill">Total Bill</string>
     <string name="custlist_header_acc">Account Balance</string>
 
+    <!-- Text used in Merchant's Preferences.xml -->
+    <string name="addCBSummary">%s%% of Payment is given as Cashback to Customer.\nIf 0%%, means No Cashback is given.</string>
+    <string name="addCashSummary">%s feature to \'Add Money\' to Customer Account.</string>
+    <string name="overdraftSummary">%s feature to do \'Overdraft\' from Customer Account.</string>
+    <string name="addExtraCBSummary">%s%% of \'Money Added\' to Customer Account is given as \'Extra Cashback\'.\nIf 0%%, means No Extra Cashback is given.</string>
+    <string name="minCashExtraCBSummary">Extra Cashback applies, only if \'Money Added\' to Account is more than %s.</string>
+    <string name="passwordSummary">Change your account password.</string>
+    <string name="regdMobileSummary">"Change \'%s\' as Registered Mobile number."</string>
+    <string name="emailSummary">"Change \'%s\' as contact Email ID."</string>
+    <string name="contactPhoneSummary">"Change \'%s\' as Business Contact Phone number.\nDo not add 0 in start."</string>
+
 
 </resources>
