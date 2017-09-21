@@ -73,7 +73,7 @@ public class TxnListFragment extends BaseFragment {
     private static final int CSV_LINES_BUFFER = 5;
 
     // Txn Item View padding for the right column element values
-    private static final int TXN_ITEM_PADDING = 10;
+    private static final String TXN_ITEM_PADDING_STR = "%10s";
 
     private static final String ARG_START_TIME = "startTime";
     private static final String ARG_END_TIME = "endTime";
@@ -712,17 +712,18 @@ public class TxnListFragment extends BaseFragment {
             mCustId.setText(CommonUtils.getPartialVisibleStr(mTxn.getCust_mobile()));
 
             // padding to keep Bill, Cashback, Account values in same vertical line
-            String paddingStr = "%"+TXN_ITEM_PADDING+"s";
-            mBillAmount.setText(String.format(paddingStr,AppCommonUtil.getAmtStr(mTxn.getTotal_billed())));
+            //String paddingStr = "%"+TXN_ITEM_PADDING+"s";
+            mBillAmount.setText(String.format(TXN_ITEM_PADDING_STR, AppCommonUtil.getSignedAmtStr(mTxn.getTotal_billed(), true)));
             // set account add/debit amount
             int value = txn.getCl_credit();
             if(value > 0) {
-                mAccountAmt.setText(String.format(paddingStr,AppCommonUtil.getSignedAmtStr(value, true)));
+                mAccountAmt.setText(String.format(TXN_ITEM_PADDING_STR,AppCommonUtil.getSignedAmtStr(value, true)));
                 mAccountAmt.setTextColor(ContextCompat.getColor(getActivity(), R.color.green_positive));
+                mImgOverdraft.setVisibility(View.GONE);
             } else {
                 // Debit case
                 int totalDebit = txn.getCl_debit() + txn.getCl_overdraft();
-                mAccountAmt.setText(String.format(paddingStr,AppCommonUtil.getSignedAmtStr(totalDebit, false)));
+                mAccountAmt.setText(String.format(TXN_ITEM_PADDING_STR,AppCommonUtil.getSignedAmtStr(totalDebit, false)));
                 /*if(value>0) {
                     mAccountAmt.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
                 } else {
@@ -737,7 +738,7 @@ public class TxnListFragment extends BaseFragment {
             }
             // set cb amount
             int totalCb = mTxn.getCb_credit()+mTxn.getExtra_cb_credit();
-            mCashbackAward.setText(String.format(paddingStr,AppCommonUtil.getSignedAmtStr(totalCb, true)));
+            mCashbackAward.setText(String.format(TXN_ITEM_PADDING_STR,AppCommonUtil.getAmtStr(totalCb)));
 
             /*if(mTxn.getCl_credit() > 0) {
                 mAccountIcon.setVisibility(View.VISIBLE);
@@ -860,7 +861,7 @@ public class TxnListFragment extends BaseFragment {
         @Override
         public TxnHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            View view = layoutInflater.inflate(R.layout.txn_itemview_3, parent, false);
+            View view = layoutInflater.inflate(R.layout.txn_itemview_4, parent, false);
             //LogMy.d(TAG,"Root view: "+view.getId());
             //view.setOnClickListener(mListener);
             return new TxnHolder(view);

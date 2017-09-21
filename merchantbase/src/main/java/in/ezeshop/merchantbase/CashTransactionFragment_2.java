@@ -1001,7 +1001,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
         }
 
         // 'debit cash' status
-        if(mOverdraft < STATUS_DISABLED) {
+        if(mOverdraftStatus < STATUS_DISABLED) {
             // not permanently disabled
             int newStatus;
 
@@ -1053,7 +1053,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
         mLabelAccount = v.findViewById(R.id.label_account);
         mInputAccount = (EditText) v.findViewById(R.id.input_account);
 
-        mLayoutOverdraft = v.findViewById(R.id.layout_overdraft);
+        mLayoutOverdraft = v.findViewById(R.id.ct_layout_overdraft);
         mImgOverdraft = (ImageView) v.findViewById(R.id.ct_img_overdraft);
         mLabelOverdraft = (EditText) v.findViewById(R.id.ct_label_overdraft);
         mInputOverdraft = (EditText) v.findViewById(R.id.ct_input_overdraft);

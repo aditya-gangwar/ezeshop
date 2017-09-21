@@ -9,339 +9,345 @@
         android:layout_marginBottom="@dimen/large_space"
         android:text="TRANSACTION  DETAILS"/>
 
-    <LinearLayout
-        style="@style/LL_Horizontal_paddingSidesXL">
-
-        <ImageView
-            style="@style/Imageview_Left_Column"
-            android:src="@drawable/ic_perm_identity_white_18dp" />
-        <TextView
-            style="@style/Edittext_only_view_small_lessPad"
-            android:id="@+id/label_customer_id"
-            android:layout_height="match_parent"
-            android:layout_width="0dp"
-            android:text="Customer"
-            android:layout_weight="40"
-            android:gravity="left|center_vertical"/>
-        <EditText
-            style="@style/Edittext_only_click_small_lessPad"
-            android:id="@+id/input_customer_mobile"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="880xxx1535"
-            android:layout_marginEnd="@dimen/medium_space"
-            android:layout_marginRight="@dimen/medium_space"
-            android:textColor="@color/link_blue"/>
-    </LinearLayout>
-
-    <LinearLayout
-        style="@style/LL_Horizontal_paddingSidesXL">
-
-        <ImageView
-            android:src="@drawable/ic_access_time_white_18dp"
-            style="@style/Imageview_Left_Column"/>
-        <TextView
-            style="@style/Edittext_only_view_small_lessPad"
-            android:layout_height="match_parent"
-            android:layout_width="0dp"
-            android:text="Time"
-            android:layout_weight="40"
-            android:gravity="left|center_vertical"/>
-        <TextView
-            style="@style/Edittext_only_view_small_lessPad"
-            android:id="@+id/input_txn_time"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="TBS"
-            android:layout_marginEnd="@dimen/medium_space"
-            android:layout_marginRight="@dimen/medium_space"/>
-    </LinearLayout>
-
-    <LinearLayout
-        style="@style/LL_Vertical"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/medium_space"
-        android:background="@color/bg_light_grey_dark">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            style="@style/LL_Horizontal_paddingSidesXL"
-            android:layout_marginTop="@dimen/small_space"
-            android:layout_marginBottom="@dimen/small_space">
+            style="@style/LL_Vertical"
+            android:layout_height="wrap_content">
 
-            <ImageView
-                style="@style/Imageview_Left_Column"
-                android:src="@drawable/ic_receipt_white_18dp"/>
-            <TextView
-                style="@style/Edittext_only_view_small_lessPad"
-                android:layout_height="match_parent"
-                android:layout_width="0dp"
-                android:text="Bill Amount"
-                android:layout_weight="40"
-                android:gravity="left|top"
-                android:layout_gravity="bottom"/>
-            <TextView
-                style="@style/Edittext_only_view_small_lessPad"
-                android:id="@+id/input_total_bill"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="\u20B9 NA"
-                android:layout_marginEnd="@dimen/medium_space"
-                android:layout_marginRight="@dimen/medium_space"
-                android:textColor="@color/green_positive"/>
+            <LinearLayout
+                style="@style/LL_Horizontal_paddingSidesXL">
+
+                <ImageView
+                    style="@style/Imageview_Left_Column"
+                    android:src="@drawable/ic_perm_identity_white_18dp" />
+                <TextView
+                    style="@style/Edittext_only_view_small_lessPad"
+                    android:id="@+id/label_customer_id"
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:text="Customer"
+                    android:layout_weight="40"
+                    android:gravity="left|center_vertical"/>
+                <EditText
+                    style="@style/Edittext_only_click_small_lessPad"
+                    android:id="@+id/input_customer_mobile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="880xxx1535"
+                    android:layout_marginEnd="@dimen/medium_space"
+                    android:layout_marginRight="@dimen/medium_space"
+                    android:textColor="@color/link_blue"/>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/LL_Horizontal_paddingSidesXL">
+
+                <ImageView
+                    android:src="@drawable/ic_access_time_white_18dp"
+                    style="@style/Imageview_Left_Column"/>
+                <TextView
+                    style="@style/Edittext_only_view_small_lessPad"
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:text="Time"
+                    android:layout_weight="40"
+                    android:gravity="left|center_vertical"/>
+                <TextView
+                    style="@style/Edittext_only_view_small_lessPad"
+                    android:id="@+id/input_txn_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="TBS"
+                    android:layout_marginEnd="@dimen/medium_space"
+                    android:layout_marginRight="@dimen/medium_space"/>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/LL_Vertical"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/medium_space"
+                android:background="@color/bg_light_grey_dark">
+
+                <LinearLayout
+                    style="@style/LL_Horizontal_paddingSidesXL"
+                    android:layout_marginTop="@dimen/small_space"
+                    android:layout_marginBottom="@dimen/small_space">
+
+                    <ImageView
+                        style="@style/Imageview_Left_Column"
+                        android:src="@drawable/ic_receipt_white_18dp"/>
+                    <TextView
+                        style="@style/Edittext_only_view_small_lessPad"
+                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:text="Bill Amount"
+                        android:layout_weight="40"
+                        android:gravity="left|top"
+                        android:layout_gravity="bottom"/>
+                    <TextView
+                        style="@style/Edittext_only_view_small_lessPad"
+                        android:id="@+id/input_total_bill"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="\u20B9 NA"
+                        android:layout_marginEnd="@dimen/medium_space"
+                        android:layout_marginRight="@dimen/medium_space"
+                        android:textColor="@color/green_positive"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/LL_Horizontal_paddingSidesXL"
+                    android:id="@+id/layout_account"
+                    android:layout_marginBottom="@dimen/small_space">
+
+                    <ImageView
+                        style="@style/Imageview_Left_Column"
+                        android:src="@drawable/ic_account_balance_wallet_white_18dp"/>
+                    <TextView
+                        style="@style/Edittext_only_view_small_lessPad"
+                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:text="Account"
+                        android:layout_weight="40"
+                        android:gravity="left"/>
+                    <TextView
+                        style="@style/Edittext_only_view_small_lessPad"
+                        android:id="@+id/input_account"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="+ \u20B9 NA"
+                        android:layout_marginEnd="@dimen/medium_space"
+                        android:layout_marginRight="@dimen/medium_space"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/LL_Horizontal_paddingSidesXL"
+                    android:layout_marginBottom="@dimen/small_space"
+                    android:id="@+id/layout_overdraft">
+
+                    <ImageView
+                        style="@style/Imageview_Left_Column"
+                        android:src="@drawable/ic_account_balance_wallet_white_18dp"
+                        android:tint="@color/red_negative"/>
+                    <TextView
+                        style="@style/Edittext_only_view_small_lessPad"
+                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:text="Overdraft"
+                        android:layout_weight="40"
+                        android:gravity="left"/>
+                    <TextView
+                        style="@style/Edittext_only_view_small_lessPad"
+                        android:id="@+id/input_overdraft"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="- \u20B9 NA"
+                        android:layout_marginEnd="@dimen/medium_space"
+                        android:layout_marginRight="@dimen/medium_space"
+                        android:textColor="@color/red_negative"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/LL_Vertical"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/medium_space"
+                android:background="@color/bg_light_grey_dark">
+
+                <LinearLayout
+                    style="@style/LL_Horizontal_paddingSidesXL"
+                    android:layout_marginTop="@dimen/small_space"
+                    android:layout_marginBottom="@dimen/small_space">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/cash_logo_18dp"
+                        android:layout_marginLeft="@dimen/XS_space"
+                        android:layout_marginRight="@dimen/medium_space"/>
+                    <TextView
+                        style="@style/Edittext_only_view_small_lessPad"
+                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:text="Payment"
+                        android:layout_weight="40"
+                        android:gravity="left"/>
+                    <TextView
+                        style="@style/Edittext_only_view_small_lessPad"
+                        android:id="@+id/input_payment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="\u20B9 NA"
+                        android:layout_marginEnd="@dimen/medium_space"
+                        android:layout_marginRight="@dimen/medium_space"
+                        android:textColor="@color/accent2"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/LL_Horizontal_paddingSidesXL"
+                    android:id="@+id/layout_add_cb"
+                    android:layout_marginBottom="@dimen/small_space">
+
+                    <TextView
+                        style="@style/Edittext_only_view_small_lessPad"
+                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:text="* Cashback"
+                        android:layout_weight="40"
+                        android:gravity="left"/>
+                    <TextView
+                        style="@style/Edittext_only_view_small_lessPad"
+                        android:id="@+id/input_add_cb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="+ \u20B9 NA"
+                        android:layout_marginEnd="@dimen/medium_space"
+                        android:layout_marginRight="@dimen/medium_space"
+                        android:textColor="@color/accent2"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/LL_Horizontal_paddingSidesXL"
+                    android:layout_marginBottom="@dimen/small_space"
+                    android:id="@+id/layout_cb_details">
+
+                    <EditText
+                        style="@style/Edittext_only_view_small_lessPad"
+                        android:layout_width="wrap_content"
+                        android:id="@+id/input_cb_details"
+                        android:text="\@  5% of \u20B9 2345 + 10% of \u20B9 234"
+                        android:textStyle="italic"
+                        android:paddingTop="0dp"
+                        android:textColor="@color/secondary_text"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/LL_Horizontal_paddingSidesXL"
+                android:id="@+id/layout_extra_details"
+                android:paddingTop="@dimen/XXL_space">
+
+                <View
+                    style="@style/Divider_horizontal_Medium"
+                    android:layout_weight="50"
+                    android:background="@color/primary"/>
+
+                <EditText
+                    style="@style/Edittext_only_view_small"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/label_cash_back"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="More Details"
+                    android:textColor="@color/primary"/>
+
+                <View
+                    style="@style/Divider_horizontal_Medium"
+                    android:layout_weight="50"
+                    android:background="@color/primary"/>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/LL_Horizontal_paddingSidesXL">
+
+                <ImageView
+                    style="@style/Imageview_Left_Column"
+                    android:src="@drawable/ic_swap_horiz_white_18dp"/>
+                <TextView
+                    style="@style/Edittext_only_view_small_lessPad"
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:text="Transaction ID"
+                    android:layout_weight="40"
+                    android:gravity="left|center_vertical"/>
+                <TextView
+                    style="@style/Edittext_only_view_small_lessPad"
+                    android:id="@+id/input_txn_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="TBS"
+                    android:layout_marginEnd="@dimen/medium_space"
+                    android:layout_marginRight="@dimen/medium_space"/>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/LL_Horizontal_paddingSidesXL">
+
+                <ImageView
+                    style="@style/Imageview_Left_Column"
+                    android:src="@drawable/ic_lock_outline_white_18dp"/>
+                <TextView
+                    style="@style/Edittext_only_view_small_lessPad"
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:text="PIN Used"
+                    android:layout_weight="40"
+                    android:gravity="left|center_vertical"/>
+                <TextView
+                    style="@style/Edittext_only_view_small_lessPad"
+                    android:id="@+id/input_pin_used"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="TBS"
+                    android:layout_marginEnd="@dimen/medium_space"
+                    android:layout_marginRight="@dimen/medium_space" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/LL_Horizontal_paddingSidesXL"
+                android:id="@+id/layout_invoice_num">
+
+                <ImageView
+                    style="@style/Imageview_Left_Column"
+                    android:src="@drawable/ic_access_time_white_18dp"
+                    android:visibility="invisible"/>
+                <TextView
+                    style="@style/Edittext_only_view_small_lessPad"
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:text="Invoice#"
+                    android:layout_weight="40"
+                    android:gravity="left|center_vertical"/>
+                <TextView
+                    style="@style/Edittext_only_view_small_lessPad"
+                    android:id="@+id/input_invoice_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="TBS"
+                    android:layout_marginEnd="@dimen/medium_space"
+                    android:layout_marginRight="@dimen/medium_space"/>
+            </LinearLayout>
+
+            <!--LinearLayout
+                style="@style/LL_Horizontal_paddingSidesXL"
+                android:id="@+id/layout_no_cb">
+
+                <ImageView
+                    style="@style/Imageview_Left_Column"
+                    android:src="@drawable/ic_access_time_white_18dp"
+                    android:visibility="invisible"/>
+                <TextView
+                    style="@style/Edittext_only_view_small_lessPad"
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:text="No Cashback Bill"
+                    android:layout_weight="40"
+                    android:gravity="left|center_vertical" />
+                <TextView
+                    style="@style/Edittext_only_view_small_lessPad"
+                    android:id="@+id/input_no_cb_bill"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="TBS"
+                    android:layout_marginEnd="@dimen/medium_space"
+                    android:layout_marginRight="@dimen/medium_space"/>
+            </LinearLayout-->
+
         </LinearLayout>
-
-        <LinearLayout
-            style="@style/LL_Horizontal_paddingSidesXL"
-            android:id="@+id/layout_account"
-            android:layout_marginBottom="@dimen/small_space">
-
-            <ImageView
-                style="@style/Imageview_Left_Column"
-                android:src="@drawable/ic_account_balance_wallet_white_18dp"/>
-            <TextView
-                style="@style/Edittext_only_view_small_lessPad"
-                android:layout_height="match_parent"
-                android:layout_width="0dp"
-                android:text="Account"
-                android:layout_weight="40"
-                android:gravity="left"/>
-            <TextView
-                style="@style/Edittext_only_view_small_lessPad"
-                android:id="@+id/input_account"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="+ \u20B9 NA"
-                android:layout_marginEnd="@dimen/medium_space"
-                android:layout_marginRight="@dimen/medium_space"/>
-        </LinearLayout>
-
-        <LinearLayout
-            style="@style/LL_Horizontal_paddingSidesXL"
-            android:layout_marginBottom="@dimen/small_space"
-            android:id="@+id/layout_overdraft">
-
-            <ImageView
-                style="@style/Imageview_Left_Column"
-                android:src="@drawable/ic_account_balance_wallet_white_18dp"
-                android:tint="@color/red_negative"/>
-            <TextView
-                style="@style/Edittext_only_view_small_lessPad"
-                android:layout_height="match_parent"
-                android:layout_width="0dp"
-                android:text="Overdraft"
-                android:layout_weight="40"
-                android:gravity="left"/>
-            <TextView
-                style="@style/Edittext_only_view_small_lessPad"
-                android:id="@+id/input_overdraft"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="- \u20B9 NA"
-                android:layout_marginEnd="@dimen/medium_space"
-                android:layout_marginRight="@dimen/medium_space"
-                android:textColor="@color/red_negative"/>
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        style="@style/LL_Vertical"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/medium_space"
-        android:background="@color/bg_light_grey_dark">
-
-        <LinearLayout
-            style="@style/LL_Horizontal_paddingSidesXL"
-            android:layout_marginTop="@dimen/small_space"
-            android:layout_marginBottom="@dimen/small_space">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/cash_logo_18dp"
-                android:layout_marginLeft="@dimen/XS_space"
-                android:layout_marginRight="@dimen/medium_space"/>
-            <TextView
-                style="@style/Edittext_only_view_small_lessPad"
-                android:layout_height="match_parent"
-                android:layout_width="0dp"
-                android:text="Payment"
-                android:layout_weight="40"
-                android:gravity="left"/>
-            <TextView
-                style="@style/Edittext_only_view_small_lessPad"
-                android:id="@+id/input_payment"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="\u20B9 NA"
-                android:layout_marginEnd="@dimen/medium_space"
-                android:layout_marginRight="@dimen/medium_space"
-                android:textColor="@color/accent2"/>
-        </LinearLayout>
-
-        <LinearLayout
-            style="@style/LL_Horizontal_paddingSidesXL"
-            android:id="@+id/layout_add_cb"
-            android:layout_marginBottom="@dimen/small_space">
-
-            <TextView
-                style="@style/Edittext_only_view_small_lessPad"
-                android:layout_height="match_parent"
-                android:layout_width="0dp"
-                android:text="* Cashback"
-                android:layout_weight="40"
-                android:gravity="left"/>
-            <TextView
-                style="@style/Edittext_only_view_small_lessPad"
-                android:id="@+id/input_add_cb"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="+ \u20B9 NA"
-                android:layout_marginEnd="@dimen/medium_space"
-                android:layout_marginRight="@dimen/medium_space"
-                android:textColor="@color/accent2"/>
-        </LinearLayout>
-
-        <LinearLayout
-            style="@style/LL_Horizontal_paddingSidesXL"
-            android:layout_marginBottom="@dimen/small_space"
-            android:id="@+id/layout_cb_details">
-
-            <EditText
-                style="@style/Edittext_only_view_small_lessPad"
-                android:layout_width="wrap_content"
-                android:id="@+id/input_cb_details"
-                android:text="\@  5% of \u20B9 2345 + 10% of \u20B9 234"
-                android:textStyle="italic"
-                android:paddingTop="0dp"
-                android:textColor="@color/secondary_text"/>
-        </LinearLayout>
-
-    </LinearLayout>
-
-
-
-
-    <LinearLayout
-        style="@style/LL_Horizontal_paddingSidesXL"
-        android:id="@+id/layout_extra_details"
-        android:paddingTop="@dimen/XXL_space">
-
-        <View
-            style="@style/Divider_horizontal_Medium"
-            android:layout_weight="50"
-            android:background="@color/primary"/>
-
-        <EditText
-            style="@style/Edittext_only_view_small"
-            android:layout_height="wrap_content"
-            android:id="@+id/label_cash_back"
-            android:layout_width="wrap_content"
-            android:layout_gravity="center"
-            android:text="More Details"
-            android:textColor="@color/primary"/>
-
-        <View
-            style="@style/Divider_horizontal_Medium"
-            android:layout_weight="50"
-            android:background="@color/primary"/>
-    </LinearLayout>
-
-    <LinearLayout
-        style="@style/LL_Horizontal_paddingSidesXL">
-
-        <ImageView
-            style="@style/Imageview_Left_Column"
-            android:src="@drawable/ic_swap_horiz_white_18dp"/>
-        <TextView
-            style="@style/Edittext_only_view_small_lessPad"
-            android:layout_height="match_parent"
-            android:layout_width="0dp"
-            android:text="Transaction ID"
-            android:layout_weight="40"
-            android:gravity="left|center_vertical"/>
-        <TextView
-            style="@style/Edittext_only_view_small_lessPad"
-            android:id="@+id/input_txn_id"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="TBS"
-            android:layout_marginEnd="@dimen/medium_space"
-            android:layout_marginRight="@dimen/medium_space"/>
-    </LinearLayout>
-
-    <LinearLayout
-        style="@style/LL_Horizontal_paddingSidesXL">
-
-        <ImageView
-            style="@style/Imageview_Left_Column"
-            android:src="@drawable/ic_lock_outline_white_18dp"/>
-        <TextView
-            style="@style/Edittext_only_view_small_lessPad"
-            android:layout_height="match_parent"
-            android:layout_width="0dp"
-            android:text="PIN Used"
-            android:layout_weight="40"
-            android:gravity="left|center_vertical"/>
-        <TextView
-            style="@style/Edittext_only_view_small_lessPad"
-            android:id="@+id/input_pin_used"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="TBS"
-            android:layout_marginEnd="@dimen/medium_space"
-            android:layout_marginRight="@dimen/medium_space" />
-    </LinearLayout>
-
-    <LinearLayout
-        style="@style/LL_Horizontal_paddingSidesXL"
-        android:id="@+id/layout_invoice_num">
-
-        <ImageView
-            style="@style/Imageview_Left_Column"
-            android:src="@drawable/ic_access_time_white_18dp"
-            android:visibility="invisible"/>
-        <TextView
-            style="@style/Edittext_only_view_small_lessPad"
-            android:layout_height="match_parent"
-            android:layout_width="0dp"
-            android:text="Invoice#"
-            android:layout_weight="40"
-            android:gravity="left|center_vertical"/>
-        <TextView
-            style="@style/Edittext_only_view_small_lessPad"
-            android:id="@+id/input_invoice_num"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="TBS"
-            android:layout_marginEnd="@dimen/medium_space"
-            android:layout_marginRight="@dimen/medium_space"/>
-    </LinearLayout>
-
-    <!--LinearLayout
-        style="@style/LL_Horizontal_paddingSidesXL"
-        android:id="@+id/layout_no_cb">
-
-        <ImageView
-            style="@style/Imageview_Left_Column"
-            android:src="@drawable/ic_access_time_white_18dp"
-            android:visibility="invisible"/>
-        <TextView
-            style="@style/Edittext_only_view_small_lessPad"
-            android:layout_height="match_parent"
-            android:layout_width="0dp"
-            android:text="No Cashback Bill"
-            android:layout_weight="40"
-            android:gravity="left|center_vertical" />
-        <TextView
-            style="@style/Edittext_only_view_small_lessPad"
-            android:id="@+id/input_no_cb_bill"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="TBS"
-            android:layout_marginEnd="@dimen/medium_space"
-            android:layout_marginRight="@dimen/medium_space"/>
-    </LinearLayout-->
-
-
+    </ScrollView>
 </LinearLayout>

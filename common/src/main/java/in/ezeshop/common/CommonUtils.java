@@ -43,7 +43,7 @@ public class CommonUtils {
     }
 
     public static int getAccBalance(Cashback cb) {
-        return (cb.getCl_credit()+cb.getCb_credit()-cb.getCl_debit()-cb.getCl_overdraft());
+        return (cb.getCl_credit()+cb.getCb_credit()+cb.getExtra_cb_credit()-cb.getCl_debit()-cb.getCl_overdraft());
     }
 
     public static String getPartialVisibleStr(String userId) {

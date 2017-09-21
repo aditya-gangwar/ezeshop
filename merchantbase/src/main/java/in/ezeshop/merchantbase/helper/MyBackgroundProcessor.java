@@ -118,12 +118,12 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
         mRequestHandler.obtainMessage(MyRetainedFragment.REQUEST_MERCHANT_STATS,null).sendToTarget();
     }
 
-    public void addDeleteDeviceRequest(Integer index, String curDeviceId) {
+    /*public void addDeleteDeviceRequest(Integer index, String curDeviceId) {
         MessageDelDevice msg = new MessageDelDevice();
         msg.curDeviceId = curDeviceId;
         msg.index = index;
         mRequestHandler.obtainMessage(MyRetainedFragment.REQUEST_DELETE_TRUSTED_DEVICE, msg).sendToTarget();
-    }
+    }*/
 
     public void addChangeMobileRequest() {
         mRequestHandler.obtainMessage(MyRetainedFragment.REQUEST_CHANGE_MOBILE,null).sendToTarget();
@@ -302,9 +302,9 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
                 case MyRetainedFragment.REQUEST_UPLOAD_IMG:
                     error = uploadImgFile((MessageImgUpload) msg.obj);
                     break;
-                case MyRetainedFragment.REQUEST_DELETE_TRUSTED_DEVICE:
+                /*case MyRetainedFragment.REQUEST_DELETE_TRUSTED_DEVICE:
                     error = deleteDevice((MessageDelDevice) msg.obj);
-                    break;
+                    break;*/
                 case MyRetainedFragment.REQUEST_CHANGE_MOBILE:
                     error = changeMobileNum();
                     break;
@@ -399,9 +399,9 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
                 mRetainedFragment.mNewMobileNum, mRetainedFragment.mOtpMobileChange);
     }
 
-    private int deleteDevice(MessageDelDevice msg) {
+    /*private int deleteDevice(MessageDelDevice msg) {
         return MerchantUser.getInstance().deleteTrustedDevice(msg.index, msg.curDeviceId);
-    }
+    }*/
 
     private int uploadImgFile(MessageImgUpload msg) {
         File file = msg.file;

@@ -106,9 +106,9 @@ public class MyTransaction {
     }*/
 
     public static String getCbDetailStr(Transaction txn) {
-        String str = "@  " + txn.getCb_percent() + "% of " + AppCommonUtil.getAmtStr(txn.getCb_eligible_amt());
+        String str = "@  (" + txn.getCb_percent() + "% of " + AppCommonUtil.getAmtStr(txn.getCb_eligible_amt()) + ")";
         if(txn.getExtra_cb_credit() > 0) {
-            str = str + " + " + txn.getExtra_cb_percent() + "% of " + AppCommonUtil.getAmtStr(txn.getExtracb_eligible_amt());
+            str = str + "  +  (" + txn.getExtra_cb_percent() + "% of " + AppCommonUtil.getAmtStr(txn.getExtracb_eligible_amt()) + ")";
         }
 
         return str;

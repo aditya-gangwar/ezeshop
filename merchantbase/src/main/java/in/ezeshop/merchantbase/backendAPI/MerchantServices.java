@@ -54,11 +54,11 @@ import in.ezeshop.common.database.Transaction;
         return Backendless.CustomService.invoke( SERVICE_NAME, SERVICE_VERSION_NAME, "updateSettings", args, Merchants.class );
     }
 
-    public void deleteTrustedDevice(java.lang.String deviceId, java.lang.String curDeviceId)
+    /*public void deleteTrustedDevice(java.lang.String deviceId, java.lang.String curDeviceId)
     {
         Object[] args = new Object[]{deviceId, curDeviceId};
         Backendless.CustomService.invoke( SERVICE_NAME, SERVICE_VERSION_NAME, "deleteTrustedDevice", args);
-    }
+    }*/
 
     public MerchantStats getMerchantStats(java.lang.String mchntId)
     {

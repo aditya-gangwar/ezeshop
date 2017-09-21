@@ -192,11 +192,20 @@ public class CustomerDetailsDialog extends BaseDialog {
                 mLayoutAccBalance.setVisibility(View.GONE);
             } else {
                 mLayoutAccBalance.setVisibility(View.VISIBLE);*/
-                mInputAccBalance.setText(AppCommonUtil.getAmtStr(cb.getCurrAccBalance()));
-                mInputAccTotalAdd.setText(AppCommonUtil.getAmtStr(cb.getCurrAccTotalAdd()));
+            int accBalance = cb.getCurrAccBalance();
+            if(accBalance<0) {
+                mInputAccBalance.setText(AppCommonUtil.getSignedAmtStr(Math.abs(accBalance),false));
+                mInputAccBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
+            } else {
+                mInputAccBalance.setText(AppCommonUtil.getSignedAmtStr(accBalance,true));
+                mInputAccBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.green_positive));
+            }
+
+            //mInputAccBalance.setText(AppCommonUtil.getAmtStr(cb.getCurrAccBalance()));
+                mInputAccTotalAdd.setText(AppCommonUtil.getSignedAmtStr(cb.getCurrAccTotalAdd(),true));
             mInputAccAddCb.setText(AppCommonUtil.getAmtStr(cb.getCurrAccTotalCb()));
             mInputAccDeposit.setText(AppCommonUtil.getAmtStr(cb.getClCredit()));
-                mInputAccTotalDebit.setText(AppCommonUtil.getAmtStr(cb.getCurrAccTotalDebit()));
+                mInputAccTotalDebit.setText(AppCommonUtil.getSignedAmtStr(cb.getCurrAccTotalDebit(),true));
             //}
 
             /*mInputCbAvailable.setText(AppCommonUtil.getAmtStr(cb.getCurrCbBalance()));

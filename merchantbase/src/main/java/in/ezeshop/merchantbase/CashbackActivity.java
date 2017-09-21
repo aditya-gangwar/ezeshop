@@ -62,7 +62,8 @@ public class CashbackActivity extends BaseActivity implements
         DialogFragmentWrapper.DialogFragmentWrapperIf,
         CustomerRegDialog.CustomerRegFragmentIf, TxnSuccessDialog.TxnSuccessDialogIf,
         CustomerOpDialog.CustomerOpDialogIf, OtpPinInputDialog.OtpPinInputDialogIf,
-        PasswordPreference.PasswordPreferenceIf, TrustedDevicesFragment.TrustedDevicesFragmentIf,
+        PasswordPreference.PasswordPreferenceIf,
+        //TrustedDevicesFragment.TrustedDevicesFragmentIf,
         TxnPinInputDialog.TxnPinInputDialogIf, MobileChangePreference.MobileChangePreferenceIf,
         DashboardTxnFragment.DashboardFragmentIf, DashboardFragment.DashboardSummaryFragmentIf,
         CustomerDetailsDialog.CustomerDetailsDialogIf,
@@ -86,7 +87,7 @@ public class CashbackActivity extends BaseActivity implements
     private static final String CASH_TRANS_FRAGMENT = "CashTransFragment";
     //private static final String ORDER_LIST_FRAGMENT = "OrderListFragment";
     private static final String SETTINGS_FRAGMENT = "SettingsFragment";
-    private static final String TRUSTED_DEVICES_FRAGMENT = "TrustedDevicesFragment";
+    //private static final String TRUSTED_DEVICES_FRAGMENT = "TrustedDevicesFragment";
     private static final String DASHBOARD_FRAGMENT = "DashboardFragment";
     private static final String DASHBOARD_SUMMARY_FRAG = "DashboardSummaryFrag";
     private static final String CUSTOMER_LIST_FRAG = "CustomerListFrag";
@@ -114,6 +115,8 @@ public class CashbackActivity extends BaseActivity implements
 
     private static final String DIALOG_SESSION_TIMEOUT = "dialogSessionTimeout";
     private static final String DIALOG_TXN_VERIFY_TYPE = "dialogTxnVerifyType";
+    private static final String DIALOG_WRONG_TXN_PIN = "dialogWrongTxnPin";
+    private static final String DIALOG_WRONG_TXN_OTP = "dialogWrongTxnOtp";
 
     private static final String DIALOG_LOAD_TEST = "dialogLoadTest";
 
@@ -140,7 +143,7 @@ public class CashbackActivity extends BaseActivity implements
 
     // Activity state members: These are to be saved for restore in event of activity recreation
     //boolean mCashTxnStartPending;
-    boolean mExitAfterLogout;
+    //boolean mExitAfterLogout;
     boolean mTbImageIsMerchant;
     int mLastMenuItemId;
 
@@ -168,7 +171,7 @@ public class CashbackActivity extends BaseActivity implements
 
         if(savedInstanceState!=null) {
             //mCashTxnStartPending = savedInstanceState.getBoolean("mCashTxnStartPending");
-            mExitAfterLogout = savedInstanceState.getBoolean("mExitAfterLogout");
+            //mExitAfterLogout = savedInstanceState.getBoolean("mExitAfterLogout");
             mTbImageIsMerchant = savedInstanceState.getBoolean("mTbImageIsMerchant");
             mLastMenuItemId = savedInstanceState.getInt("mLastMenuItemId");
         }
@@ -480,10 +483,11 @@ public class CashbackActivity extends BaseActivity implements
         } else {
             mTbImage.setVisibility(View.VISIBLE);
 
-            int radiusInDp = (int) getResources().getDimension(R.dimen.toolbar_image_width);
-            int radiusInPixels = AppCommonUtil.dpToPx(radiusInDp);
+            float radiusInDp = (int) getResources().getDimension(R.dimen.toolbar_image_width);
+            //int radiusInPixels = AppCommonUtil.dpToPx(radiusInDp);
+            float radiusInPixels = AppCommonUtil.dipToPixels(this, radiusInDp);
 
-            Bitmap scaledImg = Bitmap.createScaledBitmap(image,radiusInPixels,radiusInPixels,true);
+            Bitmap scaledImg = Bitmap.createScaledBitmap(image,(int)radiusInPixels,(int)radiusInPixels,false);
             Bitmap roundImage = AppCommonUtil.getCircleBitmap(scaledImg);
 
             mTbImage.setImageBitmap(roundImage);
@@ -501,7 +505,7 @@ public class CashbackActivity extends BaseActivity implements
         // no error case: all cashback values available
         //mTbTitle.setText(CommonUtils.getPartialVisibleStr(mWorkFragment.mCustMobile));
         // This is the only place where complete mobile number is shown - everywhere else its partially hidden
-        mTbTitle.setText(CommonUtils.getPartialVisibleStr(mWorkFragment.mCustMobile));
+        mTbTitle.setText(mWorkFragment.mCurrCustomer.getMobileNum());
 
         // display image
         setTbImage(R.drawable.ic_account_circle_white_48dp, R.color.bg_light_green);
@@ -929,21 +933,24 @@ public class CashbackActivity extends BaseActivity implements
         if(errorCode==ErrorCodes.NO_ERROR) {
             DialogFragmentWrapper.createNotification(AppConstants.pwdChangeSuccessTitle, AppConstants.pwdChangeSuccessMsg, false, false)
                     .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
-            int error = logoutMerchant();
+            // Must have logged out also
+            onLogoutResponse(errorCode);
+            //mExitAfterLogout = false;
+            /*int error = logoutMerchant();
             if(error != ErrorCodes.NO_ERROR) {
                 onLogoutResponse(error);
-            }
+            }*/
         } else {
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
                     .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
         }
     }
 
-    @Override
+    /*@Override
     public void deleteDevice() {
         AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
         mWorkFragment.deleteDevice(AppCommonUtil.getDeviceId(this));
-    }
+    }*/
 
     @Override
     public void onBgProcessResponse(int errorCode, int operation) {
@@ -1002,7 +1009,7 @@ public class CashbackActivity extends BaseActivity implements
                 case MyRetainedFragment.REQUEST_CHANGE_PASSWD:
                     passwordChangeResponse(errorCode);
                     break;
-                case MyRetainedFragment.REQUEST_DELETE_TRUSTED_DEVICE:
+                /*case MyRetainedFragment.REQUEST_DELETE_TRUSTED_DEVICE:
                     AppCommonUtil.cancelProgressDialog(true);
                     if(errorCode == ErrorCodes.NO_ERROR) {
                         // detach and attach trusted device fragment - to refresh its view
@@ -1020,7 +1027,7 @@ public class CashbackActivity extends BaseActivity implements
                         DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
                                 .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
                     }
-                    break;
+                    break;*/
                 //case RetainedFragment.REQUEST_ADD_MERCHANT_OP:
                 case MyRetainedFragment.REQUEST_CHANGE_MOBILE:
                     onChangeMobileResponse(errorCode);
@@ -1568,6 +1575,12 @@ public class CashbackActivity extends BaseActivity implements
                         CommonUtils.getTxnImgDir(new Date()));
                 mWorkFragment.mCardImageFilename = null;
             }*/
+        } else if(errorCode == ErrorCodes.WRONG_OTP) {
+            DialogFragmentWrapper.createNotification(AppConstants.commitTransFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
+                    .show(mFragMgr, DIALOG_WRONG_TXN_OTP);
+        } else if(errorCode == ErrorCodes.WRONG_PIN ) {
+            DialogFragmentWrapper.createNotification(AppConstants.commitTransFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
+                    .show(mFragMgr, DIALOG_WRONG_TXN_PIN);
         } else {
             // delete file, if available
             //delCardImageFile();
@@ -1589,14 +1602,36 @@ public class CashbackActivity extends BaseActivity implements
 
         try {
             if (tag.equals(DIALOG_BACK_BUTTON)) {
-                mExitAfterLogout = true;
+                //mExitAfterLogout = true;
                 int error = logoutMerchant();
                 if (error != ErrorCodes.NO_ERROR) {
                     onLogoutResponse(error);
                 }
             } else if (tag.equals(DIALOG_SESSION_TIMEOUT)) {
-                mExitAfterLogout = false;
-                logoutMerchant();
+                //mExitAfterLogout = false;
+                int error = logoutMerchant();
+                if (error != ErrorCodes.NO_ERROR) {
+                    onLogoutResponse(error);
+                }
+            } else if(tag.equals(DIALOG_WRONG_TXN_OTP)) {
+                // open the OTP dialog again
+                TxnPinInputDialog dialog = TxnPinInputDialog.newInstance(
+                        mWorkFragment.mCurrTransaction.getTransaction().getCl_credit(),
+                        mWorkFragment.mCurrTransaction.getTransaction().getCl_debit(),
+                        //mWorkFragment.mCurrTransaction.getTransaction().getCb_debit(),
+                        mWorkFragment.mCurrTransaction.getTransaction().getCl_overdraft(),
+                        true);
+                dialog.show(mFragMgr, DIALOG_OTP_CASH_TXN);
+
+            } else if(tag.equals(DIALOG_WRONG_TXN_PIN)) {
+                // open the PIN dialog again
+                TxnPinInputDialog dialog = TxnPinInputDialog.newInstance(
+                        mWorkFragment.mCurrTransaction.getTransaction().getCl_credit(),
+                        mWorkFragment.mCurrTransaction.getTransaction().getCl_debit(),
+                        //mWorkFragment.mCurrTransaction.getTransaction().getCb_debit(),
+                        mWorkFragment.mCurrTransaction.getTransaction().getCl_overdraft(),
+                        false);
+                dialog.show(mFragMgr, DIALOG_PIN_CASH_TXN);
             }
         }
         catch (Exception e) {
@@ -2006,7 +2041,7 @@ public class CashbackActivity extends BaseActivity implements
         }
     }
 
-    private void startTrustedDevicesFragment() {
+    /*private void startTrustedDevicesFragment() {
         if (mFragMgr.findFragmentByTag(TRUSTED_DEVICES_FRAGMENT) == null) {
             //setDrawerState(false);
 
@@ -2020,7 +2055,7 @@ public class CashbackActivity extends BaseActivity implements
             // Commit the transaction
             transaction.commit();
         }
-    }
+    }*/
 
     /*private void startMchntOrdersFragment() {
         if (mFragMgr.findFragmentByTag(MCHNT_ORDERS_FRAGMENT) == null) {
@@ -2181,7 +2216,7 @@ public class CashbackActivity extends BaseActivity implements
         super.onSaveInstanceState(outState);
 
         //outState.putBoolean("mCashTxnStartPending", mCashTxnStartPending);
-        outState.putBoolean("mExitAfterLogout", mExitAfterLogout);
+        //outState.putBoolean("mExitAfterLogout", mExitAfterLogout);
         outState.putBoolean("mTbImageIsMerchant", mTbImageIsMerchant);
         outState.putInt("mLastMenuItemId", mLastMenuItemId);
     }

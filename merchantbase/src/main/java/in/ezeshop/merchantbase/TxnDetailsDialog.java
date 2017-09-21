@@ -140,6 +140,7 @@ public class TxnDetailsDialog extends BaseDialog {
             if(value > 0) {
                 mInputAcc.setText(AppCommonUtil.getSignedAmtStr(value, true));
                 mInputAcc.setTextColor(ContextCompat.getColor(getActivity(), R.color.green_positive));
+                mLayoutOverdraft.setVisibility(View.GONE);
             } else {
                 value = txn.getCl_debit();
                 mInputAcc.setText(AppCommonUtil.getSignedAmtStr(value, false));

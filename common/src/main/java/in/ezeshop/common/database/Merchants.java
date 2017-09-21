@@ -27,13 +27,13 @@ public class  Merchants
   private String email;
   private String txn_table;
   private String auto_id;
-  private String tempDevId;
+  //private String tempDevId;
   private String cb_rate;
-  private java.util.List<MerchantDevice> trusted_devices;
+  //private java.util.List<MerchantDevice> trusted_devices;
   private String buss_category;
   private Address address;
   private Integer cl_debit_limit_for_pin;
-  private Integer cb_debit_limit_for_pin;
+  //private Integer cb_debit_limit_for_pin;
   private Integer cl_credit_limit_for_pin;
   private Boolean first_login_ok;
   private Boolean debugLogs;
@@ -50,6 +50,15 @@ public class  Merchants
   private String prepaidCbRate;
   private Integer prepaidCbMinAmt;
   private String regFormNum;
+  private Boolean autoPasswd;
+
+  public Boolean getAutoPasswd() {
+    return autoPasswd;
+  }
+
+  public void setAutoPasswd(Boolean autoPasswd) {
+    this.autoPasswd = autoPasswd;
+  }
 
   public Boolean getCl_overdraft_enable() {
     return cl_overdraft_enable;
@@ -183,9 +192,13 @@ public class  Merchants
     return cl_debit_limit_for_pin;
   }
 
-  public Integer getCb_debit_limit_for_pin() {
+  /*public Integer getCb_debit_limit_for_pin() {
     return cb_debit_limit_for_pin;
   }
+  public void setCb_debit_limit_for_pin(Integer cb_debit_limit_for_pin) {
+    this.cb_debit_limit_for_pin = cb_debit_limit_for_pin;
+  }
+  */
 
   public Integer getCl_credit_limit_for_pin() {
     return cl_credit_limit_for_pin;
@@ -193,10 +206,6 @@ public class  Merchants
 
   public void setCl_debit_limit_for_pin(Integer cl_debit_limit_for_pin) {
     this.cl_debit_limit_for_pin = cl_debit_limit_for_pin;
-  }
-
-  public void setCb_debit_limit_for_pin(Integer cb_debit_limit_for_pin) {
-    this.cb_debit_limit_for_pin = cb_debit_limit_for_pin;
   }
 
   public void setCl_credit_limit_for_pin(Integer cl_credit_limit_for_pin) {
@@ -353,7 +362,7 @@ public class  Merchants
     this.auto_id = auto_id;
   }
 
-  public String getTempDevId()
+  /*public String getTempDevId()
   {
     return tempDevId;
   }
@@ -361,16 +370,6 @@ public class  Merchants
   public void setTempDevId( String tempDevId )
   {
     this.tempDevId = tempDevId;
-  }
-
-  public String getCb_rate()
-  {
-    return cb_rate;
-  }
-
-  public void setCb_rate( String cb_rate )
-  {
-    this.cb_rate = cb_rate;
   }
 
   public java.util.List<MerchantDevice> getTrusted_devices()
@@ -381,6 +380,16 @@ public class  Merchants
   public void setTrusted_devices( java.util.List<MerchantDevice> trusted_devices )
   {
     this.trusted_devices = trusted_devices;
+  }*/
+
+  public String getCb_rate()
+  {
+    return cb_rate;
+  }
+
+  public void setCb_rate( String cb_rate )
+  {
+    this.cb_rate = cb_rate;
   }
 
   public String getBuss_category()

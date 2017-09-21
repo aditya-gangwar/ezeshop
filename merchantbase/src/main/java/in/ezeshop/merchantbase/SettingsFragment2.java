@@ -237,100 +237,106 @@ public class SettingsFragment2 extends PreferenceFragment
         String newValue = null;
         String errDesc = null;
 
-        if (key.equals(KEY_CB_RATE)) {
-            newValue = (String)o;
-            errorCode = ValidationHelper.validateCbRate(newValue);
-            if (errorCode == ErrorCodes.NO_ERROR) {
-                mMerchantUser.setNewCbRate(newValue);
-                mSettingsChanged = true;
-                setCbRateSummary(newValue, false);
-            }
-        } else if (key.equals(KEY_ADD_CL_ENABLED)) {
-            //boolean isAddClEnabled = sharedPreferences.getBoolean(KEY_ADD_CL_ENABLED, mMerchantUser.getMerchant().getCl_add_enable());
-            boolean isAddClEnabled = (boolean)o;
-            //if (isAddClEnabled != mMerchantUser.getMerchant().getCl_add_enable()) {
-            mMerchantUser.setNewIsAddClEnabled(isAddClEnabled);
-            mSettingsChanged = true;
-            setAddCashSummary(isAddClEnabled, false);
-
-            // as they depend on it
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            setPpCbRateSummary(prefs.getString(KEY_OVERDRAFT_ENABLED,null), !isAddClEnabled, isAddClEnabled);
-            setPpCbRateSummary(prefs.getString(KEY_PP_CB_RATE,null), !isAddClEnabled, isAddClEnabled);
-            setPpMinAmtSummary(prefs.getString(KEY_PP_MIN_AMT,null), !isAddClEnabled, isAddClEnabled);
-            //}
-        } else if (key.equals(KEY_OVERDRAFT_ENABLED)) {
-            //boolean isAddClEnabled = sharedPreferences.getBoolean(KEY_ADD_CL_ENABLED, mMerchantUser.getMerchant().getCl_add_enable());
-            boolean overdraftEnabled = (boolean)o;
-            //if (isAddClEnabled != mMerchantUser.getMerchant().getCl_add_enable()) {
-            mMerchantUser.setNewOverdraftEnabled(overdraftEnabled);
-            mSettingsChanged = true;
-            setAddCashSummary(overdraftEnabled, false);
-
-        } else if (key.equals(KEY_PP_CB_RATE)) {
-            newValue = (String)o;
-            errorCode = ValidationHelper.validateCbRate(newValue);
-            if (errorCode == ErrorCodes.NO_ERROR) {
-                mMerchantUser.setNewPpCbRate(newValue);
-                mSettingsChanged = true;
-                setPpCbRateSummary(newValue, false, null);
-            }
-        } else if (key.equals(KEY_PP_MIN_AMT)) {
-            newValue = (String)o;
-            if(newValue==null || newValue.isEmpty()) {
-                errorCode = ErrorCodes.EMPTY_VALUE;
-            } else {
-                try {
-                    int newVal = Integer.valueOf(newValue);
-                    if (newVal > MyGlobalSettings.getCashAccLimit()) {
-                        errDesc = "Value more than Cash Account Limit of " +
-                                AppCommonUtil.getValueAmtStr(MyGlobalSettings.getCashAccLimit().toString());
-                        errorCode = ErrorCodes.INVALID_VALUE;
-                    } else {
-                        mMerchantUser.setNewPpMinAmt(newVal);
-                        mSettingsChanged = true;
-                        setPpMinAmtSummary(newValue, false, null);
-                    }
-                } catch (Exception e) {
-                    errorCode = ErrorCodes.INVALID_FORMAT;
+        try {
+            if (key.equals(KEY_CB_RATE)) {
+                newValue = (String) o;
+                errorCode = ValidationHelper.validateCbRate(newValue);
+                if (errorCode == ErrorCodes.NO_ERROR) {
+                    mMerchantUser.setNewCbRate(newValue);
+                    mSettingsChanged = true;
+                    setCbRateSummary(newValue, false);
                 }
-            }
-        } else if (key.equals(KEY_EMAIL)) {
-            //newValue = sharedPreferences.getString(KEY_EMAIL, null);
-            newValue = (String)o;
-            errorCode = ValidationHelper.validateEmail(newValue);
-            if (errorCode == ErrorCodes.NO_ERROR) {
-                mMerchantUser.setNewEmail(newValue);
+            } else if (key.equals(KEY_ADD_CL_ENABLED)) {
+                //boolean isAddClEnabled = sharedPreferences.getBoolean(KEY_ADD_CL_ENABLED, mMerchantUser.getMerchant().getCl_add_enable());
+                boolean isAddClEnabled = (boolean) o;
+                //if (isAddClEnabled != mMerchantUser.getMerchant().getCl_add_enable()) {
+                mMerchantUser.setNewIsAddClEnabled(isAddClEnabled);
                 mSettingsChanged = true;
-                setEmailSummary(newValue);
-            }
-        } else if (key.equals(KEY_CONTACT_PHONE)) {
-            //newValue = sharedPreferences.getString(KEY_CONTACT_PHONE, null);
-            newValue = (String)o;
-            errorCode = ValidationHelper.validateMobileNo(newValue);
-            if (errorCode == ErrorCodes.NO_ERROR) {
-                mMerchantUser.setNewContactPhome(newValue);
+                setAddCashSummary(isAddClEnabled, false);
+
+                // as they depend on it
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                //setOverdraftSummary(prefs.getString(KEY_OVERDRAFT_ENABLED,null), !isAddClEnabled, isAddClEnabled);
+                setOverdraftSummary(prefs.getBoolean(KEY_OVERDRAFT_ENABLED, false), !isAddClEnabled, isAddClEnabled);
+                setPpCbRateSummary(prefs.getString(KEY_PP_CB_RATE, null), !isAddClEnabled, isAddClEnabled);
+                setPpMinAmtSummary(prefs.getString(KEY_PP_MIN_AMT, null), !isAddClEnabled, isAddClEnabled);
+                //}
+            } else if (key.equals(KEY_OVERDRAFT_ENABLED)) {
+                //boolean isAddClEnabled = sharedPreferences.getBoolean(KEY_ADD_CL_ENABLED, mMerchantUser.getMerchant().getCl_add_enable());
+                boolean overdraftEnabled = (boolean) o;
+                //if (isAddClEnabled != mMerchantUser.getMerchant().getCl_add_enable()) {
+                mMerchantUser.setNewOverdraftEnabled(overdraftEnabled);
                 mSettingsChanged = true;
-                setContactPhoneSummary(newValue);
+                setOverdraftSummary(overdraftEnabled, false, null);
+
+            } else if (key.equals(KEY_PP_CB_RATE)) {
+                newValue = (String) o;
+                errorCode = ValidationHelper.validateCbRate(newValue);
+                if (errorCode == ErrorCodes.NO_ERROR) {
+                    mMerchantUser.setNewPpCbRate(newValue);
+                    mSettingsChanged = true;
+                    setPpCbRateSummary(newValue, false, null);
+                }
+            } else if (key.equals(KEY_PP_MIN_AMT)) {
+                newValue = (String) o;
+                if (newValue == null || newValue.isEmpty()) {
+                    errorCode = ErrorCodes.EMPTY_VALUE;
+                } else {
+                    try {
+                        int newVal = Integer.valueOf(newValue);
+                        if (newVal > MyGlobalSettings.getCashAccLimit()) {
+                            errDesc = "Value more than Cash Account Limit of " +
+                                    AppCommonUtil.getValueAmtStr(MyGlobalSettings.getCashAccLimit().toString());
+                            errorCode = ErrorCodes.INVALID_VALUE;
+                        } else {
+                            mMerchantUser.setNewPpMinAmt(newVal);
+                            mSettingsChanged = true;
+                            setPpMinAmtSummary(newValue, false, null);
+                        }
+                    } catch (Exception e) {
+                        errorCode = ErrorCodes.INVALID_FORMAT;
+                    }
+                }
+            } else if (key.equals(KEY_EMAIL)) {
+                //newValue = sharedPreferences.getString(KEY_EMAIL, null);
+                newValue = (String) o;
+                errorCode = ValidationHelper.validateEmail(newValue);
+                if (errorCode == ErrorCodes.NO_ERROR) {
+                    mMerchantUser.setNewEmail(newValue);
+                    mSettingsChanged = true;
+                    setEmailSummary(newValue);
+                }
+            } else if (key.equals(KEY_CONTACT_PHONE)) {
+                //newValue = sharedPreferences.getString(KEY_CONTACT_PHONE, null);
+                newValue = (String) o;
+                errorCode = ValidationHelper.validateMobileNo(newValue);
+                if (errorCode == ErrorCodes.NO_ERROR) {
+                    mMerchantUser.setNewContactPhome(newValue);
+                    mSettingsChanged = true;
+                    setContactPhoneSummary(newValue);
+                }
+            } else if (key.equals(KEY_LINKED_INV)) {
+                boolean askLinkedInvNum = (boolean) o;
+                //if (askLinkedInvNum != mMerchantUser.getMerchant().isInvoiceNumAsk()) {
+                mMerchantUser.setNewInvNumAsk(askLinkedInvNum);
+                mSettingsChanged = true;
+                //}
+            } else if (key.equals(KEY_LINKED_INV_MANDATORY)) {
+                boolean linkedInvOptional = (boolean) o;
+                //if (linkedInvOptional != mMerchantUser.getMerchant().isInvoiceNumOptional()) {
+                mMerchantUser.setNewInvNumOptional(!linkedInvOptional);
+                mSettingsChanged = true;
+                //}
+            } else if (key.equals(KEY_LINKED_INV_ONLY_NMBRS)) {
+                boolean linkedInvOnlyNmbrs = (boolean) o;
+                //if (linkedInvOnlyNmbrs != mMerchantUser.getMerchant().isInvoiceNumOnlyNumbers()) {
+                mMerchantUser.setNewInvNumOnlyNumbers(linkedInvOnlyNmbrs);
+                mSettingsChanged = true;
+                //}
             }
-        } else if (key.equals(KEY_LINKED_INV)) {
-            boolean askLinkedInvNum = (boolean)o;
-            //if (askLinkedInvNum != mMerchantUser.getMerchant().isInvoiceNumAsk()) {
-            mMerchantUser.setNewInvNumAsk(askLinkedInvNum);
-            mSettingsChanged = true;
-            //}
-        } else if (key.equals(KEY_LINKED_INV_MANDATORY)) {
-            boolean linkedInvOptional = (boolean)o;
-            //if (linkedInvOptional != mMerchantUser.getMerchant().isInvoiceNumOptional()) {
-            mMerchantUser.setNewInvNumOptional(!linkedInvOptional);
-            mSettingsChanged = true;
-            //}
-        } else if (key.equals(KEY_LINKED_INV_ONLY_NMBRS)) {
-            boolean linkedInvOnlyNmbrs = (boolean)o;
-            //if (linkedInvOnlyNmbrs != mMerchantUser.getMerchant().isInvoiceNumOnlyNumbers()) {
-            mMerchantUser.setNewInvNumOnlyNumbers(linkedInvOnlyNmbrs);
-            mSettingsChanged = true;
-            //}
+        } catch (Exception e) {
+            LogMy.e(TAG, "Exception in onPreferenceChange"+key, e);
+            errorCode = ErrorCodes.GENERAL_ERROR;
         }
 
         if (errorCode != ErrorCodes.NO_ERROR
@@ -355,21 +361,21 @@ public class SettingsFragment2 extends PreferenceFragment
     private void setAllSummaries() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        boolean disableDependentPref = false;
+        boolean disablePref = false;
         if(mMerchantUser.getMerchant().getAdmin_status()== DbConstants.USER_STATUS_UNDER_CLOSURE) {
-            disableDependentPref = true;
+            disablePref = true;
         }
 
-        setCbRateSummary(prefs.getString(KEY_CB_RATE,null), disableDependentPref);
-        setAddCashSummary(prefs.getBoolean(KEY_ADD_CL_ENABLED, false), disableDependentPref);
+        setCbRateSummary(prefs.getString(KEY_CB_RATE,null), disablePref);
+        setAddCashSummary(prefs.getBoolean(KEY_ADD_CL_ENABLED, false), disablePref);
 
-        if(!disableDependentPref &&
+        if(!disablePref &&
                 !prefs.getBoolean(KEY_ADD_CL_ENABLED, mMerchantUser.getMerchant().getCl_add_enable())) {
-            disableDependentPref = true;
+            disablePref = true;
         }
-        setPpCbRateSummary(prefs.getString(KEY_OVERDRAFT_ENABLED,null), disableDependentPref, null);
-        setPpCbRateSummary(prefs.getString(KEY_PP_CB_RATE,null), disableDependentPref, null);
-        setPpMinAmtSummary(prefs.getString(KEY_PP_MIN_AMT,null), disableDependentPref, null);
+        setOverdraftSummary(prefs.getBoolean(KEY_OVERDRAFT_ENABLED,false), disablePref, null);
+        setPpCbRateSummary(prefs.getString(KEY_PP_CB_RATE,null), disablePref, null);
+        setPpMinAmtSummary(prefs.getString(KEY_PP_MIN_AMT,null), disablePref, null);
 
         setMobileNumSummary(prefs.getString(KEY_MOBILE_NUM, null));
         setContactPhoneSummary(prefs.getString(KEY_CONTACT_PHONE, null));

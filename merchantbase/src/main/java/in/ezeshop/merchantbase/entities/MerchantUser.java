@@ -209,7 +209,8 @@ public class MerchantUser
             }
         }
         // reset all
-        reset();
+        //reset();
+        mInstance.mUserToken = null;
         return ErrorCodes.NO_ERROR;
     }
 
@@ -226,6 +227,8 @@ public class MerchantUser
             isLoginValid();
             CommonServices.getInstance().changePassword(mMerchant.getAuto_id(), oldPasswd, newPasswd);
             LogMy.d(TAG,"changePassword success");
+            // logout mandatory after change password
+            logoutSync();
         } catch (BackendlessException e) {
             LogMy.e(TAG,"Change password failed: "+e.toString());
             return AppCommonUtil.getLocalErrorCode(e);
@@ -588,7 +591,7 @@ public class MerchantUser
         return ErrorCodes.NO_ERROR;
     }
 
-    public int deleteTrustedDevice(int index, String curDeviceId) {
+    /*public int deleteTrustedDevice(int index, String curDeviceId) {
         LogMy.d(TAG, "In deleteTrustedDevice: " + index);
         if(mPseudoLoggedIn) {
             return ErrorCodes.OPERATION_NOT_ALLOWED;
@@ -604,7 +607,7 @@ public class MerchantUser
             return AppCommonUtil.getLocalErrorCode(e);
         }
         return ErrorCodes.NO_ERROR;
-    }
+    }*/
 
     /*
      * Public methods for changing merchant properties/settings
@@ -675,9 +678,9 @@ public class MerchantUser
         mDisplayImage = displayImage;
     }
 
-    public List<MerchantDevice> getTrustedDeviceList() {
+    /*public List<MerchantDevice> getTrustedDeviceList() {
         return mMerchant.getTrusted_devices();
-    }
+    }*/
 
     public Merchants getMerchant()
     {

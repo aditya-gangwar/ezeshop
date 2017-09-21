@@ -28,9 +28,18 @@ public class PasswdChangeDialog extends BaseDialog {
     public static final String TAG = "BaseApp-PasswdChangeDialog";
 
     private PasswdChangeDialogIf mListener;
+    private boolean mShowSecInfo;
+    private boolean mInformOnCancel;
 
     public interface PasswdChangeDialogIf {
         void onPasswdChangeData(String oldPasswd, String newPassword);
+    }
+
+    public static PasswdChangeDialog newInstance(boolean showSecInfo, boolean informOnCancel) {
+        PasswdChangeDialog fragment = new PasswdChangeDialog();
+        fragment.mInformOnCancel = informOnCancel;
+        fragment.mShowSecInfo = showSecInfo;
+        return fragment;
     }
 
     @Override
@@ -52,6 +61,18 @@ public class PasswdChangeDialog extends BaseDialog {
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_password_change, null);
         initUiResources(v);
 
+        if(savedInstanceState!=null) {
+            LogMy.d(TAG,"Restoring dialog state");
+            mInformOnCancel = savedInstanceState.getBoolean("mInformOnCancel");
+            mShowSecInfo = savedInstanceState.getBoolean("mShowSecInfo");
+        }
+
+        if(mShowSecInfo) {
+            labelInfo.setVisibility(View.VISIBLE);
+        } else {
+            labelInfo.setVisibility(View.GONE);
+        }
+
         // return new dialog
         final AlertDialog alertDialog =  new AlertDialog.Builder(getActivity()).setView(v)
                 .setPositiveButton(R.string.ok, this)
@@ -71,6 +92,7 @@ public class PasswdChangeDialog extends BaseDialog {
                     public void onSingleClick(View v) {
                         AppCommonUtil.hideKeyboard(getDialog());
 
+                        // Validate
                         String currPasswd = inputCurrPasswd.getText().toString();
                         String newPassword = inputNewPasswd.getText().toString();
 
@@ -126,6 +148,9 @@ public class PasswdChangeDialog extends BaseDialog {
                 break;
             case DialogInterface.BUTTON_NEGATIVE:
                 AppCommonUtil.hideKeyboard(getDialog());
+                if(mInformOnCancel) {
+                    mListener.onPasswdChangeData(null, null);
+                }
                 dialog.dismiss();
                 break;
             case DialogInterface.BUTTON_NEUTRAL:
@@ -148,16 +173,28 @@ public class PasswdChangeDialog extends BaseDialog {
     @Override
     public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
+        if(mInformOnCancel) {
+            mListener.onPasswdChangeData(null, null);
+        }
         //mListener.onPasswdChangeData(null, null);
     }
 
+    EditText labelInfo;
     EditText inputCurrPasswd;
     EditText inputNewPasswd;
     EditText inputNewPasswd2;
 
-    private void initUiResources(View view) {
-        inputCurrPasswd = (EditText) view.findViewById(R.id.input_current_passwd);
-        inputNewPasswd = (EditText) view.findViewById(R.id.input_new_passwd);
-        inputNewPasswd2 = (EditText) view.findViewById(R.id.input_new_passwd_2);
+    private void initUiResources(View v) {
+        labelInfo = (EditText) v.findViewById(R.id.label_security_info);
+        inputCurrPasswd = (EditText) v.findViewById(R.id.input_current_passwd);
+        inputNewPasswd = (EditText) v.findViewById(R.id.input_new_passwd);
+        inputNewPasswd2 = (EditText) v.findViewById(R.id.input_new_passwd_2);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("mInformOnCancel", mInformOnCancel);
+        outState.putBoolean("mShowSecInfo", mShowSecInfo);
     }
 }

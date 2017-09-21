@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.helpshift.support.Support;
 
+import in.ezeshop.appbase.PasswdChangeDialog;
 import in.ezeshop.appbase.SingleWebViewActivity;
 import in.ezeshop.appbase.constants.AppConstants;
 import in.ezeshop.appbase.utilities.OnSingleClickListener;
@@ -51,11 +52,12 @@ import java.util.Map;
 public class LoginActivity extends AppCompatActivity implements
         MyRetainedFragment.RetainedFragmentIf, DialogFragmentWrapper.DialogFragmentWrapperIf,
         PasswdResetDialog.PasswdResetDialogIf, OtpPinInputDialog.OtpPinInputDialogIf,
-        ForgotIdDialog.ForgotIdDialogIf {
+        ForgotIdDialog.ForgotIdDialogIf, PasswdChangeDialog.PasswdChangeDialogIf {
     private static final String TAG = "MchntApp-LoginActivity";
 
     private static final String RETAINED_FRAGMENT_TAG = "workLogin";
     private static final String DIALOG_PASSWD_RESET = "dialogPaswdReset";
+    private static final String DIALOG_PASSWD_CHANGE = "dialogPaswdChange";
     private static final String DIALOG_PIN_LOGIN_NEW_DEVICE = "dialogPinNewDevice";
     private static final String DIALOG_FORGOT_ID = "dialogForgotId";
     //private static final String DIALOG_SESSION_TIMEOUT = "dialogSessionTimeout";
@@ -67,9 +69,10 @@ public class LoginActivity extends AppCompatActivity implements
     //private MerchantUser    mMerchantUser;
     MyRetainedFragment      mWorkFragment;
 
-    private String          mPassword;
-    private String          mLoginId;
-    boolean                 mProcessingResetPasswd;
+    private String      mPassword;
+    private String      mLoginId;
+    private boolean     mProcessingPasswd;
+    private boolean     mPasswdChangePending;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,8 +90,15 @@ public class LoginActivity extends AppCompatActivity implements
 
         bindUiResources();
 
+        if(savedInstanceState!=null) {
+            mProcessingPasswd = savedInstanceState.getBoolean("mProcessingPasswd");
+            mPasswdChangePending = savedInstanceState.getBoolean("mPasswdChangePending");
+        } else {
+            mPasswdChangePending = false;
+            mProcessingPasswd = false;
+        }
+
         // local activity initializations
-        //mMerchantUser = MerchantUser.getInstance();
         makeForgotIdPasswordLink();
         makeHelpTnCLink();
 
@@ -147,8 +157,15 @@ public class LoginActivity extends AppCompatActivity implements
                             .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
                 } else {
                     if(checkPermissions()) {
-                        initOperationData();
-                        loginMerchant();
+                        if(mPasswdChangePending
+                                && MerchantUser.getInstance().getMerchant()!=null
+                                && MerchantUser.getInstance().getMerchant().getAutoPasswd()
+                                ) {
+                            askPasswdChange();
+                        } else {
+                            initOperationData();
+                            loginMerchant();
+                        }
                     }
                 }
             }
@@ -416,7 +433,25 @@ public class LoginActivity extends AppCompatActivity implements
                     DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
                             .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
                 }
-                mProcessingResetPasswd = false;
+                mProcessingPasswd = false;
+
+            } else if(operation == MyRetainedFragment.REQUEST_CHANGE_PASSWD) {
+                LogMy.d(TAG, "In passwordChangeResponse: " + errorCode);
+                AppCommonUtil.cancelProgressDialog(true);
+                mProcessingPasswd = false;
+
+                if(errorCode==ErrorCodes.NO_ERROR) {
+                    DialogFragmentWrapper.createNotification(AppConstants.pwdChangeSuccessTitle, AppConstants.pwdChangeSuccessMsg, false, false)
+                            .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
+                    // must have logged out too
+                    mPasswdTextRes.setText("");
+                    MerchantUser.reset();
+                    mPasswdChangePending = false;
+                } else {
+                    DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
+                            .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
+                    mPasswdChangePending = true;
+                }
 
             } else if (operation == MyRetainedFragment.REQUEST_FORGOT_ID) {
                 AppCommonUtil.cancelProgressDialog(true);
@@ -440,7 +475,7 @@ public class LoginActivity extends AppCompatActivity implements
 
     private void makeForgotIdPasswordLink()
     {
-        mProcessingResetPasswd = false;
+        mProcessingPasswd = false;
         SpannableString forgotPrompt = new SpannableString( getString( R.string.Forgot_id_passwd_label ) );
 
         ClickableSpan clickableSpan = new ClickableSpan()
@@ -448,8 +483,8 @@ public class LoginActivity extends AppCompatActivity implements
             @Override
             public void onClick( View widget )
             {
-                if(!mProcessingResetPasswd) {
-                    mProcessingResetPasswd = true;
+                if(!mProcessingPasswd) {
+                    mProcessingPasswd = true;
                     // read and set values
                     initOperationData();
                     // validate
@@ -460,7 +495,7 @@ public class LoginActivity extends AppCompatActivity implements
                         dialog.show(getFragmentManager(), DIALOG_PASSWD_RESET);
                     } else {
                         mIdTextRes.setError(AppCommonUtil.getErrorDesc(errorCode));
-                        mProcessingResetPasswd = false;
+                        mProcessingPasswd = false;
                     }
                 } else {
                     AppCommonUtil.toast(LoginActivity.this, AppConstants.toastInProgress);
@@ -550,7 +585,7 @@ public class LoginActivity extends AppCompatActivity implements
             AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
             mWorkFragment.generatePassword(dob, AppCommonUtil.getDeviceId(this), mLoginId);
         } else {
-            mProcessingResetPasswd = false;
+            mProcessingPasswd = false;
         }
     }
 
@@ -580,7 +615,46 @@ public class LoginActivity extends AppCompatActivity implements
         mLoginButton.setEnabled(true);
         mPasswdTextRes.setText("");
 
-        startCbFrag();
+        // check if first login after password reset - ask to change password
+        if(MerchantUser.getInstance().getMerchant().getAutoPasswd()) {
+            askPasswdChange();
+        } else {
+            startCbFrag();
+        }
+    }
+
+    private void askPasswdChange() {
+        if(!mProcessingPasswd) {
+            mProcessingPasswd = true;
+            // Ask for password change
+            PasswdChangeDialog dialog = PasswdChangeDialog.newInstance(true,true);
+            dialog.show(getFragmentManager(), DIALOG_PASSWD_CHANGE);
+        } else {
+            AppCommonUtil.toast(LoginActivity.this, AppConstants.toastInProgress);
+        }
+    }
+
+    @Override
+    public void onPasswdChangeData(String oldPasswd, String newPassword) {
+        if(oldPasswd==null || newPassword==null) {
+            // it is mandatory to change password here - so logout forcefully
+            mPasswdChangePending = true;
+            mProcessingPasswd = false;
+        } else {
+            int resultCode = AppCommonUtil.isNetworkAvailableAndConnected(this);
+            if ( resultCode != ErrorCodes.NO_ERROR) {
+                // Show error notification dialog
+                DialogFragmentWrapper.createNotification(AppConstants.noInternetTitle, AppCommonUtil.getErrorDesc(resultCode), false, true)
+                        .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
+
+                mPasswdChangePending = true;
+                mProcessingPasswd = false;
+            } else {
+                // show progress dialog
+                AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
+                mWorkFragment.changePassword(oldPasswd, newPassword);
+            }
+        }
     }
 
     private void startCbFrag() {
@@ -646,6 +720,17 @@ public class LoginActivity extends AppCompatActivity implements
     public void onBgThreadCreated() {
         // nothing to do
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        LogMy.d(TAG, "In onSaveInstanceState");
+        super.onSaveInstanceState(outState);
+
+        outState.putBoolean("mProcessingPasswd", mProcessingPasswd);
+        outState.putBoolean("mPasswdChangePending", mPasswdChangePending);
+    }
+
+
 }
 
 /**

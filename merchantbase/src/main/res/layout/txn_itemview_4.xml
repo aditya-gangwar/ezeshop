@@ -6,11 +6,10 @@
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground">
 
-    <RelativeLayout
+
+    <LinearLayout
+        style="@style/LL_Horizontal_paddingSidesLarge"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/root_layout"
-        android:padding="@dimen/medium_space"
         android:clickable="false"
         android:focusable="false">
 
@@ -19,28 +18,16 @@
             android:id="@+id/txn_time"
             android:text="08 Apr,16  20:15"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="40"
             android:textColor="@color/subheading"
-            android:paddingTop="0dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <TextView
-            style="@style/Edittext_only_view_small_lessPad"
-            android:id="@+id/txn_customer_id"
-            android:text="880xxx1535"
-            android:layout_below="@id/txn_time"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:textColor="@color/secondary_text"/>
+            android:gravity="start"/>
 
         <LinearLayout
             style="@style/LL_Horizontal_wrap"
             android:id="@+id/bill_layout"
-            android:layout_width="wrap_content"
-            android:layout_alignParentRight="true"
-            android:paddingBottom="0dp"
+            android:layout_width="0dp"
+            android:layout_weight="60"
             android:clickable="false"
             android:focusable="false">
 
@@ -48,93 +35,89 @@
                 style="@style/Edittext_only_view_small_lessPad"
                 android:id="@+id/bill_label"
                 android:layout_height="match_parent"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="60"
                 android:text="Bill :"
-                android:paddingBottom="0dp"
                 android:gravity="end"
                 android:textColor="@color/secondary_text"/>
 
             <TextView
                 style="@style/Edittext_only_view_small_lessPad"
                 android:id="@+id/bill_input"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="40"
                 android:layout_height="match_parent"
                 android:text="+ \u20B9 99,999"
-                android:paddingBottom="0dp"
                 android:gravity="end"
                 android:textColor="@color/green_positive"/>
 
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/LL_Horizontal_paddingSidesLarge"
+        android:layout_width="match_parent"
+        android:clickable="false"
+        android:focusable="false">
+
+        <TextView
+            style="@style/Edittext_only_view_small_lessPad"
+            android:id="@+id/txn_customer_id"
+            android:text="880xxx1535"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="40"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
+            android:textColor="@color/secondary_text"
+            android:gravity="start"/>
 
         <LinearLayout
             style="@style/LL_Horizontal_wrap"
             android:id="@+id/cb_layout"
-            android:layout_width="wrap_content"
-            android:layout_below="@id/bill_layout"
-            android:layout_alignParentRight="true"
+            android:layout_width="0dp"
+            android:layout_weight="60"
             android:clickable="false"
             android:focusable="false">
 
             <TextView
                 style="@style/Edittext_only_view_small_lessPad"
-                android:id="@+id/txn_label_bill"
+                android:id="@+id/txn_label_cb"
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="60"
                 android:text="Cashback :"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
                 android:gravity="end"
                 android:textColor="@color/secondary_text" />
 
             <TextView
                 style="@style/Edittext_only_view_small_lessPad"
                 android:id="@+id/txn_cashback_award"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="40"
                 android:layout_height="wrap_content"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
                 android:gravity="end"
-                android:text="\u20B9 9,99999"/>
+                android:text="\u20B9 999999"/>
         </LinearLayout>
 
-        <LinearLayout
-            style="@style/LL_Horizontal_wrap"
-            android:id="@+id/acc_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/cb_layout"
-            android:layout_alignParentRight="true"
-            android:paddingTop="0dp"
-            android:paddingBottom="0dp"
-            android:clickable="false"
-            android:focusable="false">
+    </LinearLayout>
 
-            <TextView
-                style="@style/Edittext_only_view_small_lessPad"
-                android:id="@+id/acc_label"
-                android:layout_height="match_parent"
-                android:layout_width="wrap_content"
-                android:paddingTop="0dp"
-                android:text="Account :"
-                android:gravity="end"
-                android:textColor="@color/secondary_text"/>
-
-            <TextView
-                style="@style/Edittext_only_view_small_lessPad"
-                android:id="@+id/acc_input"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:paddingTop="0dp"
-                android:text="- \u20B9 9,999"
-                android:gravity="end"
-                android:textColor="@color/red_negative"/>
-
-        </LinearLayout>
+    <LinearLayout
+        style="@style/LL_Horizontal_paddingSidesLarge"
+        android:layout_width="match_parent"
+        android:clickable="false"
+        android:focusable="false">
 
         <LinearLayout
             style="@style/LL_Horizontal_wrap"
             android:id="@+id/layout_txn_icons"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="40"
             android:layout_height="wrap_content"
-            android:layout_below="@id/txn_customer_id"
-            android:paddingTop="0dp"
-            android:paddingBottom="0dp"
             android:clickable="false"
             android:focusable="false">
 
@@ -143,10 +126,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_account_balance_wallet_white_18dp"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp"
                 android:tint="@color/red_negative"
-                android:layout_marginRight="@dimen/small_space"/>
+                android:layout_marginLeft="@dimen/edittext_padding_less"/>
 
             <!--TextView
                 style="@style/Edittext_only_view_small_lessPad"
@@ -158,7 +139,7 @@
                 android:layout_width="wrap_content"
                 android:textColor="@color/white"/-->
 
-            <TextView
+            <!--TextView
                 style="@style/Edittext_only_view_small_lessPad"
                 android:visibility="gone"
                 android:background="@drawable/rounnd_rect_blue"
@@ -170,12 +151,44 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:textColor="@color/white"
-                android:layout_marginRight="@dimen/small_space"/>
+                android:layout_marginRight="@dimen/small_space"/-->
 
         </LinearLayout>
-    </RelativeLayout>
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:id="@+id/acc_layout"
+            android:layout_width="0dp"
+            android:layout_weight="60"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false">
+
+            <TextView
+                style="@style/Edittext_only_view_small_lessPad"
+                android:id="@+id/acc_label"
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="60"
+                android:text="Account :"
+                android:gravity="end"
+                android:textColor="@color/secondary_text"/>
+
+            <TextView
+                style="@style/Edittext_only_view_small_lessPad"
+                android:id="@+id/acc_input"
+                android:layout_width="0dp"
+                android:layout_weight="40"
+                android:layout_height="match_parent"
+                android:text="- \u20B9 9,999"
+                android:gravity="end"
+                android:textColor="@color/red_negative"/>
+
+        </LinearLayout>
+    </LinearLayout>
 
     <View
-        style="@style/Divider_horizontal_Medium"/>
+        style="@style/Divider_horizontal_Medium"
+        android:layout_marginBottom="@dimen/small_space"/>
 
 </LinearLayout>

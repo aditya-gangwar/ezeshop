@@ -30,6 +30,7 @@ public class PasswordPreference extends DialogPreference {
 
     private PasswordPreferenceIf mCallback;
 
+    EditText labelInfo;
     EditText inputCurrPasswd;
     EditText inputNewPasswd;
     EditText inputNewPasswd2;
@@ -53,6 +54,7 @@ public class PasswordPreference extends DialogPreference {
 
     @Override
     protected void onBindDialogView (View view) {
+        labelInfo = (EditText) view.findViewById(R.id.label_security_info);
         inputCurrPasswd = (EditText) view.findViewById(R.id.input_current_passwd);
         inputNewPasswd = (EditText) view.findViewById(R.id.input_new_passwd);
         inputNewPasswd2 = (EditText) view.findViewById(R.id.input_new_passwd_2);
@@ -69,6 +71,8 @@ public class PasswordPreference extends DialogPreference {
         getDialog().setCanceledOnTouchOutside(false);
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
+        labelInfo.setVisibility(View.GONE);
+
         Button pos = ((AlertDialog) getDialog()).getButton(DialogInterface.BUTTON_POSITIVE);
         pos.setOnClickListener(new OnSingleClickListener() {
             @Override
@@ -76,29 +80,35 @@ public class PasswordPreference extends DialogPreference {
                 String currPasswd = inputCurrPasswd.getText().toString();
                 String newPassword = inputNewPasswd.getText().toString();
 
-                int errorCode = ValidationHelper.validatePassword(currPasswd);
-                if(errorCode!= ErrorCodes.NO_ERROR) {
-                    inputCurrPasswd.setError(AppCommonUtil.getErrorDesc(errorCode));
-                } else {
-                    errorCode = ValidationHelper.validateNewPassword(newPassword);
-                    if (errorCode != ErrorCodes.NO_ERROR) {
-                        inputNewPasswd.setError(AppCommonUtil.getErrorDesc(errorCode));
-                    } else {
-                        String newPassword2 = inputNewPasswd2.getText().toString();
-                        if (!newPassword.equals(newPassword2)) {
-                            inputNewPasswd2.setError("Does not match with new password above.");
-                            errorCode = ErrorCodes.GENERAL_ERROR;
-                        }
-                    }
-                }
-
-                if(errorCode==ErrorCodes.NO_ERROR) {
+                if(validate(currPasswd,newPassword)) {
                     mCallback.changePassword(currPasswd,newPassword);
                     getDialog().dismiss();
                 }
             }
         });
     }
+
+    private boolean validate(String currPasswd, String newPassword) {
+        int errorCode = ValidationHelper.validatePassword(currPasswd);
+        if(errorCode!= ErrorCodes.NO_ERROR) {
+            inputCurrPasswd.setError(AppCommonUtil.getErrorDesc(errorCode));
+            return false;
+        } else {
+            errorCode = ValidationHelper.validateNewPassword(newPassword);
+            if (errorCode != ErrorCodes.NO_ERROR) {
+                inputNewPasswd.setError(AppCommonUtil.getErrorDesc(errorCode));
+                return false;
+            } else {
+                String newPassword2 = inputNewPasswd2.getText().toString();
+                if (!newPassword.equals(newPassword2)) {
+                    inputNewPasswd2.setError("Does not match with new password above.");
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 
     /*@Override
     public void onClick(View v) {

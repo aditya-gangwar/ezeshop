@@ -52,7 +52,7 @@ public class MyRetainedFragment extends RetainedFragment {
     public static final int REQUEST_GENERATE_MERCHANT_PWD = 10;
     public static final int REQUEST_ADD_CUSTOMER_OP = 11;
     public static final int REQUEST_CHANGE_PASSWD = 12;
-    public static final int REQUEST_DELETE_TRUSTED_DEVICE = 13;
+    //public static final int REQUEST_DELETE_TRUSTED_DEVICE = 13;
     public static final int REQUEST_CHANGE_MOBILE = 14;
     public static final int REQUEST_MERCHANT_STATS = 15;
     public static final int REQUEST_FORGOT_ID = 16;
@@ -169,9 +169,9 @@ public class MyRetainedFragment extends RetainedFragment {
         mBackgroundProcessor.addChangeMobileRequest();
     }
 
-    public void deleteDevice(String curDeviceId) {
+    /*public void deleteDevice(String curDeviceId) {
         mBackgroundProcessor.addDeleteDeviceRequest(toDeleteTrustedDeviceIndex, curDeviceId);
-    }
+    }*/
 
     public void uploadImageFile(Context ctxt, String localStoredFileName, String remoteFileName, String remoteDir) {
         // get file object for the stored file
