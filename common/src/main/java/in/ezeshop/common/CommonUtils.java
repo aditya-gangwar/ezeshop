@@ -46,14 +46,26 @@ public class CommonUtils {
         return (cb.getCl_credit()+cb.getCb_credit()+cb.getExtra_cb_credit()-cb.getCl_debit()-cb.getCl_overdraft());
     }
 
-    public static String getPartialVisibleStr(String userId) {
+    public static String getHalfVisibleMobileNum(String mobileNum) {
+        if(mobileNum.length() != CommonConstants.MOBILE_NUM_LENGTH) {
+            return null;
+        }
+        // build half visible mobile num : 8800xxx535
+        char[] mobile = mobileNum.toCharArray();
+        mobile[4] = '*';
+        mobile[5] = '*';
+        mobile[6] = '*';
+        return String.valueOf(mobile);
+    }
+
+    public static String getHalfVisibleStr(String str) {
         // build half visible userid : XXXXX91535
         StringBuilder halfVisibleUserid = new StringBuilder();
-        int hiddenlen = userId.length() - (userId.length() / 3);
+        int hiddenlen = str.length() - (str.length() / 3);
         for(int i=0; i<hiddenlen; i++) {
             halfVisibleUserid.append("x");
         }
-        halfVisibleUserid.append(userId.substring(hiddenlen));
+        halfVisibleUserid.append(str.substring(hiddenlen));
         return halfVisibleUserid.toString();
     }
 

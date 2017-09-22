@@ -479,7 +479,7 @@ public class CashbackActivityCust extends AppCompatActivity implements
                 // this will override any existing daat from file, with latest data from DB
                 for (MyCashback cb :
                         mRetainedFragment.mLastFetchCashbacks) {
-                    LogMy.d(TAG,"Adding CB row from DB to local store: "+cb.getMerchantId()+", "+cb.getClCredit()+", "+cb.getCbCredit());
+                    LogMy.d(TAG,"Adding CB row from DB to local store: "+cb.getMerchantId()+", "+cb.getClCredit());
                     mRetainedFragment.mCashbacks.put(cb.getMerchantId(), cb);
                     // Add to total stats
                     //mRetainedFragment.stats.addToStats(cb);
@@ -1009,8 +1009,8 @@ public class CashbackActivityCust extends AppCompatActivity implements
     }
 
     private void processCbCsvRecord(String csvString) {
-        MyCashback cb = new MyCashback();
-        cb.init(csvString, false);
+        MyCashback cb = new MyCashback(csvString, false);
+        //cb.init(csvString, false);
         mRetainedFragment.mCashbacks.put(cb.getMerchantId(), cb);
         //mRetainedFragment.stats.addToStats(cb);
         LogMy.d(TAG,"Added new item in cashback store: "+mRetainedFragment.mCashbacks.size());

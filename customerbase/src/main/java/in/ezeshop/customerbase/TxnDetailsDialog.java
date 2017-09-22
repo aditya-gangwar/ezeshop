@@ -63,7 +63,7 @@ public class TxnDetailsDialog extends BaseDialog {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_txn_details_custapp, null);
+        View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_txn_details_custapp_2, null);
 
         bindUiResources(v);
 

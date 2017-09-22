@@ -30,8 +30,6 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="880xxx1535"
-            android:layout_marginEnd="@dimen/medium_space"
-            android:layout_marginRight="@dimen/medium_space"
             android:textColor="@color/primary"/>
     </LinearLayout>
 
@@ -40,25 +38,20 @@
 
             <ImageView
                 style="@style/Imageview_Left_Column"
-                android:src="@drawable/ic_phone_android_white_18dp"
-                android:visibility="invisible"/>
+                android:src="@drawable/ic_access_time_white_18dp"/>
             <TextView
                 style="@style/Edittext_only_view_small_lessPad"
                 android:layout_height="match_parent"
                 android:layout_width="0dp"
                 android:text="Last Txn"
                 android:layout_weight="1"
-                android:gravity="left|center_vertical"
-                android:paddingTop="0dp"/>
+                android:gravity="left|center_vertical"/>
             <TextView
                 style="@style/Edittext_only_view_small_lessPad"
                 android:id="@+id/input_cust_last_activity"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="22 July 16, 23:00"
-                android:layout_marginEnd="@dimen/medium_space"
-                android:layout_marginRight="@dimen/medium_space"
-                android:paddingTop="0dp"/>
+                android:text="22 July 16, 23:00"/>
         </LinearLayout>
 
         <LinearLayout
@@ -82,8 +75,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="22 July 16, 23:00"
-                android:layout_marginEnd="@dimen/medium_space"
-                android:layout_marginRight="@dimen/medium_space"
                 android:paddingTop="0dp"/>
         </LinearLayout>
 
@@ -106,8 +97,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Active"
-                android:layout_marginEnd="@dimen/medium_space"
-                android:layout_marginRight="@dimen/medium_space"
                 android:textColor="@color/green_positive"/>
         </LinearLayout>
 
@@ -156,8 +145,6 @@
                     android:id="@+id/input_status_date"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="@dimen/medium_space"
-                    android:layout_marginRight="@dimen/medium_space"
                     android:text="22 July 16, 23:00"/>
             </LinearLayout>
 
@@ -206,8 +193,6 @@
                 android:id="@+id/input_total_bill"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="@dimen/medium_space"
-                android:layout_marginRight="@dimen/medium_space"
                 android:text="\u20B9 NA"/>
         </LinearLayout>
 
@@ -216,7 +201,7 @@
             android:id="@+id/layout_acc_balance"
             android:layout_marginTop="@dimen/large_space">
 
-            <TextView
+            <!--TextView
                 style="@style/Edittext_only_view_small"
                 android:layout_height="match_parent"
                 android:layout_width="wrap_content"
@@ -224,7 +209,7 @@
                 android:text="ACCOUNT"
                 android:textStyle="normal"
                 android:textColor="@color/subheading"
-                android:paddingLeft="@dimen/screen_side_padding_more" />
+                android:paddingLeft="@dimen/screen_side_padding_more" /-->
 
             <LinearLayout
                 style="@style/LL_Horizontal_paddingSidesXL"
@@ -237,7 +222,7 @@
                     style="@style/Edittext_only_view_small_lessPad"
                     android:layout_height="match_parent"
                     android:layout_width="0dp"
-                    android:text="Balance"
+                    android:text="Account Balance"
                     android:layout_weight="1"
                     android:gravity="left|center_vertical"/>
                 <TextView
@@ -246,8 +231,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="+ \u20B9 NA"
-                    android:layout_marginEnd="@dimen/medium_space"
-                    android:layout_marginRight="@dimen/medium_space"
                     android:textColor="@color/green_positive"/>
             </LinearLayout>
             <LinearLayout
@@ -271,9 +254,7 @@
                     android:id="@+id/input_acc_add"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="+ \u20B9 NA"
-                    android:layout_marginEnd="@dimen/medium_space"
-                    android:layout_marginRight="@dimen/medium_space"/>
+                    android:text="+ \u20B9 NA" />
             </LinearLayout>
             <LinearLayout
                 style="@style/LL_Horizontal_paddingSidesXL"
@@ -300,8 +281,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="+ \u20B9 9,999"
-                    android:layout_marginEnd="@dimen/medium_space"
-                    android:layout_marginRight="@dimen/medium_space"
                     android:paddingTop="0dp"
                     android:textColor="@color/secondary_text"/>
             </LinearLayout>
@@ -330,8 +309,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="+ \u20B9 9,999"
-                    android:layout_marginEnd="@dimen/medium_space"
-                    android:layout_marginRight="@dimen/medium_space"
                     android:paddingTop="0dp"
                     android:textColor="@color/secondary_text"/>
             </LinearLayout>
@@ -357,9 +334,7 @@
                     android:id="@+id/input_acc_debit"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="- \u20B9 NA"
-                    android:layout_marginEnd="@dimen/medium_space"
-                    android:layout_marginRight="@dimen/medium_space"/>
+                    android:text="- \u20B9 NA" />
             </LinearLayout>
         </LinearLayout>
     

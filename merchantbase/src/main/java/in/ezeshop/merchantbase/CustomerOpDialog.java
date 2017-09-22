@@ -203,7 +203,7 @@ public class CustomerOpDialog extends BaseDialog  {
         }
         /*String cardNum = getArguments().getString(ARG_CARD_NUM, null);
         if(cardNum != null) {
-            //mInputQrCard.setText(CommonUtils.getPartialVisibleStr(cardNum));
+            //mInputQrCard.setText(CommonUtils.getHalfVisibleMobileNum(cardNum));
             scannedCardId = cardNum;
             mInputQrCard.setText("OK");
             mInputQrCard.setTextColor(ContextCompat.getColor(getActivity(), R.color.green_positive));

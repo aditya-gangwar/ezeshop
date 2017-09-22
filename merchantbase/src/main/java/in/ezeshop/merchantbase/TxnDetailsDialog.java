@@ -2,7 +2,6 @@ package in.ezeshop.merchantbase;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -11,17 +10,12 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import in.ezeshop.appbase.BaseDialog;
 import in.ezeshop.appbase.entities.MyTransaction;
-import in.ezeshop.appbase.utilities.OnSingleClickListener;
-import in.ezeshop.appbase.utilities.TxnReportsHelper;
 import in.ezeshop.common.CommonUtils;
 import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.database.Transaction;
@@ -120,7 +114,7 @@ public class TxnDetailsDialog extends BaseDialog {
         final Transaction txn = mCallback.getRetainedFragment().mLastFetchTransactions.get(position);
 
         if(txn != null) {
-            mInputMobileNum.setText(Html.fromHtml("<u>"+CommonUtils.getPartialVisibleStr(txn.getCust_mobile())+"</u>"));
+            mInputMobileNum.setText(Html.fromHtml("<u>"+CommonUtils.getHalfVisibleMobileNum(txn.getCust_mobile())+"</u>"));
             mInputMobileNum.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {

@@ -126,8 +126,7 @@
                 android:layout_height="@dimen/large_space"/>
 
             <LinearLayout
-                style="@style/LL_Horizontal_paddingSidesXL"
-                android:background="@color/primary_highlight">
+                style="@style/LL_Horizontal_paddingSidesXL">
 
                 <ImageView
                     style="@style/Imageview_Left_Column"
@@ -150,8 +149,7 @@
                 android:hint="Enter OTP"
                 android:maxLength="@string/otp_char_limit"
                 android:gravity="center"
-                android:imeOptions="actionDone"
-                android:background="@color/primary_highlight"/>
+                android:imeOptions="actionDone"/>
 
         </LinearLayout>
     </ScrollView>

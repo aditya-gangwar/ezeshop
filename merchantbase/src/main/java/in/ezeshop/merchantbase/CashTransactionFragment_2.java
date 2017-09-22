@@ -704,7 +704,9 @@ public class CashTransactionFragment_2 extends BaseFragment implements
                             } else {
                                 // activating overdraft means activating cl_denit also
                                 // this as before calculating overdraft - any amount in account is need to be debit
-                                setDebitClStatus(STATUS_AUTO);
+                                if(mDebitClStatus==STATUS_CLEARED) {
+                                    setDebitClStatus(STATUS_AUTO);
+                                }
                                 setOverdraftStatus(STATUS_AUTO);
                                 calcAndSetAmts(false);
                             }
@@ -793,22 +795,6 @@ public class CashTransactionFragment_2 extends BaseFragment implements
                         mDebitClStatus == STATUS_AUTO ||
                         mAddCbStatus == STATUS_AUTO ||
                         mOverdraft == STATUS_AUTO) {
-                    // If all 0 - no point going ahead
-                    // This may happen, if this txn involves only cashback and
-                    // that cashback is less than 1 rupee - which will be rounded of to 0
-                    if ((mAddCbNormal + mAddCbExtra) <= 0 && mAddCashload <= 0 && mOverdraft <= 0 && mDebitCashload <= 0) {
-                        //AppCommonUtil.toast(getActivity(), "No MyeCash data to process !!");
-                        String msg;
-                        //if (mRetainedFragment.mBillTotal <= 0) {
-                            msg = "All CAdd/Debit amounts are 0. Nothing to process.";
-                        //} else {
-                        //    msg = "'Award Cashback' is less than 1 Rupee. Other credit/debit amount are 0.";
-                        //}
-                        DialogFragmentWrapper dialog = DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, msg, true, true);
-                        dialog.setTargetFragment(CashTransactionFragment_2.this, REQ_NOTIFY_ERROR);
-                        dialog.show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
-                        return;
-                    }
 
                     if (mReturnCash != 0) {
                         if (mCashPaid >= 0) {
@@ -816,6 +802,25 @@ public class CashTransactionFragment_2 extends BaseFragment implements
                         } else {
                             AppCommonUtil.toast(getActivity(), "Set Payment done");
                         }
+
+                        return;
+                    }
+
+                    // If all 0 - no point going ahead
+                    // This may happen, if this txn involves only cashback and
+                    // that cashback is less than 1 rupee - which will be rounded of to 0
+                    if ((mAddCbNormal + mAddCbExtra) <= 0 && mAddCashload <= 0 && mOverdraft <= 0 && mDebitCashload <= 0) {
+                        //AppCommonUtil.toast(getActivity(), "No MyeCash data to process !!");
+                        String msg;
+                        //if (mRetainedFragment.mBillTotal <= 0) {
+                            msg = "All Add/Debit amounts are 0. Nothing to process.";
+                        //} else {
+                        //    msg = "'Award Cashback' is less than 1 Rupee. Other credit/debit amount are 0.";
+                        //}
+                        DialogFragmentWrapper dialog = DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, msg, true, true);
+                        dialog.setTargetFragment(CashTransactionFragment_2.this, REQ_NOTIFY_ERROR);
+                        dialog.show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
+                        return;
                     } else {
                         // Balance is 0
                         // Ask for confirmation - if first overdraft for this customer
@@ -937,9 +942,10 @@ public class CashTransactionFragment_2 extends BaseFragment implements
         mClBalance = mRetainedFragment.mCurrCashback.getCurrAccBalance();
         if(mClBalance <= 0) {
             setDebitClStatus(STATUS_NO_BALANCE);
+            mClBalance = 0;
         } else {
-            // by default, debit if available
-            setDebitClStatus(STATUS_AUTO);
+            // by default, dont try to debit
+            setDebitClStatus(STATUS_CLEARED);
         }
 
         // Init overdraft status

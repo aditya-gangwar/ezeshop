@@ -1,7 +1,6 @@
 package in.ezeshop.common;
 
 import in.ezeshop.common.constants.CommonConstants;
-import in.ezeshop.common.constants.DbConstants;
 import in.ezeshop.common.database.Customers;
 
 import java.text.SimpleDateFormat;
@@ -91,13 +90,13 @@ public class MyCustomer {
         String[] csvFields = new String[CUST_CSV_TOTAL_FIELDS];
 
         csvFields[CUST_CSV_PRIVATE_ID] = customer.getPrivate_id() ;
-        csvFields[CUST_CSV_MOBILE_NUM] = CommonUtils.getPartialVisibleStr(customer.getMobile_num());
+        csvFields[CUST_CSV_MOBILE_NUM] = CommonUtils.getHalfVisibleMobileNum(customer.getMobile_num());
         csvFields[CUST_CSV_ACC_STATUS] = String.valueOf(customer.getAdmin_status()) ;
         csvFields[CUST_CSV_STATUS_REASON] = customer.getStatus_reason();
         csvFields[CUST_CSV_STATUS_UPDATE_TIME] = String.valueOf(customer.getStatus_update_time().getTime()) ;
 
         /*if(card!=null) {
-            csvFields[CUST_CSV_CARD_ID] = CommonUtils.getPartialVisibleStr(card.getCardNum());
+            csvFields[CUST_CSV_CARD_ID] = CommonUtils.getHalfVisibleMobileNum(card.getCardNum());
             csvFields[CUST_CSV_CARD_STATUS] = String.valueOf(card.getStatus());
             csvFields[CUST_CSV_CARD_STATUS_UPDATE_TIME] = String.valueOf(card.getStatus_update_time().getTime());
         } else {

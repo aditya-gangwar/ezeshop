@@ -163,7 +163,7 @@ public class CashbackListFragment extends BaseFragment {
         if(mRetainedFragment.mCashbacks!=null) {
             mMyCbs = new ArrayList<>(mRetainedFragment.mCashbacks.values());
             for(MyCashback cb:mMyCbs) {
-                LogMy.d(TAG,"In refreshData: "+cb.getMerchantId()+", "+cb.getClCredit()+", "+cb.getCbCredit());
+                LogMy.d(TAG,"In refreshData: "+cb.getMerchantId()+", "+cb.getClCredit());
             }
             sortList(mSelectedSortType);
             updateUI();

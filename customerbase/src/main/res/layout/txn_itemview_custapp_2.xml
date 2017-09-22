@@ -19,7 +19,7 @@
             android:text="08 Apr,16  20:15"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
-            android:layout_weight="40"
+            android:layout_weight="50"
             android:textColor="@color/subheading"
             android:gravity="start"/>
 
@@ -27,7 +27,7 @@
             style="@style/LL_Horizontal_wrap"
             android:id="@+id/bill_layout"
             android:layout_width="0dp"
-            android:layout_weight="60"
+            android:layout_weight="50"
             android:clickable="false"
             android:focusable="false">
 
@@ -36,7 +36,7 @@
                 android:id="@+id/bill_label"
                 android:layout_height="match_parent"
                 android:layout_width="0dp"
-                android:layout_weight="60"
+                android:layout_weight="55"
                 android:text="Bill :"
                 android:gravity="end"
                 android:textColor="@color/secondary_text"/>
@@ -45,10 +45,10 @@
                 style="@style/Edittext_only_view_small_lessPad"
                 android:id="@+id/bill_input"
                 android:layout_width="0dp"
-                android:layout_weight="40"
-                android:paddingLeft="0dp"
+                android:layout_weight="45"
                 android:layout_height="match_parent"
                 android:text="+ \u20B9 99,999"
+                android:paddingLeft="0dp"
                 android:gravity="end"
                 android:textColor="@color/green_positive"/>
 
@@ -63,13 +63,11 @@
 
         <TextView
             style="@style/Edittext_only_view_small_lessPad"
-            android:id="@+id/txn_customer_id"
-            android:text="880xxx1535"
+            android:id="@+id/txn_mchnt_name"
+            android:text="Chaudhary Medical Store"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
-            android:layout_weight="40"
-            android:paddingTop="0dp"
-            android:paddingBottom="0dp"
+            android:layout_weight="50"
             android:textColor="@color/secondary_text"
             android:gravity="start"/>
 
@@ -77,7 +75,7 @@
             style="@style/LL_Horizontal_wrap"
             android:id="@+id/cb_layout"
             android:layout_width="0dp"
-            android:layout_weight="60"
+            android:layout_weight="50"
             android:clickable="false"
             android:focusable="false">
 
@@ -86,10 +84,8 @@
                 android:id="@+id/txn_label_cb"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
-                android:layout_weight="60"
+                android:layout_weight="55"
                 android:text="Cashback :"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp"
                 android:gravity="end"
                 android:textColor="@color/secondary_text" />
 
@@ -97,11 +93,9 @@
                 style="@style/Edittext_only_view_small_lessPad"
                 android:id="@+id/txn_cashback_award"
                 android:layout_width="0dp"
-                android:layout_weight="40"
+                android:layout_weight="45"
                 android:paddingLeft="0dp"
                 android:layout_height="wrap_content"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp"
                 android:gravity="end"
                 android:text="\u20B9 999999"/>
         </LinearLayout>
@@ -118,7 +112,7 @@
             style="@style/LL_Horizontal_wrap"
             android:id="@+id/layout_txn_icons"
             android:layout_width="0dp"
-            android:layout_weight="40"
+            android:layout_weight="50"
             android:layout_height="match_parent"
             android:clickable="false"
             android:focusable="false">
@@ -131,37 +125,13 @@
                 android:tint="@color/red_negative"
                 android:layout_marginLeft="@dimen/edittext_padding_less"/>
 
-            <!--TextView
-                style="@style/Edittext_only_view_small_lessPad"
-                android:background="@drawable/round_rect_red"
-                android:id="@+id/overdraft_label"
-                android:text="Overdraft"
-                android:layout_below="@id/txn_customer_id"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:textColor="@color/white"/-->
-
-            <!--TextView
-                style="@style/Edittext_only_view_small_lessPad"
-                android:visibility="gone"
-                android:background="@drawable/rounnd_rect_blue"
-                android:id="@+id/refund_label"
-                android:text="Refund"
-                android:layout_below="@id/txn_customer_id"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:textColor="@color/white"
-                android:layout_marginRight="@dimen/small_space"/-->
-
         </LinearLayout>
 
         <LinearLayout
             style="@style/LL_Horizontal_wrap"
             android:id="@+id/acc_layout"
             android:layout_width="0dp"
-            android:layout_weight="60"
+            android:layout_weight="50"
             android:layout_height="wrap_content"
             android:clickable="false"
             android:focusable="false">
@@ -171,7 +141,7 @@
                 android:id="@+id/acc_label"
                 android:layout_height="match_parent"
                 android:layout_width="0dp"
-                android:layout_weight="60"
+                android:layout_weight="55"
                 android:text="Account :"
                 android:gravity="end"
                 android:textColor="@color/secondary_text"/>
@@ -180,8 +150,8 @@
                 style="@style/Edittext_only_view_small_lessPad"
                 android:id="@+id/acc_input"
                 android:layout_width="0dp"
-                android:layout_weight="40"
                 android:paddingLeft="0dp"
+                android:layout_weight="45"
                 android:layout_height="match_parent"
                 android:text="- \u20B9 9,999"
                 android:gravity="end"

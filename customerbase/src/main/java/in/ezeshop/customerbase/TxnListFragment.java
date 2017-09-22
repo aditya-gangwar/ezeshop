@@ -838,7 +838,7 @@ public class TxnListFragment extends BaseFragment {
         @Override
         public TxnHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            View view = layoutInflater.inflate(R.layout.txn_itemview_custapp, parent, false);
+            View view = layoutInflater.inflate(R.layout.txn_itemview_custapp_2, parent, false);
             LogMy.d(TAG,"Root view: "+view.getId());
             view.setOnClickListener(mListener);
             return new TxnHolder(view);

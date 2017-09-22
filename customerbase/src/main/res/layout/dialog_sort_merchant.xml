@@ -6,13 +6,9 @@
     android:orientation="vertical">
 
     <EditText
-        style="@style/Edittext_only_view_small_more_pad"
-        android:textStyle="bold"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="false"
-        android:gravity="left"
-        android:text="Sort Merchants by:"/>
+        style="@style/Dialog_title"
+        android:id="@+id/label_title"
+        android:text="SORT  MERCHANTS"/>
 
     <View
         style="@style/Divider_horizontal_Large"
@@ -32,28 +28,28 @@
 
             <RadioButton
                 style="@style/radio_button_medium"
+                android:id="@+id/lastTxnTime"
+                android:text="Last Transaction Time" />
+
+            <!--RadioButton
+                style="@style/radio_button_medium"
+                android:id="@+id/balanceCb"
+                android:text="Cashback Balance" /-->
+
+            <RadioButton
+                style="@style/radio_button_medium"
                 android:id="@+id/mchntName"
                 android:text="Merchant Name" />
 
             <RadioButton
                 style="@style/radio_button_medium"
-                android:id="@+id/lastTxnTime"
-                android:text="Last Txn Time" />
+                android:id="@+id/balanceAcc"
+                android:text="Account Balance" />
 
             <RadioButton
                 style="@style/radio_button_medium"
                 android:id="@+id/cityName"
-                android:text="City Name" />
-
-            <RadioButton
-                style="@style/radio_button_medium"
-                android:id="@+id/balanceCb"
-                android:text="Cashback Balance" />
-
-            <RadioButton
-                style="@style/radio_button_medium"
-                android:id="@+id/balanceAcc"
-                android:text="Account Balance" />
+                android:text="City" />
 
         </RadioGroup>
 

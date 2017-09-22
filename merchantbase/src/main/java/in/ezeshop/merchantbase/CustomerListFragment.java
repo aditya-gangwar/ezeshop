@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import in.ezeshop.appbase.BaseFragment;
 import in.ezeshop.appbase.constants.AppConstants;
+import in.ezeshop.common.CommonUtils;
 import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.DbConstants;
 import in.ezeshop.common.constants.ErrorCodes;
@@ -474,7 +475,7 @@ public class CustomerListFragment extends BaseFragment {
                 /*if(cust.getCardId()==null || cust.getCardId().isEmpty()) {
                     sb.append(CommonConstants.CSV_DELIMETER);
                 } else {
-                    sb.append(CommonUtils.getPartialVisibleStr(cust.getCardId())).append(CommonConstants.CSV_DELIMETER);
+                    sb.append(CommonUtils.getHalfVisibleMobileNum(cust.getCardId())).append(CommonConstants.CSV_DELIMETER);
                 }*/
                 sb.append(DbConstants.userStatusDesc[cust.getStatus()]).append(CommonConstants.CSV_DELIMETER);
 
@@ -629,7 +630,7 @@ public class CustomerListFragment extends BaseFragment {
             mCb = cb;
             MyCustomer customer = mCb.getCustomer();
 
-            mCustId.setText(customer.getPrivateId());
+            mCustId.setText(CommonUtils.getHalfVisibleMobileNum(customer.getMobileNum()));
             mLastTxnTime.setText(mSdfDateWithTime.format(cb.getLastTxnTime()));
             mBillAmt.setText(AppCommonUtil.getAmtStr(cb.getBillAmt()));
 

@@ -489,6 +489,7 @@ public class CashbackActivity extends BaseActivity implements
 
             Bitmap scaledImg = Bitmap.createScaledBitmap(image,(int)radiusInPixels,(int)radiusInPixels,false);
             Bitmap roundImage = AppCommonUtil.getCircleBitmap(scaledImg);
+            //Bitmap roundImage = AppCommonUtil.getCircleBitmap(image);
 
             mTbImage.setImageBitmap(roundImage);
         }
@@ -503,7 +504,7 @@ public class CashbackActivity extends BaseActivity implements
         mTbLayoutSubhead1.setVisibility(View.VISIBLE);
 
         // no error case: all cashback values available
-        //mTbTitle.setText(CommonUtils.getPartialVisibleStr(mWorkFragment.mCustMobile));
+        //mTbTitle.setText(CommonUtils.getHalfVisibleMobileNum(mWorkFragment.mCustMobile));
         // This is the only place where complete mobile number is shown - everywhere else its partially hidden
         mTbTitle.setText(mWorkFragment.mCurrCustomer.getMobileNum());
 

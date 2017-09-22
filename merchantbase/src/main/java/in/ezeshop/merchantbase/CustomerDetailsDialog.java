@@ -135,7 +135,7 @@ public class CustomerDetailsDialog extends BaseDialog {
 
         if(cust != null) {
             //mInputCustomerId.setText(cust.getPrivateId());
-            mInputMobileNum.setText(CommonUtils.getPartialVisibleStr(cust.getMobileNum()));
+            mInputMobileNum.setText(CommonUtils.getHalfVisibleMobileNum(cust.getMobileNum()));
             if(cb.getLastTxnTime()!=null) {
                 mLastUsedHere.setText(mSdfDateWithTime.format(cb.getLastTxnTime()));
             } else {
@@ -147,7 +147,7 @@ public class CustomerDetailsDialog extends BaseDialog {
                 mLayoutCard.setVisibility(View.GONE);
             } else {
                 mLayoutCard.setVisibility(View.VISIBLE);
-                mInputQrCard.setText(CommonUtils.getPartialVisibleStr(cust.getCardId()));
+                mInputQrCard.setText(CommonUtils.getHalfVisibleMobileNum(cust.getCardId()));
                 mInputCardStatus.setText(DbConstants.cardStatusDesc[cust.getCardStatus()]);
                 mLayoutCardStatusDate.setVisibility(View.GONE);
                 if (cust.getCardStatus() != DbConstants.CUSTOMER_CARD_STATUS_ACTIVE) {

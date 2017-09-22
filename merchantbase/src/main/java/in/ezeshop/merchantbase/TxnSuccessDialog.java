@@ -76,7 +76,7 @@ public class TxnSuccessDialog extends BaseDialog {
 
         bindUiResources(v);
         // display values
-        String cust = "Customer: "+ CommonUtils.getPartialVisibleStr(mobileNum);
+        String cust = "Customer: "+ CommonUtils.getHalfVisibleMobileNum(mobileNum);
         mInputCustomer.setText(cust);
         if(txnId!=null) {
             String txt = "Txn ID: " + txnId;

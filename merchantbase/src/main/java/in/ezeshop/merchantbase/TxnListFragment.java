@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -90,7 +89,7 @@ public class TxnListFragment extends BaseFragment {
 
     private RecyclerView mTxnRecyclerView;
     private EditText mHeaderTime;
-    private EditText mHeaderCustomer;
+    //private EditText mHeaderCustomer;
     private EditText mHeaderBill;
     private EditText mHeaderCb;
     private EditText mHeaderAcc;
@@ -156,6 +155,7 @@ public class TxnListFragment extends BaseFragment {
     }
 
     private void sortTxnList(int sortType) {
+        LogMy.d(TAG,"In sortTxnList : "+sortType+", "+mSelectedSortType);
         switch (sortType) {
             case SortTxnDialog.TXN_SORT_DATE_TIME:
                 Collections.sort(mRetainedFragment.mLastFetchTransactions, new MyTransaction.TxnDateComparator());
@@ -169,12 +169,6 @@ public class TxnListFragment extends BaseFragment {
             case SortTxnDialog.TXN_SORT_ACC_AMT:
                 Collections.sort(mRetainedFragment.mLastFetchTransactions, new MyTransaction.TxnAccAmtComparator());
                 break;
-            /*case SortTxnDialog.TXN_SORT_CB_REDEEM:
-                Collections.sort(mRetainedFragment.mLastFetchTransactions, new MyTransaction.TxnCbRedeemComparator());
-                break;
-            case SortTxnDialog.TXN_SORT_ACC_DEBIT:
-                Collections.sort(mRetainedFragment.mLastFetchTransactions, new MyTransaction.TxnAccDebitComparator());
-                break;*/
         }
         // Make it in decreasing order
         Collections.reverse(mRetainedFragment.mLastFetchTransactions);
@@ -214,24 +208,14 @@ public class TxnListFragment extends BaseFragment {
                 break;
             case SortTxnDialog.TXN_SORT_CB_AWARD:
                 text = AppConstants.SYMBOL_DOWN_ARROW + getString(R.string.txnlist_header_cb);
-                mHeaderBill.setText(text);
-                mHeaderBill.setTypeface(null, Typeface.BOLD);
+                mHeaderCb.setText(text);
+                mHeaderCb.setTypeface(null, Typeface.BOLD);
                 break;
             case SortTxnDialog.TXN_SORT_ACC_AMT:
                 text = AppConstants.SYMBOL_DOWN_ARROW + getString(R.string.txnlist_header_acc);
-                mHeaderBill.setText(text);
-                mHeaderBill.setTypeface(null, Typeface.BOLD);
+                mHeaderAcc.setText(text);
+                mHeaderAcc.setTypeface(null, Typeface.BOLD);
                 break;
-            /*case SortTxnDialog.TXN_SORT_CB_REDEEM:
-                text = "Account  | "+AppConstants.SYMBOL_DOWN_ARROW+"Cashback Redeem";
-                mHeaderAmts.setText(text);
-                mHeaderAmts.setTypeface(null, Typeface.BOLD);
-                break;
-            case SortTxnDialog.TXN_SORT_ACC_DEBIT:
-                text = AppConstants.SYMBOL_DOWN_ARROW+"Account  |  Cashback Redeem";
-                mHeaderAmts.setText(text);
-                mHeaderAmts.setTypeface(null, Typeface.BOLD);
-                break;*/
         }
 
         // store existing sortType
@@ -247,7 +231,7 @@ public class TxnListFragment extends BaseFragment {
         mTxnRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mHeaderTime = (EditText) view.findViewById(R.id.txnlist_header_time);
-        mHeaderCustomer = (EditText) view.findViewById(R.id.txnlist_header_customer_id);
+        //mHeaderCustomer = (EditText) view.findViewById(R.id.txnlist_header_customer_id);
         mHeaderBill = (EditText) view.findViewById(R.id.txnlist_header_bill);
         mHeaderCb = (EditText) view.findViewById(R.id.txnlist_header_cb);
         mHeaderAcc = (EditText) view.findViewById(R.id.txnlist_header_acc);
@@ -406,7 +390,7 @@ public class TxnListFragment extends BaseFragment {
                 sb.append(i+1).append(CommonConstants.CSV_DELIMETER);
 
                 Transaction txn = mRetainedFragment.mLastFetchTransactions.get(i);
-                sb.append(CommonUtils.getPartialVisibleStr(txn.getCust_mobile())).append(CommonConstants.CSV_DELIMETER);
+                sb.append(CommonUtils.getHalfVisibleMobileNum(txn.getCust_mobile())).append(CommonConstants.CSV_DELIMETER);
                 sb.append(mSdfOnlyDateCSV.format(txn.getCreate_time())).append(CommonConstants.CSV_DELIMETER);
                 sb.append(mSdfOnlyTimeCSV.format(txn.getCreate_time())).append(CommonConstants.CSV_DELIMETER);
 
@@ -709,7 +693,7 @@ public class TxnListFragment extends BaseFragment {
             mTxn = txn;
 
             mDatetime.setText(mSdfDateWithTime.format(mTxn.getCreate_time()));
-            mCustId.setText(CommonUtils.getPartialVisibleStr(mTxn.getCust_mobile()));
+            mCustId.setText(CommonUtils.getHalfVisibleMobileNum(mTxn.getCust_mobile()));
 
             // padding to keep Bill, Cashback, Account values in same vertical line
             //String paddingStr = "%"+TXN_ITEM_PADDING+"s";

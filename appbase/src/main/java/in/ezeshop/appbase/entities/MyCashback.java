@@ -102,9 +102,9 @@ public class MyCashback {
     /*
      * Current cashback Getter methods
      */
-    /*public Cashback getCurrCashback() {
+    public Cashback getCurrCashback() {
         return mCurrCashback;
-    }*/
+    }
     public int getBillAmt() {
         return mCurrCashback.getTotal_billed();
     }
@@ -130,8 +130,8 @@ public class MyCashback {
         return mCurrCashback.getCl_overdraft();
     }
 
-    /*public int getClDebit() { return mCurrCashback.getCl_debit(); }
-    public int getClOverdraft() { return mCurrCashback.getCl_overdraft(); }*/
+    public int getClDebit() { return mCurrCashback.getCl_debit(); }
+    public int getClOverdraft() { return mCurrCashback.getCl_overdraft(); }
 
     public Date getLastTxnTime() {
         // updateTime will be null if no txn done after registration - use createTime in that case

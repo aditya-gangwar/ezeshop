@@ -490,7 +490,7 @@ public class SettingsFragment2 extends PreferenceFragment
         if(null==value) {
             return;
         }
-        String summary = String.format(getActivity().getString(R.string.regdMobileSummary), CommonUtils.getPartialVisibleStr(value));
+        String summary = String.format(getActivity().getString(R.string.regdMobileSummary), CommonUtils.getHalfVisibleMobileNum(value));
         Preference pref = findPreference(KEY_MOBILE_NUM);
         pref.setSummary(summary);
     }

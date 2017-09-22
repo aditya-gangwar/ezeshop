@@ -5,7 +5,7 @@
     android:id="@+id/txnlist_root"
     android:background="?android:attr/windowBackground">
 
-    <RelativeLayout
+    <!--RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar_report"
@@ -38,22 +38,33 @@
             android:id="@+id/txnlist_divider_0"
             android:layout_below="@id/txnlist_filter_duration"/>
 
-    </RelativeLayout>
+    </RelativeLayout-->
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txnlist_filters"
+        android:layout_below="@id/toolbar_report"
         android:id="@+id/txnlist_header"
-        android:background="@color/bg_light_grey">
+        android:background="@color/bg_listWithCard_header">
 
         <EditText
             style="@style/Edittext_only_view_small"
             android:layout_width="wrap_content"
             android:id="@+id/txnlist_header_time"
             android:layout_height="wrap_content"
-            android:text="Date Time"
-            android:paddingBottom="@dimen/edittext_padding_less"/>
+            android:text="@string/txnlist_header_datetime"
+            android:paddingBottom="0dp"
+            android:textColor="@color/white"/>
+        <EditText
+            style="@style/Edittext_only_view_small"
+            android:layout_width="wrap_content"
+            android:id="@+id/txnlist_header_customer_id"
+            android:layout_below="@id/txnlist_header_time"
+            android:layout_height="wrap_content"
+            android:text="@string/txnlist_header_customer"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
+            android:textColor="@color/white"/>
 
         <EditText
             style="@style/Edittext_only_view_small"
@@ -61,34 +72,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="Total Bill  |  + Cashback Add"
-            android:paddingBottom="@dimen/edittext_padding_less"/>
-
+            android:text="@string/txnlist_header_bill"
+            android:paddingBottom="0dp"
+            android:textColor="@color/white"/>
         <EditText
             style="@style/Edittext_only_view_small"
-            android:id="@+id/txnlist_header_amts"
+            android:id="@+id/txnlist_header_cb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/txnlist_header_bill"
             android:layout_alignParentRight="true"
-            android:text="- Cashback Debit"
-            android:paddingBottom="@dimen/edittext_padding_less"
-            android:paddingTop="0dp"/>
-
+            android:text="@string/txnlist_header_cb"
+            android:paddingBottom="0dp"
+            android:paddingTop="0dp"
+            android:textColor="@color/white"/>
         <EditText
             style="@style/Edittext_only_view_small"
-            android:id="@+id/txnlist_header_mchnt"
+            android:id="@+id/txnlist_header_acc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/txnlist_header_time"
-            android:text="Merchant"
-            android:paddingBottom="@dimen/edittext_padding_less"
-            android:paddingTop="0dp"/>
+            android:layout_below="@id/txnlist_header_cb"
+            android:layout_alignParentRight="true"
+            android:text="@string/txnlist_header_acc"
+            android:paddingTop="0dp"
+            android:textColor="@color/white"/>
 
         <View
             style="@style/Divider_horizontal_Large"
             android:id="@+id/txnlist_divider_1"
-            android:layout_below="@id/txnlist_header_amts"/>
+            android:layout_below="@id/txnlist_header_acc"/>
 
     </RelativeLayout>
 

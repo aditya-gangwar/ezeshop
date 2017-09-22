@@ -109,29 +109,28 @@
 
         </android.support.v7.widget.Toolbar>
 
-        <LinearLayout
+        <!--LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/balance_toolbar"
             android:orientation="vertical"
-            android:layout_below="@id/toolbar">
+            android:id="@+id/balance_toolbar"
+            android:layout_below="@id/toolbar"-->
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left">
+                style="@style/LL_Horizontal_paddingSidesLarge"
+                android:id="@+id/balance_toolbar"
+                android:layout_below="@id/toolbar"
+                android:background="@color/primary_highlight">
 
                 <EditText
-                    style="@style/Edittext_only_view_medium"
+                    style="@style/Edittext_only_view_small"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:text="Total Balance"
-                    android:textStyle="bold"
-                    android:textColor="@color/secondary_text"
                     android:layout_weight="1"
-                    android:gravity="left"/>
+                    android:gravity="left|center_vertical"/>
 
-                <ImageView
+                <!--ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_favorite_white_18dp"
@@ -144,24 +143,23 @@
                     android:layout_height="match_parent"
                     android:text="\u20B9 0"
                     android:textStyle="bold"
-                    android:textColor="@color/secondary_text"/>
+                    android:textColor="@color/secondary_text"/-->
 
-                <ImageView
+                <!--ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_account_balance_wallet_white_18dp"
                     android:tint="@color/primary"
                     android:id="@+id/tb_acc_img"
-                    android:layout_marginLeft="@dimen/large_space"/>
+                    android:layout_marginLeft="@dimen/large_space"/-->
 
                 <EditText
                     style="@style/Edittext_only_view_medium"
                     android:id="@+id/tb_curr_cashload"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="\u20B9 0"
-                    android:textStyle="bold"
-                    android:textColor="@color/secondary_text"/>
+                    android:text="+ \u20B9 0"
+                    android:textColor="@color/green_positive"/>
 
             </LinearLayout>
 
@@ -196,7 +194,7 @@
                     android:textColor="@color/secondary_text"/>
             </LinearLayout-->
 
-        </LinearLayout>
+        <!--/LinearLayout-->
 
         <View
             style="@style/Divider_horizontal_Medium"

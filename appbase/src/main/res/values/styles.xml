@@ -238,9 +238,7 @@
         <item name="android:orientation">horizontal</item>
     </style>
 
-    <style name="LL_Horizontal_paddingSidesLarge">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
+    <style name="LL_Horizontal_paddingSidesLarge" parent="LL_Horizontal_wrap">
         <item name="android:paddingLeft">@dimen/screen_side_padding</item>
         <item name="android:paddingRight">@dimen/screen_side_padding</item>
     </style>
