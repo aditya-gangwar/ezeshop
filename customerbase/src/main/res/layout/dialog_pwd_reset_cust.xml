@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    style="@style/LL_Vertical"
     android:layout_height="wrap_content"
     android:background="?android:attr/windowBackground">
+
+    <EditText
+        style="@style/Dialog_title"
+        android:id="@+id/label_title"
+        android:text="PASSWORD  RESET"/>
 
     <LinearLayout
         style="@style/LL_Vertical_paddingSidesLarge">
@@ -84,4 +89,4 @@
             android:layout_height="@dimen/XL_space"/>
 
     </LinearLayout>
-</RelativeLayout>
+</LinearLayout>

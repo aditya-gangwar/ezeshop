@@ -75,9 +75,9 @@ public class SortMchntDialog extends BaseDialog {
             case MyCashback.CB_CMP_TYPE_ACC_BALANCE:
                 mSortCustRadioGroup.check(mBalanceAcc.getId());
                 break;
-            case MyCashback.CB_CMP_TYPE_CB_BALANCE:
+            /*case MyCashback.CB_CMP_TYPE_CB_BALANCE:
                 mSortCustRadioGroup.check(mBalanceCb.getId());
-                break;
+                break;*/
         }
 
         if(!getArguments().getBoolean(ARG_SHOW_ACC)) {
@@ -122,10 +122,10 @@ public class SortMchntDialog extends BaseDialog {
                         } else if (selectedId == R.id.cityName) {
                             selectedSortType = MyCashback.CB_CMP_TYPE_MCHNT_CITY;
 
-                        } else if (selectedId == R.id.balanceCb) {
+                        } /*else if (selectedId == R.id.balanceCb) {
                             selectedSortType = MyCashback.CB_CMP_TYPE_CB_BALANCE;
 
-                        } else if (selectedId == R.id.balanceAcc) {
+                        }*/ else if (selectedId == R.id.balanceAcc) {
                             selectedSortType = MyCashback.CB_CMP_TYPE_ACC_BALANCE;
 
                         }
@@ -182,7 +182,7 @@ public class SortMchntDialog extends BaseDialog {
     private RadioButton mUpdateTime;
     private RadioButton mMchntCity;
 
-    private RadioButton mBalanceCb;
+    //private RadioButton mBalanceCb;
     private RadioButton mBalanceAcc;
 
     private void initUiResources(View v) {
@@ -190,7 +190,7 @@ public class SortMchntDialog extends BaseDialog {
         mMchntName = (RadioButton) v.findViewById(R.id.mchntName);
         mMchntCity = (RadioButton) v.findViewById(R.id.cityName);
         mUpdateTime = (RadioButton) v.findViewById(R.id.lastTxnTime);
-        mBalanceCb = (RadioButton) v.findViewById(R.id.balanceCb);
+        //mBalanceCb = (RadioButton) v.findViewById(R.id.balanceCb);
         mBalanceAcc = (RadioButton) v.findViewById(R.id.balanceAcc);
     }
 }

@@ -155,7 +155,7 @@
 
                 <EditText
                     style="@style/Edittext_only_view_medium"
-                    android:id="@+id/tb_curr_cashload"
+                    android:id="@+id/tb_curr_account"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="+ \u20B9 0"
@@ -197,10 +197,10 @@
         <!--/LinearLayout-->
 
         <View
-            style="@style/Divider_horizontal_Medium"
+            style="@style/Divider_horizontal_Large"
             android:id="@+id/balance_divider"
             android:layout_below="@id/balance_toolbar"
-            android:background="@color/secondary_text"/>
+            android:background="@color/primary_highlight"/>
 
         <!-- The main content view where fragments are loaded -->
         <FrameLayout

@@ -99,8 +99,8 @@ public class CashbackActivityCust extends AppCompatActivity implements
     private EditText mTbTitle2;
     //private LinearLayout mTbLayoutSubhead1;
     private EditText mTbSubhead1Text1;
-    private EditText mTbSubhead1Text2;
-    private View mTbImgAcc;
+    //private EditText mTbSubhead1Text2;
+    //private View mTbImgAcc;
 
     private CustomerUser mCustomerUser;
     private Customers mCustomer;
@@ -139,9 +139,9 @@ public class CashbackActivityCust extends AppCompatActivity implements
         }
 
         // reference to views
-        mTbSubhead1Text1 = (EditText) findViewById(R.id.tb_curr_cashload) ;
-        mTbSubhead1Text2 = (EditText) findViewById(R.id.tb_curr_cashback) ;
-        mTbImgAcc = findViewById(R.id.tb_acc_img) ;
+        mTbSubhead1Text1 = (EditText) findViewById(R.id.tb_curr_account) ;
+        //mTbSubhead1Text2 = (EditText) findViewById(R.id.tb_curr_cashback) ;
+        //mTbImgAcc = findViewById(R.id.tb_acc_img) ;
 
         // Setup a toolbar to replace the action bar.
         initToolbar();
@@ -822,7 +822,17 @@ public class CashbackActivityCust extends AppCompatActivity implements
             for(MyCashback cb: mRetainedFragment.mCashbacks.values()) {
                 mRetainedFragment.stats.addToStats(cb);
             }
-            mTbSubhead1Text2.setText(AppCommonUtil.getAmtStr(mRetainedFragment.stats.getCbBalance()));
+
+            // Update 'Total Balance'
+            AppCommonUtil.showAmtColor(this,null,mTbSubhead1Text1,mRetainedFragment.stats.getClBalance(),false);
+            /*mTbSubhead1Text1.setText(AppCommonUtil.getNegativeAmtStr(mRetainedFragment.stats.getClBalance()));
+            if(mRetainedFragment.stats.getClBalance() < 0) {
+                mTbSubhead1Text1.setTextColor(ContextCompat.getColor(this, R.color.red_negative));
+            } else {
+                mTbSubhead1Text1.setTextColor(ContextCompat.getColor(this, R.color.green_positive));
+            }*/
+
+            /*mTbSubhead1Text2.setText(AppCommonUtil.getAmtStr(mRetainedFragment.stats.getCbBalance()));
             if(mRetainedFragment.stats.getClBalance()>0) {
                 mTbImgAcc.setVisibility(View.VISIBLE);
                 mTbSubhead1Text1.setVisibility(View.VISIBLE);
@@ -830,7 +840,7 @@ public class CashbackActivityCust extends AppCompatActivity implements
             } else {
                 mTbImgAcc.setVisibility(View.GONE);
                 mTbSubhead1Text1.setVisibility(View.GONE);
-            }
+            }*/
 
             // create or refresh cashback list fragment
             mMchntListFragment = (CashbackListFragment) mFragMgr.findFragmentByTag(CASHBACK_LIST_FRAGMENT);

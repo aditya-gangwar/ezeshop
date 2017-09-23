@@ -105,13 +105,21 @@ public class MyTransaction {
         return detail;
     }*/
 
-    public static String getCbDetailStr(Transaction txn) {
-        String str = "@  (" + txn.getCb_percent() + "% of " + AppCommonUtil.getAmtStr(txn.getCb_eligible_amt()) + ")";
-        if(txn.getExtra_cb_credit() > 0) {
-            str = str + "  +  (" + txn.getExtra_cb_percent() + "% of " + AppCommonUtil.getAmtStr(txn.getExtracb_eligible_amt()) + ")";
+    public static String getCbDetailStr(Transaction txn, boolean asciiOnly) {
+        if(asciiOnly) {
+            String str = "@  (" + txn.getCb_percent() + "% of " + txn.getCb_eligible_amt() + ")";
+            if(txn.getExtra_cb_credit() > 0) {
+                str = str + "  +  (" + txn.getExtra_cb_percent() + "% of " + txn.getExtracb_eligible_amt() + ")";
+            }
+            return str;
+        } else {
+            // same as above - but amounts with rupee symbol
+            String str = "@  (" + txn.getCb_percent() + "% of " + AppCommonUtil.getAmtStr(txn.getCb_eligible_amt()) + ")";
+            if(txn.getExtra_cb_credit() > 0) {
+                str = str + "  +  (" + txn.getExtra_cb_percent() + "% of " + AppCommonUtil.getAmtStr(txn.getExtracb_eligible_amt()) + ")";
+            }
+            return str;
         }
-
-        return str;
     }
 
     /*

@@ -542,14 +542,13 @@ public class CashbackActivity extends BaseActivity implements
         }*/
 
         int curAccBal = mWorkFragment.mCurrCashback.getCurrAccBalance();
+        mTbSubhead1Text1.setText(AppCommonUtil.getSignedAmtStr(curAccBal));
 
         if(curAccBal < 0) {
-            mTbSubhead1Text1.setText(AppCommonUtil.getSignedAmtStr(Math.abs(curAccBal),false));
             mTbSubhead1Text1.setTextColor(ContextCompat.getColor(this, R.color.red_negative));
             AppCommonUtil.setLeftDrawable(mTbSubhead1Text1,
                     AppCommonUtil.getTintedDrawable(this,R.drawable.ic_account_balance_wallet_white_18dp,R.color.red_negative));
         } else {
-            mTbSubhead1Text1.setText(AppCommonUtil.getAmtStr(curAccBal));
             mTbSubhead1Text1.setTextColor(ContextCompat.getColor(this, R.color.white));
             AppCommonUtil.setLeftDrawable(mTbSubhead1Text1,
                     ContextCompat.getDrawable(this, R.drawable.ic_account_balance_wallet_white_18dp));

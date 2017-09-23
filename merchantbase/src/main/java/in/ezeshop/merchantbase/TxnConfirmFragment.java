@@ -2,7 +2,6 @@ package in.ezeshop.merchantbase;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -134,19 +133,31 @@ public class TxnConfirmFragment extends BaseFragment {
         Transaction curTransaction = mCallback.getRetainedFragment().mCurrTransaction.getTransaction();
         //int cashPaid = getArguments().getInt(ARG_CASH_PAID);
 
-        int value = curTransaction.getTotal_billed();
-        mInputBillAmt.setText(AppCommonUtil.getSignedAmtStr(value, true));
+        //int value = curTransaction.getTotal_billed();
+        //mInputBillAmt.setText(AppCommonUtil.getNegativeAmtStr(value, true));
+        AppCommonUtil.showAmtColor(getActivity(), null, mInputBillAmt, curTransaction.getTotal_billed(),false);
 
         // set account add/debit amount
-        value = curTransaction.getCl_credit();
+        int value = curTransaction.getCl_credit() - curTransaction.getCl_debit() - curTransaction.getCl_overdraft();
+        AppCommonUtil.showAmtColor(getActivity(), null, mInputAcc, value, false);
+
+        // show/hide overdraft icon
+        if(curTransaction.getCl_overdraft() > 0) {
+            mLayoutOverdraft.setVisibility(View.VISIBLE);
+            mInputOverdraft.setText(AppCommonUtil.getNegativeAmtStr(curTransaction.getCl_overdraft()));
+        } else {
+            mLayoutOverdraft.setVisibility(View.GONE);
+        }
+
+        /*int value = curTransaction.getCl_credit();
         if(value > 0) {
-            mInputAcc.setText(AppCommonUtil.getSignedAmtStr(value, true));
+            mInputAcc.setText(AppCommonUtil.getNegativeAmtStr(value, true));
             mInputAcc.setTextColor(ContextCompat.getColor(getActivity(), R.color.green_positive));
             mLayoutOverdraft.setVisibility(View.GONE);
         } else {
             value = curTransaction.getCl_debit();
             if(value>0) {
-                mInputAcc.setText(AppCommonUtil.getSignedAmtStr(value, false));
+                mInputAcc.setText(AppCommonUtil.getNegativeAmtStr(value, false));
                 mInputAcc.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
             } else {
                 mLayoutAcc.setVisibility(View.GONE);
@@ -154,16 +165,20 @@ public class TxnConfirmFragment extends BaseFragment {
 
             if(curTransaction.getCl_overdraft() > 0) {
                 mLayoutOverdraft.setVisibility(View.VISIBLE);
-                mInputOverdraft.setText(AppCommonUtil.getSignedAmtStr(curTransaction.getCl_overdraft(), false));
+                mInputOverdraft.setText(AppCommonUtil.getNegativeAmtStr(curTransaction.getCl_overdraft(), false));
             } else {
                 mLayoutOverdraft.setVisibility(View.GONE);
             }
-        }
+        }*/
 
-        mInputPayment.setText(AppCommonUtil.getAmtStr(curTransaction.getPaymentAmt()));
+        //mInputPayment.setText(AppCommonUtil.getAmtStr(curTransaction.getPaymentAmt()));
+        AppCommonUtil.showAmtColor(getActivity(), null, mInputPayment, curTransaction.getPaymentAmt(),false);
+
         value = curTransaction.getCb_credit() + curTransaction.getExtra_cb_credit();
-        mInputAddCb.setText(AppCommonUtil.getAmtStr(value));
-        mInputCbDetails.setText(MyTransaction.getCbDetailStr(curTransaction));
+        //mInputAddCb.setText(AppCommonUtil.getAmtStr(value));
+        AppCommonUtil.showAmtColor(getActivity(), null, mInputAddCb, value,false);
+
+        mInputCbDetails.setText(MyTransaction.getCbDetailStr(curTransaction,false));
 
         if(mMerchant.isInvoiceNumAsk()) {
             mLayoutExtraDetails.setVisibility(View.VISIBLE);

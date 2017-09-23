@@ -105,9 +105,6 @@ public class MyCashback {
     public Cashback getCurrCashback() {
         return mCurrCashback;
     }
-    public int getBillAmt() {
-        return mCurrCashback.getTotal_billed();
-    }
 
     public int getCurrAccBalance() {
         return CommonUtils.getAccBalance(mCurrCashback);
@@ -130,8 +127,10 @@ public class MyCashback {
         return mCurrCashback.getCl_overdraft();
     }
 
-    public int getClDebit() { return mCurrCashback.getCl_debit(); }
-    public int getClOverdraft() { return mCurrCashback.getCl_overdraft(); }
+    public int getBillAmt() {
+        return mCurrCashback.getTotal_billed();
+    }
+    public int getCurrClDebit() { return mCurrCashback.getCl_debit(); }
 
     public Date getLastTxnTime() {
         // updateTime will be null if no txn done after registration - use createTime in that case
@@ -175,7 +174,7 @@ public class MyCashback {
                 /*case CB_CMP_TYPE_ACC_ADD:
                     return compare(lhs.getClCredit(), rhs.getClCredit());
                 case CB_CMP_TYPE_ACC_DEBIT:
-                    return compare(lhs.getClDebit(), rhs.getClDebit());
+                    return compare(lhs.getCurrClDebit(), rhs.getCurrClDebit());
                 case CB_CMP_TYPE_CB_ADD:
                     return compare(lhs.getCbCredit(), rhs.getCbCredit());*/
                 /*case CB_CMP_TYPE_CB_DEBIT:

@@ -215,8 +215,8 @@ public class MyBackgroundProcessor <T> extends BackgroundProcessor<T> {
                 mRetainedFragment.mLastFetchCashbacks = new ArrayList<>(cashbacks.size());
                 for (Cashback cb :
                         cashbacks) {
-                    MyCashback myCb = new MyCashback();
-                    myCb.init(cb, false);
+                    MyCashback myCb = new MyCashback(cb, false);
+                    //myCb.init(cb, false);
                     mRetainedFragment.mLastFetchCashbacks.add(myCb);
                 }
 

@@ -26,9 +26,7 @@ import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.ErrorCodes;
 import in.ezeshop.common.database.Transaction;
 
-/**
- * Created by adgangwa on 28-10-2016.
- */
+/*
 public class TxnReportsHelper {
 
     public interface TxnReportsHelperIf {
@@ -67,7 +65,7 @@ public class TxnReportsHelper {
         now.removeDays(MyGlobalSettings.getTxnsIntableKeepDays()-1);
         LogMy.d( TAG, "now: "+ String.valueOf(now.getTime().getTime()) );
         return now.toMidnight().getTime();
-    }
+    }*/
 
     /*
      * If mFromDate < mTxnInDbFrom (means txns from CSV files required)
@@ -76,7 +74,7 @@ public class TxnReportsHelper {
      * Else
      *      fetch txns only from DB
      */
-    public void startTxnFetch(Date from, Date to, String merchantId, String customerId) throws Exception{
+    /*public void startTxnFetch(Date from, Date to, String merchantId, String customerId) throws Exception{
         mFromDate = from;
         mToDate = to;
         LogMy.d( TAG, "mTxnInDbFrom: "+ String.valueOf(mTxnInDbFrom.getTime()) );
@@ -283,3 +281,4 @@ public class TxnReportsHelper {
         return mTxnInDbFrom;
     }
 }
+*/

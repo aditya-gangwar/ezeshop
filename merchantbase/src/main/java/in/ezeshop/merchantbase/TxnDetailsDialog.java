@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -128,16 +127,30 @@ public class TxnDetailsDialog extends BaseDialog {
             });
             mInputTxnTime.setText(mSdfDateWithTime.format(txn.getCreate_time()));
 
-            mInputTotalBill.setText(AppCommonUtil.getAmtStr(txn.getTotal_billed()));
+            //mInputTotalBill.setText(AppCommonUtil.getAmtStr(txn.getTotal_billed()));
+            AppCommonUtil.showAmtColor(getActivity(), null, mInputTotalBill, txn.getTotal_billed(),false);
+
             // set account add/debit amount
-            int value = txn.getCl_credit();
+            int value = txn.getCl_credit() - txn.getCl_debit() - txn.getCl_overdraft();
+            AppCommonUtil.showAmtColor(getActivity(), null, mInputAcc, value, false);
+
+            // show/hide overdraft layout
+            if(txn.getCl_overdraft() > 0) {
+                mLayoutOverdraft.setVisibility(View.VISIBLE);
+                mInputOverdraft.setText(AppCommonUtil.getNegativeAmtStr(txn.getCl_overdraft()));
+            } else {
+                mLayoutOverdraft.setVisibility(View.GONE);
+            }
+
+            // set account add/debit amount
+            /*int value = txn.getCl_credit();
             if(value > 0) {
-                mInputAcc.setText(AppCommonUtil.getSignedAmtStr(value, true));
+                mInputAcc.setText(AppCommonUtil.getNegativeAmtStr(value, true));
                 mInputAcc.setTextColor(ContextCompat.getColor(getActivity(), R.color.green_positive));
                 mLayoutOverdraft.setVisibility(View.GONE);
             } else {
                 value = txn.getCl_debit();
-                mInputAcc.setText(AppCommonUtil.getSignedAmtStr(value, false));
+                mInputAcc.setText(AppCommonUtil.getNegativeAmtStr(value, false));
                 if(value>0) {
                     mInputAcc.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
                 } else {
@@ -146,16 +159,20 @@ public class TxnDetailsDialog extends BaseDialog {
 
                 if(txn.getCl_overdraft() > 0) {
                     mLayoutOverdraft.setVisibility(View.VISIBLE);
-                    mInputOverdraft.setText(AppCommonUtil.getSignedAmtStr(txn.getCl_overdraft(), false));
+                    mInputOverdraft.setText(AppCommonUtil.getNegativeAmtStr(txn.getCl_overdraft(), false));
                 } else {
                     mLayoutOverdraft.setVisibility(View.GONE);
                 }
-            }
+            }*/
 
-            mInputPayment.setText(AppCommonUtil.getAmtStr(txn.getPaymentAmt()));
+            //mInputPayment.setText(AppCommonUtil.getAmtStr(txn.getPaymentAmt()));
+            AppCommonUtil.showAmtColor(getActivity(), null, mInputPayment, txn.getPaymentAmt(),false);
+
             value = txn.getCb_credit() + txn.getExtra_cb_credit();
-            mInputCbAward.setText(AppCommonUtil.getAmtStr(value));
-            mInputCbDetails.setText(MyTransaction.getCbDetailStr(txn));
+            //mInputCbAward.setText(AppCommonUtil.getAmtStr(value));
+            AppCommonUtil.showAmtColor(getActivity(), null, mInputCbAward, value,false);
+
+            mInputCbDetails.setText(MyTransaction.getCbDetailStr(txn,false));
 
             mInputTxnId.setText(txn.getTrans_id());
             mPinUsed.setText(txn.getCpin());

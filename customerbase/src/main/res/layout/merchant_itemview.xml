@@ -18,8 +18,7 @@
     <LinearLayout
         style="@style/LL_Horizontal_wrap"
         android:id="@+id/layout_mchnt_item"
-        android:paddingTop="@dimen/small_space"
-        android:paddingBottom="@dimen/small_space"
+        android:padding="@dimen/small_space"
         android:clickable="false">
 
         <ImageView
@@ -28,7 +27,7 @@
             android:layout_width="@dimen/dp_item_image_width"
             android:layout_height="match_parent"
             android:scaleType="centerInside"
-            android:layout_marginRight="@dimen/small_space"
+            android:layout_marginRight="@dimen/medium_space"
             android:layout_gravity="center"/>
 
         <LinearLayout
@@ -45,22 +44,20 @@
                 <EditText
                     style="@style/Edittext_only_click_small_lessPad"
                     android:id="@+id/input_mchnt_name"
-                    android:layout_height="wrap_content"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
                     android:text="Ganga Stores and Cosmetics"
                     android:textStyle="bold"
                     android:gravity="left"
                     android:textColor="@color/subheading"/>
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:id="@+id/icon_mchnt_status_alert"
                     android:src="@drawable/ic_warning_white_18dp"
                     android:tint="@color/red_negative"
                     android:clickable="false"
-                    android:paddingRight="@dimen/edittext_padding_less"
-                    android:paddingTop="@dimen/edittext_padding_less"/>
+                    android:padding="@dimen/edittext_padding_less"/>
             </LinearLayout>
 
             <LinearLayout
@@ -70,7 +67,7 @@
 
                 <EditText
                     style="@style/Edittext_only_click_small_lessPad"
-                    android:id="@+id/mchnt_category_city"
+                    android:id="@+id/mchnt_area_city"
                     android:layout_height="wrap_content"
                     android:layout_width="0dp"
                     android:layout_weight="1"
@@ -78,6 +75,15 @@
                     android:text="Faridabad"
                     android:paddingTop="0dp"
                     android:textColor="@color/secondary_text"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/icon_account"
+                    android:src="@drawable/ic_account_balance_wallet_white_18dp"
+                    android:paddingTop="0dp"
+                    android:tint="@color/primary"
+                    android:padding="@dimen/edittext_padding_less"/>
 
             </LinearLayout>
 
@@ -90,18 +96,18 @@
                 <EditText
                     style="@style/Edittext_only_click_small_lessPad"
                     android:id="@+id/input_last_txn"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:gravity="left"
+                    android:gravity="left|center_vertical"
                     android:text="08 Apr,16  20:15"
                     android:paddingTop="0dp"
                     android:textColor="@color/secondary_text"/>
 
                 <TextView
                     style="@style/Edittext_only_view_medium_lessPad"
-                    android:id="@+id/cust_acc_balance"
-                    android:layout_height="match_parent"
+                    android:id="@+id/input_acc_bal"
+                    android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:text="+ \u20B9 9,999"
                     android:paddingTop="0dp"

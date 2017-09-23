@@ -385,7 +385,7 @@ public class CustomerListFragment extends BaseFragment {
         boolean accFigures = false;
         for (MyCashback cb :
                 mRetainedFragment.mLastFetchCashbacks) {
-            if(cb.getClCredit()!=0 || cb.getClDebit()!=0) {
+            if(cb.getClCredit()!=0 || cb.getCurrClDebit()!=0) {
                 accFigures = true;
                 break;
             }
@@ -492,7 +492,7 @@ public class CustomerListFragment extends BaseFragment {
                 if(showAccFields) {
                     sb.append(cb.getCurrAccBalance()).append(CommonConstants.CSV_DELIMETER);
                     sb.append(cb.getClCredit()).append(CommonConstants.CSV_DELIMETER);
-                    sb.append(cb.getClDebit()).append(CommonConstants.CSV_DELIMETER);
+                    sb.append(cb.getCurrClDebit()).append(CommonConstants.CSV_DELIMETER);
                 }*/
 
                 sb.append(cb.getBillAmt()).append(CommonConstants.CSV_DELIMETER);
@@ -634,21 +634,22 @@ public class CustomerListFragment extends BaseFragment {
             mLastTxnTime.setText(mSdfDateWithTime.format(cb.getLastTxnTime()));
             mBillAmt.setText(AppCommonUtil.getAmtStr(cb.getBillAmt()));
 
-            int accBalance = mCb.getCurrAccBalance();
+            AppCommonUtil.showAmtColor(getActivity(),null,mAccBalance,mCb.getCurrAccBalance(),false);
+            /*int accBalance = mCb.getCurrAccBalance();
             if(accBalance<0) {
-                mAccBalance.setText(AppCommonUtil.getSignedAmtStr(Math.abs(accBalance),false));
+                mAccBalance.setText(AppCommonUtil.getNegativeAmtStr(accBalance,false));
                 mAccBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
             } else {
-                mAccBalance.setText(AppCommonUtil.getSignedAmtStr(accBalance,true));
+                mAccBalance.setText(AppCommonUtil.getNegativeAmtStr(accBalance,true));
                 mAccBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.green_positive));
-            }
+            }*/
 
-            /*if(cb.getClCredit()==0 && cb.getClDebit()==0) {
+            /*if(cb.getClCredit()==0 && cb.getCurrClDebit()==0) {
                 mLayoutAcc.setVisibility(View.GONE);
             } else {
                 mLayoutAcc.setVisibility(View.VISIBLE);
                 mAccAdd.setText(AppCommonUtil.getAmtStr(cb.getClCredit()));
-                mAccDebit.setText(AppCommonUtil.getAmtStr(cb.getClDebit()));
+                mAccDebit.setText(AppCommonUtil.getAmtStr(cb.getCurrClDebit()));
                 mAccBalance.setText(AppCommonUtil.getAmtStr(mCb.getCurrAccBalance()));
             }
 

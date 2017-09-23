@@ -3,9 +3,10 @@
     <!-- Transaction List Header Labels -->
     <string name="txnlist_header_datetime">Date Time</string>
     <string name="txnlist_header_customer">Customer</string>
+    <string name="txnlist_header_merchant">Merchant</string>
     <string name="txnlist_header_bill">Bill Amount</string>
     <string name="txnlist_header_cb">Cashback</string>
-    <string name="txnlist_header_acc">Account Add\/Debit</string>
+    <string name="txnlist_header_acc">Account Add/Debit</string>
 
     <string name="merchant_app_name">EzeShop Merchant</string>
     <string name="customer_app_name">EzeShop Customer</string>

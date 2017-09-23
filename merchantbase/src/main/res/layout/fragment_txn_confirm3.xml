@@ -177,7 +177,7 @@
                 android:id="@+id/input_cash_paid"
                 android:layout_width="wrap_content"
                 android:text="\u20B9 NA"
-                android:textColor="@color/accent2"
+                android:textColor="@color/primary_text"
                 android:gravity="right" />
         </LinearLayout>
 
@@ -198,7 +198,7 @@
                 android:layout_width="match_parent"
                 android:text="\u20B9 999"
                 android:paddingBottom="@dimen/edittext_padding_less"
-                android:textColor="@color/accent2"
+                android:textColor="@color/primary_text"
                 android:gravity="right" />
         </LinearLayout>
 

@@ -61,7 +61,7 @@
             android:id="@+id/txnlist_header_customer_id"
             android:layout_below="@id/txnlist_header_time"
             android:layout_height="wrap_content"
-            android:text="@string/txnlist_header_customer"
+            android:text="@string/txnlist_header_merchant"
             android:paddingTop="0dp"
             android:paddingBottom="0dp"
             android:textColor="@color/white"/>

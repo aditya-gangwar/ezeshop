@@ -4,11 +4,14 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,7 +35,8 @@ import in.ezeshop.customerbase.helper.MyRetainedFragment;
  */
 public class MchntDetailsDialogCustApp extends BaseDialog {
     private static final String TAG = "CustApp-MerchantDetailsDialog";
-    private static final String ARG_CB_MCHNTID = "mchntId";
+    private static final String ARG_GETTXNS_BTN = "getTxnsBtn";
+    //private static final String ARG_CB_MCHNTID = "mchntId";
 
     private MerchantDetailsDialogIf mCallback;
     private SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.DATE_LOCALE);
@@ -42,13 +46,17 @@ public class MchntDetailsDialogCustApp extends BaseDialog {
         void getMchntTxns(String id, String name);
     }
 
-    public static MchntDetailsDialogCustApp newInstance(String merchantId) {
+    private String mMerchantId;
+
+    public static MchntDetailsDialogCustApp newInstance(String merchantId, boolean showGetTxnsBtn) {
         LogMy.d(TAG, "Creating new MerchantDetailsDialog instance: "+merchantId);
         Bundle args = new Bundle();
-        args.putString(ARG_CB_MCHNTID, merchantId);
+        args.putBoolean(ARG_GETTXNS_BTN, showGetTxnsBtn);
+        //args.putString(ARG_CB_MCHNTID, merchantId);
 
         MchntDetailsDialogCustApp fragment = new MchntDetailsDialogCustApp();
         fragment.setArguments(args);
+        fragment.mMerchantId = merchantId;
         return fragment;
     }
 
@@ -63,22 +71,36 @@ public class MchntDetailsDialogCustApp extends BaseDialog {
                     + " must implement MerchantDetailsDialogIf");
         }
 
-        String mchntId = getArguments().getString(ARG_CB_MCHNTID, null);
-        MyCashback cb = mCallback.getRetainedFragment().mCashbacks.get(mchntId);
-        if(cb==null) {
+        //String mchntId = getArguments().getString(ARG_CB_MCHNTID, null);
+        if(savedInstanceState!=null) {
+            LogMy.d(TAG,"Restoring");
+            mMerchantId = savedInstanceState.getString("mMerchantId");
+        }
+
+        boolean error = false;
+        if(mCallback.getRetainedFragment().mCashbacks==null) {
+            error = true;
+        } else {
+            MyCashback cb = mCallback.getRetainedFragment().mCashbacks.get(mMerchantId);
+            if(cb==null) {
+                error = true;
+            } else {
+                initDialogView(cb);
+            }
+        }
+
+        if(error) {
             // I shouldn't be here
             //raise alarm
             Map<String,String> params = new HashMap<>();
             params.put("CustomerId", CustomerUser.getInstance().getCustomer().getPrivate_id());
-            params.put("MerchantId",mchntId);
+            params.put("MerchantId",mMerchantId);
             AppAlarms.invalidCardState(CustomerUser.getInstance().getCustomer().getPrivate_id(),
                     DbConstants.USER_TYPE_CUSTOMER,"MerchantDetailsDialog:onActivityCreated",params);
 
             AppCommonUtil.toast(getActivity(), "Error. Please try again later.");
             // dismiss dialog
             getDialog().dismiss();
-        } else {
-            initDialogView(cb);
         }
     }
 
@@ -87,12 +109,18 @@ public class MchntDetailsDialogCustApp extends BaseDialog {
         View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_mchnt_details_for_cust, null);
 
         bindUiResources(v);
+        boolean showGetTxns = getArguments().getBoolean(ARG_GETTXNS_BTN, true);
 
-        Dialog dialog = new AlertDialog.Builder(getActivity())
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setView(v)
-                .setPositiveButton(android.R.string.ok, this)
-                .setNeutralButton("Get Txns", this)
-                .create();
+                .setPositiveButton(android.R.string.ok, this);
+
+        if(showGetTxns) {
+            builder.setNeutralButton("Get Txns", this);
+        }
+
+        Dialog dialog = builder.create();
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
@@ -116,8 +144,7 @@ public class MchntDetailsDialogCustApp extends BaseDialog {
                 dialog.dismiss();
                 break;
             case DialogInterface.BUTTON_NEUTRAL:
-                mCallback.getMchntTxns(mInputMchntId.getText().toString(),
-                        mName.getText().toString());
+                mCallback.getMchntTxns(mMerchantId,mName.getText().toString());
                 dialog.dismiss();
                 break;
         }
@@ -154,7 +181,7 @@ public class MchntDetailsDialogCustApp extends BaseDialog {
             } else {
                 textCbRate = merchant.getCbRate()+"% + "+merchant.getPpCbRate()+"% *";
                 mPpCbDetails.setVisibility(View.VISIBLE);
-                String ppCbDetails = "* Extra "+merchant.getPpCbRate()+"% when Prepaid amount > "+AppCommonUtil.getAmtStr(merchant.getPpMinAmt());
+                String ppCbDetails = "* "+merchant.getPpCbRate()+"% when Money added > "+AppCommonUtil.getAmtStr(merchant.getPpMinAmt());
                 mPpCbDetails.setText(ppCbDetails);
             }
             mCbRate.setText(textCbRate);
@@ -165,17 +192,40 @@ public class MchntDetailsDialogCustApp extends BaseDialog {
             }
             mLastTxnTime.setText(mSdfDateWithTime.format(time));
 
-            mInputTotalBill.setText(AppCommonUtil.getAmtStr(cb.getBillAmt()));
+            //mInputTotalBill.setText(AppCommonUtil.getAmtStr(cb.getBillAmt()));
+            AppCommonUtil.showAmt(getActivity(), null, mInputTotalBill, cb.getBillAmt(),false);
 
-            if(cb.getClCredit()==0 && cb.getClDebit()==0) {
+            AppCommonUtil.showAmtColor(getActivity(), null, mInputAccBalance, cb.getCurrAccBalance(), false);
+            /*int accBalance = cb.getCurrAccBalance();
+            if(accBalance<0) {
+                mInputAccBalance.setText(AppCommonUtil.getNegativeAmtStr(accBalance,false));
+                mInputAccBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
+            } else {
+                mInputAccBalance.setText(AppCommonUtil.getNegativeAmtStr(accBalance,true));
+                mInputAccBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.green_positive));
+            }*/
+
+            //mInputAccBalance.setText(AppCommonUtil.getAmtStr(cb.getCurrAccBalance()));
+            //mInputAccTotalAdd.setText(AppCommonUtil.getNegativeAmtStr(cb.getCurrAccTotalAdd(),true));
+            AppCommonUtil.showAmtSigned(getActivity(), null, mInputAccTotalAdd, cb.getCurrAccTotalAdd(), false);
+
+            //mInputAccAddCb.setText(AppCommonUtil.getAmtStr(cb.getCurrAccTotalCb()));
+            AppCommonUtil.showAmt(getActivity(), null, mInputAccAddCb, cb.getCurrAccTotalCb(), true);
+            //mInputAccDeposit.setText(AppCommonUtil.getAmtStr(cb.getClCredit()));
+            AppCommonUtil.showAmt(getActivity(), null, mInputAccDeposit, cb.getClCredit(), true);
+
+            //mInputAccTotalDebit.setText(AppCommonUtil.getNegativeAmtStr(cb.getCurrAccTotalDebit(),true));
+            AppCommonUtil.showAmtSigned(getActivity(), null, mInputAccTotalDebit, (cb.getCurrAccTotalDebit()*-1), false);
+
+            /*if(cb.getClCredit()==0 && cb.getCurrClDebit()==0) {
                 mLabelAcc.setVisibility(View.GONE);
                 mLayoutBalAcc.setVisibility(View.GONE);
                 mLayoutAddAcc.setVisibility(View.GONE);
                 mLayoutDebitAcc.setVisibility(View.GONE);
             } else {
-                mInputAccAvailable.setText(AppCommonUtil.getAmtStr(cb.getCurrAccBalance()));
+                mInputAccBalance.setText(AppCommonUtil.getAmtStr(cb.getCurrAccBalance()));
                 mInputAccTotalAdd.setText(AppCommonUtil.getAmtStr(cb.getClCredit()));
-                mInputAccTotalDebit.setText(AppCommonUtil.getAmtStr(cb.getClDebit()));
+                mInputAccTotalDebit.setText(AppCommonUtil.getAmtStr(cb.getCurrClDebit()));
             }
 
             mInputCbAvailable.setText(AppCommonUtil.getAmtStr(cb.getCurrCbBalance()));
@@ -183,9 +233,10 @@ public class MchntDetailsDialogCustApp extends BaseDialog {
             mInputCbTotalRedeem.setText(AppCommonUtil.getAmtStr(cb.getCbRedeem()));
 
             mInputMchntId.setText(merchant.getId());
+            mInputStatus.setText(DbConstants.userStatusDesc[merchant.getStatus()]);*/
+
             String phone = AppConstants.PHONE_COUNTRY_CODE+merchant.getContactPhone();
             mInputContactPhone.setText(phone);
-            mInputStatus.setText(DbConstants.userStatusDesc[merchant.getStatus()]);
             mAddressLine1.setText(merchant.getAddressLine1());
             mAddressCity.setText(merchant.getCity());
             mAddressState.setText(merchant.getState());
@@ -205,11 +256,13 @@ public class MchntDetailsDialogCustApp extends BaseDialog {
     private EditText mLastTxnTime;
     private EditText mInputTotalBill;
 
-    private EditText mInputAccAvailable;
+    private EditText mInputAccBalance;
     private EditText mInputAccTotalAdd;
+    private TextView mInputAccAddCb;
+    private TextView mInputAccDeposit;
     private EditText mInputAccTotalDebit;
 
-    private View mLabelAcc;
+    /*private View mLabelAcc;
     private View mLayoutBalAcc;
     private View mLayoutAddAcc;
     private View mLayoutDebitAcc;
@@ -218,9 +271,9 @@ public class MchntDetailsDialogCustApp extends BaseDialog {
     private EditText mInputCbTotalAward;
     private EditText mInputCbTotalRedeem;
 
-    private EditText mInputMchntId;
+    private EditText mInputMchntId;*/
     private EditText mInputContactPhone;
-    private EditText mInputStatus;
+    //private EditText mInputStatus;
     private EditText mAddressLine1;
     private EditText mAddressCity;
     private EditText mAddressState;
@@ -240,27 +293,35 @@ public class MchntDetailsDialogCustApp extends BaseDialog {
 
         mInputTotalBill = (EditText) v.findViewById(R.id.input_total_bill);
 
-        mInputCbAvailable = (EditText) v.findViewById(R.id.input_cb_balance);
+        mInputAccBalance = (EditText) v.findViewById(R.id.input_acc_balance);
+        mInputAccTotalAdd = (EditText) v.findViewById(R.id.input_acc_add);
+        mInputAccAddCb = (TextView) v.findViewById(R.id.input_cb);
+        mInputAccDeposit = (TextView) v.findViewById(R.id.input_acc_deposit);
+        mInputAccTotalDebit = (EditText) v.findViewById(R.id.input_acc_debit);
+
+        /*mInputCbAvailable = (EditText) v.findViewById(R.id.input_cb_balance);
         mInputCbTotalAward = (EditText) v.findViewById(R.id.input_cb_award);
         mInputCbTotalRedeem = (EditText) v.findViewById(R.id.input_cb_redeem);
-
-        mInputAccAvailable = (EditText) v.findViewById(R.id.input_acc_balance);
-        mInputAccTotalAdd = (EditText) v.findViewById(R.id.input_acc_add);
-        mInputAccTotalDebit = (EditText) v.findViewById(R.id.input_acc_debit);
 
         mLabelAcc = v.findViewById(R.id.label_acc);
         mLayoutBalAcc = v.findViewById(R.id.layout_bal_acc);
         mLayoutAddAcc = v.findViewById(R.id.layout_add_acc);
         mLayoutDebitAcc = v.findViewById(R.id.layout_debit_acc);
 
-        mInputMchntId = (EditText) v.findViewById(R.id.input_merchant_id);
+        mInputMchntId = (EditText) v.findViewById(R.id.input_merchant_id);*/
         mInputContactPhone = (EditText) v.findViewById(R.id.input_mobile);
-        mInputStatus = (EditText) v.findViewById(R.id.input_status);
+        //mInputStatus = (EditText) v.findViewById(R.id.input_status);
         mAddressLine1 = (EditText) v.findViewById(R.id.input_address);
         mAddressCity = (EditText) v.findViewById(R.id.input_city);
         mAddressState = (EditText) v.findViewById(R.id.input_state);
 
         mLayoutExpNotice = v.findViewById(R.id.layout_expiry_notice);
         mInputExpNotice = (EditText) v.findViewById(R.id.input_expiry_notice);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("mMerchantId", mMerchantId);
     }
 }

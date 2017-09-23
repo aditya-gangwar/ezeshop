@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -263,7 +266,7 @@ public class CashbackListFragment extends BaseFragment {
             // loop and check if there's any txn with acc credit/debit
             boolean accFigures = false;
             for (MyCashback cb : mMyCbs) {
-                if(cb.getClCredit()!=0 || cb.getClDebit()!=0) {
+                if(cb.getClCredit()!=0 || cb.getCurrClDebit()!=0) {
                     accFigures = true;
                 }
             }
@@ -302,11 +305,12 @@ public class CashbackListFragment extends BaseFragment {
         private ImageView mMerchantDp;
         private EditText mMerchantName;
         private View mMchntStatusAlert;
-        private EditText mCategoryNdCity;
+        private EditText mAreaNdCity;
         private EditText mLastTxnTime;
-        private EditText mAccBalance;
-        private EditText mCbBalance;
-        private View mLayoutAcc;
+        private TextView mAccBalance;
+        private ImageView mAccImage;
+        //private EditText mCbBalance;
+        //private View mLayoutAcc;
 
         public CbHolder(View itemView) {
             super(itemView);
@@ -316,20 +320,21 @@ public class CashbackListFragment extends BaseFragment {
             mMerchantDp = (ImageView) itemView.findViewById(R.id.img_merchant);
             mMerchantName = (EditText) itemView.findViewById(R.id.input_mchnt_name);
             mMchntStatusAlert = itemView.findViewById(R.id.icon_mchnt_status_alert);
-            mCategoryNdCity = (EditText) itemView.findViewById(R.id.mchnt_category_city);
+            mAreaNdCity = (EditText) itemView.findViewById(R.id.mchnt_area_city);
             mLastTxnTime = (EditText) itemView.findViewById(R.id.input_last_txn);
-            mAccBalance = (EditText) itemView.findViewById(R.id.input_acc_bal);
-            mCbBalance = (EditText) itemView.findViewById(R.id.input_cb_bal);
-            mLayoutAcc = itemView.findViewById(R.id.layout_acc);
+            mAccBalance = (TextView) itemView.findViewById(R.id.input_acc_bal);
+            mAccImage = (ImageView)  itemView.findViewById(R.id.icon_account);
+            //mCbBalance = (EditText) itemView.findViewById(R.id.input_cb_bal);
+            //mLayoutAcc = itemView.findViewById(R.id.layout_acc);
 
             mCardView.setOnTouchListener(this);
             mLayoutMchntItem.setOnTouchListener(this);
             mMerchantDp.setOnTouchListener(this);
             mMerchantName.setOnTouchListener(this);
-            mCategoryNdCity.setOnTouchListener(this);
+            mAreaNdCity.setOnTouchListener(this);
             mLastTxnTime.setOnTouchListener(this);
             mAccBalance.setOnTouchListener(this);
-            mCbBalance.setOnTouchListener(this);
+            //mCbBalance.setOnTouchListener(this);
         }
 
         @Override
@@ -356,7 +361,7 @@ public class CashbackListFragment extends BaseFragment {
                         rootView = (View) v.getParent().getParent().getParent();
                         LogMy.d(TAG, "Clicked 2nd level view " + rootView.getId());
 
-                    } else if (v.getId() == mCategoryNdCity.getId() || v.getId() == mLastTxnTime.getId()) {
+                    } else if (v.getId() == mAreaNdCity.getId() || v.getId() == mLastTxnTime.getId()) {
                         rootView = (View) v.getParent().getParent().getParent().getParent().getParent();
                         LogMy.d(TAG, "Clicked 3rd level view " + rootView.getId());
 
@@ -391,17 +396,33 @@ public class CashbackListFragment extends BaseFragment {
             } else {
                 mMchntStatusAlert.setVisibility(View.GONE);
             }
-            String txt = merchant.getBusinessCategory()+", "+merchant.getCity();
-            mCategoryNdCity.setText(txt);
-            String str = "Last: "+mSdfDateWithTime.format(cb.getLastTxnTime());
-            mLastTxnTime.setText(str);
-            if(mCb.getCurrAccBalance()==0) {
+            String txt = merchant.getCity();
+            mAreaNdCity.setText(txt);
+            //txt = "Last: "+mSdfDateWithTime.format(cb.getLastTxnTime());
+            txt = mSdfDateWithTime.format(cb.getLastTxnTime());
+            mLastTxnTime.setText(txt);
+
+            AppCommonUtil.showAmtColor(getActivity(),null,mAccBalance,mCb.getCurrAccBalance(),false);
+
+            /*int color = ContextCompat.getColor(getActivity(), R.color.green_positive);
+            if((mCb.getCurrAccBalance() < 0)) {
+                mAccBalance.setText(AppCommonUtil.getNegativeAmtStr(
+                        Math.abs(mCb.getCurrAccBalance()), false));
+                color = ContextCompat.getColor(getActivity(), R.color.red_negative);
+                mAccImage.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            } else {
+                mAccBalance.setText(AppCommonUtil.getNegativeAmtStr(mCb.getCurrAccBalance(), true));
+                mAccImage.setColorFilter(ContextCompat.getColor(getActivity(), R.color.primary), PorterDuff.Mode.SRC_IN);
+            }
+            mAccBalance.setTextColor(color);*/
+
+            /*if(mCb.getCurrAccBalance()==0) {
                 mLayoutAcc.setVisibility(View.GONE);
             } else {
                 mLayoutAcc.setVisibility(View.VISIBLE);
                 mAccBalance.setText(AppCommonUtil.getAmtStr(mCb.getCurrAccBalance()));
             }
-            mCbBalance.setText(AppCommonUtil.getAmtStr(mCb.getCurrCbBalance()));
+            mCbBalance.setText(AppCommonUtil.getAmtStr(mCb.getCurrCbBalance()));*/
         }
 
         private Bitmap getMchntDp(String filename) {
@@ -443,7 +464,7 @@ public class CashbackListFragment extends BaseFragment {
                     LogMy.d(TAG,"In onClickListener of customer list item");
                     int pos = mRecyclerView.getChildAdapterPosition(v);
                     if (pos >= 0 && pos < getItemCount()) {
-                        MchntDetailsDialogCustApp dialog = MchntDetailsDialogCustApp.newInstance(mCbs.get(pos).getMerchantId());
+                        MchntDetailsDialogCustApp dialog = MchntDetailsDialogCustApp.newInstance(mCbs.get(pos).getMerchantId(),true);
                         dialog.show(getFragmentManager(), DIALOG_MERCHANT_DETAILS);
                     } else {
                         LogMy.e(TAG,"Invalid position in onClickListener of customer list item: "+pos);

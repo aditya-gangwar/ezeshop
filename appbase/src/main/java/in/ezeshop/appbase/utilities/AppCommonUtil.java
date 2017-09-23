@@ -60,6 +60,7 @@ import in.ezeshop.common.database.Customers;
 import in.ezeshop.common.database.MerchantDevice;
 import in.ezeshop.common.database.MerchantOps;
 import in.ezeshop.common.database.Merchants;
+import in.ezeshop.common.database.Transaction;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -93,6 +94,59 @@ public class AppCommonUtil {
     // As there's only single background thread interacting with backend
     // so this shud work fine for now
     public static MyErrorParams mErrorParams = new MyErrorParams();
+
+    /*
+     * Fxs to calculate and show commonly used parametrs
+     */
+
+    // shows amount with Sign and in color
+    // useSecColor: color (primary/secondary) when value!=0 - for both label and input
+    public static void showAmtColor(Context ctxt, TextView label, TextView input, int value, boolean useSecColor) {
+        // set input value
+        input.setText(AppCommonUtil.getSignedAmtStr(value));
+
+        // set input color
+        input.setTextColor( ContextCompat.getColor(ctxt,
+                value==0?R.color.disabled:(value>0?R.color.green_positive:R.color.red_negative)) );
+
+        // set label color
+        if(label!=null) {
+            label.setTextColor( ContextCompat.getColor(ctxt,
+                    value==0?R.color.disabled:(useSecColor?R.color.secondary_text:R.color.primary_text)) );
+        }
+    }
+
+    // shows amount with Sign and but No color
+    // useSecColor: color (primary/secondary) when value!=0 - for both label and input
+    public static void showAmtSigned(Context ctxt, TextView label, TextView input, int value, boolean useSecColor) {
+        // set input value
+        input.setText(AppCommonUtil.getSignedAmtStr(value));
+
+        // set input and label color
+        @ColorRes int color = (value==0)?R.color.disabled:(useSecColor?R.color.secondary_text:R.color.primary_text);
+        input.setTextColor( ContextCompat.getColor(ctxt,color) );
+        if(label!=null) {
+            label.setTextColor(ContextCompat.getColor(ctxt, color));
+        }
+    }
+
+    // shows amount with No sign or color
+    public static void showAmt(Context ctxt, TextView label, TextView input, int value, boolean useSecColor) {
+        if(value>=0) {
+            // set input value
+            input.setText(AppCommonUtil.getAmtStr(value));
+
+            // set input and label color
+            @ColorRes int color = (value == 0) ? R.color.disabled : (useSecColor ? R.color.secondary_text : R.color.primary_text);
+            input.setTextColor(ContextCompat.getColor(ctxt, color));
+            if (label != null) {
+                label.setTextColor(ContextCompat.getColor(ctxt, color));
+            }
+        } else {
+            // does not expect -ve values
+            throw new NumberFormatException();
+        }
+    }
 
     /*
      * Progress Dialog related fxs
@@ -668,12 +722,17 @@ public class AppCommonUtil {
     /*
      * Functions to add Rupee symbol to given Amount
      */
-    public static String getSignedAmtStr(int value, boolean isCredit) {
-        if(value==0) {
-            return getAmtStr(value);
-        }
-        return isCredit ? "+ "+AppConstants.SYMBOL_RS +String.valueOf(value) : "- "+AppConstants.SYMBOL_RS +String.valueOf(value);
+    public static String getNegativeAmtStr(int value) {
+        return getSignedAmtStr(value*-1);
     }
+    public static String getSignedAmtStr(int value) {
+        return value==0
+                ? (AppConstants.SYMBOL_RS +String.valueOf(value))
+                : ( value>0
+                    ? "+ "+AppConstants.SYMBOL_RS +String.valueOf(value)
+                    : "- "+AppConstants.SYMBOL_RS +String.valueOf(Math.abs(value)) );
+    }
+
     public static String getAmtStr(int value) {
         return AppConstants.SYMBOL_RS +String.valueOf(value);
     }
@@ -684,7 +743,7 @@ public class AppCommonUtil {
     public static int getValueAmtStr(String amtStr) {
         return Integer.parseInt(amtStr.replace(AppConstants.SYMBOL_RS,"").replace(" ",""));
     }
-    // reverse of getSignedAmtStr()
+    // reverse of getNegativeAmtStr()
     public static int getValueSignedAmtStr(String amtStr) {
         return Integer.parseInt(amtStr.replace(AppConstants.SYMBOL_RS,"").replace("+","").replace("-","").replace(" ",""));
     }

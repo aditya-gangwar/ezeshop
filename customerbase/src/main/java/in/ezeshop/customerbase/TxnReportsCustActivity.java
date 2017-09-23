@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class TxnReportsCustActivity extends BaseActivity implements
         MyRetainedFragment.RetainedFragmentIf,
         MyDatePickerDialog.MyDatePickerIf, TxnListFragment.TxnListFragmentIf,
         DialogFragmentWrapper.DialogFragmentWrapperIf, TxnDetailsDialog.TxnDetailsDialogIf,
-        TxnReportsHelper2.TxnReportsHelper2If {
+        TxnReportsHelper2.TxnReportsHelper2If, MchntDetailsDialogCustApp.MerchantDetailsDialogIf {
     private static final String TAG = "CustApp-TxnReportsActivity";
 
     public static final String EXTRA_MERCHANT_ID = "extraMchntId";
@@ -377,13 +378,18 @@ public class TxnReportsCustActivity extends BaseActivity implements
         }
     }
 
-    /*@Override
+    @Override
     public void showMchntDetails(String mchntId) {
-        MerchantDetailsDialog dialog = MerchantDetailsDialog.newInstance(mchntId);
+        MchntDetailsDialogCustApp dialog = MchntDetailsDialogCustApp.newInstance(mchntId, false);
         dialog.show(getFragmentManager(), DIALOG_MERCHANT_DETAILS);
     }
 
     @Override
+    public void getMchntTxns(String id, String name) {
+        // do nothing - as 'Get Txns' button is not shown
+    }
+
+    /*@Override
     public void getMchntTxns(String id, String name) {
         finish();
         // start itself again
@@ -415,6 +421,10 @@ public class TxnReportsCustActivity extends BaseActivity implements
 
             // Commit the transaction
             transaction.commit();
+        } else {
+            // update the UI
+            TxnListFragment txnListFrag = (TxnListFragment) fragment;
+            txnListFrag.sortNupdateUI();
         }
     }
 
@@ -489,7 +499,7 @@ public class TxnReportsCustActivity extends BaseActivity implements
     private EditText mInputDateFrom;
     private EditText mInputDateTo;
     private View mMerchantLayout;
-    private EditText mInputMerchant;
+    private TextView mInputMerchant;
     private AppCompatButton mBtnGetReport;
 
     private LinearLayout mMainLayout;
@@ -500,7 +510,7 @@ public class TxnReportsCustActivity extends BaseActivity implements
         mInputDateFrom = (EditText) findViewById(R.id.input_date_from);
         mInputDateTo = (EditText) findViewById(R.id.input_date_to);
         mMerchantLayout = findViewById(R.id.layout_merchant);
-        mInputMerchant = (EditText) findViewById(R.id.input_merchant);
+        mInputMerchant = (TextView) findViewById(R.id.input_merchant);
         mBtnGetReport = (AppCompatButton) findViewById(R.id.btn_get_report);
 
         mMainLayout = (LinearLayout) findViewById(R.id.layout_report_main);

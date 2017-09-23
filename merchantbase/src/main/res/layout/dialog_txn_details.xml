@@ -172,7 +172,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:text="\u20B9 NA"
-                        android:textColor="@color/accent2"/>
+                        android:textColor="@color/primary_text"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -193,7 +193,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:text="+ \u20B9 NA"
-                        android:textColor="@color/accent2"/>
+                        android:textColor="@color/primary_text"/>
                 </LinearLayout>
 
                 <LinearLayout

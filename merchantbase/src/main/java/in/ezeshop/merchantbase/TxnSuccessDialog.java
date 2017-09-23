@@ -93,19 +93,21 @@ public class TxnSuccessDialog extends BaseDialog {
             mInputCashBalanceOld.setText(AppCommonUtil.getAmtStr(clbalanceOld));
         }*/
 
-        if(clbalance < 0) {
-            mInputCashBalance.setText(AppCommonUtil.getSignedAmtStr(Math.abs(clbalance),false));
+        AppCommonUtil.showAmtColor(getActivity(), null, mInputCashBalance, clbalance, false);
+        /*if(clbalance < 0) {
+            mInputCashBalance.setText(AppCommonUtil.getNegativeAmtStr(clbalance,false));
             mInputCashBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
         } else {
-            mInputCashBalance.setText(AppCommonUtil.getSignedAmtStr(clbalance,true));
+            mInputCashBalance.setText(AppCommonUtil.getNegativeAmtStr(clbalance,true));
             mInputCashBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.green_positive));
-        }
+        }*/
 
-        if(clbalanceOld < 0) {
-            mInputCashBalanceOld.setText(AppCommonUtil.getSignedAmtStr(Math.abs(clbalanceOld),false));
+        AppCommonUtil.showAmtSigned(getActivity(), null, mInputCashBalanceOld, clbalanceOld, false);
+        /*if(clbalanceOld < 0) {
+            mInputCashBalanceOld.setText(AppCommonUtil.getNegativeAmtStr(clbalanceOld,false));
         } else {
-            mInputCashBalanceOld.setText(AppCommonUtil.getSignedAmtStr(clbalanceOld,true));
-        }
+            mInputCashBalanceOld.setText(AppCommonUtil.getNegativeAmtStr(clbalanceOld,true));
+        }*/
 
         //displayTransactionValues();
 

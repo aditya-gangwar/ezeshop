@@ -95,13 +95,14 @@ public class TxnSummaryFragment extends BaseFragment {
 
         input_values[AppConstants.INDEX_TXN_COUNT].setText(String.valueOf(summary[AppConstants.INDEX_TXN_COUNT]));
         input_values[AppConstants.INDEX_OVERDRAFT_TXN_COUNT].setText(String.valueOf(summary[AppConstants.INDEX_OVERDRAFT_TXN_COUNT]));
-        input_values[AppConstants.INDEX_BILL_AMOUNT].setText(AppCommonUtil.getSignedAmtStr(summary[AppConstants.INDEX_BILL_AMOUNT], true));
-        input_values[AppConstants.INDEX_CASHBACK].setText(AppCommonUtil.getSignedAmtStr(summary[AppConstants.INDEX_CASHBACK], true));
-        input_values[AppConstants.INDEX_ADD_ACCOUNT].setText(AppCommonUtil.getSignedAmtStr(summary[AppConstants.INDEX_ADD_ACCOUNT], true));
-        input_values[AppConstants.INDEX_DEBIT_ACCOUNT].setText(AppCommonUtil.getSignedAmtStr(summary[AppConstants.INDEX_DEBIT_ACCOUNT], false));
+
+        input_values[AppConstants.INDEX_BILL_AMOUNT].setText(AppCommonUtil.getSignedAmtStr(summary[AppConstants.INDEX_BILL_AMOUNT]));
+        input_values[AppConstants.INDEX_CASHBACK].setText(AppCommonUtil.getSignedAmtStr(summary[AppConstants.INDEX_CASHBACK]));
+        input_values[AppConstants.INDEX_ADD_ACCOUNT].setText(AppCommonUtil.getSignedAmtStr(summary[AppConstants.INDEX_ADD_ACCOUNT]));
+        input_values[AppConstants.INDEX_DEBIT_ACCOUNT].setText(AppCommonUtil.getNegativeAmtStr(summary[AppConstants.INDEX_DEBIT_ACCOUNT]));
         if(summary[AppConstants.INDEX_OVERDRAFT] > 0) {
             layoutOverdraft.setVisibility(View.VISIBLE);
-            input_values[AppConstants.INDEX_OVERDRAFT].setText(AppCommonUtil.getSignedAmtStr(summary[AppConstants.INDEX_OVERDRAFT], false));
+            input_values[AppConstants.INDEX_OVERDRAFT].setText(AppCommonUtil.getNegativeAmtStr(summary[AppConstants.INDEX_OVERDRAFT]));
         } else {
             layoutOverdraft.setVisibility(View.GONE);
         }

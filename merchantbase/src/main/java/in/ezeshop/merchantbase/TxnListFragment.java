@@ -65,14 +65,14 @@ public class TxnListFragment extends BaseFragment {
     //private static final String CSV_HEADER_NO_ACC = "Sl. No.,Date,Time,Transaction Id,Customer ID,Bill Amount,Cashback Add,Cashback Debit,Cashback Rate,Linked Invoice,Cancel Time,Comments";
     //private static final String CSV_HEADER = "Sl. No.,Date,Time,Transaction Id,Customer ID,Bill Amount,Cashback Add,Cashback Debit,Cashback Rate,Account Debit,Account Add,Extra Cashback Add,Extra Cashback Rate,Linked Invoice,Comments";
     //private static final String CSV_HEADER_NO_ACC = "Sl. No.,Date,Time,Transaction Id,Customer ID,Bill Amount,Cashback Add,Cashback Debit,Cashback Rate,Linked Invoice,Comments";
-    private static final String CSV_HEADER = "Sl. No.,Customer,Date,Time,Bill Amount,Account Add,Account Debit,Overdraft,Cashback,Cashback Details,Transaction Id,Linked Invoice";
+    private static final String CSV_HEADER = "Sl. No.,Date,Time,Customer,Bill Amount,Account Add,Account Debit,Overdraft,Cashback,Cashback Details,Transaction Id,Linked Invoice";
     // 5+10+10+10+10+10+5+5+5+5 = 75
     private static final int CSV_RECORD_MAX_CHARS = 100;
     //TODO: change this to 100 in production
     private static final int CSV_LINES_BUFFER = 5;
 
     // Txn Item View padding for the right column element values
-    private static final String TXN_ITEM_PADDING_STR = "%10s";
+    //private static final String TXN_ITEM_PADDING_STR = "%10s";
 
     private static final String ARG_START_TIME = "startTime";
     private static final String ARG_END_TIME = "endTime";
@@ -89,7 +89,6 @@ public class TxnListFragment extends BaseFragment {
 
     private RecyclerView mTxnRecyclerView;
     private EditText mHeaderTime;
-    //private EditText mHeaderCustomer;
     private EditText mHeaderBill;
     private EditText mHeaderCb;
     private EditText mHeaderAcc;
@@ -231,7 +230,6 @@ public class TxnListFragment extends BaseFragment {
         mTxnRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mHeaderTime = (EditText) view.findViewById(R.id.txnlist_header_time);
-        //mHeaderCustomer = (EditText) view.findViewById(R.id.txnlist_header_customer_id);
         mHeaderBill = (EditText) view.findViewById(R.id.txnlist_header_bill);
         mHeaderCb = (EditText) view.findViewById(R.id.txnlist_header_cb);
         mHeaderAcc = (EditText) view.findViewById(R.id.txnlist_header_acc);
@@ -390,9 +388,9 @@ public class TxnListFragment extends BaseFragment {
                 sb.append(i+1).append(CommonConstants.CSV_DELIMETER);
 
                 Transaction txn = mRetainedFragment.mLastFetchTransactions.get(i);
-                sb.append(CommonUtils.getHalfVisibleMobileNum(txn.getCust_mobile())).append(CommonConstants.CSV_DELIMETER);
                 sb.append(mSdfOnlyDateCSV.format(txn.getCreate_time())).append(CommonConstants.CSV_DELIMETER);
                 sb.append(mSdfOnlyTimeCSV.format(txn.getCreate_time())).append(CommonConstants.CSV_DELIMETER);
+                sb.append(CommonUtils.getHalfVisibleMobileNum(txn.getCust_mobile())).append(CommonConstants.CSV_DELIMETER);
 
                 /*boolean txnCancel = false;
                 if(txn.getCancelTime()!=null) {
@@ -445,7 +443,7 @@ public class TxnListFragment extends BaseFragment {
                 } else {
                     sb.append("0").append(CommonConstants.CSV_DELIMETER);
                 }
-                sb.append(MyTransaction.getCbDetailStr(txn)).append(CommonConstants.CSV_DELIMETER);
+                sb.append(MyTransaction.getCbDetailStr(txn,true)).append(CommonConstants.CSV_DELIMETER);
 
                 /*if(txn.getCb_debit() > 0) {
                         sb.append(txn.getCb_debit()).append(CommonConstants.CSV_DELIMETER);
@@ -593,101 +591,28 @@ public class TxnListFragment extends BaseFragment {
 
         public TextView mDatetime;
         public TextView mCustId;
-        //public TextView mTxnId;
-
         public TextView mBillAmount;
         public TextView mCashbackAward;
-        //public View mCashbackIcon1;
-        //public TextView mCbAwardCancel;
-        //public View mAccountIcon;
         public TextView mAccountAmt;
         public View mImgOverdraft;
-        //public View mTxnAmtDiv;
-        //public View mCashbackIcon;
-        //public TextView mCashbackAmt;
 
-        //public View mLayoutCancel;
-        //public TextView mCancelTime;
-
-        //public View rootLayout;
-
-        //public ImageView mSecureIcon;
+        public TextView mLabelBill;
+        public TextView mLabelCb;
+        public TextView mLabelAcc;
 
         public TxnHolder(View itemView) {
             super(itemView);
-            //itemView.setOnClickListener(this);
             mDatetime = (TextView) itemView.findViewById(R.id.txn_time);
             mCustId = (TextView) itemView.findViewById(R.id.txn_customer_id);
-            //mTxnId = (TextView) itemView.findViewById(R.id.txn_id);
-
             mBillAmount = (TextView) itemView.findViewById(R.id.bill_input);
-            //mAccountIcon = itemView.findViewById(R.id.txn_account_icon);
             mAccountAmt = (TextView) itemView.findViewById(R.id.acc_input);
             mImgOverdraft = itemView.findViewById(R.id.txn_ic_overdraft);
-            //mTxnAmtDiv = itemView.findViewById(R.id.txn_amts_divider);
-
-            //mCashbackIcon = itemView.findViewById(R.id.txn_cashback_icon);
-            //mCashbackAmt = (TextView) itemView.findViewById(R.id.txn_cashback_amt);
-
             mCashbackAward = (TextView) itemView.findViewById(R.id.txn_cashback_award);
-            //mCashbackIcon1 = itemView.findViewById(R.id.txn_cashback_icon_1);
-            //mCbAwardCancel = (TextView) itemView.findViewById(R.id.txn_cb_award_cancel);
-            //mSecureIcon = (ImageView)itemView.findViewById(R.id.txn_secure_icon);
 
-            //mLayoutCancel = itemView.findViewById(R.id.layout_cancelled);
-            //mCancelTime = (TextView) itemView.findViewById(R.id.input_cancel_time);
-
-            //rootLayout = itemView.findViewById(R.id.root_layout);
-
-            /*mCustId.setOnTouchListener(this);
-            mDatetime.setOnTouchListener(this);
-            mBillAmount.setOnTouchListener(this);
-            mAccountAmt.setOnTouchListener(this);
-            mCashbackAmt.setOnTouchListener(this);
-            mCashbackAward.setOnTouchListener(this);
-            mCancelTime.setOnTouchListener(this);*/
-            //itemView.setOnClickListener(this);
+            mLabelBill = (TextView) itemView.findViewById(R.id.txn_label_bill);
+            mLabelCb = (TextView) itemView.findViewById(R.id.txn_label_cb);
+            mLabelAcc = (TextView) itemView.findViewById(R.id.txn_label_acc);
         }
-
-        /*@Override
-        public void onClick(View v) {
-            LogMy.d(TAG, "onClick: " + getAdapterPosition());
-            //v.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.disabled));
-            if(!mCallback.getRetainedFragment().getResumeOk())
-                return;
-
-            LogMy.d(TAG,"In onClickListener of txn list item");
-            int pos = getAdapterPosition();
-            showDetailedDialog(pos);
-            //AppCommonUtil.cancelProgressDialog(true);
-        }*/
-
-        /*@Override
-        public boolean onTouch(View v, MotionEvent event) {
-            if(!mCallback.getRetainedFragment().getResumeOk())
-                return true;
-
-            try {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    LogMy.d(TAG, "In onTouch: " + v.getId());
-
-                    View rootView = null;
-                    if (v.getId() == mCustId.getId() || v.getId() == mDatetime.getId()) {
-                        rootView = (View) v.getParent().getParent();
-                        LogMy.d(TAG, "Clicked first level view " + rootView.getId());
-                    } else {
-                        rootView = (View) v.getParent().getParent().getParent();
-                        LogMy.d(TAG, "Clicked second level view " + rootView.getId());
-                    }
-                    rootView.performClick();
-                }
-            } catch (Exception e) {
-                LogMy.e(TAG, "Exception in Fragment: ", e);
-                DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), true, true)
-                        .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
-            }
-            return true;
-        }*/
 
         public void bindTxn(Transaction txn) {
             mTxn = txn;
@@ -695,25 +620,29 @@ public class TxnListFragment extends BaseFragment {
             mDatetime.setText(mSdfDateWithTime.format(mTxn.getCreate_time()));
             mCustId.setText(CommonUtils.getHalfVisibleMobileNum(mTxn.getCust_mobile()));
 
-            // padding to keep Bill, Cashback, Account values in same vertical line
-            //String paddingStr = "%"+TXN_ITEM_PADDING+"s";
-            mBillAmount.setText(String.format(TXN_ITEM_PADDING_STR, AppCommonUtil.getSignedAmtStr(mTxn.getTotal_billed(), true)));
+            AppCommonUtil.showAmt(getActivity(), mLabelBill, mBillAmount, mTxn.getTotal_billed(),true);
+            AppCommonUtil.showAmt(getActivity(), mLabelCb, mCashbackAward, (mTxn.getCb_credit()+mTxn.getExtra_cb_credit()), true);
+
+            // set account add/debit amount
+            int value = txn.getCl_credit() - txn.getCl_debit() - txn.getCl_overdraft();
+            AppCommonUtil.showAmtColor(getActivity(), mLabelAcc, mAccountAmt, value, true);
+
+            // show/hide overdraft icon
+            mImgOverdraft.setVisibility( value>0?View.GONE:View.VISIBLE);
+
+            /*mBillAmount.setText(AppCommonUtil.getNegativeAmtStr(mTxn.getTotal_billed(), true));
             // set account add/debit amount
             int value = txn.getCl_credit();
             if(value > 0) {
-                mAccountAmt.setText(String.format(TXN_ITEM_PADDING_STR,AppCommonUtil.getSignedAmtStr(value, true)));
+                //mAccountAmt.setText(String.format(TXN_ITEM_PADDING_STR,AppCommonUtil.getNegativeAmtStr(value, true)));
+                mAccountAmt.setText(AppCommonUtil.getNegativeAmtStr(value, true));
                 mAccountAmt.setTextColor(ContextCompat.getColor(getActivity(), R.color.green_positive));
                 mImgOverdraft.setVisibility(View.GONE);
             } else {
                 // Debit case
                 int totalDebit = txn.getCl_debit() + txn.getCl_overdraft();
-                mAccountAmt.setText(String.format(TXN_ITEM_PADDING_STR,AppCommonUtil.getSignedAmtStr(totalDebit, false)));
-                /*if(value>0) {
-                    mAccountAmt.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
-                } else {
-                    mAccountAmt.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
-                }*/
-
+                //mAccountAmt.setText(String.format(TXN_ITEM_PADDING_STR,AppCommonUtil.getNegativeAmtStr(totalDebit, false)));
+                mAccountAmt.setText(AppCommonUtil.getNegativeAmtStr(totalDebit, false));
                 if(txn.getCl_overdraft()>0) {
                     mImgOverdraft.setVisibility(View.VISIBLE);
                 } else {
@@ -722,92 +651,8 @@ public class TxnListFragment extends BaseFragment {
             }
             // set cb amount
             int totalCb = mTxn.getCb_credit()+mTxn.getExtra_cb_credit();
-            mCashbackAward.setText(String.format(TXN_ITEM_PADDING_STR,AppCommonUtil.getAmtStr(totalCb)));
-
-            /*if(mTxn.getCl_credit() > 0) {
-                mAccountIcon.setVisibility(View.VISIBLE);
-                mAccountAmt.setVisibility(View.VISIBLE);
-                mTxnAmtDiv.setVisibility(View.VISIBLE);
-
-                mAccountAmt.setText(AppCommonUtil.getSignedAmtStr(mTxn.getCl_credit(), true));
-                mAccountAmt.setTextColor(ContextCompat.getColor(getActivity(), R.color.green_positive));
-
-            } else if(mTxn.getCl_debit() > 0) {
-                mAccountIcon.setVisibility(View.VISIBLE);
-                mAccountAmt.setVisibility(View.VISIBLE);
-                mTxnAmtDiv.setVisibility(View.VISIBLE);
-
-                mAccountAmt.setText(AppCommonUtil.getSignedAmtStr(mTxn.getCl_debit(), false));
-                mAccountAmt.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
-
-            } else {
-                mAccountIcon.setVisibility(View.GONE);
-                mAccountAmt.setVisibility(View.GONE);
-                mTxnAmtDiv.setVisibility(View.GONE);
-                //mAccountAmt.setText("-");
-                //mAccountAmt.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
-            }
-
-            if(mTxn.getCb_debit() > 0) {
-                mCashbackIcon.setVisibility(View.VISIBLE);
-                mCashbackAmt.setText(AppCommonUtil.getSignedAmtStr(mTxn.getCb_debit(), false));
-                mCashbackAmt.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
-            } else {
-                mCashbackIcon.setVisibility(View.GONE);
-                mCashbackAmt.setText("-");
-                mCashbackAmt.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
-            }
-
-            int totalCb = mTxn.getCb_credit()+mTxn.getExtra_cb_credit();
-            if( totalCb > 0) {
-                //String cbData = AppCommonUtil.getAmtStr(mTxn.getCb_credit())+" @ "+mTxn.getCb_percent()+"%";
-                mCashbackIcon1.setVisibility(View.VISIBLE);
-                String cbData = AppCommonUtil.getSignedAmtStr(totalCb, true);
-                mCashbackAward.setText(cbData);
-            } else {
-                mCashbackIcon1.setVisibility(View.GONE);
-                mCashbackAward.setText("-");
-            }
-
-            // changes if txn was cancelled
-            //if(mTxn.getCancelTime()==null) {
-                //mCancelTime.setVisibility(View.GONE);
-                //mCbAwardCancel.setVisibility(View.GONE);
-
-                // need to remove strike through - must if last txn was cancelled one
-                mBillAmount.setPaintFlags(mBillAmount.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
-                mCashbackAward.setPaintFlags(mCashbackAward.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
-                mCashbackAmt.setPaintFlags(mCashbackAmt.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
-                mAccountAmt.setPaintFlags(mAccountAmt.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));*/
-
-            /*} else {
-                mCancelTime.setVisibility(View.VISIBLE);
-                String txt = "CANCELLED AT "+ mSdfDateWithTime.format(txn.getCancelTime());
-                mCancelTime.setText(txt);
-
-                if(txn.getTotal_billed()>0) {
-                    mBillAmount.setPaintFlags(mBillAmount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                }
-
-                if(txn.getCb_credit() > 0) {
-                    mCashbackAward.setPaintFlags(mCashbackAward.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                }
-                if(txn.getExtra_cb_credit() > 0) {
-                    // Extra CB can't be cancelled
-                    mCbAwardCancel.setVisibility(View.VISIBLE);
-                    mCbAwardCancel.setText(AppCommonUtil.getAmtStr(mTxn.getExtra_cb_credit()));
-                } else {
-                    mCbAwardCancel.setVisibility(View.GONE);
-                }
-
-                if(txn.getCb_debit()>0) {
-                    mCashbackAmt.setPaintFlags(mCashbackAmt.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                }
-
-                if(txn.getCl_debit()>0) {
-                    mAccountAmt.setPaintFlags(mAccountAmt.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                }
-            }*/
+            //mCashbackAward.setText(String.format(TXN_ITEM_PADDING_STR,AppCommonUtil.getAmtStr(totalCb)));
+            mCashbackAward.setText(AppCommonUtil.getAmtStr(totalCb));*/
         }
     }
 
@@ -824,7 +669,7 @@ public class TxnListFragment extends BaseFragment {
                     if(!mCallback.getRetainedFragment().getResumeOk())
                         return;
 
-                    LogMy.d(TAG,"In onClickListener of txn list item");
+                    LogMy.d(TAG,"In onSingleClick of txn list item");
                     int pos = mTxnRecyclerView.getChildAdapterPosition(v);
 
                     // Updating old as well as new positions

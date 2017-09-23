@@ -5,7 +5,6 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatImageButton;
@@ -13,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 
 import in.ezeshop.appbase.constants.AppConstants;
 import in.ezeshop.appbase.utilities.OnSingleClickListener;
@@ -108,25 +106,31 @@ public class TxnPinInputDialog extends DialogFragment
                 mInputSecretPin.setHint("Enter OTP");
             }
 
-            if (cashCredit > 0) {
-                mInputCashAmount.setText(AppCommonUtil.getSignedAmtStr(cashCredit, true));
+        if(cashCredit==0) {
+            mLayoutAcc.setVisibility(View.GONE);
+        } else {
+            AppCommonUtil.showAmtColor(getActivity(), null, mInputCashAmount, cashCredit, false);
+        }
+
+            /*if (cashCredit > 0) {
+                mInputCashAmount.setText(AppCommonUtil.getNegativeAmtStr(cashCredit, true));
                 mInputCashAmount.setTextColor(ContextCompat.getColor(getActivity(), R.color.green_positive));
             } else if (cashDebit > 0) {
-                mInputCashAmount.setText(AppCommonUtil.getSignedAmtStr(cashDebit, false));
+                mInputCashAmount.setText(AppCommonUtil.getNegativeAmtStr(cashDebit, false));
                 mInputCashAmount.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
             } else {
                 mLayoutAcc.setVisibility(View.GONE);
-            }
+            }*/
 
             if(overdraft > 0) {
                 mLayoutOverdraft.setVisibility(View.VISIBLE);
-                mInputOverdraft.setText(AppCommonUtil.getSignedAmtStr(overdraft, false));
+                mInputOverdraft.setText(AppCommonUtil.getNegativeAmtStr(overdraft));
             } else {
                 mLayoutOverdraft.setVisibility(View.GONE);
             }
 
             /*if (cashbackDebit > 0) {
-                mInputCashbackAmount.setText(AppCommonUtil.getSignedAmtStr(cashbackDebit, false));
+                mInputCashbackAmount.setText(AppCommonUtil.getNegativeAmtStr(cashbackDebit, false));
                 mInputCashAmount.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
             } else {
                 mLayoutCashbackAmount.setVisibility(View.GONE);

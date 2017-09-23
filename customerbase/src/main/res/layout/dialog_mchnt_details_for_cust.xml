@@ -96,7 +96,7 @@
                         android:id="@+id/input_cb_rate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="5% + 5% *"
+                        android:text="5% + 10% *"
                         android:paddingLeft="0dp"
                         android:textColor="@color/green_positive"
                         android:textStyle="bold"/>
@@ -112,7 +112,7 @@
                     android:paddingTop="0dp"
                     android:layout_height="wrap_content"
                     android:textStyle="italic"
-                    android:text="* Extra 5% when Moeny added > \u20B9 1000"/>
+                    android:text="*10% when Money added > \u20B9 1000"/>
 
             </RelativeLayout>
 
@@ -355,7 +355,7 @@
 
                 <ImageView
                     style="@style/Imageview_Left_Column"
-                    android:src="@drawable/ic_phone_android_white_18dp"/>
+                    android:src="@drawable/ic_contact_phone_white_18dp"/>
                 <!--EditText
                     style="@style/Edittext_only_view_small_lessPad"
                     android:id="@+id/label_customer_mobile"

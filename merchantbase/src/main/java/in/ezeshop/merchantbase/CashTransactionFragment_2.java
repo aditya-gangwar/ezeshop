@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatButton;
@@ -231,13 +232,20 @@ public class CashTransactionFragment_2 extends BaseFragment implements
     }
 
     private void displayInputBillAmt() {
-        if(mRetainedFragment.mBillTotal==0) {
+        int value = mRetainedFragment.mBillTotal;
+        AppCommonUtil.showAmtColor(getActivity(), null, mInputBillAmt, value,false);
+        mLayoutBillAmt.setAlpha(value==0?0.4f:1.0f);
+        mImgBill.setColorFilter(ContextCompat.getColor(getActivity(),
+                value==0?R.color.disabled:R.color.primary),
+                PorterDuff.Mode.SRC_IN);
+
+        /*if(mRetainedFragment.mBillTotal==0) {
             mInputBillAmt.setText(AppConstants.SYMBOL_RS_0);
             mLayoutBillAmt.setAlpha(0.4f);
         } else {
-            mInputBillAmt.setText(AppCommonUtil.getSignedAmtStr(mRetainedFragment.mBillTotal, true));
+            mInputBillAmt.setText(AppCommonUtil.getNegativeAmtStr(mRetainedFragment.mBillTotal, true));
             mLayoutBillAmt.setAlpha(1.0f);
-        }
+        }*/
     }
 
     private void setAddCashload(int value) {
@@ -259,23 +267,26 @@ public class CashTransactionFragment_2 extends BaseFragment implements
     private void setOverdraft(int value) {
         if(value!=mOverdraft) {
             this.mOverdraft = value;
-            mInputOverdraft.setText(AppCommonUtil.getSignedAmtStr(mOverdraft, false));
+            mInputOverdraft.setText(AppCommonUtil.getNegativeAmtStr(mOverdraft));
         }
     }
 
     private void setAccountAmt() {
-        if(mAddCashload>0) {
-            mInputAccount.setText(AppCommonUtil.getSignedAmtStr(mAddCashload, true));
+        int value = mAddCashload - mDebitCashload;
+        AppCommonUtil.showAmtColor(getActivity(), null, mInputAccount, value, true);
+
+        /*if(mAddCashload>0) {
+            mInputAccount.setText(AppCommonUtil.getNegativeAmtStr(mAddCashload, true));
             mInputAccount.setTextColor(ContextCompat.getColor(getActivity(), R.color.green_positive));
 
         } else if(mDebitCashload>0) {
-            mInputAccount.setText(AppCommonUtil.getSignedAmtStr(mDebitCashload, false));
+            mInputAccount.setText(AppCommonUtil.getNegativeAmtStr(mDebitCashload, false));
             mInputAccount.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
 
         } else {
             mInputAccount.setText(AppCommonUtil.getAmtStr(0));
             mInputAccount.setTextColor(ContextCompat.getColor(getActivity(), R.color.secondary_text));
-        }
+        }*/
     }
 
     private void setAddCashback(int onBill, int onAcc) {
@@ -287,24 +298,15 @@ public class CashTransactionFragment_2 extends BaseFragment implements
 
     private void setCashBalance() {
         LogMy.d(TAG,"In setCashBalance: "+mReturnCash);
-        if(mReturnCash > 0) {
-            String str = "Balance     "+ AppCommonUtil.getSignedAmtStr(mReturnCash, false);
-            mInputToPayCash.setText(str);
-            mInputToPayCash.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
-            mDividerInputToPayCash.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
 
-        } else if(mReturnCash == 0) {
-            String str = "Balance      "+AppConstants.SYMBOL_RS+" 0";
-            mInputToPayCash.setText(str);
-            mInputToPayCash.setTextColor(ContextCompat.getColor(getActivity(), R.color.green_positive));
-            mDividerInputToPayCash.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.green_positive));
+        // set text
+        String str = "Balance     "+ AppCommonUtil.getSignedAmtStr(mReturnCash);
+        mInputToPayCash.setText(str);
 
-        } else {
-            String str = "Balance      "+ AppCommonUtil.getSignedAmtStr(Math.abs(mReturnCash), true);
-            mInputToPayCash.setText(str);
-            mInputToPayCash.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
-            mDividerInputToPayCash.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
-        }
+        // set color
+        @ColorRes int color = mReturnCash==0?R.color.green_positive:R.color.red_negative;
+        mInputToPayCash.setTextColor(ContextCompat.getColor(getActivity(), color));
+        mDividerInputToPayCash.setBackgroundColor(ContextCompat.getColor(getActivity(), color));
     }
 
     private void setCashPaid(int value) {

@@ -91,7 +91,7 @@ public class TxnReportsHelper2 {
 
         //if(mFromDate.getTime() < mTxnInDbFrom.getTime()) {
             // archived txns from CSV files are required
-            if(mMerchantId==null || mMerchantId.isEmpty()) {
+            if(mFetchByMchnt && (mMerchantId==null || mMerchantId.isEmpty()) ) {
                 LogMy.e(TAG,"Merchant ID not available to fetch txn CSV files");
                 throw new BackendlessException(String.valueOf(ErrorCodes.GENERAL_ERROR), "Merchant ID not available to fetch txn CSV files");
             }
