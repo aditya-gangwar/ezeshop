@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="100"/-->
 
-    <LinearLayout
+    <!--LinearLayout
         style="@style/LL_Horizontal_wrap"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/small_space">
@@ -50,6 +50,6 @@
         android:paddingTop="0dp"
         android:text="Select 'Transactions' from Menu for recent data. "
         android:textStyle="italic"
-        android:gravity="left"/>
+        android:gravity="left"/-->
 
 </LinearLayout>

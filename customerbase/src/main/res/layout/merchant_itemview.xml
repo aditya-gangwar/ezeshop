@@ -12,14 +12,13 @@
     android:elevation="3dp"
     card_view:cardCornerRadius="4dp"
     android:clickable="true"
-    android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground">
+    android:focusable="true">
 
     <LinearLayout
         style="@style/LL_Horizontal_wrap"
-        android:id="@+id/layout_mchnt_item"
         android:padding="@dimen/small_space"
-        android:clickable="false">
+        android:clickable="false"
+        android:focusable="false">
 
         <ImageView
             android:id="@+id/img_merchant"
@@ -33,13 +32,15 @@
         <LinearLayout
             style="@style/LL_Vertical"
             android:layout_height="wrap_content"
-            android:clickable="false">
+            android:clickable="false"
+            android:focusable="false">
 
             <LinearLayout
                 style="@style/LL_Horizontal_wrap"
                 android:id="@+id/layout_mchnt_name"
                 android:layout_width="match_parent"
-                android:clickable="false">
+                android:clickable="false"
+                android:focusable="false">
 
                 <EditText
                     style="@style/Edittext_only_click_small_lessPad"
@@ -63,7 +64,8 @@
             <LinearLayout
                 style="@style/LL_Horizontal_wrap"
                 android:layout_width="match_parent"
-                android:clickable="false">
+                android:clickable="false"
+                android:focusable="false">
 
                 <EditText
                     style="@style/Edittext_only_click_small_lessPad"
@@ -91,7 +93,8 @@
                 style="@style/LL_Horizontal_wrap"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:clickable="false">
+                android:clickable="false"
+                android:focusable="false">
 
                 <EditText
                     style="@style/Edittext_only_click_small_lessPad"

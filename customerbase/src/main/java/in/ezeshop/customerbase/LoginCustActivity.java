@@ -592,8 +592,8 @@ public class LoginCustActivity extends AppCompatActivity implements
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 
         //Start Cashback Activity
-        Intent intent = new Intent( this, CashbackActivityCust.class );
-        intent.putExtra(CashbackActivityCust.INTENT_EXTRA_USER_TOKEN, CustomerUser.getInstance().getUserToken());
+        Intent intent = new Intent( this, CashbackActivityCust2.class );
+        intent.putExtra(CashbackActivityCust2.INTENT_EXTRA_USER_TOKEN, CustomerUser.getInstance().getUserToken());
         // clear Login activity from backstack
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

@@ -84,9 +84,9 @@ public class MyGlobalSettings
     public static Integer getMchntDashBNoRefreshMins() {
         return (Integer) getValue(GlobalSettingConstants.SETTINGS_STATS_NO_REFRESH_MINS);
     }
-    public static Integer getCustNoRefreshMins() {
+    /*public static Integer getCustNoRefreshMins() {
         return (Integer) getValue(GlobalSettingConstants.SETTINGS_CUSTOMER_NO_REFRESH_MINS);
-    }
+    }*/
     public static Integer getCashAccLimit() {
         return (Integer) getValue(GlobalSettingConstants.SETTINGS_CUSTOMER_CASH_LIMIT);
     }

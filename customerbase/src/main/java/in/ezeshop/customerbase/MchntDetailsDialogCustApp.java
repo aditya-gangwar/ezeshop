@@ -171,8 +171,8 @@ public class MchntDetailsDialogCustApp extends BaseDialog {
                 mImgMerchant.setImageBitmap(cb.getDpMerchant());
             }
             mName.setText(merchant.getName());
-            String txt = merchant.getBusinessCategory()+", "+merchant.getCity();
-            mCategoryNdCity.setText(txt);
+            /*String txt = merchant.getBusinessCategory()+", "+merchant.getCity();
+            mCategoryNdCity.setText(txt);*/
 
             String textCbRate = "";
             if(Integer.valueOf(merchant.getPpCbRate()) <= 0) {
@@ -249,7 +249,7 @@ public class MchntDetailsDialogCustApp extends BaseDialog {
 
     private ImageView mImgMerchant;
     private EditText mName;
-    private EditText mCategoryNdCity;
+    //private EditText mCategoryNdCity;
     private EditText mCbRate;
     private EditText mPpCbDetails;
 
@@ -286,7 +286,7 @@ public class MchntDetailsDialogCustApp extends BaseDialog {
         mImgMerchant = (ImageView) v.findViewById(R.id.img_merchant);;
 
         mName = (EditText) v.findViewById(R.id.input_brand_name);;
-        mCategoryNdCity = (EditText) v.findViewById(R.id.input_category_city);;
+        //mCategoryNdCity = (EditText) v.findViewById(R.id.input_category_city);;
         mCbRate = (EditText) v.findViewById(R.id.input_cb_rate);;
         mPpCbDetails = (EditText) v.findViewById(R.id.input_pp_cb_details);;
         mLastTxnTime = (EditText) v.findViewById(R.id.input_last_txn_time);;

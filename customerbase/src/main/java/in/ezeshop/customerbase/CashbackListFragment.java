@@ -29,6 +29,7 @@ import java.util.List;
 
 import in.ezeshop.appbase.BaseFragment;
 import in.ezeshop.appbase.constants.AppConstants;
+import in.ezeshop.appbase.utilities.OnSingleClickListener;
 import in.ezeshop.common.MyGlobalSettings;
 import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.DbConstants;
@@ -63,7 +64,7 @@ public class CashbackListFragment extends BaseFragment {
     }
 
     private RecyclerView mRecyclerView;
-    private EditText mUpdated;
+    //private EditText mUpdated;
     //private EditText mUpdatedDetail;
     private List<MyCashback> mMyCbs;
 
@@ -135,7 +136,7 @@ public class CashbackListFragment extends BaseFragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.cust_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        mUpdated = (EditText) view.findViewById(R.id.input_updated_time);
+        //mUpdated = (EditText) view.findViewById(R.id.input_updated_time);
         //mUpdatedDetail = (EditText) view.findViewById(R.id.updated_time_details);
 
         return view;
@@ -143,15 +144,18 @@ public class CashbackListFragment extends BaseFragment {
 
     private void updateUI() {
         if(mMyCbs!=null) {
-            CbAdapter adapter = (CbAdapter) mRecyclerView.getAdapter();
+            mRecyclerView.setAdapter(new CbAdapter(mMyCbs));
+
+            /*CbAdapter adapter = (CbAdapter) mRecyclerView.getAdapter();
             if(adapter==null) {
                 LogMy.d(TAG, "Adaptor not set yet");
                 mRecyclerView.setAdapter(new CbAdapter(mMyCbs));
             } else {
                 adapter.refresh(mMyCbs);
-            }
+            }*/
+
             // update time
-            mUpdated.setText(mSdfDateWithTime.format(mRetainedFragment.mCbsUpdateTime));
+            //mUpdated.setText(mSdfDateWithTime.format(mRetainedFragment.mCbsUpdateTime));
 
             /*mRecyclerView.removeAllViews();
             mRecyclerView.setAdapter(new CbAdapter(mMyCbs));
@@ -204,7 +208,8 @@ public class CashbackListFragment extends BaseFragment {
             LogMy.e(TAG, "Exception in Fragment: ", e);
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), true, true)
                     .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
-            getActivity().onBackPressed();
+            throw e;
+            //getActivity().onBackPressed();
         }
         mCallback.getRetainedFragment().setResumeOk(true);
     }
@@ -231,7 +236,8 @@ public class CashbackListFragment extends BaseFragment {
                 sortMerchantList();
 
             } else if(i == R.id.action_refresh) {
-                if(!mCallback.refreshMchntList()) {
+                mCallback.refreshMchntList();
+                /*if(!mCallback.refreshMchntList()) {
                     String msg = null;
                     if(MyGlobalSettings.getCustNoRefreshMins()==(24*60)) {
                         // 24 is treated as special case as 'once in a day'
@@ -247,7 +253,7 @@ public class CashbackListFragment extends BaseFragment {
                     DialogFragmentWrapper dialog = DialogFragmentWrapper.createNotification(AppConstants.generalInfoTitle, msg, true, false);
                     dialog.setTargetFragment(this, REQ_NOTIFY_ERROR);
                     dialog.show(getFragmentManager(), DialogFragmentWrapper.DIALOG_CONFIRMATION);
-                }
+                }*/
             }
 
         } catch(Exception e) {
@@ -295,13 +301,12 @@ public class CashbackListFragment extends BaseFragment {
         // do nothing
     }
 
-    private class CbHolder extends RecyclerView.ViewHolder
-            implements View.OnTouchListener {
+    private class CbHolder extends RecyclerView.ViewHolder {
 
         private MyCashback mCb;
 
-        private View mCardView;
-        private View mLayoutMchntItem;
+        //private View mCardView;
+        //private View mLayoutMchntItem;
         private ImageView mMerchantDp;
         private EditText mMerchantName;
         private View mMchntStatusAlert;
@@ -315,8 +320,8 @@ public class CashbackListFragment extends BaseFragment {
         public CbHolder(View itemView) {
             super(itemView);
 
-            mCardView = itemView.findViewById(R.id.card_view);
-            mLayoutMchntItem = itemView.findViewById(R.id.layout_mchnt_item);
+            //mCardView = itemView.findViewById(R.id.card_view);
+            //mLayoutMchntItem = itemView.findViewById(R.id.layout_mchnt_item);
             mMerchantDp = (ImageView) itemView.findViewById(R.id.img_merchant);
             mMerchantName = (EditText) itemView.findViewById(R.id.input_mchnt_name);
             mMchntStatusAlert = itemView.findViewById(R.id.icon_mchnt_status_alert);
@@ -327,17 +332,17 @@ public class CashbackListFragment extends BaseFragment {
             //mCbBalance = (EditText) itemView.findViewById(R.id.input_cb_bal);
             //mLayoutAcc = itemView.findViewById(R.id.layout_acc);
 
-            mCardView.setOnTouchListener(this);
+            /*mCardView.setOnTouchListener(this);
             mLayoutMchntItem.setOnTouchListener(this);
             mMerchantDp.setOnTouchListener(this);
             mMerchantName.setOnTouchListener(this);
             mAreaNdCity.setOnTouchListener(this);
             mLastTxnTime.setOnTouchListener(this);
-            mAccBalance.setOnTouchListener(this);
+            mAccBalance.setOnTouchListener(this);*/
             //mCbBalance.setOnTouchListener(this);
         }
 
-        @Override
+        /*@Override
         public boolean onTouch(View v, MotionEvent event) {
             try {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -378,7 +383,7 @@ public class CashbackListFragment extends BaseFragment {
                         .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
             }
             return true;
-        }
+        }*/
 
         public void bindCb(MyCashback cb) {
             mCb = cb;
@@ -435,10 +440,10 @@ public class CashbackListFragment extends BaseFragment {
                     } else {
                         LogMy.d(TAG,"Decoded file as bitmap: "+file.getPath());
                         // convert to round image
-                        int radiusInDp = (int) getResources().getDimension(R.dimen.dp_item_image_width);
-                        int radiusInPixels = AppCommonUtil.dpToPx(radiusInDp);
+                        float radiusInDp = getResources().getDimension(R.dimen.dp_item_image_width);
+                        float radiusInPixels = AppCommonUtil.dipToPixels(getActivity(), radiusInDp);
 
-                        Bitmap scaledImg = Bitmap.createScaledBitmap(bitmap,radiusInPixels,radiusInPixels,true);
+                        Bitmap scaledImg = Bitmap.createScaledBitmap(bitmap,(int)radiusInPixels,(int)radiusInPixels,true);
                         Bitmap roundImage = AppCommonUtil.getCircleBitmap(scaledImg);
                         return roundImage;
                     }
@@ -454,16 +459,30 @@ public class CashbackListFragment extends BaseFragment {
 
     private class CbAdapter extends RecyclerView.Adapter<CbHolder> {
         private List<MyCashback> mCbs;
+
+        private int selected_position = -1;
         private View.OnClickListener mListener;
+        private View.OnTouchListener mTouchListener;
 
         public CbAdapter(List<MyCashback> cbs) {
             mCbs = cbs;
-            mListener = new View.OnClickListener() {
+            mListener = new OnSingleClickListener() {
                 @Override
-                public void onClick(View v) {
-                    LogMy.d(TAG,"In onClickListener of customer list item");
+                public void onSingleClick(View v) {
+                    LogMy.d(TAG,"In onClickListener of merchant list item");
+
+                    if(!mCallback.getRetainedFragment().getResumeOk())
+                        return;
+
                     int pos = mRecyclerView.getChildAdapterPosition(v);
+
+                    // Updating old as well as new positions
+                    notifyItemChanged(selected_position);
+                    selected_position = pos;
+                    notifyItemChanged(selected_position);
+
                     if (pos >= 0 && pos < getItemCount()) {
+                        // show detailed dialog
                         MchntDetailsDialogCustApp dialog = MchntDetailsDialogCustApp.newInstance(mCbs.get(pos).getMerchantId(),true);
                         dialog.show(getFragmentManager(), DIALOG_MERCHANT_DETAILS);
                     } else {
@@ -471,28 +490,67 @@ public class CashbackListFragment extends BaseFragment {
                     }
                 }
             };
-        }
 
-        public void refresh(List<MyCashback> cbs) {
-            mCbs = cbs;
-            notifyDataSetChanged();
+            mTouchListener = new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    LogMy.d(TAG,"In OnTouchListener of merchant list item");
+
+                    if(!mCallback.getRetainedFragment().getResumeOk())
+                        return true;
+
+                    int pos = mRecyclerView.getChildAdapterPosition(v);
+
+                    // Updating old as well as new positions
+                    notifyItemChanged(selected_position);
+                    selected_position = pos;
+                    notifyItemChanged(selected_position);
+
+                    if (pos >= 0 && pos < getItemCount()) {
+                        // show detailed dialog
+                        MchntDetailsDialogCustApp dialog = MchntDetailsDialogCustApp.newInstance(mCbs.get(pos).getMerchantId(),true);
+                        dialog.show(getFragmentManager(), DIALOG_MERCHANT_DETAILS);
+                    } else {
+                        LogMy.e(TAG,"Invalid position in OnTouchListener of merchant list item: "+pos);
+                    }
+
+                    return true;
+                }
+            };
         }
 
         @Override
         public CbHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
             View view = layoutInflater.inflate(R.layout.merchant_itemview, parent, false);
-            view.setOnClickListener(mListener);
+            //view.setOnClickListener(mListener);
             return new CbHolder(view);
         }
+
         @Override
         public void onBindViewHolder(CbHolder holder, int position) {
             MyCashback cb = mCbs.get(position);
+
+            /*if(selected_position == position){
+                // Here I am just highlighting the background
+                holder.itemView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.list_highlight));
+            }else{
+                holder.itemView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
+            }*/
+
+            holder.itemView.setOnClickListener(mListener);
+            //holder.itemView.setOnTouchListener(mTouchListener);
             holder.bindCb(cb);
         }
+
         @Override
         public int getItemCount() {
             return mCbs.size();
         }
+
+        /*public void refresh(List<MyCashback> cbs) {
+            mCbs = cbs;
+            notifyDataSetChanged();
+        }*/
     }
 }

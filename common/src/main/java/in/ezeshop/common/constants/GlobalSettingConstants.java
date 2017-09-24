@@ -23,7 +23,7 @@ public class GlobalSettingConstants {
     public static final String SETTINGS_CL_DEBIT_LIMIT_FOR_PIN = "AC_Debit_Limit_For_PIN";
     public static final String SETTINGS_CB_DEBIT_LIMIT_FOR_PIN = "CB_Debit_Limit_For_PIN";
     public static final String SETTINGS_STATS_NO_REFRESH_MINS = "Mchnt_Stats_Refresh_Mins";
-    public static final String SETTINGS_CUSTOMER_NO_REFRESH_MINS = "Cust_Data_Refresh_Mins";
+    //public static final String SETTINGS_CUSTOMER_NO_REFRESH_MINS = "Cust_Data_Refresh_Mins";
     public static final String SETTINGS_CUSTOMER_CASH_LIMIT = "AC_Max_Cash_Limit";
     public static final String SETTINGS_CUSTOMER_OVERDRAFT_LIMIT = "AC_Max_Overdraft_Limit";
     public static final String SETTINGS_MCHNT_REMOVAL_EXPIRY_DAYS = "Mchnt_Removal_Expiry_Days";
@@ -94,7 +94,7 @@ public class GlobalSettingConstants {
         aMap.put(SETTINGS_CUSTOMER_ACCOUNT_BLOCK_MINS,"60");
         aMap.put(SETTINGS_CUST_ACC_LIMIT_MODE_MINS,"60");
         aMap.put(SETTINGS_STATS_NO_REFRESH_MINS,"240");
-        aMap.put(SETTINGS_CUSTOMER_NO_REFRESH_MINS,"240");
+        //aMap.put(SETTINGS_CUSTOMER_NO_REFRESH_MINS,"240");
         aMap.put(SETTINGS_WRONG_ATTEMPT_RESET_MINS,"120");
 
         //aMap.put(SETTINGS_CB_REDEEM_CARD_REQ,"false");
@@ -186,7 +186,7 @@ public class GlobalSettingConstants {
         aMap.put(SETTINGS_CL_DEBIT_LIMIT_FOR_PIN, "Account Debit: Amount over which Customer PIN is asked during txn.");
         aMap.put(SETTINGS_CB_DEBIT_LIMIT_FOR_PIN, "Cashback Redeem: Amount over which Customer PIN is asked during txn.");
         aMap.put(SETTINGS_STATS_NO_REFRESH_MINS, "Dashboard and Customer List in 'Merchant App' will be refreshed only once in this duration.");
-        aMap.put(SETTINGS_CUSTOMER_NO_REFRESH_MINS, "Merchant List in the 'Customer App' will be refreshed only once in this duration.");
+        //aMap.put(SETTINGS_CUSTOMER_NO_REFRESH_MINS, "Merchant List in the 'Customer App' will be refreshed only once in this duration.");
         aMap.put(SETTINGS_CUSTOMER_CASH_LIMIT, "Customer: Maximum amount that can be kept in any account of single merchant.");
         aMap.put(SETTINGS_CUSTOMER_OVERDRAFT_LIMIT, "Customer: Maximum amount that can be overdraft from any account of single merchant.");
         aMap.put(SETTINGS_MCHNT_REMOVAL_EXPIRY_DAYS, "Notice Period for Merchant, if he decides to leave MyeCash program. No Credit Txns will be allowed in this duration.");
@@ -252,7 +252,7 @@ public class GlobalSettingConstants {
         aMap.put(SETTINGS_CUST_RENEW_DURATION, DATATYPE_INT);
         aMap.put(SETTINGS_MCHNT_TXN_HISTORY_DAYS, DATATYPE_INT);
         aMap.put(SETTINGS_CUST_TXN_HISTORY_DAYS, DATATYPE_INT);
-        aMap.put(SETTINGS_CUSTOMER_NO_REFRESH_MINS, DATATYPE_INT);
+        //aMap.put(SETTINGS_CUSTOMER_NO_REFRESH_MINS, DATATYPE_INT);
         aMap.put(SETTINGS_CB_REDEEM_LIMIT, DATATYPE_INT);
         aMap.put(SETTINGS_SERVICE_DISABLED_UNTIL, DATATYPE_DATE);
         //aMap.put(SETTINGS_TXN_IMAGE_CAPTURE_MODE, DATATYPE_INT);

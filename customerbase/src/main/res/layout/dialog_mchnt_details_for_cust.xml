@@ -12,6 +12,9 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingTop="@dimen/medium_space"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_below="@id/label_title">
 
         <LinearLayout
@@ -68,7 +71,7 @@
                     android:gravity="left|center"
                     android:paddingTop="0dp"
                     android:textStyle="bold"/>
-                <EditText
+                <!--EditText
                     style="@style/Edittext_only_view_small_lessPad"
                     android:layout_below="@+id/input_brand_name"
                     android:layout_toRightOf="@id/img_merchant"
@@ -77,13 +80,13 @@
                     android:layout_width="match_parent"
                     android:paddingTop="0dp"
                     android:layout_height="wrap_content"
-                    android:text="TBS"/>
+                    android:text="TBS"/-->
 
                 <LinearLayout
                     style="@style/LL_Horizontal_wrap"
                     android:id="@+id/layout_cashback"
                     android:layout_width="wrap_content"
-                    android:layout_below="@+id/input_category_city"
+                    android:layout_below="@+id/input_brand_name"
                     android:layout_toRightOf="@id/img_merchant">
 
                     <EditText
@@ -108,17 +111,18 @@
                     android:layout_toRightOf="@id/img_merchant"
                     android:gravity="left|center"
                     android:id="@+id/input_pp_cb_details"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:paddingTop="0dp"
                     android:layout_height="wrap_content"
                     android:textStyle="italic"
-                    android:text="*10% when Money added > \u20B9 1000"/>
+                    android:text="*10% when Money added > \u20B9 1000"
+                    android:textColor="@color/secondary_text"/>
 
             </RelativeLayout>
 
             <LinearLayout
                 style="@style/LL_Horizontal_wrap"
-                android:layout_marginTop="@dimen/medium_space">
+                android:layout_marginTop="@dimen/large_space">
 
                 <ImageView
                     style="@style/Imageview_Left_Column"
@@ -140,7 +144,7 @@
 
             <LinearLayout
                 style="@style/LL_Horizontal_wrap"
-                android:layout_marginTop="@dimen/medium_space">
+                android:layout_marginTop="@dimen/small_space">
 
                 <ImageView
                     style="@style/Imageview_Left_Column"
@@ -173,7 +177,7 @@
             <LinearLayout
                 style="@style/LL_Horizontal_wrap"
                 android:id="@+id/layout_bal_acc"
-                android:layout_marginTop="@dimen/medium_space">
+                android:layout_marginTop="@dimen/small_space">
 
                 <ImageView
                     style="@style/Imageview_Left_Column"
@@ -296,14 +300,10 @@
                     android:text="+ \u20B9 NA"/>
             </LinearLayout>
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/small_space"/>
-
             <LinearLayout
                 style="@style/LL_Horizontal_wrap"
                 android:id="@+id/layout_extra_details"
-                android:paddingTop="@dimen/XXL_space"
+                android:paddingTop="@dimen/XL_space"
                 android:paddingBottom="@dimen/medium_space">
 
                 <View
@@ -399,8 +399,7 @@
             </LinearLayout-->
 
             <LinearLayout
-                style="@style/LL_Horizontal_wrap"
-                android:layout_marginTop="@dimen/medium_space">
+                style="@style/LL_Horizontal_wrap">
 
                 <ImageView
                     style="@style/Imageview_Left_Column"

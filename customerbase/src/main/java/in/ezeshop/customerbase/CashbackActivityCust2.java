@@ -1,6 +1,9 @@
 package in.ezeshop.customerbase;
 
-/*
+/**
+ * Created by adgangwa on 23-02-2016.
+ */
+
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -53,7 +56,7 @@ import in.ezeshop.appbase.utilities.DialogFragmentWrapper;
 import in.ezeshop.appbase.utilities.LogMy;
 
 
-public class CashbackActivityCust extends AppCompatActivity implements
+public class CashbackActivityCust2 extends AppCompatActivity implements
         MyRetainedFragment.RetainedFragmentIf, DialogFragmentWrapper.DialogFragmentWrapperIf,
         PasswdChangeDialog.PasswdChangeDialogIf, MobileChangeDialog.MobileChangeDialogIf,
         OtpPinInputDialog.OtpPinInputDialogIf, CashbackListFragment.CashbackListFragmentIf,
@@ -105,7 +108,7 @@ public class CashbackActivityCust extends AppCompatActivity implements
     // Activity state members: These are to be saved for restore in event of activity recreation
     boolean mExitAfterLogout;
     int mLastMenuItemId;
-    long mGetCbSince;
+    //long mGetCbSince;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +135,7 @@ public class CashbackActivityCust extends AppCompatActivity implements
         if(savedInstanceState!=null) {
             mExitAfterLogout = savedInstanceState.getBoolean("mExitAfterLogout");
             mLastMenuItemId = savedInstanceState.getInt("mLastMenuItemId");
-            mGetCbSince = savedInstanceState.getLong("mGetCbSince");
+            //mGetCbSince = savedInstanceState.getLong("mGetCbSince");
         }
 
         // reference to views
@@ -153,7 +156,10 @@ public class CashbackActivityCust extends AppCompatActivity implements
         // read file, if 'cashback store' is empty
         LogMy.d(TAG,"In onBgThreadCreated");
         try {
-            boolean fetchData = false;
+            // fetch data from DB
+            fetchCbData();
+
+            /*boolean fetchData = false;
             if (mRetainedFragment.mCashbacks == null) {
                 if (!processCbDataFile(false)) {
                     fetchData = true;
@@ -169,10 +175,10 @@ public class CashbackActivityCust extends AppCompatActivity implements
                 fetchCbData();
             } else {
                 startCashbackListFrag();
-            }
+            }*/
         } catch (Exception e) {
             AppCommonUtil.cancelProgressDialog(true);
-            LogMy.e(TAG, "Exception in CashbackActivityCust:onBgThreadCreated", e);
+            LogMy.e(TAG, "Exception in CashbackActivityCust2:onBgThreadCreated", e);
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), false, true)
                     .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
             if(mRetainedFragment.mCashbacks == null) {
@@ -320,19 +326,19 @@ public class CashbackActivityCust extends AppCompatActivity implements
 
     @Override
     public boolean refreshMchntList() {
-        if(custStatsRefreshReq(mRetainedFragment.mCbsUpdateTime.getTime())) {
+        //if(custStatsRefreshReq(mRetainedFragment.mCbsUpdateTime.getTime())) {
             // Fetch from scratch
             // While we could have implemented fetching only latest data here
             // However intentionally fetching from scratch - to avoid scenario wherein due to
             // some un-foreseen bug - wrong CB data is getting displayed always from local file
-            mGetCbSince = 0;
+            //mGetCbSince = 0;
             mRetainedFragment.mCashbacks = null;
-            mRetainedFragment.mCbsUpdateTime = null;
-            deleteCbFile();
+            //mRetainedFragment.mCbsUpdateTime = null;
+            //deleteCbFile();
             fetchCbData();
             return true;
-        }
-        return false;
+        //}
+        //return false;
     }
 
     private void updateTbForCustomer() {
@@ -347,7 +353,26 @@ public class CashbackActivityCust extends AppCompatActivity implements
             mTbTitle2.setText(DbConstants.userStatusDesc[mCustomer.getAdmin_status()]);
             mTbTitle2.setTextColor(ContextCompat.getColor(this, R.color.red_negative));
 
-        }
+        } /*else if(mCustomer.getMembership_card()!=null &&
+                mCustomer.getMembership_card().getStatus() != DbConstants.CUSTOMER_CARD_STATUS_ACTIVE) {
+
+            switch(mCustomer.getMembership_card().getStatus()) {
+                case DbConstants.CUSTOMER_CARD_STATUS_DISABLED:
+                    mTbTitle2.setVisibility(View.VISIBLE);
+                    mTbTitle2.setTextColor(ContextCompat.getColor(this, R.color.red_negative));
+                    String txt = "Member Card: "+DbConstants.cardStatusDesc[mCustomer.getMembership_card().getStatus()];
+                    mTbTitle2.setText(txt);
+                    break;
+                default:
+                    // Issue if its neither Active nor Disabled - and still linked to customer
+                    //raise alarm
+                    Map<String,String> params = new HashMap<>();
+                    params.put("CustomerId",mCustomer.getPrivate_id());
+                    params.put("CardNum",mCustomer.getMembership_card().getCardNum());
+                    params.put("CardStatus",String.valueOf(mCustomer.getMembership_card().getStatus()));
+                    AppAlarms.invalidCardState(mCustomer.getPrivate_id(),DbConstants.USER_TYPE_CUSTOMER,"updateTbForCustomer",params);
+            }
+        }*/
 
         //mTbSubhead1Text1.setText(AppCommonUtil.getAmtStr(mRetainedFragment.mCurrCashback.getCurrAccBalance()));
         //mTbSubhead1Divider.setVisibility(View.VISIBLE);
@@ -417,7 +442,7 @@ public class CashbackActivityCust extends AppCompatActivity implements
             }
         } catch (Exception e) {
             AppCommonUtil.cancelProgressDialog(true);
-            LogMy.e(TAG, "Exception in CashbackActivityCust", e);
+            LogMy.e(TAG, "Exception in CashbackActivityCust2", e);
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), false, true)
                     .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
         }
@@ -429,7 +454,7 @@ public class CashbackActivityCust extends AppCompatActivity implements
 
         // read data from file, ir-respective of result from DB i.e. error, 0 records or whatever
         // dont read though - if records fetched are from scratch
-        if(mGetCbSince != 0) {
+        /*if(mGetCbSince != 0) {
             // some data was there in file earlier - read the same
             if(!processCbDataFile(true)) {
                 // if some error in reading file - fetch all records from scratch
@@ -437,7 +462,7 @@ public class CashbackActivityCust extends AppCompatActivity implements
                 fetchCbData();
                 return;
             }
-        }
+        }*/
 
         // If here, means:
         // - either DB data was fetched from scratch
@@ -465,17 +490,17 @@ public class CashbackActivityCust extends AppCompatActivity implements
                 // reset to null
                 mRetainedFragment.mLastFetchCashbacks = null;
                 // set time for current set of records
-                mRetainedFragment.mCbsUpdateTime = new Date();
+                //mRetainedFragment.mCbsUpdateTime = new Date();
 
                 // write complete 'in memory cashback store' to the file
                 //writeCbsToFile();
 
             } else {
-                LogMy.d(TAG, "No updated data available in DB");
-                if(mRetainedFragment.mCashbacks != null) {
+                LogMy.d(TAG, "No data available in DB");
+                /*if(mRetainedFragment.mCashbacks != null) {
                     // local data available from file - mark the same as latest
                     mRetainedFragment.mCbsUpdateTime = new Date();
-                }
+                }*/
             }
 
             // Final merged CB records should be in 'mRetainedFragment.mCashbacks' now
@@ -486,12 +511,16 @@ public class CashbackActivityCust extends AppCompatActivity implements
                         "You are not registered with any Merchant yet",
                         "Get registered to save more!");
             } else {
+                // I shouldn't be here
+                // if no data returned from DB - then none shud be in local store too
+                // TODO: raise alarm
+
                 // write all data with time to the local file
-                if(!writeCbsToFile())
+                /*if(!writeCbsToFile())
                 {
                     // try to delete file, like if partially created
                     deleteCbFile();
-                }
+                }*/
                 startCashbackListFrag();
             }
 
@@ -510,7 +539,7 @@ public class CashbackActivityCust extends AppCompatActivity implements
         }
     }
 
-    private void deleteCbFile() {
+    /*private void deleteCbFile() {
         // try to delete file, like if partially created
         try {
             deleteFile(AppCommonUtil.getCashbackFileName(mCustomerUser.getCustomer().getPrivate_id()));
@@ -551,7 +580,7 @@ public class CashbackActivityCust extends AppCompatActivity implements
             return false;
         }
         return true;
-    }
+    }*/
 
     private void onChangeMobileResponse(int errorCode) {
         LogMy.d(TAG, "In onChangeMobileResponse: " + errorCode);
@@ -796,6 +825,22 @@ public class CashbackActivityCust extends AppCompatActivity implements
 
             // Update 'Total Balance'
             AppCommonUtil.showAmtColor(this,null,mTbSubhead1Text1,mRetainedFragment.stats.getClBalance(),false);
+            /*mTbSubhead1Text1.setText(AppCommonUtil.getNegativeAmtStr(mRetainedFragment.stats.getClBalance()));
+            if(mRetainedFragment.stats.getClBalance() < 0) {
+                mTbSubhead1Text1.setTextColor(ContextCompat.getColor(this, R.color.red_negative));
+            } else {
+                mTbSubhead1Text1.setTextColor(ContextCompat.getColor(this, R.color.green_positive));
+            }*/
+
+            /*mTbSubhead1Text2.setText(AppCommonUtil.getAmtStr(mRetainedFragment.stats.getCbBalance()));
+            if(mRetainedFragment.stats.getClBalance()>0) {
+                mTbImgAcc.setVisibility(View.VISIBLE);
+                mTbSubhead1Text1.setVisibility(View.VISIBLE);
+                mTbSubhead1Text1.setText(AppCommonUtil.getAmtStr(mRetainedFragment.stats.getClBalance()));
+            } else {
+                mTbImgAcc.setVisibility(View.GONE);
+                mTbSubhead1Text1.setVisibility(View.GONE);
+            }*/
 
             // create or refresh cashback list fragment
             mMchntListFragment = (CashbackListFragment) mFragMgr.findFragmentByTag(CASHBACK_LIST_FRAGMENT);
@@ -872,7 +917,7 @@ public class CashbackActivityCust extends AppCompatActivity implements
             }
         } catch (Exception e) {
             AppCommonUtil.cancelProgressDialog(true);
-            LogMy.e(TAG, "Exception in CashbackActivityCust", e);
+            LogMy.e(TAG, "Exception in CashbackActivityCust2", e);
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), false, true)
                     .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
         }
@@ -889,7 +934,8 @@ public class CashbackActivityCust extends AppCompatActivity implements
     }
 
     private void fetchCbData() {
-        LogMy.d(TAG,"Fetching cb data from backend: "+mGetCbSince);
+        //LogMy.d(TAG,"Fetching cb data from backend: "+mGetCbSince);
+        LogMy.d(TAG,"Fetching cb data from backend");
         int resultCode = AppCommonUtil.isNetworkAvailableAndConnected(this);
         if ( resultCode != ErrorCodes.NO_ERROR) {
             // Show error notification dialog
@@ -897,13 +943,14 @@ public class CashbackActivityCust extends AppCompatActivity implements
                     .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
         } else {
             AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
-            mRetainedFragment.fetchCashback(mGetCbSince, this);
+            //mRetainedFragment.fetchCashback(mGetCbSince, this);
+            mRetainedFragment.fetchCashback((long)0, this);
         }
     }
 
     // Reads and process local cashback data file
     // If the fx returns true, then 'mRetainedFragment.mCashbacks' will definitly have some data
-    private boolean processCbDataFile(boolean ignoreTime) {
+    /*private boolean processCbDataFile(boolean ignoreTime) {
         LogMy.d(TAG,"In processCbDataFile: "+ignoreTime);
         String fileName = AppCommonUtil.getCashbackFileName(mCustomerUser.getCustomer().getPrivate_id());
 
@@ -979,9 +1026,9 @@ public class CashbackActivityCust extends AppCompatActivity implements
         mRetainedFragment.mCashbacks.put(cb.getMerchantId(), cb);
         //mRetainedFragment.stats.addToStats(cb);
         LogMy.d(TAG,"Added new item in cashback store: "+mRetainedFragment.mCashbacks.size());
-    }
+    }*/
 
-    private boolean custStatsRefreshReq(long lastUpdate) {
+    /*private boolean custStatsRefreshReq(long lastUpdate) {
 
         if(MyGlobalSettings.getCustNoRefreshMins()==(24*60)) {
             // 24 is treated as special case as 'once in a day'
@@ -1000,7 +1047,7 @@ public class CashbackActivityCust extends AppCompatActivity implements
         }
 
         return false;
-    }
+    }*/
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -1047,7 +1094,6 @@ public class CashbackActivityCust extends AppCompatActivity implements
 
         outState.putBoolean("mExitAfterLogout", mExitAfterLogout);
         outState.putInt("mLastMenuItemId", mLastMenuItemId);
-        outState.putLong("mGetCbSince", mGetCbSince);
+        //outState.putLong("mGetCbSince", mGetCbSince);
     }
 }
-*/

@@ -46,7 +46,7 @@ public class MyRetainedFragment extends RetainedFragment {
     // Cashback Data
     public List<MyCashback> mLastFetchCashbacks;
     public Map<String, MyCashback> mCashbacks;
-    public Date mCbsUpdateTime;
+    //public Date mCbsUpdateTime;
 
     // stats for the customer
     public CustomerStats stats;

@@ -37,7 +37,7 @@
         </activity>
 
         <activity
-            android:name="in.ezeshop.customerbase.CashbackActivityCust"
+            android:name="in.ezeshop.customerbase.CashbackActivityCust2"
             android:label="CashbackActivity"
             android:windowSoftInputMode="stateAlwaysHidden"
             android:screenOrientation="portrait">
