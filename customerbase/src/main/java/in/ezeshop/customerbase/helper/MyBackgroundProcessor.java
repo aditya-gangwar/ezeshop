@@ -126,6 +126,9 @@ public class MyBackgroundProcessor <T> extends BackgroundProcessor<T> {
     public void addCustomerOpsReq() {
         mRequestHandler.obtainMessage(MyRetainedFragment.REQUEST_FETCH_CUSTOMER_OPS, null).sendToTarget();
     }
+    public void addCheckMsgDevRegReq() {
+        mRequestHandler.obtainMessage(MyRetainedFragment.REQUEST_MSG_DEV_REG_CHK, null).sendToTarget();
+    }
 
 
     @Override
@@ -175,8 +178,16 @@ public class MyBackgroundProcessor <T> extends BackgroundProcessor<T> {
             case MyRetainedFragment.REQUEST_AUTO_LOGIN:
                 error = tryAutoLogin();
                 break;
+            case MyRetainedFragment.REQUEST_MSG_DEV_REG_CHK:
+                error = chkMsgDevReg();
+                break;
         }
         return error;
+    }
+
+    private int chkMsgDevReg() {
+        LogMy.d(TAG, "In chkMsgDevReg");
+        return CustomerUser.getInstance().checkMsgDevReg();
     }
 
     private int tryAutoLogin() {

@@ -82,6 +82,7 @@ public class ErrorCodes {
     public static final int DEVICE_INSECURE = 591;
     public static final int LOGGED_IN_DEVICE_DELETE = 592;
     public static final int WRNG_PSWD_NOT_TRUSTED_DEV = 593;
+    public static final int DEV_NOT_REG_FOR_MSGING = 594;
 
     // Misc errors
     public static final int DUPLICATE_ENTRY = 661;
@@ -147,6 +148,7 @@ public class ErrorCodes {
         aMap.put(DEVICE_INSECURE,"Your device is not secure. Please install and run application on other device.");
         aMap.put(LOGGED_IN_DEVICE_DELETE,"You cannot delete device from which you are logged in.");
         aMap.put(WRNG_PSWD_NOT_TRUSTED_DEV,"Not Trusted Device. Please enter correct User ID/Password to add in Trusted device list.");
+        aMap.put(DEV_NOT_REG_FOR_MSGING,"");
 
         aMap.put(NO_SUCH_CARD,"Invalid MyeCash Customer Card");
         aMap.put(WRONG_CARD,"Wrong Customer Card Used.");
@@ -216,6 +218,7 @@ public class ErrorCodes {
     public static final String BL_ERROR_MULTIPLE_LOGIN_LIMIT = "3044";
     public static final String BL_ERROR_SESSION_TIMEOUT_URL = "3048";
     public static final String BL_ERROR_SESSION_TIMEOUT = "3091";
+    public static final String BL_ERROR_MSGING_UNKNOWN_DEV = "5000";
 
 
     // Map from backendless error codes to local error codes
@@ -247,6 +250,7 @@ public class ErrorCodes {
         map.put(BL_ERROR_NO_DATA_FOUND_3, NO_DATA_FOUND);
         map.put(BL_ERROR_SESSION_TIMEOUT_URL, SESSION_TIMEOUT);
         map.put(BL_ERROR_SESSION_TIMEOUT, SESSION_TIMEOUT);
+        map.put(BL_ERROR_MSGING_UNKNOWN_DEV, DEV_NOT_REG_FOR_MSGING);
 
         backendToLocalErrorCode = Collections.unmodifiableMap(map);
     }
@@ -296,6 +300,7 @@ public class ErrorCodes {
         aMap.put(String.valueOf(DEVICE_INSECURE),"DEVICE_INSECURE");
         aMap.put(String.valueOf(LOGGED_IN_DEVICE_DELETE),"LOGGED_IN_DEVICE_DELETE");
         aMap.put(String.valueOf(WRNG_PSWD_NOT_TRUSTED_DEV),"WRNG_PSWD_NOT_TRUSTED_DEV");
+        aMap.put(String.valueOf(DEV_NOT_REG_FOR_MSGING),"DEV_NOT_REG_FOR_MSGING");
 
         aMap.put(String.valueOf(NO_SUCH_CARD),"NO_SUCH_CARD");
         aMap.put(String.valueOf(WRONG_CARD),"WRONG_CARD");
@@ -359,6 +364,7 @@ public class ErrorCodes {
         aMap.put(BL_ERROR_NO_DATA_FOUND_3, BL_ERROR_NO_DATA_FOUND_3);
         aMap.put(BL_ERROR_SESSION_TIMEOUT_URL, BL_ERROR_SESSION_TIMEOUT_URL);
         aMap.put(BL_ERROR_SESSION_TIMEOUT, BL_ERROR_SESSION_TIMEOUT);
+        aMap.put(BL_ERROR_MSGING_UNKNOWN_DEV, BL_ERROR_MSGING_UNKNOWN_DEV);
 
         appErrorNames = Collections.unmodifiableMap(aMap);
     }

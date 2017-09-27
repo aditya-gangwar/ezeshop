@@ -440,6 +440,17 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
                     }
                     break;
             }
+
+            // This function will be repeatedly called
+            // so, checking for device registration here
+            // This so - as we dont know how much time the device registration may take - few millisec to few sec
+            // If we do this somewhere else, we may not be able to catch it
+            if(mCustomerUser.isChkMsgDevReg()) {
+                // device registration completed
+                // start thread to verify registration and update customer object, if required
+                mRetainedFragment.checkMsgDevReg();
+            }
+
         } catch (Exception e) {
             AppCommonUtil.cancelProgressDialog(true);
             LogMy.e(TAG, "Exception in CashbackActivityCust2", e);

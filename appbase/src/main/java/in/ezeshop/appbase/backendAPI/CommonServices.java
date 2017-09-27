@@ -43,6 +43,12 @@ package in.ezeshop.appbase.backendAPI;
           Backendless.CustomService.invoke( SERVICE_NAME, SERVICE_VERSION_NAME, "isSessionValid", args );
       }
 
+      public java.lang.String setMsgDeviceId(java.lang.String userId, java.lang.String deviceId)
+      {
+          Object[] args = new Object[]{userId, deviceId};
+          return Backendless.CustomService.invoke( SERVICE_NAME, SERVICE_VERSION_NAME, "setMsgDeviceId", args, java.lang.String.class );
+      }
+
       public void changePassword(String userId, String oldPasswd, String newPasswd)
       {
           Object[] args = new Object[]{userId, oldPasswd, newPasswd};

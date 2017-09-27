@@ -31,6 +31,9 @@ public class AppConstants {
     public static final String SYMBOL_RS_0 = "\u20B9 0";
     public static final String SYMBOL_DOWN_ARROW = "\u25BC";
 
+    // Android push messaging project/sender id
+    public static final String PUSH_MSG_SEND_ID = "442748921852";
+
     // Crashlytics custom keys
     public static final String CLTS_INPUT_CUST_MOBILE = "inputCustMobile";
     //public static final String CLTS_INPUT_CUST_CARD = "inputCustCard";

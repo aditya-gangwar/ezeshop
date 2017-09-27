@@ -308,14 +308,15 @@ public class CashbackListFragment extends BaseFragment {
         //private View mCardView;
         //private View mLayoutMchntItem;
         private ImageView mMerchantDp;
-        private EditText mMerchantName;
+        private TextView mMerchantName;
         private View mMchntStatusAlert;
-        private EditText mAreaNdCity;
-        private EditText mLastTxnTime;
+        private TextView mAreaNdCity;
+        private TextView mLastTxnTime;
         private TextView mAccBalance;
         private ImageView mAccImage;
         //private EditText mCbBalance;
         //private View mLayoutAcc;
+        //public View mLayoutRoot;
 
         public CbHolder(View itemView) {
             super(itemView);
@@ -323,14 +324,16 @@ public class CashbackListFragment extends BaseFragment {
             //mCardView = itemView.findViewById(R.id.card_view);
             //mLayoutMchntItem = itemView.findViewById(R.id.layout_mchnt_item);
             mMerchantDp = (ImageView) itemView.findViewById(R.id.img_merchant);
-            mMerchantName = (EditText) itemView.findViewById(R.id.input_mchnt_name);
+            mMerchantName = (TextView) itemView.findViewById(R.id.input_mchnt_name);
             mMchntStatusAlert = itemView.findViewById(R.id.icon_mchnt_status_alert);
-            mAreaNdCity = (EditText) itemView.findViewById(R.id.mchnt_area_city);
-            mLastTxnTime = (EditText) itemView.findViewById(R.id.input_last_txn);
+            mAreaNdCity = (TextView) itemView.findViewById(R.id.mchnt_area_city);
+            mLastTxnTime = (TextView) itemView.findViewById(R.id.input_last_txn);
             mAccBalance = (TextView) itemView.findViewById(R.id.input_acc_bal);
             mAccImage = (ImageView)  itemView.findViewById(R.id.icon_account);
             //mCbBalance = (EditText) itemView.findViewById(R.id.input_cb_bal);
             //mLayoutAcc = itemView.findViewById(R.id.layout_acc);
+
+            //mLayoutRoot = itemView.findViewById(R.id.layout_root);
 
             /*mCardView.setOnTouchListener(this);
             mLayoutMchntItem.setOnTouchListener(this);
@@ -408,26 +411,6 @@ public class CashbackListFragment extends BaseFragment {
             mLastTxnTime.setText(txt);
 
             AppCommonUtil.showAmtColor(getActivity(),null,mAccBalance,mCb.getCurrAccBalance(),false);
-
-            /*int color = ContextCompat.getColor(getActivity(), R.color.green_positive);
-            if((mCb.getCurrAccBalance() < 0)) {
-                mAccBalance.setText(AppCommonUtil.getNegativeAmtStr(
-                        Math.abs(mCb.getCurrAccBalance()), false));
-                color = ContextCompat.getColor(getActivity(), R.color.red_negative);
-                mAccImage.setColorFilter(color, PorterDuff.Mode.SRC_IN);
-            } else {
-                mAccBalance.setText(AppCommonUtil.getNegativeAmtStr(mCb.getCurrAccBalance(), true));
-                mAccImage.setColorFilter(ContextCompat.getColor(getActivity(), R.color.primary), PorterDuff.Mode.SRC_IN);
-            }
-            mAccBalance.setTextColor(color);*/
-
-            /*if(mCb.getCurrAccBalance()==0) {
-                mLayoutAcc.setVisibility(View.GONE);
-            } else {
-                mLayoutAcc.setVisibility(View.VISIBLE);
-                mAccBalance.setText(AppCommonUtil.getAmtStr(mCb.getCurrAccBalance()));
-            }
-            mCbBalance.setText(AppCommonUtil.getAmtStr(mCb.getCurrCbBalance()));*/
         }
 
         private Bitmap getMchntDp(String filename) {
@@ -522,7 +505,7 @@ public class CashbackListFragment extends BaseFragment {
         @Override
         public CbHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            View view = layoutInflater.inflate(R.layout.merchant_itemview, parent, false);
+            View view = layoutInflater.inflate(R.layout.merchant_itemview_2, parent, false);
             //view.setOnClickListener(mListener);
             return new CbHolder(view);
         }
@@ -538,6 +521,7 @@ public class CashbackListFragment extends BaseFragment {
                 holder.itemView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.white));
             }*/
 
+            //holder.mLayoutRoot.setOnClickListener(mListener);
             holder.itemView.setOnClickListener(mListener);
             //holder.itemView.setOnTouchListener(mTouchListener);
             holder.bindCb(cb);

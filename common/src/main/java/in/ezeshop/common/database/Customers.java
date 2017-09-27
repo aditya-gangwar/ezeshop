@@ -35,6 +35,15 @@ public class Customers
   private int sex;
   private java.util.Date regDate;
   private String regMchntId;
+  private String msgDevId;
+
+  public String getMsgDevId() {
+    return msgDevId;
+  }
+
+  public void setMsgDevId(String msgDevId) {
+    this.msgDevId = msgDevId;
+  }
 
   public Date getRegDate() {
     return regDate;

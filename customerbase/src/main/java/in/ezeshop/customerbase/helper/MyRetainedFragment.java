@@ -36,6 +36,7 @@ public class MyRetainedFragment extends RetainedFragment {
     public static final int REQUEST_ENABLE_ACC = 9;
     public static final int REQUEST_FETCH_CUSTOMER_OPS = 10;
     public static final int REQUEST_AUTO_LOGIN = 11;
+    public static final int REQUEST_MSG_DEV_REG_CHK = 12;
 
     // Threads taken care by this fragment
     private MyBackgroundProcessor<String> mBackgroundProcessor;
@@ -115,6 +116,10 @@ public class MyRetainedFragment extends RetainedFragment {
     }
     public void fetchCustomerOps() {
         mBackgroundProcessor.addCustomerOpsReq();
+    }
+
+    public void checkMsgDevReg() {
+        mBackgroundProcessor.addCheckMsgDevRegReq();
     }
 
     @Override
