@@ -6,6 +6,7 @@
 .DS_Store
 /build
 /captures
+common/build
 merchant/build
 appbase/build
 merchantbase/build
