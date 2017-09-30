@@ -41,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        card_view:cardCornerRadius="2dp">
+        card_view:cardCornerRadius="4dp">
 
     <!--LinearLayout
         style="@style/LL_Vertical"

@@ -18,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import in.ezeshop.appbase.BaseDialog;
-import in.ezeshop.appbase.barcodeReader.BarcodeCaptureActivity;
 import in.ezeshop.appbase.utilities.OnSingleClickListener;
 import in.ezeshop.common.MyGlobalSettings;
 import in.ezeshop.common.constants.CommonConstants;

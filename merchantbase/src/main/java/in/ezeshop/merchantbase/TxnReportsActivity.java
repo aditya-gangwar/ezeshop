@@ -19,7 +19,6 @@ import android.widget.LinearLayout;
 
 import in.ezeshop.appbase.BaseActivity;
 import in.ezeshop.appbase.MyDatePickerDialog;
-import in.ezeshop.appbase.barcodeReader.BarcodeCaptureActivity;
 import in.ezeshop.appbase.constants.AppConstants;
 import in.ezeshop.appbase.entities.MyTransaction;
 import in.ezeshop.appbase.utilities.AppAlarms;

@@ -16,6 +16,12 @@
     <dimen name="dp_dialog_image_width">60dp</dimen>
     <dimen name="dp_dialog_image_height">60dp</dimen>
 
+    <dimen name="prescription_icon_frame_width">100dp</dimen>
+    <dimen name="prescription_icon_frame_height">100dp</dimen>
+
+    <dimen name="prescription_icon_width">82dp</dimen>
+    <dimen name="prescription_icon_height">82dp</dimen>
+
     <dimen name="normal_icon_width">24dp</dimen>
     <dimen name="normal_icon_height">24dp</dimen>
 

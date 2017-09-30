@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.design.widget.CoordinatorLayout
     android:id="@+id/myCoordinatorLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -39,7 +39,7 @@
         </LinearLayout>
 
         <LinearLayout
-            style="@style/LL_Vertical_paddingSidesXL"
+            style="@style/LL_Vertical_paddingSidesLarge"
             android:id="@+id/layout_whole"
             android:layout_alignParentTop="true"
             android:layout_above="@id/layout_last_row_btn">

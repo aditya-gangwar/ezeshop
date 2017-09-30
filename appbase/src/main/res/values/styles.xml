@@ -333,6 +333,33 @@
         <item name="android:gravity">left</item>
     </style-->
 
+    <style name="Edittext_CardTitle" parent="Edittext_only_view_small">
+        <item name="android:gravity">start</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:paddingLeft">@dimen/medium_space</item>
+    </style>
+
+    <style name="Edittext_CardTitle_Button" parent="Edittext_only_click_XS">
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:paddingRight">0dp</item>
+    </style>
+
+    <style name="Img_CardTitle_Button" parent="Edittext_only_click_small">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:paddingRight">@dimen/small_space</item>
+        <item name="android:src">@drawable/ic_keyboard_arrow_right_white_18dp</item>
+        <item name="android:tint">@color/primary</item>
+    </style>
+
     <style name="Edittext_only_view_small_lessPad" parent="Edittext_only_view_small">
         <item name="android:paddingLeft">@dimen/edittext_padding_less</item>
         <item name="android:paddingRight">@dimen/edittext_padding_less</item>
@@ -346,7 +373,18 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="Edittext_only_view_XS_lessPad" parent="Edittext_only_view_XS">
+        <item name="android:paddingLeft">@dimen/edittext_padding_less</item>
+        <item name="android:paddingRight">@dimen/edittext_padding_less</item>
+        <item name="android:paddingBottom">@dimen/edittext_padding_less</item>
+        <item name="android:paddingTop">@dimen/edittext_padding_less</item>
+    </style>
+
     <style name="Edittext_only_view_XS" parent="Edittext_only_view_small">
+        <item name="android:textSize">@dimen/text_size_XS</item>
+    </style>
+
+    <style name="Edittext_only_click_XS" parent="Edittext_only_click_small">
         <item name="android:textSize">@dimen/text_size_XS</item>
     </style>
 
