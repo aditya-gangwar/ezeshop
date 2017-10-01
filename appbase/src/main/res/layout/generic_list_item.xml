@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/layout_listItem"
+    android:paddingLeft="@dimen/medium_space"
+    android:paddingRight="@dimen/medium_space"
+    android:paddingTop="@dimen/small_space"
+    android:paddingBottom="@dimen/small_space">
+
+    <ImageView
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:src="@drawable/ic_access_time_white_18dp"
+        android:tint="@color/icon_grey_dark"
+        android:layout_marginRight="@dimen/medium_space"
+        android:id="@+id/img_listItem"/>
+    <TextView
+        style="@style/Edittext_only_click_small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left|center_vertical"
+        android:text="7:00 AM - 10:00 AM"
+        android:id="@+id/input_listItem"/>
+
+</LinearLayout>

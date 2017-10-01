@@ -1,131 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/LL_Vertical"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    style="@style/LL_Vertical_paddingSidesLarge"
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
     android:id="@+id/layout_root"
     android:foreground="?android:attr/selectableItemBackground">
 
-<android.support.v7.widget.CardView
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/small_space"
-    android:layout_marginBottom="@dimen/small_space"
-    android:layout_marginLeft="@dimen/medium_space"
-    android:layout_marginRight="@dimen/medium_space"
-    card_view:cardCornerRadius="4dp"
-    android:elevation="3dp"
-    android:clickable="false"
-    android:focusable="false">
-
-    <LinearLayout
-        style="@style/LL_Horizontal_wrap"
-        android:padding="@dimen/small_space"
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_space"
+        android:layout_marginBottom="@dimen/small_space"
+        card_view:cardCornerRadius="4dp"
+        android:elevation="3dp"
         android:clickable="false"
         android:focusable="false">
 
-        <ImageView
-            android:id="@+id/img_merchant"
-            android:src="@drawable/ic_store_grey_48dp"
-            android:layout_width="@dimen/dp_item_image_width"
-            android:layout_height="match_parent"
-            android:scaleType="centerInside"
-            android:layout_marginRight="@dimen/medium_space"
-            android:layout_gravity="center"/>
-
         <LinearLayout
-            style="@style/LL_Vertical"
-            android:layout_height="wrap_content"
+            style="@style/LL_Horizontal_wrap"
+            android:padding="@dimen/small_space"
             android:clickable="false"
             android:focusable="false">
 
-            <LinearLayout
-                style="@style/LL_Horizontal_wrap"
-                android:id="@+id/layout_mchnt_name"
-                android:layout_width="match_parent"
-                android:clickable="false"
-                android:focusable="false">
-
-                <TextView
-                    style="@style/Edittext_only_view_small_lessPad"
-                    android:id="@+id/input_mchnt_name"
-                    android:layout_height="match_parent"
-                    android:layout_width="wrap_content"
-                    android:text="Ganga Stores and Cosmetics"
-                    android:textStyle="bold"
-                    android:gravity="left"
-                    android:textColor="@color/subheading"/>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:id="@+id/icon_mchnt_status_alert"
-                    android:src="@drawable/ic_warning_white_18dp"
-                    android:tint="@color/red_negative"
-                    android:clickable="false"
-                    android:padding="@dimen/edittext_padding_less"/>
-            </LinearLayout>
+            <ImageView
+                android:id="@+id/img_merchant"
+                android:src="@drawable/ic_store_grey_48dp"
+                android:layout_width="@dimen/dp_item_image_width"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:layout_marginRight="@dimen/medium_space"
+                android:layout_gravity="center"/>
 
             <LinearLayout
-                style="@style/LL_Horizontal_wrap"
-                android:layout_width="match_parent"
-                android:clickable="false"
-                android:focusable="false">
-
-                <TextView
-                    style="@style/Edittext_only_view_small_lessPad"
-                    android:id="@+id/mchnt_area_city"
-                    android:layout_height="wrap_content"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:gravity="left"
-                    android:text="Faridabad"
-                    android:paddingTop="0dp"
-                    android:textColor="@color/secondary_text"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:id="@+id/icon_account"
-                    android:src="@drawable/ic_account_balance_wallet_white_18dp"
-                    android:paddingTop="0dp"
-                    android:tint="@color/primary"
-                    android:padding="@dimen/edittext_padding_less"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                style="@style/LL_Horizontal_wrap"
+                style="@style/LL_Vertical"
                 android:layout_height="wrap_content"
-                android:layout_width="match_parent"
                 android:clickable="false"
                 android:focusable="false">
 
-                <TextView
-                    style="@style/Edittext_only_view_small_lessPad"
-                    android:id="@+id/input_last_txn"
-                    android:layout_height="wrap_content"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:gravity="left|center_vertical"
-                    android:text="08 Apr,16  20:15"
-                    android:paddingTop="0dp"
-                    android:textColor="@color/secondary_text"/>
+                <LinearLayout
+                    style="@style/LL_Horizontal_wrap"
+                    android:id="@+id/layout_mchnt_name"
+                    android:layout_width="match_parent"
+                    android:clickable="false"
+                    android:focusable="false">
 
-                <TextView
-                    style="@style/Edittext_only_view_medium_lessPad"
-                    android:id="@+id/input_acc_bal"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="+ \u20B9 9,999"
-                    android:paddingTop="0dp"
-                    android:textColor="@color/green_positive"/>
+                    <TextView
+                        style="@style/Edittext_only_view_small_lessPad"
+                        android:id="@+id/input_mchnt_name"
+                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:text="Ganga Stores and Cosmetics"
+                        android:textStyle="bold"
+                        android:gravity="left"
+                        android:textColor="@color/subheading"/>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/icon_mchnt_status_alert"
+                        android:src="@drawable/ic_warning_white_18dp"
+                        android:tint="@color/red_negative"
+                        android:clickable="false"
+                        android:padding="@dimen/edittext_padding_less"/>
+                </LinearLayout>
 
+                <LinearLayout
+                    style="@style/LL_Horizontal_wrap"
+                    android:layout_width="match_parent"
+                    android:clickable="false"
+                    android:focusable="false">
+
+                    <TextView
+                        style="@style/Edittext_only_view_small_lessPad"
+                        android:id="@+id/mchnt_area_city"
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="left"
+                        android:text="Faridabad"
+                        android:paddingTop="0dp"
+                        android:textColor="@color/secondary_text"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/icon_account"
+                        android:src="@drawable/ic_account_balance_wallet_white_18dp"
+                        android:paddingTop="0dp"
+                        android:tint="@color/primary"
+                        android:padding="@dimen/edittext_padding_less"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/LL_Horizontal_wrap"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:clickable="false"
+                    android:focusable="false">
+
+                    <TextView
+                        style="@style/Edittext_only_view_small_lessPad"
+                        android:id="@+id/input_last_txn"
+                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="left|center_vertical"
+                        android:text="08 Apr,16  20:15"
+                        android:paddingTop="0dp"
+                        android:textColor="@color/secondary_text"/>
+
+                    <TextView
+                        style="@style/Edittext_only_view_medium_lessPad"
+                        android:id="@+id/input_acc_bal"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="+ \u20B9 9,999"
+                        android:paddingTop="0dp"
+                        android:textColor="@color/green_positive"/>
+
+                </LinearLayout>
             </LinearLayout>
+
         </LinearLayout>
 
-    </LinearLayout>
-
-</android.support.v7.widget.CardView>
+    </android.support.v7.widget.CardView>
 </LinearLayout>

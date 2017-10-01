@@ -106,7 +106,7 @@
                 </LinearLayout>
 
                 <EditText
-                    style="@style/Edittext_only_view_small_lessPad"
+                    style="@style/Edittext_only_view_XS_lessPad"
                     android:layout_below="@+id/layout_cashback"
                     android:layout_toRightOf="@id/img_merchant"
                     android:gravity="left|center"
@@ -232,7 +232,7 @@
                     android:visibility="invisible"
                     android:paddingTop="0dp"/>
                 <TextView
-                    style="@style/Edittext_only_view_small_lessPad"
+                    style="@style/Edittext_only_view_XS_lessPad"
                     android:layout_height="match_parent"
                     android:layout_width="0dp"
                     android:layout_weight="45"
@@ -241,7 +241,7 @@
                     android:paddingTop="0dp"
                     android:textColor="@color/secondary_text"/>
                 <TextView
-                    style="@style/Edittext_only_view_small_lessPad"
+                    style="@style/Edittext_only_view_XS_lessPad"
                     android:id="@+id/input_cb"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -260,7 +260,7 @@
                     android:visibility="invisible"
                     android:paddingTop="0dp"/>
                 <TextView
-                    style="@style/Edittext_only_view_small_lessPad"
+                    style="@style/Edittext_only_view_XS_lessPad"
                     android:layout_height="match_parent"
                     android:layout_width="0dp"
                     android:layout_weight="45"
@@ -269,7 +269,7 @@
                     android:paddingTop="0dp"
                     android:textColor="@color/secondary_text"/>
                 <TextView
-                    style="@style/Edittext_only_view_small_lessPad"
+                    style="@style/Edittext_only_view_XS_lessPad"
                     android:id="@+id/input_acc_deposit"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"

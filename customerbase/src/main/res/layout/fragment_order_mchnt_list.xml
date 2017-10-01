@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LL_Vertical_paddingSidesLarge"
+    android:id="@+id/list_root"
+    android:background="@color/bg_light_grey"
+    android:paddingTop="@dimen/XL_space">
+
+    <TextView
+        style="@style/Edittext_only_view_small"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="Select Merchant for this Order"/>
+
+    <CheckBox
+        style="@style/Edittext_only_view_small"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkbox_showStores"
+        android:paddingRight="@dimen/medium_space"
+        android:layout_marginBottom="@dimen/medium_space"
+        android:text="Only show Stores where I am already member"
+        android:gravity="start|center_vertical"
+        android:onClick="onCheckboxClicked"/>
+
+    <!--LinearLayout
+        style="@style/LL_Horizontal_wrap"
+        android:id="@+id/layout_myFavStores"
+        android:paddingTop="@dimen/medium_space"
+        android:paddingBottom="@dimen/small_space">
+        <View
+            style="@style/Divider_horizontal_Medium"
+            android:layout_weight="50"
+            android:background="@color/primary"/>
+        <EditText
+            style="@style/Edittext_only_view_small"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:text="Your Favourite Stores"
+            android:textColor="@color/primary"/>
+        <View
+            style="@style/Divider_horizontal_Medium"
+            android:layout_weight="50"
+            android:background="@color/primary"/>
+    </LinearLayout-->
+
+    <android.support.v7.widget.RecyclerView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recyView_myMchntListOrder"
+        android:layout_marginTop="@dimen/medium_space">
+    </android.support.v7.widget.RecyclerView>
+
+    <!--LinearLayout
+        style="@style/LL_Horizontal_wrap"
+        android:id="@+id/layout_otherStores"
+        android:paddingTop="@dimen/medium_space"
+        android:paddingBottom="@dimen/small_space">
+        <View
+            style="@style/Divider_horizontal_Medium"
+            android:layout_weight="50"
+            android:background="@color/primary"/>
+        <EditText
+            style="@style/Edittext_only_view_small"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:text="Other Stores"
+            android:textColor="@color/primary"/>
+        <View
+            style="@style/Divider_horizontal_Medium"
+            android:layout_weight="50"
+            android:background="@color/primary"/>
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recyView_mchntListOrder"
+        android:layout_marginTop="@dimen/medium_space"
+        android:layout_weight="1">
+    </android.support.v7.widget.RecyclerView-->
+
+</LinearLayout>

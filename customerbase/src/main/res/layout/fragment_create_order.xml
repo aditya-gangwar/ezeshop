@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/root_cashTxnFragment"
+        android:id="@+id/root_createOrder"
         android:background="@color/bg_light_grey">
 
         <LinearLayout
@@ -25,15 +25,15 @@
             <android.support.v7.widget.AppCompatButton
                 style="@style/button_normal_border"
                 android:id="@+id/btn_confirm_order"
-                android:text="CONFRIM  ORDER"
+                android:text="CONFIRM"
                 android:textColor="@color/primary"/>
         </LinearLayout>
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="@dimen/medium_space"
             android:layout_alignParentTop="true"
+            android:layout_marginBottom="@dimen/large_space"
             android:layout_above="@id/layout_last_row_btn">
 
             <LinearLayout
@@ -42,9 +42,7 @@
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/cardview_prescrips"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    card_view:cardCornerRadius="4dp">
+                    style="@style/My_Cardview">
 
                     <LinearLayout
                         style="@style/LL_Vertical"
@@ -52,7 +50,12 @@
 
                         <LinearLayout
                             style="@style/LL_Horizontal_wrap"
-                            android:id="@+id/layout_cardTitle">
+                            android:id="@+id/layout_cardTitle"
+                            android:paddingLeft="@dimen/medium_space"
+                            android:paddingRight="@dimen/medium_space">
+                            <ImageView
+                                style="@style/Img_CardTitle_Icon"
+                                android:src="@drawable/ic_description_black_18dp"/>
                             <TextView
                                 style="@style/Edittext_CardTitle"
                                 android:text="Prescriptions"
@@ -75,7 +78,8 @@
                             android:layout_marginTop="@dimen/XL_space"
                             android:layout_marginLeft="@dimen/large_space"
                             android:layout_marginRight="@dimen/large_space"
-                            android:scrollbarSize="0dp">
+                            android:scrollbarSize="0dp"
+                            android:visibility="visible">
 
                             <LinearLayout
                                 style="@style/LL_Horizontal_wrap"
@@ -163,7 +167,7 @@
 
                         <LinearLayout
                             style="@style/LL_Horizontal_wrap"
-                            android:layout_marginTop="@dimen/XXL_space"
+                            android:layout_marginTop="@dimen/XXXL_space"
                             android:gravity="center"
                             android:id="@+id/layout_addPrescrips">
 
@@ -179,111 +183,47 @@
                                 android:background="@drawable/round_rectangle_border_primary"/>
                         </LinearLayout>
 
-                        <TextView
-                            style="@style/Edittext_only_view_XS"
-                            android:layout_width="match_parent"
-                            android:text="You can add upto 4 prescriptions per order."
-                            android:id="@+id/info_addPrescrips"
-                            android:layout_marginTop="@dimen/medium_space"
-                            android:layout_marginBottom="@dimen/medium_space"/>
-
-                        <!--ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/img_clear_prescrips"
-                            android:layout_below="@id/info_addPrescrips"
-                            android:layout_marginTop="@dimen/large_space"
-                            android:paddingLeft="@dimen/large_space"
-                            android:tint="@color/green_positive"
-                            android:src="@drawable/ic_check_white_18dp"/>
-
-                        <TextView
-                            style="@style/Edittext_only_view_XS"
-                            android:layout_below="@id/info_addPrescrips"
-                            android:layout_toRightOf="@id/img_clear_prescrips"
-                            android:layout_width="wrap_content"
-                            android:text="Upload Clear Image"
-                            android:id="@+id/label_clear_prescrips"
-                            android:layout_marginTop="@dimen/medium_space"
-                            android:textColor="@color/secondary_text"/>
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/img_no_medicine_pics"
-                            android:layout_below="@id/img_clear_prescrips"
-                            android:layout_marginTop="@dimen/medium_space"
-                            android:paddingRight="@dimen/XL_space"
-                            android:paddingLeft="@dimen/XL_space"
-                            android:tint="@color/red_negative"
-                            android:src="@drawable/ic_clear_white_18dp"/>
-
-                        <TextView
-                            style="@style/Edittext_only_view_XS"
-                            android:id="@+id/label_no_medicine_pics"
-                            android:layout_below="@id/label_clear_prescrips"
-                            android:layout_toRightOf="@id/img_no_medicine_pics"
-                            android:layout_width="wrap_content"
-                            android:text="No Pictures of Medicines"
-                            android:textColor="@color/secondary_text"/-->
-
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/cardview_dlvrTime"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    card_view:cardCornerRadius="4dp"
-                    android:layout_marginTop="@dimen/large_space">
-
-                    <LinearLayout
-                        style="@style/LL_Vertical"
-                        android:id="@+id/layout_dlvrTime">
-
                         <LinearLayout
-                            style="@style/LL_Horizontal_wrap">
-                            <TextView
-                                style="@style/Edittext_CardTitle"
-                                android:text="Delivery Time"
-                                android:id="@+id/cardTitle_dlvryTime"/>
-                            <TextView
-                                style="@style/Edittext_CardTitle_Button"
-                                android:text="CHANGE"
-                                android:id="@+id/cardBtn_dlvryTime"/>
+                            style="@style/LL_Horizontal_wrap"
+                            android:paddingLeft="@dimen/medium_space"
+                            android:paddingRight="@dimen/medium_space"
+                            android:layout_marginTop="@dimen/XL_space"
+                            android:layout_marginBottom="@dimen/medium_space"
+                            android:gravity="center">
+
                             <ImageView
-                                style="@style/Img_CardTitle_Button"/>
+                                android:layout_height="match_parent"
+                                android:layout_width="wrap_content"
+                                android:src="@drawable/ic_info_outline_black_24dp"
+                                android:tint="@color/green_positive"
+                                android:layout_marginRight="@dimen/small_space"/>
+                            <TextView
+                                style="@style/Edittext_only_click_XS"
+                                android:layout_width="wrap_content"
+                                android:gravity="left|center_vertical"
+                                android:text="You will receive confirmation call from the Store. You can add more items to your order then."
+                                android:id="@+id/info_prescrips"
+                                android:textColor="@color/secondary_text"/>
                         </LinearLayout>
 
-                        <View
-                            style="@style/Divider_horizontal_Medium"/>
-
-                        <TextView
-                            style="@style/Edittext_only_view_small"
-                            android:layout_width="match_parent"
-                            android:text="Mon, 02-10-17   10:00 AM - 12:00 PM"
-                            android:id="@+id/input_dlvryTime"
-                            android:gravity="start"
-                            android:paddingLeft="@dimen/medium_space"
-                            android:layout_marginTop="@dimen/medium_space"
-                            android:layout_marginBottom="@dimen/medium_space"/>
-
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
                 <android.support.v7.widget.CardView
-                    android:id="@+id/cardview_dlvrAddres"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    card_view:cardCornerRadius="4dp"
-                    android:layout_marginTop="@dimen/large_space">
+                    style="@style/My_Cardview"
+                    android:id="@+id/cardview_dlvrAddres">
 
                     <LinearLayout
                         style="@style/LL_Vertical"
                         android:id="@+id/layout_dlvrAddres">
 
                         <LinearLayout
-                            style="@style/LL_Horizontal_wrap">
+                            style="@style/LL_Horizontal_wrap"
+                            android:paddingLeft="@dimen/medium_space"
+                            android:paddingRight="@dimen/medium_space">
+                            <ImageView
+                                style="@style/Img_CardTitle_Icon"
+                                android:src="@drawable/ic_place_white_18dp"/>
                             <TextView
                                 style="@style/Edittext_CardTitle"
                                 android:text="Delivery Address"
@@ -292,8 +232,8 @@
                                 style="@style/Edittext_CardTitle_Button"
                                 android:text="CHANGE"
                                 android:id="@+id/cardBtn_dlvrAddres"/>
-                            <ImageView
-                                style="@style/Img_CardTitle_Button"/>
+                            <!--ImageView
+                                style="@style/Img_CardTitle_Button"/-->
                         </LinearLayout>
 
                         <View
@@ -305,7 +245,7 @@
                             android:text="Aditya Gangwar\nA-1103, Prateek Wisteria, Sector 77\nNoida, Uttar Pradesh - 201301\n+91-8800191535"
                             android:id="@+id/input_dlvrAddres"
                             android:gravity="start"
-                            android:paddingLeft="@dimen/medium_space"
+                            android:paddingLeft="@dimen/large_space"
                             android:layout_marginTop="@dimen/medium_space"
                             android:layout_marginBottom="@dimen/medium_space"
                             android:hint="Provide Address for delivery"/>
@@ -315,27 +255,29 @@
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/cardview_orderMchnt"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    card_view:cardCornerRadius="4dp"
-                    android:layout_marginTop="@dimen/large_space">
+                    style="@style/My_Cardview">
 
                     <LinearLayout
                         style="@style/LL_Vertical"
                         android:id="@+id/layout_orderMchnt">
 
                         <LinearLayout
-                            style="@style/LL_Horizontal_wrap">
+                            style="@style/LL_Horizontal_wrap"
+                            android:paddingLeft="@dimen/medium_space"
+                            android:paddingRight="@dimen/medium_space">
+                            <ImageView
+                                style="@style/Img_CardTitle_Icon"
+                                android:src="@drawable/ic_store_white_18dp"/>
                             <TextView
                                 style="@style/Edittext_CardTitle"
-                                android:text="Merchant"
+                                android:text="Store"
                                 android:id="@+id/cardTitle_orderMchnt"/>
                             <TextView
                                 style="@style/Edittext_CardTitle_Button"
-                                android:text="SELECT"
+                                android:text="CHANGE"
                                 android:id="@+id/cardBtn_orderMchnt"/>
-                            <ImageView
-                                style="@style/Img_CardTitle_Button"/>
+                            <!--ImageView
+                                style="@style/Img_CardTitle_Button"/-->
                         </LinearLayout>
 
                         <View
@@ -346,15 +288,80 @@
                             android:layout_width="match_parent"
                             android:id="@+id/input_orderMchnt"
                             android:gravity="start"
-                            android:paddingLeft="@dimen/medium_space"
+                            android:paddingLeft="@dimen/large_space"
                             android:layout_marginTop="@dimen/medium_space"
                             android:layout_marginBottom="@dimen/medium_space"
+                            android:text="Medindia Medical Store\nIndirapuram, Ghaziabad"
                             android:hint="Select Merchant for the Order"/>
 
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
-                <android.support.v7.widget.CardView
+                <!--android.support.v7.widget.CardView
+                    android:id="@+id/cardview_dlvrTime"
+                    style="@style/My_Cardview">
+
+                    <LinearLayout
+                        style="@style/LL_Vertical"
+                        android:id="@+id/layout_dlvrTime">
+
+                        <LinearLayout
+                            style="@style/LL_Horizontal_wrap"
+                            android:paddingLeft="@dimen/medium_space"
+                            android:paddingRight="@dimen/medium_space">
+                            <ImageView
+                                style="@style/Img_CardTitle_Icon"
+                                android:src="@drawable/ic_access_time_white_18dp"/>
+                            <TextView
+                                style="@style/Edittext_CardTitle"
+                                android:text="Delivery Time"
+                                android:id="@+id/cardTitle_dlvryTime"/>
+                            <TextView
+                                style="@style/Edittext_CardTitle_Button"
+                                android:text="CHANGE"
+                                android:id="@+id/cardBtn_dlvryTime"/>
+                        </LinearLayout>
+
+                        <View
+                            style="@style/Divider_horizontal_Medium"/>
+
+                        <TextView
+                            style="@style/Edittext_only_view_small"
+                            android:layout_width="match_parent"
+                            android:text="Mon, 02-10-17  10:00 AM - 12:00 PM"
+                            android:id="@+id/input_dlvryTime"
+                            android:gravity="start"
+                            android:paddingLeft="@dimen/large_space"
+                            android:layout_marginTop="@dimen/medium_space"/>
+
+                        <LinearLayout
+                            style="@style/LL_Horizontal_wrap"
+                            android:paddingLeft="@dimen/medium_space"
+                            android:paddingRight="@dimen/medium_space"
+                            android:layout_marginTop="@dimen/small_space"
+                            android:layout_marginBottom="@dimen/medium_space"
+                            android:gravity="left">
+
+                            <ImageView
+                                android:layout_height="match_parent"
+                                android:layout_width="wrap_content"
+                                android:src="@drawable/ic_info_outline_black_24dp"
+                                android:tint="@color/green_positive"
+                                android:layout_marginRight="@dimen/small_space"/>
+                            <TextView
+                                style="@style/Edittext_only_click_XS"
+                                android:layout_width="wrap_content"
+                                android:layout_gravity="start"
+                                android:gravity="left|center_vertical"
+                                android:text="Delivery Charges : \u20B9 30, if Bill amount < \u20B9 500.\nPay in Cash at the time of delivery."
+                                android:id="@+id/info_payment"
+                                android:textColor="@color/secondary_text"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView-->
+
+                <!--android.support.v7.widget.CardView
                     android:id="@+id/cardview_useAcc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -363,12 +370,17 @@
 
                     <LinearLayout
                         style="@style/LL_Vertical"
-                        android:id="@+id/layout_useAcc">
+                        android:id="@+id/layout_useAcc"
+                        android:paddingTop="@dimen/small_space">
 
                         <LinearLayout
                             style="@style/LL_Horizontal_wrap"
                             android:paddingLeft="@dimen/medium_space"
                             android:paddingRight="@dimen/medium_space">
+
+                            <ImageView
+                                style="@style/Img_CardTitle_Icon"
+                                android:src="@drawable/ic_account_balance_wallet_white_18dp"/>
 
                             <TextView
                                 style="@style/Edittext_only_view_small"
@@ -386,19 +398,18 @@
                         </LinearLayout>
 
                         <CheckBox
+                            style="@style/Edittext_only_view_small"
                             android:id="@+id/checkbox_useAcc"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
                             android:paddingRight="@dimen/medium_space"
-                            android:paddingLeft="@dimen/small_space"
-                            android:layout_marginLeft="@dimen/medium_space"
+                            android:layout_marginLeft="@dimen/small_space"
                             android:layout_marginBottom="@dimen/medium_space"
                             android:text="Use Account money for Order Payment"
-                            android:textColor="@color/primary_text"
+                            android:gravity="start|center_vertical"
+                            android:textColor="@color/secondary_text"
                             android:onClick="onCheckboxClicked"/>
 
                     </LinearLayout>
-                </android.support.v7.widget.CardView>
+                </android.support.v7.widget.CardView-->
 
 
             </LinearLayout>
