@@ -72,18 +72,25 @@
                             style="@style/Divider_horizontal_Medium"
                             android:id="@+id/cardDiv_prescrips"/>
 
+                        <TextView
+                            style="@style/Edittext_only_click_small"
+                            android:layout_marginTop="@dimen/large_space"
+                            android:layout_width="match_parent"
+                            android:text="You can upload upto 4 prescriptions per order."
+                            android:textColor="@color/secondary_text"/>
+
                         <HorizontalScrollView
+                            android:id="@+id/layout_prescrip_imgs"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/XL_space"
+                            android:layout_marginTop="@dimen/medium_space"
                             android:layout_marginLeft="@dimen/large_space"
                             android:layout_marginRight="@dimen/large_space"
                             android:scrollbarSize="0dp"
                             android:visibility="visible">
 
                             <LinearLayout
-                                style="@style/LL_Horizontal_wrap"
-                                android:id="@+id/layout_prescrip_imgs">
+                                style="@style/LL_Horizontal_wrap">
 
                                 <FrameLayout
                                     android:id="@+id/layout_img_prescrips_1"
@@ -95,7 +102,7 @@
                                         android:layout_width="@dimen/prescription_icon_width"
                                         android:layout_height="@dimen/prescription_icon_height"
                                         android:layout_gravity="center"
-                                        android:src="@drawable/logo_blue"/>
+                                        android:src="@drawable/ic_description_black_18dp"/>
                                     <ImageView
                                         android:id="@+id/img_precrips_del_1"
                                         android:layout_width="@dimen/normal_icon_width"
@@ -185,11 +192,10 @@
 
                         <LinearLayout
                             style="@style/LL_Horizontal_wrap"
-                            android:paddingLeft="@dimen/medium_space"
+                            android:paddingLeft="@dimen/large_space"
                             android:paddingRight="@dimen/medium_space"
                             android:layout_marginTop="@dimen/XL_space"
-                            android:layout_marginBottom="@dimen/medium_space"
-                            android:gravity="center">
+                            android:layout_marginBottom="@dimen/medium_space">
 
                             <ImageView
                                 android:layout_height="match_parent"
@@ -197,12 +203,35 @@
                                 android:src="@drawable/ic_info_outline_black_24dp"
                                 android:tint="@color/green_positive"
                                 android:layout_marginRight="@dimen/small_space"/>
+
                             <TextView
                                 style="@style/Edittext_only_click_XS"
                                 android:layout_width="wrap_content"
                                 android:gravity="left|center_vertical"
-                                android:text="You will receive confirmation call from the Store. You can add more items to your order then."
+                                android:text="Store will call you for order confirmation."
                                 android:id="@+id/info_prescrips"
+                                android:textColor="@color/secondary_text"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            style="@style/LL_Horizontal_wrap"
+                            android:paddingLeft="@dimen/large_space"
+                            android:paddingRight="@dimen/medium_space"
+                            android:layout_marginBottom="@dimen/large_space">
+
+                            <ImageView
+                                android:layout_height="match_parent"
+                                android:layout_width="wrap_content"
+                                android:id="@+id/checkbox_noPrescrips"
+                                android:src="@drawable/ic_check_box_outline_blank_black_24dp"
+                                android:tint="@color/disabled"
+                                android:layout_marginRight="@dimen/small_space"/>
+                            <TextView
+                                style="@style/Edittext_only_click_XS"
+                                android:id="@+id/label_noPrescrips"
+                                android:layout_width="wrap_content"
+                                android:gravity="left|center_vertical"
+                                android:text="I only want to order non-prescription items."
                                 android:textColor="@color/secondary_text"/>
                         </LinearLayout>
 

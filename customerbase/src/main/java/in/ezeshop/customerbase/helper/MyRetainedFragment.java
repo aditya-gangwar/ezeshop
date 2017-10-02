@@ -3,6 +3,7 @@ package in.ezeshop.customerbase.helper;
 import android.content.Context;
 import android.os.Handler;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -70,12 +71,16 @@ public class MyRetainedFragment extends RetainedFragment {
     public String mAccEnablePin;
     public String mAccEnableOtp;
 
+    // customer order related parameters
+    public List<File> mPrescripImgs;
+
     public void reset() {
         LogMy.d(TAG,"In reset");
         mPinMobileChange = null;
         mNewMobileNum = null;
         mOtpMobileChange = null;
         mLastFetchCashbacks = null;
+        mPrescripImgs = null;
     }
 
     /*

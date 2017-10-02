@@ -41,8 +41,13 @@ android {
     }
 }
 
-repositories {
-    maven { url 'https://maven.fabric.io/public' }
+allprojects {
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven { url "https://jitpack.io" }
+        maven { url 'https://maven.fabric.io/public' }
+    }
 }
 
 dependencies {

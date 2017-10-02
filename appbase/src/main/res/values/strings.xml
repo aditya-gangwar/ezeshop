@@ -1,4 +1,6 @@
 <resources>
+    <!-- My brand name -->
+    <string name="brand_name">MyeCash</string>
 
     <!-- Transaction List Header Labels -->
     <string name="txnlist_header_datetime">Date Time</string>

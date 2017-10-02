@@ -82,6 +82,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
     private static final String CUSTOMER_OPS_LIST_FRAG = "CustomerOpsListFrag";
     private static final String DIALOG_NOTIFY_CB_FETCH_ERROR = "dialogCbFetchError";
     private static final String DIALOG_SESSION_TIMEOUT = "dialogSessionTimeout";
+    private static final String CUSTOMER_CREATE_ORDER_FRAG = "CustomerCreateOrderFrag";
 
 
     MyRetainedFragment mRetainedFragment;
@@ -286,6 +287,10 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
 
         // Not able to use switch() - as not allowed in library modules
         if (i == R.id.menu_txns) {
+            // show latest txns
+            startCreateOrderFragment();
+
+        } else if (i == R.id.menu_txns) {
             // show latest txns
             startTxnReportActivity(null,null);
 
@@ -821,6 +826,21 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
         } else if(tag.equals(DIALOG_SESSION_TIMEOUT)) {
             mExitAfterLogout = false;
             logoutCustomer();
+        }
+    }
+
+    private void startCreateOrderFragment() {
+        if (mFragMgr.findFragmentByTag(CUSTOMER_CREATE_ORDER_FRAG) == null) {
+
+            Fragment fragment = new CreateOrderFragment();
+            FragmentTransaction transaction = mFragMgr.beginTransaction();
+
+            // Add over the existing fragment
+            transaction.replace(R.id.fragment_container_1, fragment, CUSTOMER_CREATE_ORDER_FRAG);
+            transaction.addToBackStack(CUSTOMER_CREATE_ORDER_FRAG);
+
+            // Commit the transaction
+            transaction.commit();
         }
     }
 

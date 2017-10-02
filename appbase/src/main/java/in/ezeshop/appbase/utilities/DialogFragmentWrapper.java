@@ -121,7 +121,9 @@ public class DialogFragmentWrapper extends DialogFragment {
         String title = getArguments().getString(ARG_TITLE);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(title);
+        if(title!=null && !title.isEmpty()) {
+            builder.setTitle(title);
+        }
 
         if(type.equals(DIALOG_TYPE_SINGLE_CHOICE)) {
             final boolean frag_call = getArguments().getBoolean(ARG_FRAG_CALL);

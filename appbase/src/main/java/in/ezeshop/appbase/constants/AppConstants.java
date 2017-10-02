@@ -1,6 +1,9 @@
 package in.ezeshop.appbase.constants;
 
+import java.util.ArrayList;
+
 import in.ezeshop.appbase.BuildConfig;
+import in.ezeshop.common.constants.DbConstants;
 
 /**
  * This class contains constants relevant only the user app code and not to backend code.
@@ -65,9 +68,33 @@ public class AppConstants {
     public static final String toastInProgress = "Operation already in progress. Please wait.";
     public static final String toastNoBalance = "Not enough balance";
 
+    // Options to capture prescription image
+    //public static String[] IMG_CAPTURE_SRCS = {"CAMERA", "GALLERY"};
 
+    /*public enum IMG_CAPTURE_SRCS {
+        CAMERA,
+        GALLERY;
 
+        public static CharSequence[] getValueSet() {
+            ArrayList<String> list = new ArrayList<>();
+            for (IMG_CAPTURE_SRCS s : IMG_CAPTURE_SRCS.values()) {
+                list.add(s.name());
+            }
+            return list.toArray(new CharSequence[list.size()]);
+        }
 
+        // reverse of toString
+        public static IMG_CAPTURE_SRCS fromString(String status) {
+            switch (status) {
+                case "CAMERA":
+                    return CAMERA;
+                case "GALLERY":
+                    return GALLERY;
+                default:
+                    return null;
+            }
+        }
+    }*/
 
 
 

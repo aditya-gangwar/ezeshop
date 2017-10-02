@@ -1,4 +1,16 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.jakewharton:butterknife-gradle-plugin:8.8.1'
+    }
+}
+
 apply plugin: 'com.android.library'
+apply plugin: 'com.jakewharton.butterknife'
 
 android {
     signingConfigs {
@@ -47,21 +59,34 @@ android {
     }
 }
 
-repositories {
-    maven { url 'https://maven.fabric.io/public' }
+allprojects {
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven { url "https://jitpack.io" }
+        maven { url 'https://maven.fabric.io/public' }
+    }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: '../libs')
     testCompile 'junit:junit:4.12'
     compile project(':common')
-    compile 'com.android.support:appcompat-v7:25.2.0'
-    compile 'com.android.support:cardview-v7:25.2.0'
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:cardview-v7:25.3.1'
     //compile 'com.google.android.gms:play-services-vision:10.2.0'
     compile 'com.google.android.gms:play-services-location:10.2.0'
-    compile 'com.android.support:design:25.2.0'
-    compile 'com.android.support:recyclerview-v7:25.2.0'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
     compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
         transitive = true;
     }
+    compile 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.github.jkwiecien:EasyImage:2.0.3'
+    //compile 'com.github.tajchert:nammu:1.1.3'
+    compile 'pub.devrel:easypermissions:1.0.1'
+    compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.6.0'
 }
