@@ -39,16 +39,23 @@ public class AppConstants {
 
     // Crashlytics custom keys
     public static final String CLTS_INPUT_CUST_MOBILE = "inputCustMobile";
-    //public static final String CLTS_INPUT_CUST_CARD = "inputCustCard";
 
     // Prefixes for downloadable files
     public static final String FILE_PREFIX_TXN_LIST = "MyeCash_txns_";
     public static final String FILE_PREFIX_CUSTOMER_LIST = "MyeCash_Customers_";
 
     // Txn verify methods
-    //public static final int TXN_VERIFY_CARD = 0;
     public static final int TXN_VERIFY_PIN = 1;
     public static final int TXN_VERIFY_OTP = 2;
+
+    // Captured image related
+    /*
+     * Webp - 95%- Image compress: 3551 KB, 133 KB -- good zoom
+     * Webp - 90%- Image compress: 3551 KB, 71 KB -- good zoom
+     * Webp - 86%- Image compress: 3551 KB, 56 KB -- good enuf zoom
+     * Webp - 80%- Image compress: 3551 KB, 42 KB -- not good zoom
+     */
+    public static final int IMG_PRESCRIP_COMPRESS_RATIO = 85;
 
 
     // Titles/Msgs/hints shown on dialogues
@@ -68,33 +75,6 @@ public class AppConstants {
     public static final String toastInProgress = "Operation already in progress. Please wait.";
     public static final String toastNoBalance = "Not enough balance";
 
-    // Options to capture prescription image
-    //public static String[] IMG_CAPTURE_SRCS = {"CAMERA", "GALLERY"};
-
-    /*public enum IMG_CAPTURE_SRCS {
-        CAMERA,
-        GALLERY;
-
-        public static CharSequence[] getValueSet() {
-            ArrayList<String> list = new ArrayList<>();
-            for (IMG_CAPTURE_SRCS s : IMG_CAPTURE_SRCS.values()) {
-                list.add(s.name());
-            }
-            return list.toArray(new CharSequence[list.size()]);
-        }
-
-        // reverse of toString
-        public static IMG_CAPTURE_SRCS fromString(String status) {
-            switch (status) {
-                case "CAMERA":
-                    return CAMERA;
-                case "GALLERY":
-                    return GALLERY;
-                default:
-                    return null;
-            }
-        }
-    }*/
 
 
 
@@ -205,3 +185,31 @@ public class AppConstants {
     public static final String progressLogout = "Logging out ...";
     public static final String progressReports = "Generating report ...";
 }
+
+// Options to capture prescription image
+//public static String[] IMG_CAPTURE_SRCS = {"CAMERA", "GALLERY"};
+
+    /*public enum IMG_CAPTURE_SRCS {
+        CAMERA,
+        GALLERY;
+
+        public static CharSequence[] getValueSet() {
+            ArrayList<String> list = new ArrayList<>();
+            for (IMG_CAPTURE_SRCS s : IMG_CAPTURE_SRCS.values()) {
+                list.add(s.name());
+            }
+            return list.toArray(new CharSequence[list.size()]);
+        }
+
+        // reverse of toString
+        public static IMG_CAPTURE_SRCS fromString(String status) {
+            switch (status) {
+                case "CAMERA":
+                    return CAMERA;
+                case "GALLERY":
+                    return GALLERY;
+                default:
+                    return null;
+            }
+        }
+    }*/

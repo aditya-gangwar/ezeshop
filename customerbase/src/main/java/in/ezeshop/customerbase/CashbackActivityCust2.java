@@ -61,7 +61,8 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
         PasswdChangeDialog.PasswdChangeDialogIf, MobileChangeDialog.MobileChangeDialogIf,
         OtpPinInputDialog.OtpPinInputDialogIf, CashbackListFragment.CashbackListFragmentIf,
         PinResetDialog.PinResetDialogIf, PinChangeDialog.PinChangeDialogIf,
-        MchntDetailsDialogCustApp.MerchantDetailsDialogIf, CustomerOpListFrag.CustomerOpListFragIf {
+        MchntDetailsDialogCustApp.MerchantDetailsDialogIf, CustomerOpListFrag.CustomerOpListFragIf,
+        CreateOrderFragment.CreateOrderFragmentIf {
 
     private static final String TAG = "CustApp-CashbackActivity";
     public static final String INTENT_EXTRA_USER_TOKEN = "extraUserToken";
@@ -190,7 +191,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
     }
 
     //@Override
-    private void setDrawerState(boolean isEnabled) {
+    public void setDrawerState(boolean isEnabled) {
         LogMy.d(TAG, "In setDrawerState: " + isEnabled);
 
         if ( isEnabled ) {
@@ -286,7 +287,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
         int i = item.getItemId();
 
         // Not able to use switch() - as not allowed in library modules
-        if (i == R.id.menu_txns) {
+        if (i == R.id.create_order) {
             // show latest txns
             startCreateOrderFragment();
 
@@ -793,6 +794,11 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
             intent.putExtra(TxnReportsCustActivity.EXTRA_MERCHANT_NAME, name);
         }
         startActivityForResult(intent, RC_TXN_REPORT);
+    }
+
+    @Override
+    public void onOrderCreate() {
+
     }
 
     @Override

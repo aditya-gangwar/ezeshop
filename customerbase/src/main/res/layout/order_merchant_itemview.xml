@@ -14,6 +14,173 @@
         android:focusable="false">
 
         <LinearLayout
+            style="@style/LL_Vertical">
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:paddingLeft="@dimen/medium_space"
+            android:paddingRight="@dimen/medium_space">
+            <TextView
+                style="@style/Edittext_CardTitle"
+                android:text="Ganga Stores and Cosmetics"
+                android:id="@+id/cardTitle_mchntName"
+                android:textColor="@color/primary"/>
+
+            <TextView
+                style="@style/Edittext_CardTitle_Button"
+                android:text="CALL"
+                android:id="@+id/cardBtn_call"
+                android:textColor="@color/accent2"/>
+            <!--ImageView
+                style="@style/Img_CardTitle_Button"/-->
+        </LinearLayout>
+
+        <View
+            style="@style/Divider_horizontal_Medium"/>
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:layout_marginLeft="@dimen/small_space"
+            android:layout_marginRight="@dimen/small_space"
+            android:layout_marginTop="@dimen/medium_space"
+            android:layout_marginBottom="@dimen/medium_space"
+            android:clickable="false"
+            android:focusable="false">
+
+            <LinearLayout
+                style="@style/LL_Vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    style="@style/LL_Horizontal_wrap">
+
+                    <ImageView
+                        android:id="@+id/img_merchant"
+                        android:src="@drawable/ic_store_grey_48dp"
+                        android:layout_width="@dimen/dp_item_image_width"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitStart"
+                        android:layout_marginRight="@dimen/large_space"
+                        android:layout_gravity="top" />
+
+                    <LinearLayout
+                        style="@style/LL_Vertical"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:paddingRight="@dimen/medium_space">
+
+                        <!--TextView
+                            style="@style/Edittext_only_view_small_lessPad"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/input_mchnt_name"
+                            android:text="Ganga Stores and Cosmetics"
+                            android:gravity="left"
+                            android:textColor="@color/subheading"/-->
+                        <TextView
+                            style="@style/Edittext_only_view_XS_lessPad"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/input_mchntAddress"
+                            android:text="Krishna Plaza, Indirapuram"
+                            android:gravity="left"/>
+                        <LinearLayout
+                            style="@style/LL_Horizontal_wrap">
+                            <TextView
+                                style="@style/Edittext_only_view_XS_lessPad"
+                                android:layout_height="match_parent"
+                                android:layout_width="wrap_content"
+                                android:id="@+id/input_delChargeLimit"
+                                android:text="Delivery Charges : \u20B9 20 (FREE if Bill &gt; \u20B9 1000)"
+                                android:gravity="left"
+                                android:textColor="@color/secondary_text"/>
+                            <!--TextView
+                                style="@style/Edittext_only_view_small_lessPad"
+                                android:layout_height="match_parent"
+                                android:layout_width="wrap_content"
+                                android:id="@+id/input_delCharge"
+                                android:text="\u20B9 20"
+                                android:gravity="left"
+                                android:textColor="@color/secondary_text"/>
+                            <TextView
+                                style="@style/Edittext_only_view_XS_lessPad"
+                                android:layout_height="match_parent"
+                                android:layout_width="wrap_content"
+                                android:id="@+id/input_delChargeLimit"
+                                android:text="(FREE if Bill &gt; \u20B9 1000)"
+                                android:gravity="left"
+                                android:textColor="@color/secondary_text"/-->
+                        </LinearLayout>
+
+                        <LinearLayout
+                            style="@style/LL_Horizontal_wrap"
+                            android:layout_marginTop="@dimen/medium_space">
+
+                            <LinearLayout
+                                style="@style/LL_Vertical"
+                                android:layout_width="0dp"
+                                android:layout_weight="45"
+                                android:background="@color/bg_light_grey">
+                                <TextView
+                                    style="@style/Edittext_only_view_XS_lessPad"
+                                    android:layout_height="wrap_content"
+                                    android:text="Account Balance"/>
+                                <TextView
+                                    style="@style/Edittext_only_view_small_lessPad"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/input_accBalance"
+                                    android:text="+ \u20B9 500"
+                                    android:textColor="@color/green_positive"/>
+                            </LinearLayout>
+
+                            <Space
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="10"/>
+
+                            <LinearLayout
+                                style="@style/LL_Vertical"
+                                android:layout_width="0dp"
+                                android:layout_weight="45"
+                                android:background="@color/bg_light_grey">
+                                <TextView
+                                    style="@style/Edittext_only_view_XS_lessPad"
+                                    android:layout_height="wrap_content"
+                                    android:text="Cashback"/>
+                                <TextView
+                                    style="@style/Edittext_only_view_small_lessPad"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/input_cbRate"
+                                    android:text="\@12\%"
+                                    android:textColor="@color/green_positive"/>
+                            </LinearLayout>
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+                </LinearLayout>
+
+             </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
+                android:tint="@color/icon_grey"/>
+
+        </LinearLayout>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <!--android.support.v7.widget.CardView
+        style="@style/My_Cardview"
+        android:id="@+id/cardview_mchntItemView"
+        android:clickable="false"
+        android:focusable="false">
+
+        <LinearLayout
             style="@style/LL_Horizontal_wrap"
             android:layout_marginLeft="@dimen/small_space"
             android:layout_marginRight="@dimen/small_space"
@@ -135,7 +302,7 @@
                     </LinearLayout>
 
                 </LinearLayout>
-             </LinearLayout>
+            </LinearLayout>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -145,7 +312,7 @@
 
         </LinearLayout>
 
-    </android.support.v7.widget.CardView>
+    </android.support.v7.widget.CardView-->
 
     <!--android.support.v7.widget.CardView
         style="@style/My_Cardview"

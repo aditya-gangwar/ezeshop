@@ -2,6 +2,7 @@ package in.ezeshop.customerbase;
 
 import android.Manifest;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,13 +23,17 @@ import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import id.zelory.compressor.Compressor;
 import in.ezeshop.appbase.BaseFragment;
+import in.ezeshop.appbase.ImageViewActivity;
 import in.ezeshop.appbase.constants.AppConstants;
 import in.ezeshop.appbase.utilities.AppCommonUtil;
 import in.ezeshop.appbase.utilities.DialogFragmentWrapper;
 import in.ezeshop.appbase.utilities.LogMy;
+import in.ezeshop.common.MyGlobalSettings;
 import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.ErrorCodes;
 import in.ezeshop.customerbase.helper.MyRetainedFragment;
@@ -58,6 +64,7 @@ public class CreateOrderFragment extends BaseFragment implements
     // As, either they represent values on screen, or can be calculated again.
 
     // Part of instance state: to be restored in event of fragment recreation
+    private boolean mPrescripsDisabled;
 
     // Container Activity must implement this interface
     public interface CreateOrderFragmentIf {
@@ -71,13 +78,10 @@ public class CreateOrderFragment extends BaseFragment implements
         View v = inflater.inflate(R.layout.fragment_create_order, container, false);
         unbinder = ButterKnife.bind(this, v);
 
-        //setup all listeners
-        initListeners();
-
         EasyImage.configuration(getActivity())
                 .setImagesFolderName(CommonConstants.BRAND_NAME)
-                .setCopyTakenPhotosToPublicGalleryAppFolder(true)
-                .setCopyPickedImagesToPublicGalleryAppFolder(true)
+//                .setCopyTakenPhotosToPublicGalleryAppFolder(true)
+//                .setCopyPickedImagesToPublicGalleryAppFolder(true)
                 .setAllowMultiplePickInGallery(true);
 
         return v;
@@ -118,24 +122,20 @@ public class CreateOrderFragment extends BaseFragment implements
                 // either of fragment 'create' or 'recreate' scenarios
                 if (savedInstanceState == null) {
                     // fragment create case
+                    mPrescripsDisabled = false;
                 } else {
                     LogMy.d(TAG, "Fragment re-create case");
+                    mPrescripsDisabled = savedInstanceState.getBoolean("mPrescripsDisabled");
                 }
             } else {
                 // these fxs update onscreen view also, so need to be run for backstack scenario too
             }
 
+            //setup all listeners
+            initListeners();
+
             // Update view - only to be done only after values are restored above
             initDisplay();
-
-            Picasso.Builder builder = new Picasso.Builder(getActivity().getApplicationContext());
-            builder.listener(new Picasso.Listener() {
-                @Override
-                public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
-                    LogMy.e(TAG,"Picasso image load failed: "+uri,exception);
-                    // TODO: raise alarm
-                }}
-            );
 
         } catch (Exception e) {
             LogMy.e(TAG, "Exception in CustomerTransactionFragment:onActivityCreated", e);
@@ -147,28 +147,46 @@ public class CreateOrderFragment extends BaseFragment implements
     }
 
     private void initDisplay() {
-        refreshPrescripImgs();
+        mPrescripImgLytArr = new View[]{mLytPrescripImg1,mLytPrescripImg2,mLytPrescripImg3,mLytPrescripImg4};
+        mPrescripImgArr = new ImageView[]{mImgPrescrip1,mImgPrescrip2,mImgPrescrip3,mImgPrescrip4};
+        mPrescripImgDelArr = new ImageView[]{mImgPrescripDel1,mImgPrescripDel2,mImgPrescripDel3,mImgPrescripDel4};
 
+        refreshPrescripImgs();
     }
 
     private void refreshPrescripImgs() {
+        LogMy.d(TAG,"In refreshPrescripImgs");
+
         if(mRetainedFragment.mPrescripImgs==null || mRetainedFragment.mPrescripImgs.isEmpty()) {
-            mLayoutPrescripImgs.setVisibility(View.GONE);
+            mLytPrescripImgs.setVisibility(View.GONE);
         } else {
-            mLayoutPrescripImgs.setVisibility(View.VISIBLE);
+            mLytPrescripImgs.setVisibility(View.VISIBLE);
             // Make all invisible first
             for(int i=0; i<CommonConstants.MAX_PRESCRIPS_PER_ORDER; i++) {
-                mPrescripImgArr[i].setVisibility(View.GONE);
+                mPrescripImgLytArr[i].setVisibility(View.GONE);
             }
 
-            int indx = 1;
+            int indx = 0;
             for (File img :
                     mRetainedFragment.mPrescripImgs) {
 
-                mPrescripImgArr[indx].setVisibility(View.VISIBLE);
-                Picasso.with(getActivity()).load(img).fit().centerCrop()
-                        .placeholder(R.drawable.ic_description_black_18dp)
-                        .error(R.drawable.ic_description_black_18dp)
+                final View imgLyt =mPrescripImgLytArr[indx];
+                imgLyt.setVisibility(View.VISIBLE);
+                LogMy.d(TAG,"Image file: "+img.getAbsolutePath()+","+img.getPath()+","+Uri.fromFile(img));
+
+                Picasso.Builder builder = new Picasso.Builder(getActivity().getApplicationContext());
+                builder.listener(new Picasso.Listener() {
+                    @Override
+                    public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
+                        LogMy.e(TAG,"Picasso image load failed: "+uri,exception);
+                        imgLyt.setVisibility(View.GONE);
+                        AppCommonUtil.toast(getActivity(),"Failed to upload image");
+                        // TODO: raise alarm
+                    }}
+                );
+                builder.build().load(Uri.fromFile(img)).fit().centerCrop()
+//                        .placeholder(R.drawable.ic_description_black_18dp)
+//                        .error(R.drawable.ic_clear_black_24dp)
                         .into(mPrescripImgArr[indx]);
                 indx++;
             }
@@ -192,22 +210,22 @@ public class CreateOrderFragment extends BaseFragment implements
 
                 int id = v.getId();
                 if (id==R.id.img_precrips_1 || id==R.id.img_precrips_2 || id==R.id.img_precrips_3 || id==R.id.img_precrips_4) {
+                    File img = mRetainedFragment.mPrescripImgs.get(getImgIndex(id));
+                    LogMy.d(TAG,"Image file: "+img.getAbsolutePath()+","+img.getPath()+","+Uri.fromFile(img));
+
                     // Show appropriate uploaded prescription preview
+                    Intent intent = new Intent(getActivity(), ImageViewActivity.class );
+                    intent.putExtra(ImageViewActivity.INTENT_EXTRA_URI, Uri.fromFile(img));
+                    startActivity(intent);
 
                 } else if (id == R.id.img_precrips_del_1 || id == R.id.img_precrips_del_2 || id == R.id.img_precrips_del_3 || id == R.id.img_precrips_del_4) {
                     // Delete clicked uploaded prescription
-                    for(int i=0; i<CommonConstants.MAX_PRESCRIPS_PER_ORDER; i++) {
-                        if(mPrescripImgDelArr[i].getId()==id) {
-                            mRetainedFragment.mPrescripImgs.remove(i);
-                            refreshPrescripImgs();
-                            break;
-                        }
-                    }
+                    mRetainedFragment.mPrescripImgs.remove(getImgIndex(id));
+                    refreshPrescripImgs();
 
-                } else if (id == R.id.checkbox_noPrescrips || id == R.id.label_noPrescrips) {
+                } /*else if (id == R.id.checkbox_noPrescrips || id == R.id.label_noPrescrips) {
                     // Toggle Prescription upload
-
-                } else {
+                }*/ else {
                     return false;
                 }
             }
@@ -219,6 +237,46 @@ public class CreateOrderFragment extends BaseFragment implements
 
         return true;
     }
+
+    private int getImgIndex(int id) {
+        for(int i=0; i<CommonConstants.MAX_PRESCRIPS_PER_ORDER; i++) {
+            if(mPrescripImgDelArr[i].getId()==id || mPrescripImgArr[i].getId()==id) {
+                return i;
+            }
+        }
+
+        LogMy.e(TAG,"In getImgIndex: Invalid id: "+id);
+        return -1;
+
+        /*if(id==R.id.img_precrips_del_1) {
+            return 0;
+        } else if(id==R.id.img_precrips_del_2) {
+            return 1;
+        } else if(id==R.id.img_precrips_del_3) {
+            return 2;
+        } else if(id==R.id.img_precrips_del_4) {
+            return 3;
+        } else {
+        }*/
+    }
+
+    /*private void toggleAddPrescrips() {
+        if(mPrescripsDisabled) {
+            mCbxNoPrescrips.setImageDrawable(AppCommonUtil.getTintedDrawable(getActivity(),R.drawable.ic_check_box_black_24dp,R.color.green_positive));
+            mLytPrescripImgs.setVisibility(View.GONE);
+            mLytAddPrescrip.setVisibility(View.GONE);
+
+            mInputPrecripsInfo.setText("You can enter details of non-prescription items like personal care, OTC medicines etc below.\n\nOr can simply tell us verbally when you receive the call from the store.");
+            mPrescripsDisabled = false;
+        } else {
+            mCbxNoPrescrips.setImageDrawable(AppCommonUtil.getTintedDrawable(getActivity(),R.drawable.ic_check_box_black_24dp,R.color.green_positive));
+            mLytPrescripImgs.setVisibility(View.VISIBLE);
+            mLytAddPrescrip.setVisibility(View.VISIBLE);
+
+            mInputPrecripsInfo.setText("You can upload upto 4 prescriptions per order.");
+            mPrescripsDisabled = true;
+        }
+    }*/
 
     // Using BaseFragment's onClick method - to avoid double clicks
     @Override
@@ -255,14 +313,9 @@ public class CreateOrderFragment extends BaseFragment implements
         String[] perms = {Manifest.permission.CAMERA};
         if (EasyPermissions.hasPermissions(getActivity(), perms)) {
             // Already have permission, do the thing
-            if(mRetainedFragment.mPrescripImgs.size()<4) {
+            if(mRetainedFragment.mPrescripImgs==null || mRetainedFragment.mPrescripImgs.size()<4) {
                 // show chooser (camera/gallery) to upload prescription
                 EasyImage.openChooserWithGallery(this, "Select Image From ?", 0);
-                /*DialogFragmentWrapper dialog = DialogFragmentWrapper.createSingleChoiceDialog("Select Image Source",
-                        AppConstants.IMG_CAPTURE_SRCS.getValueSet(), -1, true);
-                dialog.setTargetFragment(CreateOrderFragment.this,REQUEST_IMG_SRC);
-                dialog.show(getFragmentManager(), DIALOG_IMG_SRC);*/
-
             } else {
                 String str = "Max "+CommonConstants.MAX_PRESCRIPS_PER_ORDER+" prescriptions allowed";
                 AppCommonUtil.toast(getActivity(), str);
@@ -323,11 +376,27 @@ public class CreateOrderFragment extends BaseFragment implements
                 int newImgs = 0;
                 for (File img :
                         imageFiles) {
+                    if(!img.exists()) {
+                        LogMy.e(TAG,"Picked image file does not exist");
+                        AppCommonUtil.toast(getActivity(),"Image upload failed");
+                        return;
+                    }
                     if(mRetainedFragment.mPrescripImgs==null) {
                         mRetainedFragment.mPrescripImgs = new ArrayList<>(CommonConstants.MAX_PRESCRIPS_PER_ORDER);
                     }
                     if(mRetainedFragment.mPrescripImgs.size() < CommonConstants.MAX_PRESCRIPS_PER_ORDER) {
-                        mRetainedFragment.mPrescripImgs.add(img);
+                        try {
+                            File compressedImage = new Compressor(getActivity())
+                                    .setQuality(AppConstants.IMG_PRESCRIP_COMPRESS_RATIO)
+                                    .setCompressFormat(Bitmap.CompressFormat.WEBP)
+                                    .compressToFile(img);
+                            LogMy.d(TAG,"Image compress: "+(img.length()/1024)+", "+(compressedImage.length()/1024));
+                            mRetainedFragment.mPrescripImgs.add(img);
+
+                        } catch(Exception e) {
+                            LogMy.e(TAG,"Failed to compress image",e);
+                            mRetainedFragment.mPrescripImgs.add(img);
+                        }
                         newImgs++;
                     } else {
                         ignored++;
@@ -426,8 +495,8 @@ public class CreateOrderFragment extends BaseFragment implements
         mImgPrescripDel3.setOnTouchListener(this);
         mImgPrescripDel4.setOnTouchListener(this);
 
-        mCbxNoPrescrips.setOnTouchListener(this);
-        mLabelNoPrescrips.setOnTouchListener(this);
+        //mCbxNoPrescrips.setOnTouchListener(this);
+        //mLabelNoPrescrips.setOnTouchListener(this);
 
         // Avoid double clicks on the button
         mBtnAddPrescrip.setOnClickListener(this);
@@ -438,7 +507,8 @@ public class CreateOrderFragment extends BaseFragment implements
 
     // UI Resources data members
     @BindView(R2.id.btn_confirm_order) AppCompatButton mBtnConfirm;
-    @BindView(R2.id.layout_prescrip_imgs) View mLayoutPrescripImgs;
+    @BindView(R2.id.layout_prescrip_imgs) View mLytPrescripImgs;
+    //@BindView(R2.id.input_prescripInfo) TextView mInputPrecripsInfo;
 
     @BindView(R2.id.layout_img_prescrips_1) View mLytPrescripImg1;
     @BindView(R2.id.img_precrips_1) ImageView mImgPrescrip1;
@@ -453,18 +523,26 @@ public class CreateOrderFragment extends BaseFragment implements
     @BindView(R2.id.img_precrips_4) ImageView mImgPrescrip4;
     @BindView(R2.id.img_precrips_del_4) ImageView mImgPrescripDel4;
 
-    ImageView mPrescripImgArr[] = {mImgPrescrip1,mImgPrescrip2,mImgPrescrip3,mImgPrescrip4};
-    ImageView mPrescripImgDelArr[] = {mImgPrescripDel1,mImgPrescripDel2,mImgPrescripDel3,mImgPrescripDel4};
-
+    @BindView(R2.id.layout_addPrescrips) View mLytAddPrescrip;
     @BindView(R2.id.btn_addPrescrips) TextView mBtnAddPrescrip;
-    @BindView(R2.id.checkbox_noPrescrips) ImageView mCbxNoPrescrips;
-    @BindView(R2.id.label_noPrescrips) TextView mLabelNoPrescrips;
+
+    @BindView(R2.id.input_comments) EditText mInputComments;
+    //@BindView(R2.id.checkbox_noPrescrips) ImageView mCbxNoPrescrips;
+    //@BindView(R2.id.label_noPrescrips) TextView mLabelNoPrescrips;
+
+    //@BindViews({R2.id.layout_prescrip_imgs, R2.id.layout_addPrescrips })
+    //List<View> allPrescripViews;
 
     @BindView(R2.id.cardBtn_dlvrAddres) TextView mBtnChangeAddr;
     @BindView(R2.id.input_dlvrAddres) TextView mInputAddress;
 
     @BindView(R2.id.cardBtn_orderMchnt) TextView mBtnChangeMchnt;
     @BindView(R2.id.input_orderMchnt) TextView mInputMchnt;
+
+    View mPrescripImgLytArr[];
+    ImageView mPrescripImgArr[];
+    ImageView mPrescripImgDelArr[];
+
     private Unbinder unbinder;
 
     @Override
@@ -473,7 +551,7 @@ public class CreateOrderFragment extends BaseFragment implements
         mCallback.setDrawerState(false);
 
         try {
-            // re-calculate all amounts
+            //refreshPrescripImgs();
         } catch (Exception e) {
             LogMy.e(TAG, "Exception in CustomerTransactionFragment:onResume", e);
             DialogFragmentWrapper dialog = DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), true, true);
@@ -495,7 +573,7 @@ public class CreateOrderFragment extends BaseFragment implements
     public void onSaveInstanceState(Bundle outState) {
         LogMy.d(TAG, "In onSaveInstanceState");
         super.onSaveInstanceState(outState);
-
+        outState.putBoolean("mPrescripsDisabled", mPrescripsDisabled);
     }
 
     @Override public void onDestroyView() {

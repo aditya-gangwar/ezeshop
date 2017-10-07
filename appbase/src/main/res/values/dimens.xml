@@ -89,6 +89,7 @@
     <dimen name="XXL_space">25dp</dimen>
     <dimen name="XXXL_space">30dp</dimen>
     <dimen name="XXXXL_space">35dp</dimen>
+    <dimen name="big_space_0">45dp</dimen>
     <dimen name="big_space">54dp</dimen>
 
 </resources>

@@ -7,59 +7,67 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/root_createOrder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/root_createOrder"
         android:background="@color/bg_light_grey">
 
-        <LinearLayout
+        <!--LinearLayout
+            android:id="@+id/layout_last_row_btn"
             style="@style/LL_Vertical"
             android:layout_height="wrap_content"
-            android:id="@+id/layout_last_row_btn"
             android:layout_alignParentBottom="true">
 
             <View
                 style="@style/Divider_horizontal_Medium"
-                android:background="@color/primary"/>
+                android:background="@color/primary" />
 
             <android.support.v7.widget.AppCompatButton
-                style="@style/button_normal_border"
                 android:id="@+id/btn_confirm_order"
+                style="@style/button_normal_border"
                 android:text="CONFIRM"
-                android:textColor="@color/primary"/>
-        </LinearLayout>
+                android:textColor="@color/primary" />
+        </LinearLayout-->
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_confirm_order"
+            style="@style/button_normal_thin"
+            android:text="CONFIRM"
+            android:layout_alignParentBottom="true"/>
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_marginBottom="@dimen/large_space"
-            android:layout_above="@id/layout_last_row_btn">
+            android:layout_above="@id/btn_confirm_order"
+            android:layout_alignParentTop="true">
 
             <LinearLayout
-                style="@style/LL_Vertical_paddingSidesLarge"
-                android:id="@+id/layout_whole">
+                android:id="@+id/layout_whole"
+                style="@style/LL_Vertical_paddingSidesLarge">
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/cardview_prescrips"
                     style="@style/My_Cardview">
 
                     <LinearLayout
+                        android:id="@+id/layout_prescrips"
                         style="@style/LL_Vertical"
-                        android:id="@+id/layout_prescrips">
+                        android:paddingBottom="@dimen/large_space">
 
                         <LinearLayout
-                            style="@style/LL_Horizontal_wrap"
                             android:id="@+id/layout_cardTitle"
+                            style="@style/LL_Horizontal_wrap"
                             android:paddingLeft="@dimen/medium_space"
                             android:paddingRight="@dimen/medium_space">
+
                             <ImageView
                                 style="@style/Img_CardTitle_Icon"
-                                android:src="@drawable/ic_description_black_18dp"/>
+                                android:src="@drawable/ic_description_black_18dp" />
+
                             <TextView
+                                android:id="@+id/cardTitle_prescrips"
                                 style="@style/Edittext_CardTitle"
-                                android:text="Prescriptions"
-                                android:id="@+id/cardTitle_prescrips"/>
+                                android:text="Prescriptions" />
                             <!--TextView
                                 style="@style/Edittext_CardTitle_Button"
                                 android:text="ADD"
@@ -69,103 +77,124 @@
                         </LinearLayout>
 
                         <View
-                            style="@style/Divider_horizontal_Medium"
-                            android:id="@+id/cardDiv_prescrips"/>
+                            android:id="@+id/cardDiv_prescrips"
+                            style="@style/Divider_horizontal_Medium" />
 
                         <TextView
-                            style="@style/Edittext_only_click_small"
-                            android:layout_marginTop="@dimen/large_space"
+                            android:id="@+id/input_prescripInfo"
+                            style="@style/Edittext_only_view_XS"
                             android:layout_width="match_parent"
-                            android:text="You can upload upto 4 prescriptions per order."
-                            android:textColor="@color/secondary_text"/>
+                            android:layout_marginTop="@dimen/medium_space"
+                            android:paddingLeft="@dimen/large_space"
+                            android:paddingRight="@dimen/large_space"
+                            android:text="Please add doctor prescription(s) containing required medicine details."
+                            android:textColor="@color/secondary_text" />
 
                         <HorizontalScrollView
                             android:id="@+id/layout_prescrip_imgs"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/medium_space"
                             android:layout_marginLeft="@dimen/large_space"
                             android:layout_marginRight="@dimen/large_space"
+                            android:layout_marginTop="@dimen/large_space"
                             android:scrollbarSize="0dp"
                             android:visibility="visible">
 
-                            <LinearLayout
-                                style="@style/LL_Horizontal_wrap">
+                            <LinearLayout style="@style/LL_Horizontal_wrap">
 
                                 <FrameLayout
                                     android:id="@+id/layout_img_prescrips_1"
-                                    android:layout_marginRight="@dimen/small_space"
                                     android:layout_width="@dimen/prescription_icon_frame_width"
-                                    android:layout_height="@dimen/prescription_icon_frame_height">
+                                    android:layout_height="@dimen/prescription_icon_frame_height"
+                                    android:layout_marginRight="@dimen/small_space">
+
                                     <ImageView
                                         android:id="@+id/img_precrips_1"
                                         android:layout_width="@dimen/prescription_icon_width"
                                         android:layout_height="@dimen/prescription_icon_height"
                                         android:layout_gravity="center"
-                                        android:src="@drawable/ic_description_black_18dp"/>
+                                        android:background="@color/bg_light_grey_dark"
+                                        android:scaleType="centerInside"
+                                        android:src="@drawable/ic_description_black_18dp" />
+
                                     <ImageView
                                         android:id="@+id/img_precrips_del_1"
                                         android:layout_width="@dimen/normal_icon_width"
                                         android:layout_height="@dimen/normal_icon_height"
                                         android:layout_gravity="top|right"
                                         android:padding="0dp"
-                                        android:src="@drawable/my_clear_32"/>
+                                        android:src="@drawable/my_clear_32" />
                                 </FrameLayout>
+
                                 <FrameLayout
                                     android:id="@+id/layout_img_prescrips_2"
-                                    android:layout_marginRight="@dimen/small_space"
                                     android:layout_width="@dimen/prescription_icon_frame_width"
-                                    android:layout_height="@dimen/prescription_icon_frame_height">
+                                    android:layout_height="@dimen/prescription_icon_frame_height"
+                                    android:layout_marginRight="@dimen/small_space">
+
                                     <ImageView
                                         android:id="@+id/img_precrips_2"
                                         android:layout_width="@dimen/prescription_icon_width"
                                         android:layout_height="@dimen/prescription_icon_height"
                                         android:layout_gravity="center"
-                                        android:src="@drawable/logo_blue"/>
+                                        android:background="@color/bg_light_grey_dark"
+                                        android:scaleType="centerInside"
+                                        android:src="@drawable/logo_blue" />
+
                                     <ImageView
                                         android:id="@+id/img_precrips_del_2"
                                         android:layout_width="@dimen/normal_icon_width"
                                         android:layout_height="@dimen/normal_icon_height"
                                         android:layout_gravity="top|right"
                                         android:padding="0dp"
-                                        android:src="@drawable/my_clear_32"/>
+                                        android:src="@drawable/my_clear_32" />
                                 </FrameLayout>
+
                                 <FrameLayout
                                     android:id="@+id/layout_img_prescrips_3"
-                                    android:layout_marginRight="@dimen/small_space"
                                     android:layout_width="@dimen/prescription_icon_frame_width"
-                                    android:layout_height="@dimen/prescription_icon_frame_height">
+                                    android:layout_height="@dimen/prescription_icon_frame_height"
+                                    android:layout_marginRight="@dimen/small_space">
+
                                     <ImageView
                                         android:id="@+id/img_precrips_3"
                                         android:layout_width="@dimen/prescription_icon_width"
                                         android:layout_height="@dimen/prescription_icon_height"
                                         android:layout_gravity="center"
-                                        android:src="@drawable/logo_blue"/>
+                                        android:background="@color/bg_light_grey_dark"
+                                        android:scaleType="centerInside"
+                                        android:src="@drawable/logo_blue" />
+
                                     <ImageView
                                         android:id="@+id/img_precrips_del_3"
                                         android:layout_width="@dimen/normal_icon_width"
                                         android:layout_height="@dimen/normal_icon_height"
                                         android:layout_gravity="top|right"
                                         android:padding="0dp"
-                                        android:src="@drawable/my_clear_32"/>
+                                        android:src="@drawable/my_clear_32" />
                                 </FrameLayout>
+
                                 <FrameLayout
                                     android:id="@+id/layout_img_prescrips_4"
                                     android:layout_width="@dimen/prescription_icon_frame_width"
                                     android:layout_height="@dimen/prescription_icon_frame_height">
+
                                     <ImageView
                                         android:id="@+id/img_precrips_4"
                                         android:layout_width="@dimen/prescription_icon_width"
                                         android:layout_height="@dimen/prescription_icon_height"
                                         android:layout_gravity="center"
-                                        android:src="@drawable/logo_blue"/>
+                                        android:background="@color/bg_light_grey_dark"
+                                        android:scaleType="centerInside"
+                                        android:src="@drawable/logo_blue" />
+
                                     <ImageView
                                         android:id="@+id/img_precrips_del_4"
                                         android:layout_width="@dimen/normal_icon_width"
                                         android:layout_height="@dimen/normal_icon_height"
                                         android:layout_gravity="top|right"
                                         android:padding="0dp"
-                                        android:src="@drawable/my_clear_32"/>
+                                        android:src="@drawable/my_clear_32" />
                                 </FrameLayout>
 
                             </LinearLayout>
@@ -173,51 +202,49 @@
                         </HorizontalScrollView>
 
                         <LinearLayout
+                            android:id="@+id/layout_addPrescrips"
                             style="@style/LL_Horizontal_wrap"
-                            android:layout_marginTop="@dimen/XXXL_space"
+                            android:layout_marginTop="@dimen/XXL_space"
                             android:gravity="center"
-                            android:id="@+id/layout_addPrescrips">
+                            android:visibility="visible">
 
                             <TextView
+                                android:id="@+id/btn_addPrescrips"
                                 style="@style/Edittext_only_click_XS"
                                 android:layout_width="wrap_content"
-                                android:text="Add Prescription"
-                                android:id="@+id/btn_addPrescrips"
                                 android:layout_gravity="center"
-                                android:gravity="center"
+                                android:background="@drawable/round_rectangle_border_primary"
                                 android:drawableLeft="@drawable/ic_photo_camera_black_24dp"
                                 android:drawablePadding="@dimen/medium_space"
-                                android:background="@drawable/round_rectangle_border_primary"/>
+                                android:gravity="center"
+                                android:text="Add Prescription" />
                         </LinearLayout>
 
                         <LinearLayout
                             style="@style/LL_Horizontal_wrap"
-                            android:paddingLeft="@dimen/large_space"
-                            android:paddingRight="@dimen/medium_space"
                             android:layout_marginTop="@dimen/XL_space"
-                            android:layout_marginBottom="@dimen/medium_space">
+                            android:paddingLeft="@dimen/XL_space"
+                            android:paddingRight="@dimen/large_space">
 
                             <ImageView
-                                android:layout_height="match_parent"
                                 android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginRight="@dimen/small_space"
                                 android:src="@drawable/ic_info_outline_black_24dp"
-                                android:tint="@color/green_positive"
-                                android:layout_marginRight="@dimen/small_space"/>
+                                android:tint="@color/green_positive" />
 
                             <TextView
-                                style="@style/Edittext_only_click_XS"
+                                android:id="@+id/info_prescrips"
+                                style="@style/Edittext_only_view_XS"
                                 android:layout_width="wrap_content"
                                 android:gravity="left|center_vertical"
-                                android:text="Store will call you for order confirmation."
-                                android:id="@+id/info_prescrips"
-                                android:textColor="@color/secondary_text"/>
+                                android:text="Merchant will call you for order confirmation." />
                         </LinearLayout>
 
-                        <LinearLayout
+                        <!--LinearLayout
                             style="@style/LL_Horizontal_wrap"
                             android:paddingLeft="@dimen/large_space"
-                            android:paddingRight="@dimen/medium_space"
-                            android:layout_marginBottom="@dimen/large_space">
+                            android:paddingRight="@dimen/medium_space">
 
                             <ImageView
                                 android:layout_height="match_parent"
@@ -231,97 +258,173 @@
                                 android:id="@+id/label_noPrescrips"
                                 android:layout_width="wrap_content"
                                 android:gravity="left|center_vertical"
-                                android:text="I only want to order non-prescription items."
-                                android:textColor="@color/secondary_text"/>
-                        </LinearLayout>
+                                android:text="I want to order non-prescription items."/>
+                        </LinearLayout-->
 
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
                 <android.support.v7.widget.CardView
-                    style="@style/My_Cardview"
-                    android:id="@+id/cardview_dlvrAddres">
+                    android:id="@+id/cardview_otherItems"
+                    style="@style/My_Cardview">
 
                     <LinearLayout
+                        android:id="@+id/layout_otherItems"
                         style="@style/LL_Vertical"
-                        android:id="@+id/layout_dlvrAddres">
+                        android:paddingBottom="@dimen/large_space"
+                        android:paddingLeft="@dimen/large_space"
+                        android:paddingRight="@dimen/large_space"
+                        android:paddingTop="@dimen/medium_space">
+
+                        <TextView
+                            android:id="@+id/input_commentsInfo"
+                            style="@style/Edittext_only_view_XS"
+                            android:layout_width="match_parent"
+                            android:layout_marginBottom="@dimen/small_space"
+                            android:gravity="left"
+                            android:text="Want to order items like personal care, baby products ?"/>
+
+                        <LinearLayout
+                            style="@style/LL_Horizontal_wrap"
+                            android:paddingLeft="@dimen/small_space">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginRight="@dimen/small_space"
+                                android:src="@drawable/ic_mic_none_black_18dp"
+                                android:tint="@color/icon_grey_dark" />
+
+                            <TextView
+                                android:id="@+id/input_commentsInfo1"
+                                style="@style/Edittext_only_view_XS"
+                                android:layout_width="wrap_content"
+                                android:gravity="left|center_vertical"
+                                android:text="Tell us verbally, when you receive call from store."
+                                android:textColor="@color/secondary_text"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            style="@style/LL_Horizontal_wrap"
+                            android:paddingLeft="@dimen/small_space">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginRight="@dimen/small_space"
+                                android:src="@drawable/ic_create_black_18dp"
+                                android:tint="@color/icon_grey" />
+
+                            <TextView
+                                android:id="@+id/input_commentsInfo2"
+                                style="@style/Edittext_only_view_XS"
+                                android:layout_width="wrap_content"
+                                android:gravity="left|center_vertical"
+                                android:text="Or, write product details below."
+                                android:textColor="@color/secondary_text"/>
+                        </LinearLayout>
+
+                        <EditText
+                            android:id="@+id/input_comments"
+                            style="@style/MyEdittext_Small"
+                            android:layout_marginTop="@dimen/large_space"
+                            android:background="@drawable/round_rect_border"
+                            android:hint="Additional notes (optional)"
+                            android:maxLength="250"
+                            android:visibility="visible" />
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cardview_dlvrAddres"
+                    style="@style/My_Cardview">
+
+                    <LinearLayout
+                        android:id="@+id/layout_dlvrAddres"
+                        style="@style/LL_Vertical">
 
                         <LinearLayout
                             style="@style/LL_Horizontal_wrap"
                             android:paddingLeft="@dimen/medium_space"
                             android:paddingRight="@dimen/medium_space">
+
                             <ImageView
                                 style="@style/Img_CardTitle_Icon"
-                                android:src="@drawable/ic_place_white_18dp"/>
+                                android:src="@drawable/ic_place_white_18dp" />
+
                             <TextView
+                                android:id="@+id/cardTitle_dlvrAddres"
                                 style="@style/Edittext_CardTitle"
-                                android:text="Delivery Address"
-                                android:id="@+id/cardTitle_dlvrAddres"/>
+                                android:text="Delivery Address" />
+
                             <TextView
+                                android:id="@+id/cardBtn_dlvrAddres"
                                 style="@style/Edittext_CardTitle_Button"
-                                android:text="CHANGE"
-                                android:id="@+id/cardBtn_dlvrAddres"/>
+                                android:text="CHANGE" />
                             <!--ImageView
                                 style="@style/Img_CardTitle_Button"/-->
                         </LinearLayout>
 
-                        <View
-                            style="@style/Divider_horizontal_Medium"/>
+                        <View style="@style/Divider_horizontal_Medium" />
 
                         <TextView
+                            android:id="@+id/input_dlvrAddres"
                             style="@style/Edittext_only_view_small"
                             android:layout_width="match_parent"
-                            android:text="Aditya Gangwar\nA-1103, Prateek Wisteria, Sector 77\nNoida, Uttar Pradesh - 201301\n+91-8800191535"
-                            android:id="@+id/input_dlvrAddres"
-                            android:gravity="start"
-                            android:paddingLeft="@dimen/large_space"
-                            android:layout_marginTop="@dimen/medium_space"
                             android:layout_marginBottom="@dimen/medium_space"
-                            android:hint="Provide Address for delivery"/>
+                            android:layout_marginTop="@dimen/medium_space"
+                            android:gravity="start"
+                            android:hint="Provide Address for delivery"
+                            android:paddingLeft="@dimen/large_space"
+                            android:text="Aditya Gangwar\nA-1103, Prateek Wisteria, Sector 77\nNoida, Uttar Pradesh - 201301\n+91-8800191535" />
 
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/cardview_orderMchnt"
-                    style="@style/My_Cardview">
+                    style="@style/My_Cardview"
+                    android:layout_marginBottom="@dimen/medium_space">
 
                     <LinearLayout
-                        style="@style/LL_Vertical"
-                        android:id="@+id/layout_orderMchnt">
+                        android:id="@+id/layout_orderMchnt"
+                        style="@style/LL_Vertical">
 
                         <LinearLayout
                             style="@style/LL_Horizontal_wrap"
                             android:paddingLeft="@dimen/medium_space"
                             android:paddingRight="@dimen/medium_space">
+
                             <ImageView
                                 style="@style/Img_CardTitle_Icon"
-                                android:src="@drawable/ic_store_white_18dp"/>
+                                android:src="@drawable/ic_store_white_18dp" />
+
                             <TextView
+                                android:id="@+id/cardTitle_orderMchnt"
                                 style="@style/Edittext_CardTitle"
-                                android:text="Store"
-                                android:id="@+id/cardTitle_orderMchnt"/>
+                                android:text="Store" />
+
                             <TextView
+                                android:id="@+id/cardBtn_orderMchnt"
                                 style="@style/Edittext_CardTitle_Button"
-                                android:text="CHANGE"
-                                android:id="@+id/cardBtn_orderMchnt"/>
+                                android:text="CHANGE" />
                             <!--ImageView
                                 style="@style/Img_CardTitle_Button"/-->
                         </LinearLayout>
 
-                        <View
-                            style="@style/Divider_horizontal_Medium"/>
+                        <View style="@style/Divider_horizontal_Medium" />
 
                         <TextView
+                            android:id="@+id/input_orderMchnt"
                             style="@style/Edittext_only_view_small"
                             android:layout_width="match_parent"
-                            android:id="@+id/input_orderMchnt"
-                            android:gravity="start"
-                            android:paddingLeft="@dimen/large_space"
-                            android:layout_marginTop="@dimen/medium_space"
                             android:layout_marginBottom="@dimen/medium_space"
-                            android:text="Medindia Medical Store\nIndirapuram, Ghaziabad"
-                            android:hint="Select Merchant for the Order"/>
+                            android:layout_marginTop="@dimen/medium_space"
+                            android:gravity="start"
+                            android:hint="Select Merchant for the Order"
+                            android:paddingLeft="@dimen/large_space"
+                            android:text="Medindia Medical Store\nIndirapuram, Ghaziabad" />
 
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
