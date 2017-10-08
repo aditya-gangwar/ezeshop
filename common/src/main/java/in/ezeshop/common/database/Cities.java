@@ -2,44 +2,64 @@ package in.ezeshop.common.database;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
+import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
+import com.backendless.geo.GeoPoint;
 import com.backendless.persistence.BackendlessDataQuery;
 
 public class Cities
 {
-  private java.util.Date updated;
   private String objectId;
-  private String city;
-  private String ownerId;
-  private java.util.Date created;
-  private String state;
   private String countryCode;
+  private String ownerId;
   private String cbTableCode;
-
-  public String getCbTableCode() {
-    return cbTableCode;
+  private String state;
+  private java.util.Date updated;
+  private String city;
+  private java.util.Date created;
+  public String getObjectId()
+  {
+    return objectId;
   }
 
-  public void setCbTableCode(String cbTableCode) {
-    this.cbTableCode = cbTableCode;
-  }
-
-  public String getCountryCode() {
+  public String getCountryCode()
+  {
     return countryCode;
   }
 
-  public void setCountryCode(String countryCode) {
+  public void setCountryCode( String countryCode )
+  {
     this.countryCode = countryCode;
+  }
+
+  public String getOwnerId()
+  {
+    return ownerId;
+  }
+
+  public String getCbTableCode()
+  {
+    return cbTableCode;
+  }
+
+  public void setCbTableCode( String cbTableCode )
+  {
+    this.cbTableCode = cbTableCode;
+  }
+
+  public String getState()
+  {
+    return state;
+  }
+
+  public void setState( String state )
+  {
+    this.state = state;
   }
 
   public java.util.Date getUpdated()
   {
     return updated;
-  }
-
-  public String getObjectId()
-  {
-    return objectId;
   }
 
   public String getCity()
@@ -52,24 +72,9 @@ public class Cities
     this.city = city;
   }
 
-  public String getOwnerId()
-  {
-    return ownerId;
-  }
-
   public java.util.Date getCreated()
   {
     return created;
-  }
-
-  public String getState()
-  {
-    return state;
-  }
-
-  public void setState( String state )
-  {
-    this.state = state;
   }
 
                                                     

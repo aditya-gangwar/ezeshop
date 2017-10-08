@@ -2,324 +2,61 @@ package in.ezeshop.common.database;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
+import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
+import com.backendless.geo.GeoPoint;
 import com.backendless.persistence.BackendlessDataQuery;
 
-import java.util.Date;
-
-public class  Merchants
+public class Merchants
 {
-  private String name;
-  private String objectId;
-  private Boolean cl_add_enable;
-  private Boolean cl_overdraft_enable;
-  private String ownerId;
-  private java.util.Date last_txn_archive;
-  private Integer admin_status;
-  private java.util.Date created;
-  private String displayImage;
-  private java.util.Date updated;
-  private java.util.Date status_update_time;
-  private String status_reason;
-  //private String admin_remarks;
-  private String cashback_table;
+  private Boolean invoiceNumOnlyNumbers;
   private String mobile_num;
+  private java.util.Date lastRenewDate;
+  private Boolean debugLogs;
+  private String status_reason;
+  private String dob;
+  private String weekOffDay;
+  private String contactName;
+  private String cashback_table;
+  private String cb_rate;
+  private Integer prepaidCbMinAmt;
+  private Boolean cl_overdraft_enable;
+  private String agentId;
   private String email;
+  private String name;
+  private Boolean autoPasswd;
+  private java.util.Date last_txn_archive;
+  private String objectId;
+  private java.util.Date created;
+  private java.util.Date updated;
+  private String ownerId;
+  private java.util.Date delLocalFilesReq;
   private String txn_table;
   private String auto_id;
-  //private String tempDevId;
-  private String cb_rate;
-  //private java.util.List<MerchantDevice> trusted_devices;
-  private String buss_category;
-  private Address address;
-  private Integer cl_debit_limit_for_pin;
-  //private Integer cb_debit_limit_for_pin;
-  private Integer cl_credit_limit_for_pin;
-  private Boolean first_login_ok;
-  private Boolean debugLogs;
-  private String dob;
-  private String agentId;
-  private Date lastRenewDate;
-  private Date removeReqDate;
-  private Boolean invoiceNumAsk;
-  private Boolean invoiceNumOptional;
-  private Boolean invoiceNumOnlyNumbers;
-  private Date delLocalFilesReq;
   private String contactPhone;
-  private String contactName;
+  private Integer freeDlvrMinAmt;
+  private Boolean invoiceNumOptional;
+  private java.util.Date removeReqDate;
+  private String buss_category;
+  private String displayImage;
+  private java.util.Date status_update_time;
+  private Boolean first_login_ok;
+  private Integer cl_debit_limit_for_pin;
   private String prepaidCbRate;
-  private Integer prepaidCbMinAmt;
+  private Boolean cl_add_enable;
+  private Integer cl_credit_limit_for_pin;
+  private Boolean invoiceNumAsk;
   private String regFormNum;
-  private Boolean autoPasswd;
-
-  public Boolean getAutoPasswd() {
-    return autoPasswd;
-  }
-
-  public void setAutoPasswd(Boolean autoPasswd) {
-    this.autoPasswd = autoPasswd;
-  }
-
-  public Boolean getCl_overdraft_enable() {
-    return cl_overdraft_enable;
-  }
-
-  public void setCl_overdraft_enable(Boolean cl_overdraft_enable) {
-    this.cl_overdraft_enable = cl_overdraft_enable;
-  }
-
-  public String getRegFormNum() {
-    return regFormNum;
-  }
-
-  public void setRegFormNum(String regFormNum) {
-    this.regFormNum = regFormNum;
-  }
-
-  public Integer getPrepaidCbMinAmt() {
-    return prepaidCbMinAmt;
-  }
-
-  public void setPrepaidCbMinAmt(Integer prepaidCbMinAmt) {
-    this.prepaidCbMinAmt = prepaidCbMinAmt;
-  }
-
-  public String getPrepaidCbRate() {
-    return prepaidCbRate;
-  }
-
-  public void setPrepaidCbRate(String prepaidCbRate) {
-    this.prepaidCbRate = prepaidCbRate;
-  }
-
-  public String getContactName() {
-    return contactName;
-  }
-
-  public void setContactName(String contactName) {
-    this.contactName = contactName;
-  }
-
-  public String getContactPhone() {
-    return contactPhone;
-  }
-
-  public void setContactPhone(String contactPhone) {
-    this.contactPhone = contactPhone;
-  }
-
-  public Date getDelLocalFilesReq() {
-    return delLocalFilesReq;
-  }
-
-  public void setDelLocalFilesReq(Date delLocalFilesReq) {
-    this.delLocalFilesReq = delLocalFilesReq;
-  }
-
-  public boolean isInvoiceNumAsk() {
-    return invoiceNumAsk;
-  }
-
-  public boolean isInvoiceNumOptional() {
-    return invoiceNumOptional;
-  }
-
-  public boolean isInvoiceNumOnlyNumbers() {
+  private Integer admin_status;
+  private Address address;
+  public Boolean getInvoiceNumOnlyNumbers()
+  {
     return invoiceNumOnlyNumbers;
   }
 
-  public void setInvoiceNumAsk(boolean invoiceNumAsk) {
-    this.invoiceNumAsk = invoiceNumAsk;
-  }
-
-  public void setInvoiceNumOptional(boolean invoiceNumOptional) {
-    this.invoiceNumOptional = invoiceNumOptional;
-  }
-
-  public void setInvoiceNumOnlyNumbers(boolean invoiceNumOnlyNumbers) {
+  public void setInvoiceNumOnlyNumbers( Boolean invoiceNumOnlyNumbers )
+  {
     this.invoiceNumOnlyNumbers = invoiceNumOnlyNumbers;
-  }
-
-  public Date getRemoveReqDate() {
-    return removeReqDate;
-  }
-
-  public void setRemoveReqDate(Date removeReqDate) {
-    this.removeReqDate = removeReqDate;
-  }
-
-  public Date getLastRenewDate() {
-    return lastRenewDate;
-  }
-
-  public void setLastRenewDate(Date lastRenewDate) {
-    this.lastRenewDate = lastRenewDate;
-  }
-
-  public String getAgentId() {
-    return agentId;
-  }
-
-  public void setAgentId(String agentId) {
-    this.agentId = agentId;
-  }
-
-  public String getDob() {
-    return dob;
-  }
-
-  public void setDob(String dob) {
-    this.dob = dob;
-  }
-
-  public Boolean getDebugLogs() {
-    return debugLogs;
-  }
-
-  public void setDebugLogs(Boolean debugLogs) {
-    this.debugLogs = debugLogs;
-  }
-
-  public Boolean getFirst_login_ok() {
-    return first_login_ok;
-  }
-
-  public void setFirst_login_ok(Boolean first_login_ok) {
-    this.first_login_ok = first_login_ok;
-  }
-
-  public Integer getCl_debit_limit_for_pin() {
-    return cl_debit_limit_for_pin;
-  }
-
-  /*public Integer getCb_debit_limit_for_pin() {
-    return cb_debit_limit_for_pin;
-  }
-  public void setCb_debit_limit_for_pin(Integer cb_debit_limit_for_pin) {
-    this.cb_debit_limit_for_pin = cb_debit_limit_for_pin;
-  }
-  */
-
-  public Integer getCl_credit_limit_for_pin() {
-    return cl_credit_limit_for_pin;
-  }
-
-  public void setCl_debit_limit_for_pin(Integer cl_debit_limit_for_pin) {
-    this.cl_debit_limit_for_pin = cl_debit_limit_for_pin;
-  }
-
-  public void setCl_credit_limit_for_pin(Integer cl_credit_limit_for_pin) {
-    this.cl_credit_limit_for_pin = cl_credit_limit_for_pin;
-  }
-
-  public String getName()
-  {
-    return name;
-  }
-
-  public void setName( String name )
-  {
-    this.name = name;
-  }
-
-  public String getObjectId()
-  {
-    return objectId;
-  }
-
-  public Boolean getCl_add_enable()
-  {
-    return cl_add_enable;
-  }
-
-  public void setCl_add_enable( Boolean cl_add_enable )
-  {
-    this.cl_add_enable = cl_add_enable;
-  }
-
-  public String getOwnerId()
-  {
-    return ownerId;
-  }
-
-  public java.util.Date getLast_txn_archive()
-  {
-    return last_txn_archive;
-  }
-
-  public void setLast_txn_archive( java.util.Date last_txn_archive )
-  {
-    this.last_txn_archive = last_txn_archive;
-  }
-
-  public Integer getAdmin_status()
-  {
-    return admin_status;
-  }
-
-  public void setAdmin_status( Integer admin_status )
-  {
-    this.admin_status = admin_status;
-  }
-
-  public java.util.Date getCreated()
-  {
-    return created;
-  }
-
-  public String getDisplayImage()
-  {
-    return displayImage;
-  }
-
-  public void setDisplayImage(String displayImage)
-  {
-    this.displayImage = displayImage;
-  }
-
-  public java.util.Date getUpdated()
-  {
-    return updated;
-  }
-
-  public java.util.Date getStatus_update_time()
-  {
-    return status_update_time;
-  }
-
-  public void setStatus_update_time( java.util.Date status_update_time )
-  {
-    this.status_update_time = status_update_time;
-  }
-
-  public String getStatus_reason()
-  {
-    return status_reason;
-  }
-
-  public void setStatus_reason( String status_reason )
-  {
-    this.status_reason = status_reason;
-  }
-
-  /*public String getAdmin_remarks()
-  {
-    return admin_remarks;
-  }
-
-  public void setAdmin_remarks( String admin_remarks )
-  {
-    this.admin_remarks = admin_remarks;
-  }*/
-
-  public String getCashback_table()
-  {
-    return cashback_table;
-  }
-
-  public void setCashback_table( String cashback_table )
-  {
-    this.cashback_table = cashback_table;
   }
 
   public String getMobile_num()
@@ -332,6 +69,116 @@ public class  Merchants
     this.mobile_num = mobile_num;
   }
 
+  public java.util.Date getLastRenewDate()
+  {
+    return lastRenewDate;
+  }
+
+  public void setLastRenewDate( java.util.Date lastRenewDate )
+  {
+    this.lastRenewDate = lastRenewDate;
+  }
+
+  public Boolean getDebugLogs()
+  {
+    return debugLogs;
+  }
+
+  public void setDebugLogs( Boolean debugLogs )
+  {
+    this.debugLogs = debugLogs;
+  }
+
+  public String getStatus_reason()
+  {
+    return status_reason;
+  }
+
+  public void setStatus_reason( String status_reason )
+  {
+    this.status_reason = status_reason;
+  }
+
+  public String getDob()
+  {
+    return dob;
+  }
+
+  public void setDob( String dob )
+  {
+    this.dob = dob;
+  }
+
+  public String getWeekOffDay()
+  {
+    return weekOffDay;
+  }
+
+  public void setWeekOffDay( String weekOffDay )
+  {
+    this.weekOffDay = weekOffDay;
+  }
+
+  public String getContactName()
+  {
+    return contactName;
+  }
+
+  public void setContactName( String contactName )
+  {
+    this.contactName = contactName;
+  }
+
+  public String getCashback_table()
+  {
+    return cashback_table;
+  }
+
+  public void setCashback_table( String cashback_table )
+  {
+    this.cashback_table = cashback_table;
+  }
+
+  public String getCb_rate()
+  {
+    return cb_rate;
+  }
+
+  public void setCb_rate( String cb_rate )
+  {
+    this.cb_rate = cb_rate;
+  }
+
+  public Integer getPrepaidCbMinAmt()
+  {
+    return prepaidCbMinAmt;
+  }
+
+  public void setPrepaidCbMinAmt( Integer prepaidCbMinAmt )
+  {
+    this.prepaidCbMinAmt = prepaidCbMinAmt;
+  }
+
+  public Boolean getCl_overdraft_enable()
+  {
+    return cl_overdraft_enable;
+  }
+
+  public void setCl_overdraft_enable( Boolean cl_overdraft_enable )
+  {
+    this.cl_overdraft_enable = cl_overdraft_enable;
+  }
+
+  public String getAgentId()
+  {
+    return agentId;
+  }
+
+  public void setAgentId( String agentId )
+  {
+    this.agentId = agentId;
+  }
+
   public String getEmail()
   {
     return email;
@@ -340,6 +187,66 @@ public class  Merchants
   public void setEmail( String email )
   {
     this.email = email;
+  }
+
+  public String getName()
+  {
+    return name;
+  }
+
+  public void setName( String name )
+  {
+    this.name = name;
+  }
+
+  public Boolean getAutoPasswd()
+  {
+    return autoPasswd;
+  }
+
+  public void setAutoPasswd( Boolean autoPasswd )
+  {
+    this.autoPasswd = autoPasswd;
+  }
+
+  public java.util.Date getLast_txn_archive()
+  {
+    return last_txn_archive;
+  }
+
+  public void setLast_txn_archive( java.util.Date last_txn_archive )
+  {
+    this.last_txn_archive = last_txn_archive;
+  }
+
+  public String getObjectId()
+  {
+    return objectId;
+  }
+
+  public java.util.Date getCreated()
+  {
+    return created;
+  }
+
+  public java.util.Date getUpdated()
+  {
+    return updated;
+  }
+
+  public String getOwnerId()
+  {
+    return ownerId;
+  }
+
+  public java.util.Date getDelLocalFilesReq()
+  {
+    return delLocalFilesReq;
+  }
+
+  public void setDelLocalFilesReq( java.util.Date delLocalFilesReq )
+  {
+    this.delLocalFilesReq = delLocalFilesReq;
   }
 
   public String getTxn_table()
@@ -362,34 +269,44 @@ public class  Merchants
     this.auto_id = auto_id;
   }
 
-  /*public String getTempDevId()
+  public String getContactPhone()
   {
-    return tempDevId;
+    return contactPhone;
   }
 
-  public void setTempDevId( String tempDevId )
+  public void setContactPhone( String contactPhone )
   {
-    this.tempDevId = tempDevId;
+    this.contactPhone = contactPhone;
   }
 
-  public java.util.List<MerchantDevice> getTrusted_devices()
+  public Integer getFreeDlvrMinAmt()
   {
-    return trusted_devices;
+    return freeDlvrMinAmt;
   }
 
-  public void setTrusted_devices( java.util.List<MerchantDevice> trusted_devices )
+  public void setFreeDlvrMinAmt( Integer freeDlvrMinAmt )
   {
-    this.trusted_devices = trusted_devices;
-  }*/
-
-  public String getCb_rate()
-  {
-    return cb_rate;
+    this.freeDlvrMinAmt = freeDlvrMinAmt;
   }
 
-  public void setCb_rate( String cb_rate )
+  public Boolean getInvoiceNumOptional()
   {
-    this.cb_rate = cb_rate;
+    return invoiceNumOptional;
+  }
+
+  public void setInvoiceNumOptional( Boolean invoiceNumOptional )
+  {
+    this.invoiceNumOptional = invoiceNumOptional;
+  }
+
+  public java.util.Date getRemoveReqDate()
+  {
+    return removeReqDate;
+  }
+
+  public void setRemoveReqDate( java.util.Date removeReqDate )
+  {
+    this.removeReqDate = removeReqDate;
   }
 
   public String getBuss_category()
@@ -400,6 +317,106 @@ public class  Merchants
   public void setBuss_category( String buss_category )
   {
     this.buss_category = buss_category;
+  }
+
+  public String getDisplayImage()
+  {
+    return displayImage;
+  }
+
+  public void setDisplayImage( String displayImage )
+  {
+    this.displayImage = displayImage;
+  }
+
+  public java.util.Date getStatus_update_time()
+  {
+    return status_update_time;
+  }
+
+  public void setStatus_update_time( java.util.Date status_update_time )
+  {
+    this.status_update_time = status_update_time;
+  }
+
+  public Boolean getFirst_login_ok()
+  {
+    return first_login_ok;
+  }
+
+  public void setFirst_login_ok( Boolean first_login_ok )
+  {
+    this.first_login_ok = first_login_ok;
+  }
+
+  public Integer getCl_debit_limit_for_pin()
+  {
+    return cl_debit_limit_for_pin;
+  }
+
+  public void setCl_debit_limit_for_pin( Integer cl_debit_limit_for_pin )
+  {
+    this.cl_debit_limit_for_pin = cl_debit_limit_for_pin;
+  }
+
+  public String getPrepaidCbRate()
+  {
+    return prepaidCbRate;
+  }
+
+  public void setPrepaidCbRate( String prepaidCbRate )
+  {
+    this.prepaidCbRate = prepaidCbRate;
+  }
+
+  public Boolean getCl_add_enable()
+  {
+    return cl_add_enable;
+  }
+
+  public void setCl_add_enable( Boolean cl_add_enable )
+  {
+    this.cl_add_enable = cl_add_enable;
+  }
+
+  public Integer getCl_credit_limit_for_pin()
+  {
+    return cl_credit_limit_for_pin;
+  }
+
+  public void setCl_credit_limit_for_pin( Integer cl_credit_limit_for_pin )
+  {
+    this.cl_credit_limit_for_pin = cl_credit_limit_for_pin;
+  }
+
+  public Boolean getInvoiceNumAsk()
+  {
+    return invoiceNumAsk;
+  }
+
+  public void setInvoiceNumAsk( Boolean invoiceNumAsk )
+  {
+    this.invoiceNumAsk = invoiceNumAsk;
+  }
+
+  public String getRegFormNum()
+  {
+    return regFormNum;
+  }
+
+  public void setRegFormNum( String regFormNum )
+  {
+    this.regFormNum = regFormNum;
+  }
+
+  public Integer getAdmin_status()
+  {
+    return admin_status;
+  }
+
+  public void setAdmin_status( Integer admin_status )
+  {
+    this.admin_status = admin_status;
   }
 
   public Address getAddress()

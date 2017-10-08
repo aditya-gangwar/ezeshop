@@ -43,7 +43,8 @@
 
             <LinearLayout
                 android:id="@+id/layout_whole"
-                style="@style/LL_Vertical_paddingSidesLarge">
+                style="@style/LL_Vertical_paddingSidesLarge"
+                android:paddingBottom="@dimen/medium_space">
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/cardview_prescrips"
@@ -375,17 +376,16 @@
                             android:layout_marginBottom="@dimen/medium_space"
                             android:layout_marginTop="@dimen/medium_space"
                             android:gravity="start"
-                            android:hint="Provide Address for delivery"
+                            android:hint="Select Address for delivery"
                             android:paddingLeft="@dimen/large_space"
-                            android:text="Aditya Gangwar\nA-1103, Prateek Wisteria, Sector 77\nNoida, Uttar Pradesh - 201301\n+91-8800191535" />
+                            android:text="Aditya Gangwar\nA-1103, Prateek Wisteria,\nSector 77, Noida,\nUttar Pradesh - 201301\n+91-8800191535" />
 
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/cardview_orderMchnt"
-                    style="@style/My_Cardview"
-                    android:layout_marginBottom="@dimen/medium_space">
+                    style="@style/My_Cardview">
 
                     <LinearLayout
                         android:id="@+id/layout_orderMchnt"

@@ -62,7 +62,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
         OtpPinInputDialog.OtpPinInputDialogIf, CashbackListFragment.CashbackListFragmentIf,
         PinResetDialog.PinResetDialogIf, PinChangeDialog.PinChangeDialogIf,
         MchntDetailsDialogCustApp.MerchantDetailsDialogIf, CustomerOpListFrag.CustomerOpListFragIf,
-        CreateOrderFragment.CreateOrderFragmentIf {
+        CreateOrderFragment.CreateOrderFragmentIf, ChooseAddressFragment.ChooseAddressFragmentIf {
 
     private static final String TAG = "CustApp-CashbackActivity";
     public static final String INTENT_EXTRA_USER_TOKEN = "extraUserToken";
@@ -84,6 +84,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
     private static final String DIALOG_NOTIFY_CB_FETCH_ERROR = "dialogCbFetchError";
     private static final String DIALOG_SESSION_TIMEOUT = "dialogSessionTimeout";
     private static final String CUSTOMER_CREATE_ORDER_FRAG = "CustomerCreateOrderFrag";
+    private static final String CUSTOMER_CHOOSE_ADDRESS_FRAG = "CustomerChooseAddressFrag";
 
 
     MyRetainedFragment mRetainedFragment;
@@ -796,8 +797,49 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
         startActivityForResult(intent, RC_TXN_REPORT);
     }
 
+    /*
+     * Create Order Fragment Interface implementation
+     */
     @Override
     public void onOrderCreate() {
+
+    }
+
+    @Override
+    public void onSelectAddress() {
+        // start 'choose address' fragment
+        startChooseAddressFragment();
+    }
+
+    @Override
+    public void onSelectMerchant() {
+
+    }
+
+    /*
+     * Choose Address Fragment Interface implementation
+     */
+    @Override
+    public void onSelectAddress(String addrId) {
+        Fragment currentFragment = getFragmentManager().findFragmentByTag(CUSTOMER_CHOOSE_ADDRESS_FRAG);
+        if(currentFragment != null && currentFragment.isVisible()) {
+            // update selected address id
+            mRetainedFragment.mSelectedAddrId = addrId;
+            // remove fragment
+            getFragmentManager().popBackStackImmediate();
+            // 'create order' fragment should already show updated address on resume
+        } else {
+            LogMy.e(TAG, "In onSelectAddress: Latest Fragment mismatch: "+currentFragment.getTag());
+        }
+    }
+
+    @Override
+    public void onAddAddress() {
+
+    }
+
+    @Override
+    public void onEditAddress(String addrId) {
 
     }
 
@@ -832,6 +874,20 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
         } else if(tag.equals(DIALOG_SESSION_TIMEOUT)) {
             mExitAfterLogout = false;
             logoutCustomer();
+        }
+    }
+
+    private void startChooseAddressFragment() {
+        if (mFragMgr.findFragmentByTag(CUSTOMER_CHOOSE_ADDRESS_FRAG) == null) {
+            Fragment fragment = new ChooseAddressFragment();
+            FragmentTransaction transaction = mFragMgr.beginTransaction();
+
+            // Add over the existing fragment
+            transaction.replace(R.id.fragment_container_1, fragment, CUSTOMER_CHOOSE_ADDRESS_FRAG);
+            transaction.addToBackStack(CUSTOMER_CHOOSE_ADDRESS_FRAG);
+
+            // Commit the transaction
+            transaction.commit();
         }
     }
 

@@ -2,145 +2,125 @@ package in.ezeshop.common.database;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
+import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
+import com.backendless.geo.GeoPoint;
 import com.backendless.persistence.BackendlessDataQuery;
-
-import java.util.Date;
 
 public class Customers
 {
-  private java.util.Date status_update_time;
-  private String txn_pin;
-  private String status_reason;
-  private String mobile_num;
-  //private String admin_remarks;
-  private String ownerId;
+  private String dob;
   private java.util.Date updated;
+  private String name;
+  private String namak;
+  private Boolean first_login_ok;
+  private String txn_tables;
+  private String regMchntId;
+  private String ownerId;
   private java.util.Date created;
+  private String msgDevId;
   private String objectId;
+  private String txn_pin;
+  private java.util.Date delLocalFilesReq;
+  private String mobile_num;
+  private java.util.Date status_update_time;
+  private Boolean debugLogs;
+  private String private_id;
+  private String defaultAddressId;
+  private java.util.Date regDate;
+  private Integer sex;
   private String cashback_table;
   private Integer admin_status;
-  private String name;
-  private String private_id;
-  //private CustomerCards membership_card;
-  // cardId is used at only one place as of now
-  // In getCashback to fetch customer record based on scanned card ID
-  //private String cardId;
-  private Boolean first_login_ok;
-  private Boolean debugLogs;
-  private String txn_tables;
-  private Date delLocalFilesReq;
-  private String namak;
-  private String dob;
-  private int sex;
-  private java.util.Date regDate;
-  private String regMchntId;
-  private String msgDevId;
-
-  public String getMsgDevId() {
-    return msgDevId;
-  }
-
-  public void setMsgDevId(String msgDevId) {
-    this.msgDevId = msgDevId;
-  }
-
-  public Date getRegDate() {
-    return regDate;
-  }
-
-  public void setRegDate(Date regDate) {
-    this.regDate = regDate;
-  }
-
-  public String getRegMchntId() {
-    return regMchntId;
-  }
-
-  public void setRegMchntId(String regMchntId) {
-    this.regMchntId = regMchntId;
-  }
-
-  public String getDob() {
+  private String status_reason;
+  private java.util.List<CustAddress> addresses;
+  public String getDob()
+  {
     return dob;
   }
 
-  public void setDob(String dob) {
+  public void setDob( String dob )
+  {
     this.dob = dob;
   }
 
-  public int getSex() {
-    return sex;
+  public java.util.Date getUpdated()
+  {
+    return updated;
   }
 
-  public void setSex(int sex) {
-    this.sex = sex;
-  }
-
-  public String getNamak() {
-    return namak;
-  }
-
-  public void setNamak(String namak) {
-    this.namak = namak;
-  }
-
-  public Date getDelLocalFilesReq() {
-    return delLocalFilesReq;
-  }
-
-  public void setDelLocalFilesReq(Date delLocalFilesReq) {
-    this.delLocalFilesReq = delLocalFilesReq;
-  }
-
-  public String getName() {
+  public String getName()
+  {
     return name;
   }
 
-  public void setName(String name) {
+  public void setName( String name )
+  {
     this.name = name;
   }
 
-  public String getTxn_tables() {
-    return txn_tables;
+  public String getNamak()
+  {
+    return namak;
   }
 
-  public void setTxn_tables(String txn_tables) {
-    this.txn_tables = txn_tables;
+  public void setNamak( String namak )
+  {
+    this.namak = namak;
   }
 
-  public Boolean getDebugLogs() {
-    return debugLogs;
-  }
-
-  public void setDebugLogs(Boolean debugLogs) {
-    this.debugLogs = debugLogs;
-  }
-
-  public Boolean getFirst_login_ok() {
+  public Boolean getFirst_login_ok()
+  {
     return first_login_ok;
   }
 
-  public void setFirst_login_ok(Boolean first_login_ok) {
+  public void setFirst_login_ok( Boolean first_login_ok )
+  {
     this.first_login_ok = first_login_ok;
   }
 
-  /*public void setCardId(String cardId) {
-    this.cardId = cardId;
+  public String getTxn_tables()
+  {
+    return txn_tables;
   }
 
-  public String getCardId() {
-    return cardId;
-  }*/
-
-  public java.util.Date getStatus_update_time()
+  public void setTxn_tables( String txn_tables )
   {
-    return status_update_time;
+    this.txn_tables = txn_tables;
   }
 
-  public void setStatus_update_time( java.util.Date status_update_time )
+  public String getRegMchntId()
   {
-    this.status_update_time = status_update_time;
+    return regMchntId;
+  }
+
+  public void setRegMchntId( String regMchntId )
+  {
+    this.regMchntId = regMchntId;
+  }
+
+  public String getOwnerId()
+  {
+    return ownerId;
+  }
+
+  public java.util.Date getCreated()
+  {
+    return created;
+  }
+
+  public String getMsgDevId()
+  {
+    return msgDevId;
+  }
+
+  public void setMsgDevId( String msgDevId )
+  {
+    this.msgDevId = msgDevId;
+  }
+
+  public String getObjectId()
+  {
+    return objectId;
   }
 
   public String getTxn_pin()
@@ -153,14 +133,14 @@ public class Customers
     this.txn_pin = txn_pin;
   }
 
-  public String getStatus_reason()
+  public java.util.Date getDelLocalFilesReq()
   {
-    return status_reason;
+    return delLocalFilesReq;
   }
 
-  public void setStatus_reason( String status_reason )
+  public void setDelLocalFilesReq( java.util.Date delLocalFilesReq )
   {
-    this.status_reason = status_reason;
+    this.delLocalFilesReq = delLocalFilesReq;
   }
 
   public String getMobile_num()
@@ -173,34 +153,64 @@ public class Customers
     this.mobile_num = mobile_num;
   }
 
-  /*public String getAdmin_remarks()
+  public java.util.Date getStatus_update_time()
   {
-    return admin_remarks;
+    return status_update_time;
   }
 
-  public void setAdmin_remarks( String admin_remarks )
+  public void setStatus_update_time( java.util.Date status_update_time )
   {
-    this.admin_remarks = admin_remarks;
-  }*/
-
-  public String getOwnerId()
-  {
-    return ownerId;
+    this.status_update_time = status_update_time;
   }
 
-  public java.util.Date getUpdated()
+  public Boolean getDebugLogs()
   {
-    return updated;
+    return debugLogs;
   }
 
-  public java.util.Date getCreated()
+  public void setDebugLogs( Boolean debugLogs )
   {
-    return created;
+    this.debugLogs = debugLogs;
   }
 
-  public String getObjectId()
+  public String getPrivate_id()
   {
-    return objectId;
+    return private_id;
+  }
+
+  public void setPrivate_id( String private_id )
+  {
+    this.private_id = private_id;
+  }
+
+  public String getDefaultAddressId()
+  {
+    return defaultAddressId;
+  }
+
+  public void setDefaultAddressId( String defaultAddressId )
+  {
+    this.defaultAddressId = defaultAddressId;
+  }
+
+  public java.util.Date getRegDate()
+  {
+    return regDate;
+  }
+
+  public void setRegDate( java.util.Date regDate )
+  {
+    this.regDate = regDate;
+  }
+
+  public Integer getSex()
+  {
+    return sex;
+  }
+
+  public void setSex( Integer sex )
+  {
+    this.sex = sex;
   }
 
   public String getCashback_table()
@@ -223,35 +233,25 @@ public class Customers
     this.admin_status = admin_status;
   }
 
-  /*public String getName()
+  public String getStatus_reason()
   {
-    return name;
+    return status_reason;
   }
 
-  public void setName( String name )
+  public void setStatus_reason( String status_reason )
   {
-    this.name = name;
-  }*/
-
-  public String getPrivate_id()
-  {
-    return private_id;
+    this.status_reason = status_reason;
   }
 
-  public void setPrivate_id( String private_id )
+  public java.util.List<CustAddress> getAddresses()
   {
-    this.private_id = private_id;
+    return addresses;
   }
 
-  /*public CustomerCards getMembership_card()
+  public void setAddresses( java.util.List<CustAddress> addresses )
   {
-    return membership_card;
+    this.addresses = addresses;
   }
-
-  public void setMembership_card( CustomerCards membership_card )
-  {
-    this.membership_card = membership_card;
-  }*/
 
                                                     
   public Customers save()

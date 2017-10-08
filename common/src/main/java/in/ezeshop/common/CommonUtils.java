@@ -4,8 +4,11 @@ import com.backendless.exceptions.BackendlessException;
 import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.ErrorCodes;
 import in.ezeshop.common.database.Cashback;
+import in.ezeshop.common.database.Cities;
+import in.ezeshop.common.database.CustAddress;
 import in.ezeshop.common.database.MerchantStats;
 import in.ezeshop.common.database.Merchants;
+import in.ezeshop.common.database.MyAreas;
 import in.ezeshop.common.database.Transaction;
 
 import java.text.SimpleDateFormat;
@@ -67,6 +70,39 @@ public class CommonUtils {
         }
         halfVisibleUserid.append(str.substring(hiddenlen));
         return halfVisibleUserid.toString();
+    }
+
+    /*
+     * Customer Address related
+     */
+    public static String getCustAddrStrWithName(CustAddress addr) {
+        MyAreas  area = addr.getArea();
+        if(area==null) {
+            return "";
+        }
+        Cities city = area.getCity();
+        if(city==null) {
+            return "";
+        }
+
+        return addr.getToName()+"\n"
+                +getCustAddressStr(addr);
+    }
+    public static String getCustAddressStr(CustAddress addr) {
+        MyAreas  area = addr.getArea();
+        if(area==null) {
+            return "";
+        }
+        Cities city = area.getCity();
+        if(city==null) {
+            return "";
+        }
+
+        return addr.getText1()+"\n"
+                +area.getAreaName()+", "+city.getCity()+"\n"
+                +city.getState()+
+                ((area.getPincode()==null||area.getPincode().isEmpty())?(""):(" - "+area.getPincode()))+"\n"
+                +"+91-"+addr.getContactNum();
     }
 
     /*

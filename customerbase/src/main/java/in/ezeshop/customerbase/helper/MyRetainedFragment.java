@@ -73,6 +73,7 @@ public class MyRetainedFragment extends RetainedFragment {
 
     // customer order related parameters
     public List<File> mPrescripImgs;
+    public String mSelectedAddrId;
 
     public void reset() {
         LogMy.d(TAG,"In reset");
@@ -81,6 +82,7 @@ public class MyRetainedFragment extends RetainedFragment {
         mOtpMobileChange = null;
         mLastFetchCashbacks = null;
         mPrescripImgs = null;
+        mSelectedAddrId = null;
     }
 
     /*

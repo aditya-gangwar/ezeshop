@@ -114,8 +114,8 @@ public class TxnConfirmFragment extends BaseFragment {
                 return;
 
             // check if invoice num is mandatory
-            if (mMerchant.isInvoiceNumAsk() &&
-                    !mMerchant.isInvoiceNumOptional() &&
+            if (mMerchant.getInvoiceNumAsk() &&
+                    !mMerchant.getInvoiceNumOptional() &&
                     mInputInvoiceNum.getText().toString().isEmpty()) {
                 mInputInvoiceNum.setError("Enter Linked Invoice Number");
             } else {
@@ -180,10 +180,10 @@ public class TxnConfirmFragment extends BaseFragment {
 
         mInputCbDetails.setText(MyTransaction.getCbDetailStr(curTransaction,false));
 
-        if(mMerchant.isInvoiceNumAsk()) {
+        if(mMerchant.getInvoiceNumAsk()) {
             mLayoutExtraDetails.setVisibility(View.VISIBLE);
             mLayoutInvoiceNum.setVisibility(View.VISIBLE);
-            if(mMerchant.isInvoiceNumOnlyNumbers()) {
+            if(mMerchant.getInvoiceNumOnlyNumbers()) {
                 mInputInvoiceNum.setInputType(EditorInfo.TYPE_CLASS_NUMBER);
             }
         } else {

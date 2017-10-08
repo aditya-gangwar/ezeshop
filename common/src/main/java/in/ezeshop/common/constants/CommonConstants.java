@@ -97,6 +97,7 @@ public class CommonConstants {
     //public static final int MIN_CARD_ORDER_QTY = 10;
 
     public static final int MAX_PRESCRIPS_PER_ORDER = 4;
+    public static final int MAX_ADDRESS_PER_CUSTOMER = 4;
     public static final int MAX_DEVICES_PER_MERCHANT = 3;
     public static final int DB_QUERY_PAGE_SIZE = 100;
 

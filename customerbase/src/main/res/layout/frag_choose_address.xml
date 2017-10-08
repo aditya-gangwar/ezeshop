@@ -15,11 +15,12 @@
 
         <LinearLayout
             style="@style/LL_Vertical_paddingSidesLarge"
-            android:id="@+id/layout_whole">
+            android:id="@+id/layout_whole"
+            android:paddingTop="@dimen/medium_space"
+            android:paddingBottom="@dimen/medium_space">
 
             <LinearLayout
                 style="@style/LL_Horizontal_wrap"
-                android:layout_marginTop="@dimen/XL_space"
                 android:gravity="center"
                 android:id="@+id/layout_chooseAddress">
 
@@ -54,8 +55,13 @@
                         android:paddingLeft="@dimen/medium_space"
                         android:paddingRight="@dimen/medium_space">
                         <TextView
+                            android:id="@+id/cardTitle_toName1"
+                            style="@style/Edittext_CardTitle"
+                            android:text="Aditya Gangwar" />
+
+                        <TextView
                             style="@style/Edittext_CardTitle_Button"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:text="EDIT"
                             android:id="@+id/cardBtn_editAddress1"
                             android:gravity="end"/>
@@ -64,6 +70,7 @@
                         style="@style/Divider_horizontal_Medium"/>
                     <LinearLayout
                         style="@style/LL_Horizontal_wrap"
+                        android:id="@+id/lyt_address1"
                         android:paddingLeft="@dimen/large_space"
                         android:paddingRight="@dimen/medium_space"
                         android:layout_marginTop="@dimen/small_space"
@@ -72,7 +79,7 @@
                             style="@style/Edittext_only_view_small"
                             android:layout_width="0dp"
                             android:layout_weight="1"
-                            android:text="Aditya Gangwar\nA-1103, Prateek Wisteria, Sector 77\nNoida, Uttar Pradesh - 201301\n+91-8800191535"
+                            android:text="A-1103, Prateek Wisteria,\nSector 77, Noida,\nUttar Pradesh - 201301\n+91-8800191535"
                             android:id="@+id/input_address1"
                             android:gravity="start"
                             android:hint="Provide Address for delivery"/>
@@ -80,7 +87,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
-                            android:tint="@color/icon_grey"/>
+                            android:tint="@color/icon_grey_dark"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -99,8 +106,13 @@
                         android:paddingLeft="@dimen/medium_space"
                         android:paddingRight="@dimen/medium_space">
                         <TextView
+                            android:id="@+id/cardTitle_toName2"
+                            style="@style/Edittext_CardTitle"
+                            android:text="Aditya Gangwar" />
+
+                        <TextView
                             style="@style/Edittext_CardTitle_Button"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:text="EDIT"
                             android:id="@+id/cardBtn_editAddress2"
                             android:gravity="end"/>
@@ -109,6 +121,7 @@
                         style="@style/Divider_horizontal_Medium"/>
                     <LinearLayout
                         style="@style/LL_Horizontal_wrap"
+                        android:id="@+id/lyt_address2"
                         android:paddingLeft="@dimen/large_space"
                         android:paddingRight="@dimen/medium_space"
                         android:layout_marginTop="@dimen/small_space"
@@ -121,11 +134,13 @@
                             android:id="@+id/input_address2"
                             android:gravity="start"
                             android:hint="Provide Address for delivery"/>
+
                         <ImageView
+                            android:id="@+id/imageView2"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
-                            android:tint="@color/icon_grey"/>
+                            android:tint="@color/icon_grey_dark" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -144,8 +159,13 @@
                         android:paddingLeft="@dimen/medium_space"
                         android:paddingRight="@dimen/medium_space">
                         <TextView
+                            android:id="@+id/cardTitle_toName3"
+                            style="@style/Edittext_CardTitle"
+                            android:text="Aditya Gangwar" />
+
+                        <TextView
                             style="@style/Edittext_CardTitle_Button"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:text="EDIT"
                             android:id="@+id/cardBtn_editAddress3"
                             android:gravity="end"/>
@@ -154,6 +174,7 @@
                         style="@style/Divider_horizontal_Medium"/>
                     <LinearLayout
                         style="@style/LL_Horizontal_wrap"
+                        android:id="@+id/lyt_address3"
                         android:paddingLeft="@dimen/large_space"
                         android:paddingRight="@dimen/medium_space"
                         android:layout_marginTop="@dimen/small_space"
@@ -170,7 +191,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
-                            android:tint="@color/icon_grey"/>
+                            android:tint="@color/icon_grey_dark"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -189,8 +210,13 @@
                         android:paddingLeft="@dimen/medium_space"
                         android:paddingRight="@dimen/medium_space">
                         <TextView
+                            android:id="@+id/cardTitle_toName4"
+                            style="@style/Edittext_CardTitle"
+                            android:text="Aditya Gangwar" />
+
+                        <TextView
                             style="@style/Edittext_CardTitle_Button"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:text="EDIT"
                             android:id="@+id/cardBtn_editAddress4"
                             android:gravity="end"/>
@@ -199,6 +225,7 @@
                         style="@style/Divider_horizontal_Medium"/>
                     <LinearLayout
                         style="@style/LL_Horizontal_wrap"
+                        android:id="@+id/lyt_address4"
                         android:paddingLeft="@dimen/large_space"
                         android:paddingRight="@dimen/medium_space"
                         android:layout_marginTop="@dimen/small_space"
@@ -215,7 +242,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
-                            android:tint="@color/icon_grey"/>
+                            android:tint="@color/icon_grey_dark"/>
                     </LinearLayout>
 
                 </LinearLayout>

@@ -263,13 +263,13 @@ public class MerchantUser
                 mNewContactPhone = mMerchant.getContactPhone();
             }
             if(mNewInvNumAsk==null) {
-                mNewInvNumAsk = mMerchant.isInvoiceNumAsk();
+                mNewInvNumAsk = mMerchant.getInvoiceNumAsk();
             }
             if(mNewInvNumOptional==null) {
-                mNewInvNumOptional = mMerchant.isInvoiceNumOptional();
+                mNewInvNumOptional = mMerchant.getInvoiceNumOptional();
             }
             if(mNewInvNumOnlyNumbers==null) {
-                mNewInvNumOnlyNumbers = mMerchant.isInvoiceNumOnlyNumbers();
+                mNewInvNumOnlyNumbers = mMerchant.getInvoiceNumOnlyNumbers();
             }
             if(mNewPpCbRate==null) {
                 mNewPpCbRate = mMerchant.getPrepaidCbRate();

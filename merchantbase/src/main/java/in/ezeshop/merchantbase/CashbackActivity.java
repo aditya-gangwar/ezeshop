@@ -879,9 +879,9 @@ public class CashbackActivity extends BaseActivity implements
         prefs.putString(SettingsFragment2.KEY_EMAIL, mMerchant.getEmail());
         prefs.putString(SettingsFragment2.KEY_CONTACT_PHONE, mMerchant.getContactPhone());
 
-        prefs.putBoolean(SettingsFragment2.KEY_LINKED_INV, mMerchant.isInvoiceNumAsk());
-        prefs.putBoolean(SettingsFragment2.KEY_LINKED_INV_MANDATORY, !mMerchant.isInvoiceNumOptional());
-        prefs.putBoolean(SettingsFragment2.KEY_LINKED_INV_ONLY_NMBRS, mMerchant.isInvoiceNumOnlyNumbers());
+        prefs.putBoolean(SettingsFragment2.KEY_LINKED_INV, mMerchant.getInvoiceNumAsk());
+        prefs.putBoolean(SettingsFragment2.KEY_LINKED_INV_MANDATORY, !mMerchant.getInvoiceNumOptional());
+        prefs.putBoolean(SettingsFragment2.KEY_LINKED_INV_ONLY_NMBRS, mMerchant.getInvoiceNumOnlyNumbers());
 
         return prefs.commit();
     }

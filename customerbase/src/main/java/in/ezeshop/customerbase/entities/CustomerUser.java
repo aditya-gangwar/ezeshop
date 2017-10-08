@@ -19,10 +19,11 @@ import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.DbConstants;
 import in.ezeshop.common.constants.ErrorCodes;
 import in.ezeshop.common.database.Cashback;
+import in.ezeshop.common.database.CustAddress;
 import in.ezeshop.common.database.CustomerOps;
-import in.ezeshop.common.database.Customers;
 import in.ezeshop.appbase.utilities.AppCommonUtil;
 import in.ezeshop.appbase.utilities.LogMy;
+import in.ezeshop.common.database.Customers;
 import in.ezeshop.common.database.Transaction;
 import in.ezeshop.customerbase.backendAPI.CustomerServices;
 import in.ezeshop.customerbase.backendAPI.CustomerServicesNoLogin;
@@ -40,6 +41,9 @@ public class CustomerUser {
     private String mUserToken;
     // Flag to indicate, if this device's registration for push messaging is to be checked
     private boolean mChkMsgDevReg;
+    // List of addresses
+    private List<CustAddress> mAddresses;
+
     /*
      * Singleton class
      */
@@ -68,6 +72,7 @@ public class CustomerUser {
     public static void reset() {
         if(mInstance!=null) {
             mInstance.mCustomer = null;
+            mInstance.mAddresses = null;
             //mInstance.mBackendlessUser = null;
             mInstance = null;
         }
@@ -435,9 +440,13 @@ public class CustomerUser {
         this.mChkMsgDevReg = chkMsgDevReg;
     }
 
+    public List<CustAddress> getAddresses() {
+        return mAddresses;
+    }
+
     /*
-         * Private helper methods
-         */
+     * Private helper methods
+     */
     private static BackendlessUser getCustUserById(String objectId) {
         ArrayList<String> relationProps = new ArrayList<>();
         relationProps.add("customer");
@@ -502,6 +511,16 @@ public class CustomerUser {
         for (String str : csvFields) {
             Backendless.Data.mapTableToClass(str, Cashback.class);
         }
+
+        // extract addresses from customer object and reset it to null
+        // 'addresses' field is not actually stored in DB -a nd only used as transport during login
+        if(mCustomer.getAddresses()!=null) {
+            mAddresses = mCustomer.getAddresses();
+            mCustomer.setAddresses(null);
+        } else {
+            LogMy.d(TAG,"Customer addresses are null");
+        }
+
         // Set user id for crashlytics
         if(AppConstants.USE_CRASHLYTICS) {
             Crashlytics.setUserIdentifier(mCustomer.getPrivate_id());

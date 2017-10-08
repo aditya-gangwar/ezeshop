@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import id.zelory.compressor.Compressor;
@@ -33,9 +32,11 @@ import in.ezeshop.appbase.constants.AppConstants;
 import in.ezeshop.appbase.utilities.AppCommonUtil;
 import in.ezeshop.appbase.utilities.DialogFragmentWrapper;
 import in.ezeshop.appbase.utilities.LogMy;
-import in.ezeshop.common.MyGlobalSettings;
+import in.ezeshop.common.CommonUtils;
 import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.ErrorCodes;
+import in.ezeshop.common.database.CustAddress;
+import in.ezeshop.customerbase.entities.CustomerUser;
 import in.ezeshop.customerbase.helper.MyRetainedFragment;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
@@ -53,9 +54,6 @@ public class CreateOrderFragment extends BaseFragment implements
     private CreateOrderFragment.CreateOrderFragmentIf mCallback;
     private MyRetainedFragment mRetainedFragment;
 
-    //private static final String DIALOG_IMG_SRC = "DialogImgSrc";
-
-    private static final int REQUEST_IMG_SRC = 1;
     private static final int REQ_NOTIFY_ERROR = 4;
     private static final int REQ_NOTIFY_ERROR_EXIT = 5;
     private static final int RC_HANDLE_CAMERA_PERM = 10;
@@ -70,6 +68,8 @@ public class CreateOrderFragment extends BaseFragment implements
     public interface CreateOrderFragmentIf {
         MyRetainedFragment getRetainedFragment();
         void setDrawerState(boolean isEnabled);
+        void onSelectAddress();
+        void onSelectMerchant();
         void onOrderCreate();
     }
 
@@ -99,6 +99,9 @@ public class CreateOrderFragment extends BaseFragment implements
         }
 
         mRetainedFragment = mCallback.getRetainedFragment();
+        mPrescripImgLytArr = new View[]{mLytPrescripImg1,mLytPrescripImg2,mLytPrescripImg3,mLytPrescripImg4};
+        mPrescripImgArr = new ImageView[]{mImgPrescrip1,mImgPrescrip2,mImgPrescrip3,mImgPrescrip4};
+        mPrescripImgDelArr = new ImageView[]{mImgPrescripDel1,mImgPrescripDel2,mImgPrescripDel3,mImgPrescripDel4};
 
         /*
          * Instead of checking for 'savedInstanceState==null', checking
@@ -123,6 +126,8 @@ public class CreateOrderFragment extends BaseFragment implements
                 if (savedInstanceState == null) {
                     // fragment create case
                     mPrescripsDisabled = false;
+                    // On first create set 'default address' as selected address
+                    mRetainedFragment.mSelectedAddrId = CustomerUser.getInstance().getCustomer().getDefaultAddressId();
                 } else {
                     LogMy.d(TAG, "Fragment re-create case");
                     mPrescripsDisabled = savedInstanceState.getBoolean("mPrescripsDisabled");
@@ -147,11 +152,33 @@ public class CreateOrderFragment extends BaseFragment implements
     }
 
     private void initDisplay() {
-        mPrescripImgLytArr = new View[]{mLytPrescripImg1,mLytPrescripImg2,mLytPrescripImg3,mLytPrescripImg4};
-        mPrescripImgArr = new ImageView[]{mImgPrescrip1,mImgPrescrip2,mImgPrescrip3,mImgPrescrip4};
-        mPrescripImgDelArr = new ImageView[]{mImgPrescripDel1,mImgPrescripDel2,mImgPrescripDel3,mImgPrescripDel4};
-
         refreshPrescripImgs();
+        refreshAddress();
+    }
+
+    private void refreshAddress() {
+        LogMy.d(TAG,"In refreshAddress");
+
+        // First time - set to default address
+        List<CustAddress> allAddress = CustomerUser.getInstance().getCustomer().getAddresses();
+        CustAddress defAddr = null;
+
+        if( !(mRetainedFragment.mSelectedAddrId==null || allAddress==null || allAddress.isEmpty() || mRetainedFragment.mSelectedAddrId.isEmpty()) ) {
+            for (CustAddress addr :
+                    allAddress) {
+                if(addr.getId().equals(mRetainedFragment.mSelectedAddrId)) {
+                    defAddr = addr;
+                }
+            }
+        }
+
+        if(defAddr!=null) {
+            mBtnChangeAddr.setText("CHANGE");
+            mInputAddress.setText(CommonUtils.getCustAddrStrWithName(defAddr));
+        } else {
+            mBtnChangeAddr.setText("SELECT");
+            mInputAddress.setText("");
+        }
     }
 
     private void refreshPrescripImgs() {
@@ -247,36 +274,7 @@ public class CreateOrderFragment extends BaseFragment implements
 
         LogMy.e(TAG,"In getImgIndex: Invalid id: "+id);
         return -1;
-
-        /*if(id==R.id.img_precrips_del_1) {
-            return 0;
-        } else if(id==R.id.img_precrips_del_2) {
-            return 1;
-        } else if(id==R.id.img_precrips_del_3) {
-            return 2;
-        } else if(id==R.id.img_precrips_del_4) {
-            return 3;
-        } else {
-        }*/
     }
-
-    /*private void toggleAddPrescrips() {
-        if(mPrescripsDisabled) {
-            mCbxNoPrescrips.setImageDrawable(AppCommonUtil.getTintedDrawable(getActivity(),R.drawable.ic_check_box_black_24dp,R.color.green_positive));
-            mLytPrescripImgs.setVisibility(View.GONE);
-            mLytAddPrescrip.setVisibility(View.GONE);
-
-            mInputPrecripsInfo.setText("You can enter details of non-prescription items like personal care, OTC medicines etc below.\n\nOr can simply tell us verbally when you receive the call from the store.");
-            mPrescripsDisabled = false;
-        } else {
-            mCbxNoPrescrips.setImageDrawable(AppCommonUtil.getTintedDrawable(getActivity(),R.drawable.ic_check_box_black_24dp,R.color.green_positive));
-            mLytPrescripImgs.setVisibility(View.VISIBLE);
-            mLytAddPrescrip.setVisibility(View.VISIBLE);
-
-            mInputPrecripsInfo.setText("You can upload upto 4 prescriptions per order.");
-            mPrescripsDisabled = true;
-        }
-    }*/
 
     // Using BaseFragment's onClick method - to avoid double clicks
     @Override
@@ -293,6 +291,7 @@ public class CreateOrderFragment extends BaseFragment implements
 
             } else if (i == mBtnChangeAddr.getId()) {
                 // Show 'choose address' fragment
+                mCallback.onSelectAddress();
 
             } else if (i == mBtnChangeMchnt.getId()) {
                 // show 'choose merchant' fragment
@@ -445,36 +444,6 @@ public class CreateOrderFragment extends BaseFragment implements
                     //getActivity().onBackPressed();
                     //mCallback.restartTxn();
                     break;
-
-                /*case REQUEST_IMG_SRC:
-                    String errStr = null;
-                    if(resultCode==ErrorCodes.NO_ERROR) {
-                        String imgSrcStr = data.getStringExtra(DialogFragmentWrapper.EXTRA_SELECTION);
-                        if(imgSrcStr!=null) {
-                            AppConstants.IMG_CAPTURE_SRCS imgSrc = AppConstants.IMG_CAPTURE_SRCS.fromString(imgSrcStr);
-
-                            if(imgSrc==AppConstants.IMG_CAPTURE_SRCS.CAMERA) {
-                                // Pick image from the camera
-
-                            } else if(imgSrc==AppConstants.IMG_CAPTURE_SRCS.GALLERY) {
-                                // Pick image from the gallery
-
-                            } else {
-                                errStr = "Invalid selected Image Source: "+imgSrcStr;
-                            }
-                        } else {
-                            errStr = "Selected Image Source is NULL";
-                        }
-
-                    } else {
-                        errStr = "Error returned by Image source selection dialog: "+resultCode;
-                    }
-
-                    if(errStr!=null) {
-                        // raise alarm
-                    }
-                    break;*/
-
             }
         } catch (Exception e) {
             LogMy.e(TAG, "Exception in Fragment: ", e);
