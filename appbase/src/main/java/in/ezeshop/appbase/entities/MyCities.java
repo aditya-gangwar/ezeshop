@@ -11,6 +11,8 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.backendless.persistence.QueryOptions;
 import in.ezeshop.common.constants.CommonConstants;
+import in.ezeshop.common.constants.ErrorCodes;
+import in.ezeshop.common.database.Areas;
 import in.ezeshop.common.database.Cities;
 import in.ezeshop.appbase.utilities.LogMy;
 
@@ -20,12 +22,59 @@ import java.util.Iterator;
 
 public class MyCities
 {
-    private static String TAG="MyCities";
+    private static String TAG="BaseApp-MyCities";
 
     private static ArrayList<String> mCityValueSet;
     private static HashMap<String,Cities> mObjectMap;
 
-    public static void init() {
+    public static int initSync() {
+        try {
+            if(mCityValueSet == null) {
+                mCityValueSet = new ArrayList<>();
+            } else {
+                mCityValueSet.clear();
+            }
+            if(mObjectMap == null) {
+                mObjectMap = new HashMap<>();
+            } else {
+                mObjectMap.clear();
+            }
+
+            // Fetch all categories from DB and build value set
+            BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+            QueryOptions queryOptions = new QueryOptions("city");
+            dataQuery.setQueryOptions(queryOptions);
+            dataQuery.setPageSize(CommonConstants.DB_QUERY_PAGE_SIZE);
+
+            BackendlessCollection<Cities> collection = Backendless.Data.of(Cities.class).find(dataQuery);
+            int cnt = collection.getTotalObjects();
+            if (cnt == 0) {
+                LogMy.e(TAG, "No Cities fetched from DB");
+                return ErrorCodes.GENERAL_ERROR;
+            } else {
+                LogMy.d(TAG, "Fetched Cities: " + cnt);
+            }
+            while (collection.getCurrentPage().size() > 0) {
+                Iterator<Cities> iterator = collection.getCurrentPage().iterator();
+                while (iterator.hasNext()) {
+                    Cities item = iterator.next();
+                    if (!item.getCity().equals(CommonConstants.DUMMY_CITY_NAME)) {
+                        mObjectMap.put(item.getCity(), item);
+                        mCityValueSet.add(item.getCity());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LogMy.e(TAG,"Exception  in MyCities:initSync",e);
+            mObjectMap = null;
+            mCityValueSet = null;
+            return ErrorCodes.GENERAL_ERROR;
+        }
+
+        return ErrorCodes.NO_ERROR;
+    }
+
+    /*public static void init() {
         if(mCityValueSet == null) {
             mCityValueSet = new ArrayList<>();
         } else {
@@ -66,7 +115,7 @@ public class MyCities
                 mObjectMap = null;
             }
         });
-    }
+    }*/
 
     public static Cities getCityWithName(String name) {
         return mObjectMap==null?null:mObjectMap.get(name);

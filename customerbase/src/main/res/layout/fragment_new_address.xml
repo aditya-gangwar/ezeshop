@@ -79,7 +79,7 @@
                         android:id="@+id/inputMobileNum"
                         style="@style/MyEdittext_Medium"
                         android:layout_height="wrap_content"
-                        android:hint="Mobile Number"
+                        android:hint="Contact Number"
                         android:inputType="textCapWords" />
                 </android.support.design.widget.TextInputLayout>
 

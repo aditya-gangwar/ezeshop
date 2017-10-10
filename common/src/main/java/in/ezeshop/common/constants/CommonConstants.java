@@ -158,4 +158,5 @@ public class CommonConstants {
     //public static final String CARDS_RETURN_BY_AGENT = "cardsReturnByAgent";*/
 
     public static final String DUMMY_CITY_NAME = "DummyCity";
+    public static final String DUMMY_AREA_NAME = "DummyArea";
 }

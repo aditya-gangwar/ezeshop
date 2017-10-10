@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.TextView;
 
 import java.util.List;
 
@@ -18,13 +17,14 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import in.ezeshop.appbase.BaseFragment;
 import in.ezeshop.appbase.constants.AppConstants;
+import in.ezeshop.appbase.entities.MyCities;
 import in.ezeshop.appbase.utilities.AppCommonUtil;
 import in.ezeshop.appbase.utilities.DialogFragmentWrapper;
 import in.ezeshop.appbase.utilities.LogMy;
-import in.ezeshop.common.CommonUtils;
-import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.ErrorCodes;
+import in.ezeshop.common.database.Cities;
 import in.ezeshop.common.database.CustAddress;
+import in.ezeshop.common.database.Areas;
 import in.ezeshop.customerbase.entities.CustomerUser;
 import in.ezeshop.customerbase.helper.MyRetainedFragment;
 import pl.aprilapps.easyphotopicker.EasyImage;
@@ -37,15 +37,36 @@ public class UpdateAddressFragment extends BaseFragment {
     private static final String TAG = "CustApp-UpdateAddressFragment";
 
     private static final int REQ_NOTIFY_ERROR = 1;
-    private static final int REQ_NOTIFY_ERROR_EXIT = 5;
+    private static final int REQ_NOTIFY_ERROR_EXIT = 3;
 
-    private MyRetainedFragment mRetainedFragment;
+    private static final String DIALOG_CITY = "DialogCity";
+    private static final int REQUEST_CITY = 10;
+    private static final String DIALOG_AREA = "DialogArea";
+    private static final int REQUEST_AREA = 12;
+
+    private static final String ARG_ADDR_ID = "argAddrId";
+
     private UpdateAddressFragment.UpdateAddressFragmentIf mCallback;
+    private MyRetainedFragment mRetainedFragment;
+
+    // Special member variable to identify backstack cases
+    private Integer mBackstackFlag;
+
+    // Part of instance state: to be restored in event of fragment recreation
+    private boolean isModified;
 
     public interface UpdateAddressFragmentIf {
         MyRetainedFragment getRetainedFragment();
         void setDrawerState(boolean isEnabled);
-        void onUpdateAddress(String addrId);
+        void onUpdateAddress(CustAddress addr, boolean setAsDefault);
+    }
+
+    public static UpdateAddressFragment getInstance(String addressId) {
+        Bundle args = new Bundle();
+        args.putString(ARG_ADDR_ID, addressId);
+        UpdateAddressFragment fragment = new UpdateAddressFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -64,8 +85,28 @@ public class UpdateAddressFragment extends BaseFragment {
             mCallback = (UpdateAddressFragment.UpdateAddressFragmentIf) getActivity();
             mRetainedFragment = mCallback.getRetainedFragment();
 
+            if(savedInstanceState==null) {
+                // Either fragment 'create' or 'backstack' case
+                if (mBackstackFlag==null) {
+                    // fragment create case - initialize member variables
+                    isModified = false;
+                    mBackstackFlag = 123; // dummy memory allocation - to check for backstack scenarios later
+                    // On first create set 'default address' as selected address
+                    mRetainedFragment.mSelectedAddrId = CustomerUser.getInstance().getCustomer().getDefaultAddressId();
+                } else {
+                    // backstack case - no need to initialize member variables
+                    // as the same are automatically stored and restored
+                    LogMy.d(TAG,"Backstack case");
+                }
+            } else {
+                // fragment recreate case - restore member variables
+                isModified = savedInstanceState.getBoolean("isModified");
+            }
+
             //setup all listeners
             initListeners();
+
+            updateUI(getArguments().getString(ARG_ADDR_ID));
 
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
@@ -79,8 +120,48 @@ public class UpdateAddressFragment extends BaseFragment {
         }
     }
 
-    private void updateUI() {
+    private void updateUI(String editAddrId) {
         LogMy.d(TAG, "In updateUI");
+
+        // find address with given id
+        CustAddress editAddr = null;
+        if(editAddrId!=null) {
+            List<CustAddress> allAddress = CustomerUser.getInstance().getCustomer().getAddresses();
+            if (!(allAddress == null || allAddress.isEmpty())) {
+                for (CustAddress addr :
+                        allAddress) {
+                    if (addr.getId().equals(editAddrId)) {
+                        editAddr = addr;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if(editAddr!=null) {
+            Areas area = editAddr.getArea();
+            Cities city = area.getCity();
+
+            mInputCity.setText(city.getCity());
+            mInputName.setText(editAddr.getToName());
+            mInputContactNum.setText(editAddr.getContactNum());
+            mInputAddress.setText(editAddr.getText1());
+            mInputArea.setText(area.getAreaName());
+            mInputState.setText(city.getState());
+            mInputPincode.setText(area.getPincode());
+
+            if(editAddrId.equals(CustomerUser.getInstance().getCustomer().getDefaultAddressId())) {
+                mCbxDefaultAddr.setChecked(true);
+            } else {
+                mCbxDefaultAddr.setChecked(false);
+            }
+
+            mBtnUpdateAddr.setText("UPDATE ADDRESS");
+        } else {
+            mBtnUpdateAddr.setText("ADD ADDRESS");
+        }
+        mInputOtherArea.setVisibility(View.GONE);
+
     }
 
     // Using BaseFragment's onClick method - to avoid double clicks
@@ -92,6 +173,21 @@ public class UpdateAddressFragment extends BaseFragment {
         try {
             LogMy.d(TAG, "In handleBtnClick: " + v.getId());
             int id = v.getId();
+
+            if(id==mInputCity.getId()) {
+                AppCommonUtil.hideKeyboard(getActivity());
+                DialogFragmentWrapper dialog = DialogFragmentWrapper.createSingleChoiceDialog(getString(R.string.city_hint),
+                        MyCities.getCityValueSet(), -1, true);
+                dialog.setTargetFragment(UpdateAddressFragment.this,REQUEST_CITY);
+                dialog.show(getFragmentManager(), DIALOG_CITY);
+
+            } else if(id==mInputArea.getId()) {
+
+            } else if(id==mCbxDefaultAddr.getId()) {
+
+            } else if(id==mBtnUpdateAddr.getId()) {
+
+            }
 
         } catch (Exception e) {
             LogMy.e(TAG, "Exception in ChooseAddressFrag:onClick", e);
@@ -110,6 +206,14 @@ public class UpdateAddressFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         LogMy.d(TAG, "In onActivityResult :" + requestCode + ", " + resultCode);
+        switch (requestCode) {
+            case REQUEST_CITY:
+                if(resultCode==ErrorCodes.NO_ERROR) {
+                    String city = data.getStringExtra(DialogFragmentWrapper.EXTRA_SELECTION);
+                    mInputCity.setText(city);
+                }
+                break;
+        }
     }
 
     private void initListeners() {
@@ -139,7 +243,7 @@ public class UpdateAddressFragment extends BaseFragment {
         mCallback.setDrawerState(false);
 
         try {
-            updateUI();
+            //updateUI();
         } catch (Exception e) {
             LogMy.e(TAG, "Exception in CustomerTransactionFragment:onResume", e);
             DialogFragmentWrapper dialog = DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), true, true);
@@ -161,6 +265,7 @@ public class UpdateAddressFragment extends BaseFragment {
     public void onSaveInstanceState(Bundle outState) {
         LogMy.d(TAG, "In onSaveInstanceState");
         super.onSaveInstanceState(outState);
+        outState.putBoolean("isModified", isModified);
     }
 
     @Override public void onDestroyView() {

@@ -58,8 +58,8 @@ public class CreateOrderFragment extends BaseFragment implements
     private static final int REQ_NOTIFY_ERROR_EXIT = 5;
     private static final int RC_HANDLE_CAMERA_PERM = 10;
 
-    // These members are not necessarily required to be stored as part of fragment state
-    // As, either they represent values on screen, or can be calculated again.
+    // Special member variable to identify backstack cases
+    private Integer mBackstackFlag;
 
     // Part of instance state: to be restored in event of fragment recreation
     private boolean mPrescripsDisabled;
@@ -105,7 +105,7 @@ public class CreateOrderFragment extends BaseFragment implements
 
         /*
          * Instead of checking for 'savedInstanceState==null', checking
-         * for any 'not saved member' value (here, mCashPaidHelper)
+         * for any 'not saved member' value (here, mBackstackFlag)
          * The reason being, that for scenarios wherein fragment was stored in backstack and
          * has come to foreground again - like after pressing 'back' from 'txn confirm fragment'
          * then, the savedInstanceState will be NULL only.
@@ -116,24 +116,22 @@ public class CreateOrderFragment extends BaseFragment implements
          * but not for 'backstack' scenarios
          */
         try {
-            boolean isBackstackCase = false;
-            /*if (mCashPaidHelper != null) {
-                isBackstackCase = true;
-            }*/
-
-            if (!isBackstackCase) {
-                // either of fragment 'create' or 'recreate' scenarios
-                if (savedInstanceState == null) {
-                    // fragment create case
+            if(savedInstanceState==null) {
+                // Either fragment 'create' or 'backstack' case
+                if (mBackstackFlag==null) {
+                    // fragment create case - initialize member variables
                     mPrescripsDisabled = false;
+                    mBackstackFlag = 123; // dummy memory allocation - to check for backstack scenarios later
                     // On first create set 'default address' as selected address
                     mRetainedFragment.mSelectedAddrId = CustomerUser.getInstance().getCustomer().getDefaultAddressId();
                 } else {
-                    LogMy.d(TAG, "Fragment re-create case");
-                    mPrescripsDisabled = savedInstanceState.getBoolean("mPrescripsDisabled");
+                    // backstack case - no need to initialize member variables
+                    // as the same are automatically stored and restored
+                    // so - do nothing
                 }
             } else {
-                // these fxs update onscreen view also, so need to be run for backstack scenario too
+                // fragment recreate case - restore member variables
+                mPrescripsDisabled = savedInstanceState.getBoolean("mPrescripsDisabled");
             }
 
             //setup all listeners

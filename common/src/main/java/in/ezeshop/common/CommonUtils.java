@@ -8,7 +8,7 @@ import in.ezeshop.common.database.Cities;
 import in.ezeshop.common.database.CustAddress;
 import in.ezeshop.common.database.MerchantStats;
 import in.ezeshop.common.database.Merchants;
-import in.ezeshop.common.database.MyAreas;
+import in.ezeshop.common.database.Areas;
 import in.ezeshop.common.database.Transaction;
 
 import java.text.SimpleDateFormat;
@@ -76,7 +76,7 @@ public class CommonUtils {
      * Customer Address related
      */
     public static String getCustAddrStrWithName(CustAddress addr) {
-        MyAreas  area = addr.getArea();
+        Areas area = addr.getArea();
         if(area==null) {
             return "";
         }
@@ -89,7 +89,7 @@ public class CommonUtils {
                 +getCustAddressStr(addr);
     }
     public static String getCustAddressStr(CustAddress addr) {
-        MyAreas  area = addr.getArea();
+        Areas area = addr.getArea();
         if(area==null) {
             return "";
         }

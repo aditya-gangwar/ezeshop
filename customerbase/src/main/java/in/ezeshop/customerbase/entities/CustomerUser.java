@@ -14,6 +14,8 @@ import java.util.List;
 
 import in.ezeshop.appbase.backendAPI.CommonServices;
 import in.ezeshop.appbase.constants.AppConstants;
+import in.ezeshop.appbase.entities.MyAreas;
+import in.ezeshop.appbase.entities.MyCities;
 import in.ezeshop.common.MyGlobalSettings;
 import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.DbConstants;
@@ -480,8 +482,20 @@ public class CustomerUser {
             return ErrorCodes.GENERAL_ERROR;
         }
 
-        return AppCommonUtil.loadGlobalSettings(MyGlobalSettings.RunMode.appCustomer);
-        //return ErrorCodes.NO_ERROR;
+        int status = AppCommonUtil.loadGlobalSettings(MyGlobalSettings.RunMode.appCustomer);
+        if( status != ErrorCodes.NO_ERROR ) {
+            return status;
+        }
+        status = MyCities.initSync();
+        if( status != ErrorCodes.NO_ERROR ) {
+            return status;
+        }
+        status = MyAreas.initSync();
+        if( status != ErrorCodes.NO_ERROR ) {
+            return status;
+        }
+
+        return status;
     }
 
     private void isLoginValid() {
