@@ -10,6 +10,7 @@ import java.util.Map;
 
 import in.ezeshop.appbase.entities.MyCashback;
 import in.ezeshop.appbase.utilities.TxnReportsHelper2;
+import in.ezeshop.common.database.CustAddress;
 import in.ezeshop.common.database.CustomerOps;
 import in.ezeshop.common.database.Transaction;
 import in.ezeshop.customerbase.entities.CustomerStats;
@@ -38,6 +39,7 @@ public class MyRetainedFragment extends RetainedFragment {
     public static final int REQUEST_FETCH_CUSTOMER_OPS = 10;
     public static final int REQUEST_AUTO_LOGIN = 11;
     public static final int REQUEST_MSG_DEV_REG_CHK = 12;
+    public static final int REQUEST_SAVE_CUST_ADDR = 13;
 
     // Threads taken care by this fragment
     private MyBackgroundProcessor<String> mBackgroundProcessor;
@@ -71,9 +73,10 @@ public class MyRetainedFragment extends RetainedFragment {
     public String mAccEnablePin;
     public String mAccEnableOtp;
 
-    // customer order related parameters
+    // customer order/address related parameters
     public List<File> mPrescripImgs;
     public String mSelectedAddrId;
+    public CustAddress mCustAddrToSave;
 
     public void reset() {
         LogMy.d(TAG,"In reset");
@@ -83,6 +86,7 @@ public class MyRetainedFragment extends RetainedFragment {
         mLastFetchCashbacks = null;
         mPrescripImgs = null;
         mSelectedAddrId = null;
+        mCustAddrToSave= null;
     }
 
     /*
@@ -127,6 +131,10 @@ public class MyRetainedFragment extends RetainedFragment {
 
     public void checkMsgDevReg() {
         mBackgroundProcessor.addCheckMsgDevRegReq();
+    }
+
+    public void saveCustAddress(Boolean setAsDefault) {
+        mBackgroundProcessor.saveCustAddrReq(setAsDefault);
     }
 
     @Override

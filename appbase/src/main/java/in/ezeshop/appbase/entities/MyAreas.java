@@ -49,6 +49,7 @@ public class MyAreas {
 
             // Fetch all Areas from DB
             BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+            dataQuery.setWhereClause("validated = true");
             QueryOptions queryOptions = new QueryOptions();
             queryOptions.addRelated("city");
             dataQuery.setQueryOptions(queryOptions);

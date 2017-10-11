@@ -87,7 +87,7 @@ public class ChooseAddressFragment extends BaseFragment {
     private void updateUI() {
         LogMy.d(TAG, "In updateUI");
         // show all address in CustomerUser address storage
-        List<CustAddress> addresses = CustomerUser.getInstance().getAddresses();
+        List<CustAddress> addresses = CustomerUser.getInstance().getAllAddress();
 
         int i=0;
         for (CustAddress addr :
@@ -126,7 +126,7 @@ public class ChooseAddressFragment extends BaseFragment {
             int id = v.getId();
             if (id == mBtnAddAddress.getId()) {
                 // check if 4 already added
-                if(CustomerUser.getInstance().getAddresses().size() < CommonConstants.MAX_ADDRESS_PER_CUSTOMER) {
+                if(CustomerUser.getInstance().getAllAddress().size() < CommonConstants.MAX_ADDRESS_PER_CUSTOMER) {
                     mCallback.onAddAddress();
                 } else {
                     AppCommonUtil.toast(getActivity(),"Max 4 Address allowed");
@@ -136,13 +136,13 @@ public class ChooseAddressFragment extends BaseFragment {
                 // any one address is to be edited
                 int idx = getAddrIndex(id);
                 LogMy.d(TAG,"Edit address. Idx: "+idx);
-                mCallback.onEditAddress(CustomerUser.getInstance().getAddresses().get(idx).getId());
+                mCallback.onEditAddress(CustomerUser.getInstance().getAllAddress().get(idx).getId());
 
             } else if (id==R.id.lyt_address1 || id==R.id.lyt_address2 || id==R.id.lyt_address3 || id==R.id.lyt_address4) {
                 // any one address is selected
                 int idx = getAddrIndex(id);
                 LogMy.d(TAG,"Selected address. Idx: "+idx);
-                mCallback.onSelectAddress(CustomerUser.getInstance().getAddresses().get(idx).getId());
+                mCallback.onSelectAddress(CustomerUser.getInstance().getAllAddress().get(idx).getId());
             }
         } catch (Exception e) {
             LogMy.e(TAG, "Exception in ChooseAddressFrag:onClick", e);

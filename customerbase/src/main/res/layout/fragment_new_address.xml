@@ -48,21 +48,6 @@
                     android:layout_marginTop="@dimen/large_space">
 
                     <android.support.design.widget.TextInputEditText
-                        android:id="@+id/inputCity"
-                        style="@style/Edittext_only_click_bg_medium"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableRight="@drawable/ic_arrow_drop_down_black_24dp"
-                        android:gravity="left|center_vertical"
-                        android:hint="Select City" />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/large_space">
-
-                    <android.support.design.widget.TextInputEditText
                         android:id="@+id/inputName"
                         style="@style/MyEdittext_Medium"
                         android:layout_height="wrap_content"
@@ -89,11 +74,13 @@
                     android:layout_marginTop="@dimen/large_space">
 
                     <android.support.design.widget.TextInputEditText
-                        android:id="@+id/inputAddrLine1"
-                        style="@style/MyEdittext_Medium"
+                        android:id="@+id/inputCity"
+                        style="@style/Edittext_only_click_bg_medium"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Address"
-                        android:inputType="textCapWords" />
+                        android:drawableRight="@drawable/ic_arrow_drop_down_black_24dp"
+                        android:gravity="left|center_vertical"
+                        android:hint="Select City" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -111,6 +98,14 @@
                         android:hint="Select Area" />
                 </android.support.design.widget.TextInputLayout>
 
+                <CheckBox
+                    style="@style/Edittext_only_view_small"
+                    android:layout_marginTop="@dimen/large_space"
+                    android:id="@+id/cbx_areaNotListed"
+                    android:text="My area not listed above"
+                    android:gravity="start|center_vertical"
+                    android:textColor="@color/secondary_text"/>
+
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -121,6 +116,19 @@
                         style="@style/MyEdittext_Medium"
                         android:layout_height="wrap_content"
                         android:hint="Other Area Name"
+                        android:inputType="textCapWords" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/large_space">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/inputAddrLine1"
+                        style="@style/MyEdittext_Medium"
+                        android:layout_height="wrap_content"
+                        android:hint="House Number / Street / Building"
                         android:inputType="textCapWords" />
                 </android.support.design.widget.TextInputLayout>
 

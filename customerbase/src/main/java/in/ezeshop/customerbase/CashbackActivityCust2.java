@@ -40,6 +40,7 @@ import in.ezeshop.appbase.SingleWebViewActivity;
 import in.ezeshop.appbase.entities.MyCashback;
 import in.ezeshop.common.MyGlobalSettings;
 import in.ezeshop.common.CsvConverter;
+import in.ezeshop.common.database.CustAddress;
 import in.ezeshop.customerbase.entities.CustomerStats;
 import in.ezeshop.customerbase.entities.CustomerUser;
 import in.ezeshop.customerbase.helper.MyRetainedFragment;
@@ -62,7 +63,8 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
         OtpPinInputDialog.OtpPinInputDialogIf, CashbackListFragment.CashbackListFragmentIf,
         PinResetDialog.PinResetDialogIf, PinChangeDialog.PinChangeDialogIf,
         MchntDetailsDialogCustApp.MerchantDetailsDialogIf, CustomerOpListFrag.CustomerOpListFragIf,
-        CreateOrderFragment.CreateOrderFragmentIf, ChooseAddressFragment.ChooseAddressFragmentIf {
+        CreateOrderFragment.CreateOrderFragmentIf, ChooseAddressFragment.ChooseAddressFragmentIf,
+        UpdateAddressFragment.UpdateAddressFragmentIf {
 
     private static final String TAG = "CustApp-CashbackActivity";
     public static final String INTENT_EXTRA_USER_TOKEN = "extraUserToken";
@@ -85,6 +87,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
     private static final String DIALOG_SESSION_TIMEOUT = "dialogSessionTimeout";
     private static final String CUSTOMER_CREATE_ORDER_FRAG = "CustomerCreateOrderFrag";
     private static final String CUSTOMER_CHOOSE_ADDRESS_FRAG = "CustomerChooseAddressFrag";
+    private static final String CUSTOMER_UPDATE_ADDRESS_FRAG = "CustomerUpdateAddressFrag";
 
 
     MyRetainedFragment mRetainedFragment;
@@ -441,6 +444,22 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
                         String error = String.format(getString(R.string.ops_no_data_info), MyGlobalSettings.getOpsKeepDays().toString());
                         DialogFragmentWrapper.createNotification(AppConstants.noDataFailureTitle, error, false, false)
                                 .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
+                    } else {
+                        DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
+                                .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
+                    }
+                    break;
+                case MyRetainedFragment.REQUEST_SAVE_CUST_ADDR:
+                    AppCommonUtil.cancelProgressDialog(true);
+                    if (errorCode == ErrorCodes.NO_ERROR) {
+                        Fragment currentFragment = getFragmentManager().findFragmentByTag(CUSTOMER_UPDATE_ADDRESS_FRAG);
+                        if(currentFragment != null && currentFragment.isVisible()) {
+                            // remove fragment
+                            getFragmentManager().popBackStackImmediate();
+                            // 'create order' fragment should already show updated address on resume
+                        } else {
+                            LogMy.e(TAG, "REQUEST_SAVE_CUST_ADDR: Latest Fragment mismatch: "+currentFragment.getTag());
+                        }
                     } else {
                         DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
                                 .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
@@ -835,12 +854,25 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
 
     @Override
     public void onAddAddress() {
-
+        LogMy.d(TAG,"In onAddAddress");
+        startUpdateAddressFragment(null);
     }
 
     @Override
     public void onEditAddress(String addrId) {
+        LogMy.d(TAG,"In onEditAddress: "+addrId);
+        startUpdateAddressFragment(addrId);
+    }
 
+    /*
+     * Choose Address Fragment Interface implementation
+     */
+    @Override
+    public void onUpdateAddress(CustAddress addr, boolean setAsDefault) {
+        LogMy.d(TAG,"In onUpdateAddress: "+addr.getId());
+        AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
+        mRetainedFragment.mCustAddrToSave = addr;
+        mRetainedFragment.saveCustAddress(setAsDefault);
     }
 
     @Override
@@ -874,6 +906,20 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
         } else if(tag.equals(DIALOG_SESSION_TIMEOUT)) {
             mExitAfterLogout = false;
             logoutCustomer();
+        }
+    }
+
+    private void startUpdateAddressFragment(String editAddrId) {
+        if (mFragMgr.findFragmentByTag(CUSTOMER_UPDATE_ADDRESS_FRAG) == null) {
+            Fragment fragment = UpdateAddressFragment.getInstance(editAddrId);
+            FragmentTransaction transaction = mFragMgr.beginTransaction();
+
+            // Add over the existing fragment
+            transaction.replace(R.id.fragment_container_1, fragment, CUSTOMER_UPDATE_ADDRESS_FRAG);
+            transaction.addToBackStack(CUSTOMER_UPDATE_ADDRESS_FRAG);
+
+            // Commit the transaction
+            transaction.commit();
         }
     }
 

@@ -135,6 +135,7 @@
     </string-array>
 
     <string name="category_hint">* Business category</string>
+    <string name="area_hint">Area</string>
     <string name="city_hint">City</string>
     <string name="state_hint">State</string>
 

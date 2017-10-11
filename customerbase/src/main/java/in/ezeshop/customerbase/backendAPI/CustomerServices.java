@@ -11,6 +11,7 @@ import com.backendless.Backendless;
 
 import in.ezeshop.appbase.constants.AppConstants;
 import in.ezeshop.common.database.Cashback;
+import in.ezeshop.common.database.CustAddress;
 import in.ezeshop.common.database.CustomerOps;
 import in.ezeshop.common.database.Transaction;
 
@@ -36,6 +37,12 @@ import in.ezeshop.common.database.Transaction;
         Backendless.setUrl( AppConstants.BACKENDLESS_HOST );
         // if you invoke this sample inside of android application, you should use overloaded "initApp" with "context" argument
         Backendless.initApp( AppConstants.BACKENDLESS_APP_ID, AppConstants.ANDROID_SECRET_KEY, CustomerServices.APP_VERSION );
+    }
+
+    public java.util.List<CustAddress> saveCustAddress(CustAddress addr, Boolean setAsDefault)
+    {
+        Object[] args = new Object[]{addr, setAsDefault};
+        return Backendless.CustomService.invoke( SERVICE_NAME, SERVICE_VERSION_NAME, "saveCustAddress", args, java.util.List.class );
     }
 
     public java.util.List<Cashback> getCashbacks(String custPrivateId, long updatedSince)

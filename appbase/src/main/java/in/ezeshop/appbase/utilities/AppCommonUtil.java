@@ -55,6 +55,7 @@ import in.ezeshop.common.MyGlobalSettings;
 import in.ezeshop.common.database.Address;
 import in.ezeshop.common.database.BusinessCategories;
 import in.ezeshop.common.database.Cities;
+import in.ezeshop.common.database.CustAddress;
 import in.ezeshop.common.database.CustomerOps;
 import in.ezeshop.common.database.Customers;
 import in.ezeshop.common.database.MerchantDevice;
@@ -95,8 +96,30 @@ public class AppCommonUtil {
     // so this shud work fine for now
     public static MyErrorParams mErrorParams = new MyErrorParams();
 
+
+    public static boolean areCustAddressEqual(CustAddress lhs, CustAddress rhs) {
+        if(!lhs.getArea().getId().equals(rhs.getArea().getId())) {
+            LogMy.d(TAG,"custAddrDiffAndCopy: Area not same");
+            return false;
+        }
+        if(!lhs.getText1().equals(rhs.getText1())) {
+            LogMy.d(TAG,"custAddrDiffAndCopy: Address text not same");
+            return false;
+        }
+        if(!lhs.getToName().equals(rhs.getToName())) {
+            LogMy.d(TAG,"custAddrDiffAndCopy: To Name not same");
+            return false;
+        }
+        if(!lhs.getContactNum().equals(rhs.getContactNum())) {
+            LogMy.d(TAG,"custAddrDiffAndCopy: Contact Num not same");
+            return false;
+        }
+
+        return true;
+    }
+
     /*
-     * Fxs to calculate and show commonly used parametrs
+     * Fxs to calculate and show commonly used parameters
      */
 
     // shows amount with Sign and in color

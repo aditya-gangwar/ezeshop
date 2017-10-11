@@ -15,6 +15,16 @@ public class Areas
   private String objectId;
   private java.util.Date updated;
   private Cities city;
+  private Boolean validated;
+
+  public Boolean getValidated() {
+    return validated;
+  }
+
+  public void setValidated(Boolean validated) {
+    this.validated = validated;
+  }
+
   public java.util.Date getCreated()
   {
     return created;

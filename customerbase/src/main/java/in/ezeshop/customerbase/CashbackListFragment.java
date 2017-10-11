@@ -60,7 +60,7 @@ public class CashbackListFragment extends BaseFragment {
     public interface CashbackListFragmentIf {
         MyRetainedFragment getRetainedFragment();
         boolean refreshMchntList();
-        //void setDrawerState(boolean isEnabled);
+        void setDrawerState(boolean isEnabled);
     }
 
     private RecyclerView mRecyclerView;
@@ -201,7 +201,7 @@ public class CashbackListFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        //mCallback.setDrawerState(false);
+        mCallback.setDrawerState(true);
         try {
             updateUI();
         } catch (Exception e) {

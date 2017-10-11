@@ -36,6 +36,12 @@ public class CommonConstants {
     //public static final String PREFIX_ERROR_CODE_AS_MSG = "ZZ";
 
     /*
+     * Start epoch time for us
+     *
+     */
+    public static long START_EPOCH_SECS = 1507752285;
+
+    /*
      * To use int as boolean
      */
     public static final int BOOLEAN_VALUE_FALSE = 0;
@@ -159,4 +165,5 @@ public class CommonConstants {
 
     public static final String DUMMY_CITY_NAME = "DummyCity";
     public static final String DUMMY_AREA_NAME = "DummyArea";
+    public static final String OTHER_AREA_NAME = "Other";
 }

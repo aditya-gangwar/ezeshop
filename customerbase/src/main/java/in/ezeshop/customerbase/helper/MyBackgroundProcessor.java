@@ -129,6 +129,9 @@ public class MyBackgroundProcessor <T> extends BackgroundProcessor<T> {
     public void addCheckMsgDevRegReq() {
         mRequestHandler.obtainMessage(MyRetainedFragment.REQUEST_MSG_DEV_REG_CHK, null).sendToTarget();
     }
+    public void saveCustAddrReq(Boolean setAsDefault) {
+        mRequestHandler.obtainMessage(MyRetainedFragment.REQUEST_SAVE_CUST_ADDR, setAsDefault).sendToTarget();
+    }
 
 
     @Override
@@ -181,8 +184,16 @@ public class MyBackgroundProcessor <T> extends BackgroundProcessor<T> {
             case MyRetainedFragment.REQUEST_MSG_DEV_REG_CHK:
                 error = chkMsgDevReg();
                 break;
+            case MyRetainedFragment.REQUEST_SAVE_CUST_ADDR:
+                error = saveCustAddress((Boolean) msg.obj);
+                break;
         }
         return error;
+    }
+
+    private int saveCustAddress(Boolean setAsDefault) {
+        LogMy.d(TAG, "In saveCustAddress");
+        return CustomerUser.getInstance().saveCustAddress(mRetainedFragment.mCustAddrToSave, setAsDefault);
     }
 
     private int chkMsgDevReg() {

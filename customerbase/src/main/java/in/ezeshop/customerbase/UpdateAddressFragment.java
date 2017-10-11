@@ -17,10 +17,13 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import in.ezeshop.appbase.BaseFragment;
 import in.ezeshop.appbase.constants.AppConstants;
+import in.ezeshop.appbase.entities.MyAreas;
 import in.ezeshop.appbase.entities.MyCities;
 import in.ezeshop.appbase.utilities.AppCommonUtil;
 import in.ezeshop.appbase.utilities.DialogFragmentWrapper;
 import in.ezeshop.appbase.utilities.LogMy;
+import in.ezeshop.appbase.utilities.ValidationHelper;
+import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.ErrorCodes;
 import in.ezeshop.common.database.Cities;
 import in.ezeshop.common.database.CustAddress;
@@ -53,7 +56,8 @@ public class UpdateAddressFragment extends BaseFragment {
     private Integer mBackstackFlag;
 
     // Part of instance state: to be restored in event of fragment recreation
-    private boolean isModified;
+    private String mEditAddressId;
+    private boolean mIsModified;
 
     public interface UpdateAddressFragmentIf {
         MyRetainedFragment getRetainedFragment();
@@ -89,7 +93,7 @@ public class UpdateAddressFragment extends BaseFragment {
                 // Either fragment 'create' or 'backstack' case
                 if (mBackstackFlag==null) {
                     // fragment create case - initialize member variables
-                    isModified = false;
+                    mIsModified = false;
                     mBackstackFlag = 123; // dummy memory allocation - to check for backstack scenarios later
                     // On first create set 'default address' as selected address
                     mRetainedFragment.mSelectedAddrId = CustomerUser.getInstance().getCustomer().getDefaultAddressId();
@@ -100,13 +104,15 @@ public class UpdateAddressFragment extends BaseFragment {
                 }
             } else {
                 // fragment recreate case - restore member variables
-                isModified = savedInstanceState.getBoolean("isModified");
+                mIsModified = savedInstanceState.getBoolean("mIsModified");
+                mEditAddressId = savedInstanceState.getString("mEditAddressId");
             }
 
             //setup all listeners
             initListeners();
 
-            updateUI(getArguments().getString(ARG_ADDR_ID));
+            mEditAddressId = getArguments().getString(ARG_ADDR_ID);
+            updateUI();
 
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
@@ -120,22 +126,13 @@ public class UpdateAddressFragment extends BaseFragment {
         }
     }
 
-    private void updateUI(String editAddrId) {
+    private void updateUI() {
         LogMy.d(TAG, "In updateUI");
 
         // find address with given id
         CustAddress editAddr = null;
-        if(editAddrId!=null) {
-            List<CustAddress> allAddress = CustomerUser.getInstance().getCustomer().getAddresses();
-            if (!(allAddress == null || allAddress.isEmpty())) {
-                for (CustAddress addr :
-                        allAddress) {
-                    if (addr.getId().equals(editAddrId)) {
-                        editAddr = addr;
-                        break;
-                    }
-                }
-            }
+        if(mEditAddressId!=null) {
+            editAddr = CustomerUser.getInstance().getAddress(mEditAddressId);
         }
 
         if(editAddr!=null) {
@@ -150,7 +147,7 @@ public class UpdateAddressFragment extends BaseFragment {
             mInputState.setText(city.getState());
             mInputPincode.setText(area.getPincode());
 
-            if(editAddrId.equals(CustomerUser.getInstance().getCustomer().getDefaultAddressId())) {
+            if(mEditAddressId.equals(CustomerUser.getInstance().getCustomer().getDefaultAddressId())) {
                 mCbxDefaultAddr.setChecked(true);
             } else {
                 mCbxDefaultAddr.setChecked(false);
@@ -160,6 +157,7 @@ public class UpdateAddressFragment extends BaseFragment {
         } else {
             mBtnUpdateAddr.setText("ADD ADDRESS");
         }
+        mCbxDefaultAddr.setChecked(false);
         mInputOtherArea.setVisibility(View.GONE);
 
     }
@@ -182,11 +180,70 @@ public class UpdateAddressFragment extends BaseFragment {
                 dialog.show(getFragmentManager(), DIALOG_CITY);
 
             } else if(id==mInputArea.getId()) {
+                AppCommonUtil.hideKeyboard(getActivity());
+
+                String city = mInputCity.getText().toString();
+                if(city.isEmpty()) {
+                    AppCommonUtil.toast(getActivity(),"Select City");
+                    mInputCity.requestFocus();
+
+                } else {
+                    DialogFragmentWrapper dialog = DialogFragmentWrapper.createSingleChoiceDialog(getString(R.string.area_hint),
+                            MyAreas.getAreaNameList(city), -1, true);
+                    dialog.setTargetFragment(UpdateAddressFragment.this, REQUEST_AREA);
+                    dialog.show(getFragmentManager(), DIALOG_AREA);
+                }
+
+
+            } else if(id==mCbxAreaNotListed.getId()) {
+                if(mCbxAreaNotListed.isChecked()) {
+                    mInputOtherArea.setVisibility(View.VISIBLE);
+                    // make area non-editable
+                    mInputArea.setAlpha(0.4f);
+                    mInputAddress.setClickable(false);
+                    mInputAddress.setFocusable(false);
+                    // make pincode editable
+                    mInputPincode.setClickable(true);
+                    mInputPincode.setFocusable(true);
+                } else {
+                    mInputOtherArea.setVisibility(View.GONE);
+                    // make area selectable
+                    mInputArea.setAlpha(1.0f);
+                    mInputAddress.setClickable(true);
+                    mInputAddress.setFocusable(true);
+                    // make pincode non-editable
+                    mInputPincode.setClickable(false);
+                    mInputPincode.setFocusable(false);
+                }
 
             } else if(id==mCbxDefaultAddr.getId()) {
+                // do nothing
 
             } else if(id==mBtnUpdateAddr.getId()) {
+                // validate fields
+                if(validate()) {
+                    CustAddress addr = createCustAddress();
+                    // Check if edit or add case
+                    boolean update = true;
+                    if(mEditAddressId!=null || !mEditAddressId.isEmpty()) {
+                        // Edit address case
+                        // Check if anything modified
+                        if(!AppCommonUtil.areCustAddressEqual(CustomerUser.getInstance().getAddress(mEditAddressId),addr)) {
+                            // something got modified
+                            addr.setId(mEditAddressId); // to identify to update existing address
+                        } else {
+                            AppCommonUtil.toast(getActivity(),"No Change");
+                            update = false;
+                        }
+                    }
 
+                    if(update) {
+                        mCallback.onUpdateAddress(addr,mCbxDefaultAddr.isChecked());
+                    }
+
+                } else {
+                    AppCommonUtil.toast(getActivity(),"Fields Missing");
+                }
             }
 
         } catch (Exception e) {
@@ -194,6 +251,68 @@ public class UpdateAddressFragment extends BaseFragment {
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), true, true)
                     .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
         }
+    }
+
+    private CustAddress createCustAddress() {
+        // First create CustAddress object from field values
+        CustAddress addr = new CustAddress();
+        addr.setToName(mInputName.getText().toString());
+        addr.setContactNum(mInputContactNum.getText().toString());
+
+        Areas area = null;
+        if(mCbxAreaNotListed.isChecked()) {
+            area = new Areas();
+            area.setValidated(false);
+            area.setAreaName(mInputOtherArea.getText().toString());
+            area.setPincode(mInputPincode.getText().toString());
+            Cities city = MyCities.getCityWithName(mInputCity.getText().toString());
+            area.setCity(city);
+        } else {
+            area = MyAreas.getAreaObject(mInputCity.getText().toString(), mInputArea.getText().toString());
+        }
+        addr.setArea(area);
+        addr.setText1(mInputAddress.getText().toString());
+        addr.setCustPrivateId(CustomerUser.getInstance().getCustomer().getPrivate_id());
+
+        return addr;
+    }
+
+    private boolean validate() {
+        boolean allok = true;
+        if(mInputName.getText().toString().isEmpty()) {
+            mInputName.setError("Enter Name");
+            allok = false;
+        }
+        int status = ValidationHelper.validateMobileNo(mInputContactNum.getText().toString());
+        if(status!=ErrorCodes.NO_ERROR) {
+            mInputContactNum.setError(AppCommonUtil.getErrorDesc(status));
+            allok = false;
+        }
+        if(mInputCity.getText().toString().isEmpty()) {
+            mInputCity.setError("Select City");
+            allok = false;
+        }
+        if(mCbxAreaNotListed.isChecked()) {
+            if (mInputOtherArea.getText().toString().isEmpty()) {
+                mInputOtherArea.setError("Enter Area Name");
+                allok = false;
+            }
+            status = ValidationHelper.validatePincode(mInputPincode.getText().toString());
+            if(status!=ErrorCodes.NO_ERROR) {
+                mInputPincode.setError(AppCommonUtil.getErrorDesc(status));
+                allok = false;
+            }
+        } else {
+            if (mInputArea.getText().toString().isEmpty()) {
+                mInputArea.setError("Select Area");
+                allok = false;
+            }
+        }
+        if(mInputAddress.getText().toString().isEmpty()) {
+            mInputAddress.setError("Enter Address");
+            allok = false;
+        }
+        return allok;
     }
 
     // Not using BaseFragment's onTouch
@@ -211,6 +330,15 @@ public class UpdateAddressFragment extends BaseFragment {
                 if(resultCode==ErrorCodes.NO_ERROR) {
                     String city = data.getStringExtra(DialogFragmentWrapper.EXTRA_SELECTION);
                     mInputCity.setText(city);
+                    mInputState.setText(MyCities.getCityWithName(city).getState());
+                }
+                break;
+            case REQUEST_AREA:
+                if(resultCode==ErrorCodes.NO_ERROR) {
+                    String areaStr = data.getStringExtra(DialogFragmentWrapper.EXTRA_SELECTION);
+                    mInputArea.setText(areaStr);
+                    Areas area = MyAreas.getAreaObject(mInputCity.getText().toString(), areaStr);
+                    mInputPincode.setText(area.getPincode()==null?"":area.getPincode());
                 }
                 break;
         }
@@ -230,6 +358,7 @@ public class UpdateAddressFragment extends BaseFragment {
     @BindView(R2.id.inputMobileNum) TextInputEditText mInputContactNum;
     @BindView(R2.id.inputAddrLine1) TextInputEditText mInputAddress;
     @BindView(R2.id.inputArea) TextInputEditText mInputArea;
+    @BindView(R2.id.cbx_areaNotListed) CheckBox mCbxAreaNotListed;
     @BindView(R2.id.inputOtherArea) TextInputEditText mInputOtherArea;
     @BindView(R2.id.inputState) TextInputEditText mInputState;
     @BindView(R2.id.inputPincode) TextInputEditText mInputPincode;
@@ -265,7 +394,8 @@ public class UpdateAddressFragment extends BaseFragment {
     public void onSaveInstanceState(Bundle outState) {
         LogMy.d(TAG, "In onSaveInstanceState");
         super.onSaveInstanceState(outState);
-        outState.putBoolean("isModified", isModified);
+        outState.putBoolean("mIsModified", mIsModified);
+        outState.putString("mEditAddressId", mEditAddressId);
     }
 
     @Override public void onDestroyView() {

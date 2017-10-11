@@ -87,8 +87,9 @@ public final class ValidationHelper{
     public static int validatePincode(String value) {
         if (value==null || value.isEmpty()) {
             return ErrorCodes.EMPTY_VALUE;
-        } else if (value.length() != CommonConstants.PINCODE_LEN) {
-            return ErrorCodes.INVALID_LENGTH;
+        } else if( value.length() < CommonConstants.PINCODE_LEN ||
+                !containsDigit(value)) {
+            return ErrorCodes.INVALID_FORMAT;
         } else {
             return ErrorCodes.NO_ERROR;
         }

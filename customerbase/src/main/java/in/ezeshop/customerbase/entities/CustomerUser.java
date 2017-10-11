@@ -286,6 +286,18 @@ public class CustomerUser {
         }*/
     }
 
+    public int saveCustAddress(CustAddress addr, Boolean setAsDefault) {
+        LogMy.d(TAG, "In saveCustAddress");
+        try {
+            mAddresses = CustomerServices.getInstance().saveCustAddress(addr, setAsDefault);
+            LogMy.d(TAG,"saveCustAddress success");
+        } catch (BackendlessException e) {
+            LogMy.e(TAG,"saveCustAddress failed: "+e.toString());
+            return AppCommonUtil.getLocalErrorCode(e);
+        }
+        return ErrorCodes.NO_ERROR;
+    }
+
     // This method doesn't do any login, but downloads corresponding customer Backendless user and object
     public static int pseudoLogin(String customerMob) {
         LogMy.d(TAG, "In pseudoLogin: "+customerMob);
@@ -442,8 +454,23 @@ public class CustomerUser {
         this.mChkMsgDevReg = chkMsgDevReg;
     }
 
-    public List<CustAddress> getAddresses() {
+    public List<CustAddress> getAllAddress() {
         return mAddresses;
+    }
+
+    public CustAddress getAddress(String id) {
+        if (!(mAddresses == null || mAddresses.isEmpty())) {
+            for (CustAddress addr :
+                    mAddresses) {
+                if (addr.getId().equals(id)) {
+                    return addr;
+                }
+            }
+            LogMy.wtf(TAG,"Edit address not found: "+id);
+        } else {
+            LogMy.d(TAG,"No addresses available for customer");
+        }
+        return null;
     }
 
     /*
@@ -528,10 +555,9 @@ public class CustomerUser {
 
         // extract addresses from customer object and reset it to null
         // 'addresses' field is not actually stored in DB -a nd only used as transport during login
-        if(mCustomer.getAddresses()!=null) {
-            mAddresses = mCustomer.getAddresses();
-            mCustomer.setAddresses(null);
-        } else {
+        mAddresses = mCustomer.getAddresses();
+        mCustomer.setAddresses(null);
+        if(mAddresses==null) {
             LogMy.d(TAG,"Customer addresses are null");
         }
 

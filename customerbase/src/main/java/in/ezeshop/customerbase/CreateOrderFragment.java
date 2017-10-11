@@ -158,7 +158,7 @@ public class CreateOrderFragment extends BaseFragment implements
         LogMy.d(TAG,"In refreshAddress");
 
         // First time - set to default address
-        List<CustAddress> allAddress = CustomerUser.getInstance().getCustomer().getAddresses();
+        List<CustAddress> allAddress = CustomerUser.getInstance().getAllAddress();
         CustAddress defAddr = null;
 
         if( !(mRetainedFragment.mSelectedAddrId==null || allAddress==null || allAddress.isEmpty() || mRetainedFragment.mSelectedAddrId.isEmpty()) ) {
