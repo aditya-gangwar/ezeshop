@@ -104,7 +104,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
     private EditText mTbTitle;
     private EditText mTbTitle2;
     //private LinearLayout mTbLayoutSubhead1;
-    private EditText mTbSubhead1Text1;
+    //private EditText mTbSubhead1Text1;
     //private EditText mTbSubhead1Text2;
     //private View mTbImgAcc;
 
@@ -145,7 +145,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
         }
 
         // reference to views
-        mTbSubhead1Text1 = (EditText) findViewById(R.id.tb_curr_account) ;
+        //mTbSubhead1Text1 = (EditText) findViewById(R.id.tb_curr_account) ;
         //mTbSubhead1Text2 = (EditText) findViewById(R.id.tb_curr_cashback) ;
         //mTbImgAcc = findViewById(R.id.tb_acc_img) ;
 
@@ -825,7 +825,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
     }
 
     @Override
-    public void onSelectAddress() {
+    public void onChooseAddress() {
         // start 'choose address' fragment
         startChooseAddressFragment();
     }
@@ -963,7 +963,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
             }
 
             // Update 'Total Balance'
-            AppCommonUtil.showAmtColor(this,null,mTbSubhead1Text1,mRetainedFragment.stats.getClBalance(),false);
+            //AppCommonUtil.showAmtColor(this,null,mTbSubhead1Text1,mRetainedFragment.stats.getClBalance(),false);
             /*mTbSubhead1Text1.setText(AppCommonUtil.getNegativeAmtStr(mRetainedFragment.stats.getClBalance()));
             if(mRetainedFragment.stats.getClBalance() < 0) {
                 mTbSubhead1Text1.setTextColor(ContextCompat.getColor(this, R.color.red_negative));

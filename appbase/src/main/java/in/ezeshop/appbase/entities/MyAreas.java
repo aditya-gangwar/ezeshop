@@ -26,7 +26,7 @@ public class MyAreas {
     // City -> Area Name List
     private static HashMap<String,ArrayList<String>> mCityToAreaNames;
     // AreaID -> Area object
-    private static HashMap<Integer,Areas> mIdToAreas;
+    private static HashMap<String,Areas> mIdToAreas;
 
     public static int initSync() {
 
@@ -49,7 +49,7 @@ public class MyAreas {
 
             // Fetch all Areas from DB
             BackendlessDataQuery dataQuery = new BackendlessDataQuery();
-            dataQuery.setWhereClause("validated = true");
+            //dataQuery.setWhereClause("validated = true");
             QueryOptions queryOptions = new QueryOptions();
             queryOptions.addRelated("city");
             dataQuery.setQueryOptions(queryOptions);
@@ -57,43 +57,22 @@ public class MyAreas {
 
             BackendlessCollection<Areas> collection = Backendless.Data.of(Areas.class).find(dataQuery);
             int cnt = collection.getTotalObjects();
-            if (cnt == 0) {
+            LogMy.d(TAG, "Fetched areas: " + cnt);
+            /*if (cnt == 0) {
                 LogMy.e(TAG, "No Areas fetched from DB");
                 return ErrorCodes.GENERAL_ERROR;
             } else {
                 LogMy.d(TAG, "Fetched areas: " + cnt);
-            }
+            }*/
             while (collection.getCurrentPage().size() > 0) {
                 Iterator<Areas> iterator = collection.getCurrentPage().iterator();
                 while (iterator.hasNext()) {
                     Areas item = iterator.next();
                     if (!item.getAreaName().equals(CommonConstants.DUMMY_AREA_NAME)) {
-                        // add to id->area hash
-                        mIdToAreas.put(item.getId(), item);
-
-                        String cityName = item.getCity().getCity();
-
-                        // add to city->areaList hash
-                        ArrayList<Areas> areaList = mCityToAreas.get(cityName);
-                        if (areaList == null) {
-                            // no value added yet for this city
-                            LogMy.d(TAG, "First area for city: " + cityName);
-                            areaList = new ArrayList<>();
-                            mCityToAreas.put(cityName, areaList);
-                        }
-                        areaList.add(item);
-
-                        // add to city->areaNames hash
-                        ArrayList<String> areaNamesList = mCityToAreaNames.get(cityName);
-                        if (areaNamesList == null) {
-                            // no value added yet for this city
-                            LogMy.d(TAG, "First area name for city: " + cityName);
-                            areaNamesList = new ArrayList<>();
-                            mCityToAreaNames.put(cityName, areaNamesList);
-                        }
-                        areaNamesList.add(item.getAreaName());
+                        addArea(item);
                     }
                 }
+                collection = collection.nextPage();
             }
         } catch (Exception e) {
             LogMy.e(TAG,"Exception  in MyAreas:initSync",e);
@@ -102,6 +81,36 @@ public class MyAreas {
             return ErrorCodes.GENERAL_ERROR;
         }
         return ErrorCodes.NO_ERROR;
+    }
+
+    public static void addArea(Areas item) {
+        // add to id->area hash
+        mIdToAreas.put(item.getId(), item);
+
+        String cityName = item.getCity().getCity();
+
+        // add to city->areaList hash
+        ArrayList<Areas> areaList = mCityToAreas.get(cityName);
+        if (areaList == null) {
+            // no value added yet for this city
+            LogMy.d(TAG, "First area for city: " + cityName);
+            areaList = new ArrayList<>();
+            mCityToAreas.put(cityName, areaList);
+        }
+        areaList.add(item);
+
+        // add to city->areaNames hash
+        ArrayList<String> areaNamesList = mCityToAreaNames.get(cityName);
+        if (areaNamesList == null) {
+            // no value added yet for this city
+            LogMy.d(TAG, "First area name for city: " + cityName);
+            areaNamesList = new ArrayList<>();
+            mCityToAreaNames.put(cityName, areaNamesList);
+        }
+        if(item.getValidated()) {
+            // adding only validated areas - in the display list
+            areaNamesList.add(item.getAreaName());
+        }
     }
 
     public static CharSequence[] getAreaNameList(String city) {

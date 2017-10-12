@@ -3,6 +3,34 @@
     style="@style/LL_Vertical"
     android:id="@+id/list_root">
 
+    <LinearLayout
+        style="@style/LL_Horizontal_paddingSidesLarge"
+        android:id="@+id/balance_toolbar"
+        android:background="@color/primary_highlight">
+
+        <EditText
+            style="@style/Edittext_only_view_small"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="Total Balance"
+            android:layout_weight="1"
+            android:gravity="left|center_vertical"/>
+
+        <EditText
+            style="@style/Edittext_only_view_medium"
+            android:id="@+id/tb_curr_account"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="+ \u20B9 0"
+            android:textColor="@color/green_positive"/>
+
+    </LinearLayout>
+
+    <View
+        style="@style/Divider_horizontal_Large"
+        android:id="@+id/balance_divider"
+        android:background="@color/primary_highlight"/>
+
     <android.support.v7.widget.RecyclerView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"

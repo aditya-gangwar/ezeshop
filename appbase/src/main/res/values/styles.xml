@@ -472,10 +472,12 @@
 
     <style name="Edittext_only_view_bg_medium" parent="Edittext_only_click_bg_medium">
         <item name="android:clickable">false</item>
+        <item name="android:focusable">false</item>
     </style>
 
-    <style name="Edittext_only_view_bg_small" parent="Edittext_only_view_small">
-        <item name="android:background">@android:color/transparent</item>
+    <style name="Edittext_only_view_bg_small" parent="Edittext_only_click_bg_small">
+        <item name="android:clickable">false</item>
+        <item name="android:focusable">false</item>
     </style>
 
     <style name="Edittext_only_click_bg_small" parent="Edittext_only_click_bg_large">

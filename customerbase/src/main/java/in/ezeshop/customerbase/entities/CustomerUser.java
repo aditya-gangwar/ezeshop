@@ -290,7 +290,15 @@ public class CustomerUser {
         LogMy.d(TAG, "In saveCustAddress");
         try {
             mAddresses = CustomerServices.getInstance().saveCustAddress(addr, setAsDefault);
-            LogMy.d(TAG,"saveCustAddress success");
+            LogMy.d(TAG,"saveCustAddress success: "+mAddresses.size());
+
+            // If new area add case - update area list too
+            int status = MyAreas.initSync();
+            if( status != ErrorCodes.NO_ERROR ) {
+                // add manually - even though 'area id' will be missing
+                LogMy.e(TAG,"Area list resync failed");
+                MyAreas.addArea(addr.getArea());
+            }
         } catch (BackendlessException e) {
             LogMy.e(TAG,"saveCustAddress failed: "+e.toString());
             return AppCommonUtil.getLocalErrorCode(e);
@@ -466,7 +474,7 @@ public class CustomerUser {
                     return addr;
                 }
             }
-            LogMy.wtf(TAG,"Edit address not found: "+id);
+            LogMy.wtf(TAG,"Address not found: "+id);
         } else {
             LogMy.d(TAG,"No addresses available for customer");
         }
@@ -559,6 +567,9 @@ public class CustomerUser {
         mCustomer.setAddresses(null);
         if(mAddresses==null) {
             LogMy.d(TAG,"Customer addresses are null");
+            // Give memory - even if no element added
+            // to avoid checking for null at all places - size is already checked for
+            mAddresses = new ArrayList<>();
         }
 
         // Set user id for crashlytics

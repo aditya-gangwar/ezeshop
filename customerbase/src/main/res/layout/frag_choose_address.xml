@@ -248,7 +248,7 @@
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <!--android.support.v7.widget.CardView
                 style="@style/My_Cardview"
                 android:id="@+id/cardview_address5">
 
@@ -291,7 +291,7 @@
                     </LinearLayout>
 
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </android.support.v7.widget.CardView-->
 
 
         </LinearLayout>

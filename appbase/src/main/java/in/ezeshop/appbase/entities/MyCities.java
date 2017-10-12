@@ -63,6 +63,7 @@ public class MyCities
                         mCityValueSet.add(item.getCity());
                     }
                 }
+                collection = collection.nextPage();
             }
         } catch (Exception e) {
             LogMy.e(TAG,"Exception  in MyCities:initSync",e);

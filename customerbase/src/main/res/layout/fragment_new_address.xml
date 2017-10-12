@@ -28,7 +28,7 @@
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_addAddress"
-            style="@style/button_normal"
+            style="@style/button_normal_thin"
             android:layout_alignParentBottom="true"
             android:text="ADD ADDRESS" />
 
@@ -37,7 +37,7 @@
             android:layout_height="match_parent"
             android:layout_above="@id/btn_addAddress"
             android:layout_alignParentTop="true"
-            android:layout_marginBottom="@dimen/large_space">
+            android:layout_marginBottom="@dimen/medium_space">
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 style="@style/LL_Vertical_paddingSidesXL">
@@ -45,11 +45,11 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/large_space">
+                    android:layout_marginTop="@dimen/medium_space">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/inputName"
-                        style="@style/MyEdittext_Medium"
+                        style="@style/MyEdittext_Small"
                         android:layout_height="wrap_content"
                         android:hint="Full Name"
                         android:inputType="textCapWords" />
@@ -58,24 +58,24 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/large_space">
+                    android:layout_marginTop="@dimen/medium_space">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/inputMobileNum"
-                        style="@style/MyEdittext_Medium"
+                        style="@style/MyEdittext_Small"
                         android:layout_height="wrap_content"
-                        android:hint="Contact Number"
+                        android:hint="10 digit Mobile Number"
                         android:inputType="textCapWords" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/large_space">
+                    android:layout_marginTop="@dimen/medium_space">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/inputCity"
-                        style="@style/Edittext_only_click_bg_medium"
+                        style="@style/Edittext_only_click_bg_small"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableRight="@drawable/ic_arrow_drop_down_black_24dp"
@@ -86,11 +86,12 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/large_space">
+                    android:layout_marginTop="@dimen/medium_space"
+                    android:id="@+id/layoutArea">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/inputArea"
-                        style="@style/Edittext_only_click_bg_medium"
+                        style="@style/Edittext_only_click_bg_small"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawableRight="@drawable/ic_arrow_drop_down_black_24dp"
@@ -99,8 +100,8 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <CheckBox
-                    style="@style/Edittext_only_view_small"
-                    android:layout_marginTop="@dimen/large_space"
+                    style="@style/Edittext_only_click_small"
+                    android:layout_marginTop="@dimen/medium_space"
                     android:id="@+id/cbx_areaNotListed"
                     android:text="My area not listed above"
                     android:gravity="start|center_vertical"
@@ -109,11 +110,12 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/large_space">
+                    android:layout_marginTop="@dimen/medium_space"
+                    android:id="@+id/layoutOtherArea">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/inputOtherArea"
-                        style="@style/MyEdittext_Medium"
+                        style="@style/MyEdittext_Small"
                         android:layout_height="wrap_content"
                         android:hint="Other Area Name"
                         android:inputType="textCapWords" />
@@ -122,11 +124,11 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/large_space">
+                    android:layout_marginTop="@dimen/medium_space">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/inputAddrLine1"
-                        style="@style/MyEdittext_Medium"
+                        style="@style/MyEdittext_Small"
                         android:layout_height="wrap_content"
                         android:hint="House Number / Street / Building"
                         android:inputType="textCapWords" />
@@ -135,11 +137,11 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/large_space">
+                    android:layout_marginTop="@dimen/medium_space">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/inputState"
-                        style="@style/Edittext_only_click_bg_medium"
+                        style="@style/Edittext_only_view_bg_small"
                         android:layout_height="wrap_content"
                         android:gravity="left|center_vertical"
                         android:hint="State"
@@ -147,22 +149,22 @@
                         android:clickable="false"/>
                 </android.support.design.widget.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <!--android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/large_space">
+                    android:layout_marginTop="@dimen/medium_space">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/inputPincode"
-                        style="@style/MyEdittext_Medium"
+                        style="@style/MyEdittext_Small"
                         android:layout_height="wrap_content"
                         android:hint="Pincode"
-                        android:inputType="textCapWords" />
-                </android.support.design.widget.TextInputLayout>
+                        android:inputType="numberDecimal" />
+                </android.support.design.widget.TextInputLayout-->
 
                 <CheckBox
-                    style="@style/Edittext_only_view_small"
-                    android:layout_marginTop="@dimen/large_space"
+                    style="@style/Edittext_only_click_small"
+                    android:layout_marginTop="@dimen/medium_space"
                     android:id="@+id/cbx_defaultAddress"
                     android:text="Set as Default Address"
                     android:gravity="start|center_vertical"

@@ -120,12 +120,12 @@
                             <LinearLayout
                                 style="@style/LL_Vertical"
                                 android:layout_width="0dp"
-                                android:layout_weight="45"
+                                android:layout_weight="42.5"
                                 android:background="@color/bg_light_grey">
                                 <TextView
                                     style="@style/Edittext_only_view_XS_lessPad"
                                     android:layout_height="wrap_content"
-                                    android:text="Account Balance"/>
+                                    android:text="Balance"/>
                                 <TextView
                                     style="@style/Edittext_only_view_small_lessPad"
                                     android:layout_height="wrap_content"
@@ -137,12 +137,12 @@
                             <Space
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="10"/>
+                                android:layout_weight="15"/>
 
                             <LinearLayout
                                 style="@style/LL_Vertical"
                                 android:layout_width="0dp"
-                                android:layout_weight="45"
+                                android:layout_weight="42.5"
                                 android:background="@color/bg_light_grey">
                                 <TextView
                                     style="@style/Edittext_only_view_XS_lessPad"

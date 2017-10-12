@@ -11,7 +11,7 @@ public class Areas
   private String areaName;
   private String pincode;
   private String ownerId;
-  private Integer id;
+  private String id;
   private String objectId;
   private java.util.Date updated;
   private Cities city;
@@ -55,12 +55,12 @@ public class Areas
     return ownerId;
   }
 
-  public Integer getId()
+  public String getId()
   {
     return id;
   }
 
-  public void setId( Integer id )
+  public void setId( String id )
   {
     this.id = id;
   }

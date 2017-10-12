@@ -39,7 +39,8 @@ public class CommonConstants {
      * Start epoch time for us
      *
      */
-    public static long START_EPOCH_SECS = 1507752285;
+    public static long START_EPOCH_SECS = 1507752285L;
+    public static long START_EPOCH_MILLI_SECS = 1507811163740L;
 
     /*
      * To use int as boolean

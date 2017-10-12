@@ -116,7 +116,7 @@
             android:id="@+id/balance_toolbar"
             android:layout_below="@id/toolbar"-->
 
-            <LinearLayout
+            <!--LinearLayout
                 style="@style/LL_Horizontal_paddingSidesLarge"
                 android:id="@+id/balance_toolbar"
                 android:layout_below="@id/toolbar"
@@ -130,29 +130,6 @@
                     android:layout_weight="1"
                     android:gravity="left|center_vertical"/>
 
-                <!--ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_favorite_white_18dp"
-                    android:tint="@color/primary"/>
-
-                <EditText
-                    style="@style/Edittext_only_view_medium"
-                    android:id="@+id/tb_curr_cashback"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="\u20B9 0"
-                    android:textStyle="bold"
-                    android:textColor="@color/secondary_text"/-->
-
-                <!--ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_account_balance_wallet_white_18dp"
-                    android:tint="@color/primary"
-                    android:id="@+id/tb_acc_img"
-                    android:layout_marginLeft="@dimen/large_space"/-->
-
                 <EditText
                     style="@style/Edittext_only_view_medium"
                     android:id="@+id/tb_curr_account"
@@ -161,7 +138,7 @@
                     android:text="+ \u20B9 0"
                     android:textColor="@color/green_positive"/>
 
-            </LinearLayout>
+            </LinearLayout-->
 
             <!--EditText
                 style="@style/Edittext_only_view_small_lessPad"
@@ -196,18 +173,18 @@
 
         <!--/LinearLayout-->
 
-        <View
+        <!--View
             style="@style/Divider_horizontal_Large"
             android:id="@+id/balance_divider"
             android:layout_below="@id/balance_toolbar"
-            android:background="@color/primary_highlight"/>
+            android:background="@color/primary_highlight"/-->
 
         <!-- The main content view where fragments are loaded -->
         <FrameLayout
             android:id="@+id/fragment_container_1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/balance_divider"
+            android:layout_below="@id/toolbar"
             android:background="?android:attr/windowBackground">
         </FrameLayout>
 

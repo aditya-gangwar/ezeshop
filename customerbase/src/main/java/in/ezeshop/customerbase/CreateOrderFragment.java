@@ -68,7 +68,7 @@ public class CreateOrderFragment extends BaseFragment implements
     public interface CreateOrderFragmentIf {
         MyRetainedFragment getRetainedFragment();
         void setDrawerState(boolean isEnabled);
-        void onSelectAddress();
+        void onChooseAddress();
         void onSelectMerchant();
         void onOrderCreate();
     }
@@ -159,20 +159,20 @@ public class CreateOrderFragment extends BaseFragment implements
 
         // First time - set to default address
         List<CustAddress> allAddress = CustomerUser.getInstance().getAllAddress();
-        CustAddress defAddr = null;
+        CustAddress selAddr = null;
 
         if( !(mRetainedFragment.mSelectedAddrId==null || allAddress==null || allAddress.isEmpty() || mRetainedFragment.mSelectedAddrId.isEmpty()) ) {
             for (CustAddress addr :
                     allAddress) {
                 if(addr.getId().equals(mRetainedFragment.mSelectedAddrId)) {
-                    defAddr = addr;
+                    selAddr = addr;
                 }
             }
         }
 
-        if(defAddr!=null) {
+        if(selAddr!=null) {
             mBtnChangeAddr.setText("CHANGE");
-            mInputAddress.setText(CommonUtils.getCustAddrStrWithName(defAddr));
+            mInputAddress.setText(CommonUtils.getCustAddrStrWithName(selAddr));
         } else {
             mBtnChangeAddr.setText("SELECT");
             mInputAddress.setText("");
@@ -289,7 +289,7 @@ public class CreateOrderFragment extends BaseFragment implements
 
             } else if (i == mBtnChangeAddr.getId()) {
                 // Show 'choose address' fragment
-                mCallback.onSelectAddress();
+                mCallback.onChooseAddress();
 
             } else if (i == mBtnChangeMchnt.getId()) {
                 // show 'choose merchant' fragment

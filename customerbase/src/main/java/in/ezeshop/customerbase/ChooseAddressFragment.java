@@ -90,8 +90,7 @@ public class ChooseAddressFragment extends BaseFragment {
         List<CustAddress> addresses = CustomerUser.getInstance().getAllAddress();
 
         int i=0;
-        for (CustAddress addr :
-                addresses) {
+        for (CustAddress addr : addresses) {
             mCardViewArr[i].setVisibility(View.VISIBLE);
             mInputNameArr[i].setText(addr.getToName());
             mInputAddrArr[i].setText(CommonUtils.getCustAddressStr(addr));
@@ -101,17 +100,6 @@ public class ChooseAddressFragment extends BaseFragment {
         for(;i<CommonConstants.MAX_ADDRESS_PER_CUSTOMER;i++) {
             mCardViewArr[i].setVisibility(View.GONE);
         }
-    }
-
-    private int getAddrIndex(int id) {
-        for(int i=0; i<CommonConstants.MAX_ADDRESS_PER_CUSTOMER; i++) {
-            if(mBtnEditArr[i].getId()==id || mLytAddressArr[i].getId()==id) {
-                return i;
-            }
-        }
-
-        LogMy.e(TAG,"In getAddrIndex: Invalid id: "+id);
-        return -1;
     }
 
     // Using BaseFragment's onClick method - to avoid double clicks
@@ -149,6 +137,17 @@ public class ChooseAddressFragment extends BaseFragment {
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), true, true)
                     .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
         }
+    }
+
+    private int getAddrIndex(int id) {
+        for(int i=0; i<CommonConstants.MAX_ADDRESS_PER_CUSTOMER; i++) {
+            if(mBtnEditArr[i].getId()==id || mLytAddressArr[i].getId()==id) {
+                return i;
+            }
+        }
+
+        LogMy.e(TAG,"In getAddrIndex: Invalid id: "+id);
+        return -1;
     }
 
     // Not using BaseFragment's onTouch

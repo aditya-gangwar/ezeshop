@@ -64,6 +64,7 @@ public class CashbackListFragment extends BaseFragment {
     }
 
     private RecyclerView mRecyclerView;
+    private EditText mTbSubhead1Text1;
     //private EditText mUpdated;
     //private EditText mUpdatedDetail;
     private List<MyCashback> mMyCbs;
@@ -135,6 +136,7 @@ public class CashbackListFragment extends BaseFragment {
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.cust_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mTbSubhead1Text1 = (EditText) view.findViewById(R.id.tb_curr_account) ;
 
         //mUpdated = (EditText) view.findViewById(R.id.input_updated_time);
         //mUpdatedDetail = (EditText) view.findViewById(R.id.updated_time_details);
@@ -144,6 +146,9 @@ public class CashbackListFragment extends BaseFragment {
 
     private void updateUI() {
         if(mMyCbs!=null) {
+
+            AppCommonUtil.showAmtColor(getActivity(),null,mTbSubhead1Text1,mRetainedFragment.stats.getClBalance(),false);
+
             mRecyclerView.setAdapter(new CbAdapter(mMyCbs));
 
             /*CbAdapter adapter = (CbAdapter) mRecyclerView.getAdapter();

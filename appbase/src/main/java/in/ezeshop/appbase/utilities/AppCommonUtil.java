@@ -53,6 +53,7 @@ import in.ezeshop.common.constants.DbConstants;
 import in.ezeshop.common.constants.ErrorCodes;
 import in.ezeshop.common.MyGlobalSettings;
 import in.ezeshop.common.database.Address;
+import in.ezeshop.common.database.Areas;
 import in.ezeshop.common.database.BusinessCategories;
 import in.ezeshop.common.database.Cities;
 import in.ezeshop.common.database.CustAddress;
@@ -98,7 +99,7 @@ public class AppCommonUtil {
 
 
     public static boolean areCustAddressEqual(CustAddress lhs, CustAddress rhs) {
-        if(!lhs.getArea().getId().equals(rhs.getArea().getId())) {
+        if(!lhs.getArea().getAreaName().equals(rhs.getArea().getAreaName())) {
             LogMy.d(TAG,"custAddrDiffAndCopy: Area not same");
             return false;
         }
@@ -229,11 +230,23 @@ public class AppCommonUtil {
     /*
      * Convert Edittext to view only
      */
-    public static void makeEditTextOnlyView(EditText et) {
+    public static void makeEditTextOnlyView(TextView et) {
         et.setFocusable(false);
         et.setClickable(false);
         et.setCursorVisible(false);
+        et.setFocusableInTouchMode(false);
+        et.setTextIsSelectable(false);
+        //et.setSelected(false);
         et.setInputType(EditorInfo.TYPE_NULL);
+    }
+
+    public static void makeEditTextEditable(TextView et, int inputType) {
+        et.setFocusable(true);
+        et.setClickable(true);
+        et.setCursorVisible(true);
+        et.setFocusableInTouchMode(true);
+        et.setTextIsSelectable(true);
+        et.setInputType(inputType);
     }
 
     /*
@@ -982,6 +995,8 @@ public class AppCommonUtil {
         Backendless.Data.mapTableToClass("BusinessCategories", BusinessCategories.class);
         Backendless.Data.mapTableToClass("Address", Address.class);
         Backendless.Data.mapTableToClass("Cities", Cities.class);
+        Backendless.Data.mapTableToClass("Areas", Areas.class);
+        Backendless.Data.mapTableToClass("CustAddress", CustAddress.class);
         //Backendless.Data.mapTableToClass("MerchantOrders", MerchantOrders.class);
 
         /*Backendless.Data.mapTableToClass( "Transaction0", Transaction.class );
