@@ -93,9 +93,9 @@ public class SplashActivity extends AppCompatActivity
     /*private class FetchGlobalSettings extends AsyncTask<Void,Void,Integer> {
         @Override
         protected Integer doInBackground(Void... params) {
-            //return MyGlobalSettings.initSync();
+            //return MyGlobalSettings.fetchAreas();
             try {
-                MyGlobalSettings.initSync(MyGlobalSettings.RunMode.appCustomer);
+                MyGlobalSettings.fetchAreas(MyGlobalSettings.RunMode.appCustomer);
             } catch (Exception e) {
                 LogMy.e(TAG,"Failed to fetch global settings: "+e.toString());
                 AppAlarms.handleException(e);

@@ -50,12 +50,14 @@ public class AppConstants {
 
     // Captured image related
     /*
-     * Webp - 95%- Image compress: 3551 KB, 133 KB -- good zoom
-     * Webp - 90%- Image compress: 3551 KB, 71 KB -- good zoom
-     * Webp - 86%- Image compress: 3551 KB, 56 KB -- good enuf zoom
-     * Webp - 80%- Image compress: 3551 KB, 42 KB -- not good zoom
+     * Webp - 95%- Image compress: 3551 KB, 133 KB
+     * Webp - 90%- Image compress: 3551 KB, 71 KB
+     * Webp - 86%- Image compress: 3551 KB, 56 KB
+     * Webp - 80%- Image compress: 3551 KB, 42 KB
      */
-    public static final int IMG_PRESCRIP_COMPRESS_RATIO = 85;
+    public static final int IMG_PRESCRIP_COMPRESS_RATIO = 90;
+    public static final int IMG_PRESCRIP_MAX_HEIGHT = 1024;
+    public static final int IMG_PRESCRIP_MAX_WIDTH = 768;
 
 
     // Titles/Msgs/hints shown on dialogues

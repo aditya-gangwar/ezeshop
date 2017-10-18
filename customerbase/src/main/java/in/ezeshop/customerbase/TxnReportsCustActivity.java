@@ -25,6 +25,7 @@ import in.ezeshop.appbase.BaseActivity;
 import in.ezeshop.appbase.MyDatePickerDialog;
 import in.ezeshop.appbase.constants.AppConstants;
 import in.ezeshop.appbase.utilities.AppCommonUtil;
+import in.ezeshop.appbase.utilities.BackgroundProcessor;
 import in.ezeshop.appbase.utilities.DialogFragmentWrapper;
 import in.ezeshop.appbase.utilities.LogMy;
 import in.ezeshop.appbase.utilities.TxnReportsHelper2;
@@ -311,7 +312,8 @@ public class TxnReportsCustActivity extends BaseActivity implements
     public void fetchTxnsFromDB(String whereClause) {
         // show progress dialog
         AppCommonUtil.showProgressDialog(this, AppConstants.progressReports);
-        mWorkFragment.fetchTransactions(whereClause);
+        //mWorkFragment.fetchTransactions(whereClause);
+        mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_FETCH_TXNS, null, null, whereClause, null, null, null, null);
     }
 
     @Override
@@ -319,7 +321,8 @@ public class TxnReportsCustActivity extends BaseActivity implements
         mWorkFragment.mMissingFiles = missingFiles;
         // show progress dialog
         AppCommonUtil.showProgressDialog(this, AppConstants.progressReports);
-        mWorkFragment.fetchTxnFiles(this);
+        //mWorkFragment.fetchTxnFiles(this);
+        mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_FETCH_TXN_FILES, this, null, null, null, null, null, null);
     }
 
     @Override
@@ -335,7 +338,8 @@ public class TxnReportsCustActivity extends BaseActivity implements
     }
 
     @Override
-    public void onBgProcessResponse(int errorCode, int operation) {
+//    public void onBgProcessResponse(int errorCode, int operation) {
+    public void onBgProcessResponse(int errorCode, BackgroundProcessor.MessageBgJob opData) {
         AppCommonUtil.cancelProgressDialog(true);
 
         // Session timeout case - show dialog and logout - irrespective of invoked operation
@@ -346,7 +350,7 @@ public class TxnReportsCustActivity extends BaseActivity implements
         }
 
         try {
-            switch(operation) {
+            switch(opData.requestCode) {
                 case MyRetainedFragment.REQUEST_FETCH_TXNS:
                     if (errorCode == ErrorCodes.NO_ERROR ||
                             errorCode == ErrorCodes.NO_DATA_FOUND) {
@@ -372,7 +376,7 @@ public class TxnReportsCustActivity extends BaseActivity implements
             }
 
         } catch (Exception e) {
-            LogMy.e(TAG, "Exception is ReportsActivity:onBgProcessResponse: "+operation+": "+errorCode, e);
+            LogMy.e(TAG, "Exception is ReportsActivity:onBgProcessResponse: "+opData.requestCode+": "+errorCode, e);
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), false, true)
                     .show(mFragMgr, DIALOG_ERROR_NOTIFY);
         }

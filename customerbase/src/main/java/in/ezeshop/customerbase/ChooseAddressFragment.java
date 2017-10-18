@@ -41,7 +41,7 @@ public class ChooseAddressFragment extends BaseFragment {
 
     public interface ChooseAddressFragmentIf {
         MyRetainedFragment getRetainedFragment();
-        void setDrawerState(boolean isEnabled);
+        void setToolbarForFrag(int iconResId, String title, String subTitle);
         void onSelectAddress(String addrId);
         void onAddAddress();
         void onEditAddress(String addrId);
@@ -76,7 +76,7 @@ public class ChooseAddressFragment extends BaseFragment {
             throw new ClassCastException(getActivity().toString()
                     + " must implement ChooseAddressFragmentIf");
         } catch(Exception e) {
-            LogMy.e(TAG, "Exception is ChooseAddressFragment:onActivityCreated", e);
+            LogMy.e(TAG, "Exception in onActivityCreated", e);
             // unexpected exception - show error
             DialogFragmentWrapper notDialog = DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), true, true);
             notDialog.setTargetFragment(this,REQ_NOTIFY_ERROR);
@@ -133,7 +133,7 @@ public class ChooseAddressFragment extends BaseFragment {
                 mCallback.onSelectAddress(CustomerUser.getInstance().getAllAddress().get(idx).getId());
             }
         } catch (Exception e) {
-            LogMy.e(TAG, "Exception in ChooseAddressFrag:onClick", e);
+            LogMy.e(TAG, "Exception in handleBtnClick", e);
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), true, true)
                     .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
         }
@@ -210,12 +210,14 @@ public class ChooseAddressFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        mCallback.setDrawerState(false);
+        mCallback.setToolbarForFrag(-1,"Select Address",null);
 
         try {
+            // intentionally called from onResume
+            // to get addresses automatically updated in case address add/edit
             updateUI();
         } catch (Exception e) {
-            LogMy.e(TAG, "Exception in CustomerTransactionFragment:onResume", e);
+            LogMy.e(TAG, "Exception in onResume", e);
             DialogFragmentWrapper dialog = DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), true, true);
             dialog.setTargetFragment(this, REQ_NOTIFY_ERROR_EXIT);
             dialog.show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);

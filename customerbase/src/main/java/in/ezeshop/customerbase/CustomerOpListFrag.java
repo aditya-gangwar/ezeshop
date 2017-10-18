@@ -39,7 +39,7 @@ public class CustomerOpListFrag extends BaseFragment {
 
     public interface CustomerOpListFragIf {
         MyRetainedFragment getRetainedFragment();
-        //void setDrawerState(boolean isEnabled);
+        void setToolbarForFrag(int iconResId, String title, String subTitle);
     }
 
     @Override
@@ -91,6 +91,7 @@ public class CustomerOpListFrag extends BaseFragment {
         super.onResume();
         //mCallback.setDrawerState(false);
         try {
+            mCallback.setToolbarForFrag(-1,"Operations History",null);
             updateUI();
         } catch (Exception e) {
             LogMy.e(TAG, "Exception in Fragment: ", e);

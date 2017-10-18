@@ -2,7 +2,9 @@ package in.ezeshop.common.database;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
+import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
+import com.backendless.geo.GeoPoint;
 import com.backendless.persistence.BackendlessDataQuery;
 
 public class Areas
@@ -14,17 +16,8 @@ public class Areas
   private String id;
   private String objectId;
   private java.util.Date updated;
-  private Cities city;
   private Boolean validated;
-
-  public Boolean getValidated() {
-    return validated;
-  }
-
-  public void setValidated(Boolean validated) {
-    this.validated = validated;
-  }
-
+  private Cities city;
   public java.util.Date getCreated()
   {
     return created;
@@ -73,6 +66,16 @@ public class Areas
   public java.util.Date getUpdated()
   {
     return updated;
+  }
+
+  public Boolean getValidated()
+  {
+    return validated;
+  }
+
+  public void setValidated( Boolean validated )
+  {
+    this.validated = validated;
   }
 
   public Cities getCity()
@@ -136,12 +139,12 @@ public class Areas
     Backendless.Data.of( Areas.class ).remove( this, callback );
   }
 
-  public static Areas findById(String id )
+  public static Areas findById( String id )
   {
     return Backendless.Data.of( Areas.class ).findById( id );
   }
 
-  public static Future<Areas> findByIdAsync(String id )
+  public static Future<Areas> findByIdAsync( String id )
   {
     if( Backendless.isAndroid() )
     {
@@ -211,12 +214,12 @@ public class Areas
     Backendless.Data.of( Areas.class ).findLast( callback );
   }
 
-  public static BackendlessCollection<Areas> find(BackendlessDataQuery query )
+  public static BackendlessCollection<Areas> find( BackendlessDataQuery query )
   {
     return Backendless.Data.of( Areas.class ).find( query );
   }
 
-  public static Future<BackendlessCollection<Areas>> findAsync(BackendlessDataQuery query )
+  public static Future<BackendlessCollection<Areas>> findAsync( BackendlessDataQuery query )
   {
     if( Backendless.isAndroid() )
     {

@@ -16,7 +16,8 @@ public abstract class RetainedFragment extends Fragment {
     // Container Activity must implement this interface
     public interface RetainedFragmentIf {
         void onBgThreadCreated();
-        void onBgProcessResponse(int errorCode, int operation);
+        //void onBgProcessResponse(int errorCode, int operation);
+        void onBgProcessResponse(int errorCode, BackgroundProcessor.MessageBgJob opData);
     }
 
     // Activity callback
@@ -106,7 +107,7 @@ public abstract class RetainedFragment extends Fragment {
         }
 
         @Override
-        public void onResult(int errorCode, int operation) {
+        public void onResult(int errorCode, BackgroundProcessor.MessageBgJob opData) {
 
             // Update our shared state with the UI.
             //synchronized (this) {
@@ -125,8 +126,9 @@ public abstract class RetainedFragment extends Fragment {
                     }
                 }*/
 
-                LogMy.d(TAG,"In onResult: "+operation);
-                mCallback.onBgProcessResponse(errorCode, operation);
+                LogMy.d(TAG,"In onResult: "+opData.requestCode);
+                //mCallback.onBgProcessResponse(errorCode, operation);
+                mCallback.onBgProcessResponse(errorCode, opData);
             //}
         }
     };

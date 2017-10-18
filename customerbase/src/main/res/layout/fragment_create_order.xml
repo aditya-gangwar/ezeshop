@@ -140,7 +140,7 @@
                                         android:layout_gravity="center"
                                         android:background="@color/bg_light_grey_dark"
                                         android:scaleType="centerInside"
-                                        android:src="@drawable/logo_blue" />
+                                        android:src="@drawable/ic_description_black_18dp" />
 
                                     <ImageView
                                         android:id="@+id/img_precrips_del_2"
@@ -164,7 +164,7 @@
                                         android:layout_gravity="center"
                                         android:background="@color/bg_light_grey_dark"
                                         android:scaleType="centerInside"
-                                        android:src="@drawable/logo_blue" />
+                                        android:src="@drawable/ic_description_black_18dp" />
 
                                     <ImageView
                                         android:id="@+id/img_precrips_del_3"
@@ -187,7 +187,7 @@
                                         android:layout_gravity="center"
                                         android:background="@color/bg_light_grey_dark"
                                         android:scaleType="centerInside"
-                                        android:src="@drawable/logo_blue" />
+                                        android:src="@drawable/ic_description_black_18dp" />
 
                                     <ImageView
                                         android:id="@+id/img_precrips_del_4"
@@ -376,6 +376,7 @@
                             android:layout_marginBottom="@dimen/medium_space"
                             android:layout_marginTop="@dimen/medium_space"
                             android:gravity="start"
+                            android:textColor="@color/secondary_text"
                             android:hint="Select Address for delivery"
                             android:paddingLeft="@dimen/large_space"
                             android:text="Aditya Gangwar\nA-1103, Prateek Wisteria,\nSector 77, Noida,\nUttar Pradesh - 201301\n+91-8800191535" />

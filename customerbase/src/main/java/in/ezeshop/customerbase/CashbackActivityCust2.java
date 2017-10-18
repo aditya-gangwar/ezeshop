@@ -4,6 +4,7 @@ package in.ezeshop.customerbase;
  * Created by adgangwa on 23-02-2016.
  */
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -25,21 +26,16 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
+import in.ezeshop.appbase.GenericListFragment;
 import in.ezeshop.appbase.OtpPinInputDialog;
 import in.ezeshop.appbase.SingleWebViewActivity;
+import in.ezeshop.appbase.entities.MyAreas;
 import in.ezeshop.appbase.entities.MyCashback;
+import in.ezeshop.appbase.utilities.BackgroundProcessor;
 import in.ezeshop.common.MyGlobalSettings;
-import in.ezeshop.common.CsvConverter;
 import in.ezeshop.common.database.CustAddress;
 import in.ezeshop.customerbase.entities.CustomerStats;
 import in.ezeshop.customerbase.entities.CustomerUser;
@@ -50,9 +46,7 @@ import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.DbConstants;
 import in.ezeshop.common.constants.ErrorCodes;
 import in.ezeshop.common.database.Customers;
-import in.ezeshop.appbase.utilities.AppAlarms;
 import in.ezeshop.appbase.utilities.AppCommonUtil;
-import in.ezeshop.common.DateUtil;
 import in.ezeshop.appbase.utilities.DialogFragmentWrapper;
 import in.ezeshop.appbase.utilities.LogMy;
 
@@ -64,7 +58,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
         PinResetDialog.PinResetDialogIf, PinChangeDialog.PinChangeDialogIf,
         MchntDetailsDialogCustApp.MerchantDetailsDialogIf, CustomerOpListFrag.CustomerOpListFragIf,
         CreateOrderFragment.CreateOrderFragmentIf, ChooseAddressFragment.ChooseAddressFragmentIf,
-        UpdateAddressFragment.UpdateAddressFragmentIf {
+        UpdateAddressFragment.UpdateAddressFragmentIf, GenericListFragment.GenericListFragmentIf {
 
     private static final String TAG = "CustApp-CashbackActivity";
     public static final String INTENT_EXTRA_USER_TOKEN = "extraUserToken";
@@ -88,7 +82,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
     private static final String CUSTOMER_CREATE_ORDER_FRAG = "CustomerCreateOrderFrag";
     private static final String CUSTOMER_CHOOSE_ADDRESS_FRAG = "CustomerChooseAddressFrag";
     private static final String CUSTOMER_UPDATE_ADDRESS_FRAG = "CustomerUpdateAddressFrag";
-
+    private static final String GENERIC_SINGLE_CHOICE_FRAG = "CustomerChooseAreaFrag";
 
     MyRetainedFragment mRetainedFragment;
     FragmentManager mFragMgr;
@@ -103,10 +97,6 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
     private AppCompatImageView mTbImage;
     private EditText mTbTitle;
     private EditText mTbTitle2;
-    //private LinearLayout mTbLayoutSubhead1;
-    //private EditText mTbSubhead1Text1;
-    //private EditText mTbSubhead1Text2;
-    //private View mTbImgAcc;
 
     private CustomerUser mCustomerUser;
     private Customers mCustomer;
@@ -114,7 +104,6 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
     // Activity state members: These are to be saved for restore in event of activity recreation
     boolean mExitAfterLogout;
     int mLastMenuItemId;
-    //long mGetCbSince;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -301,7 +290,9 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
 
         } else if(i == R.id.menu_operations) {
             AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
-            mRetainedFragment.fetchCustomerOps();
+            //mRetainedFragment.fetchCustomerOps();
+            mRetainedFragment.addBackgroundJob(MyRetainedFragment.REQUEST_FETCH_CUSTOMER_OPS, null, null, null, null, null, null, null);
+
         } else if (i == R.id.menu_change_mobile) {
             // show mobile change dialog
             MobileChangeDialog dialog = new MobileChangeDialog();
@@ -355,6 +346,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
         //mTbLayoutSubhead1.setVisibility(View.VISIBLE);
 
         // no error case: all cashback values available
+        mTbImage.setVisibility(View.VISIBLE);
         mTbTitle.setText(mCustomer.getMobile_num());
         mTbTitle2.setVisibility(View.GONE);
         if(mCustomer.getAdmin_status()!=DbConstants.USER_STATUS_ACTIVE ) {
@@ -408,8 +400,17 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
     }
 
     @Override
-    public void onBgProcessResponse(int errorCode, int operation) {
-        LogMy.d(TAG,"In onBgProcessResponse: "+operation+", "+errorCode);
+    public void startBgJob(int requestCode, String callingFragTag,
+                           String argStr1, String argStr2, String argStr3, Long argLong1, Boolean argBool1) {
+        AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
+        // pass transparently to retained fragment
+        mRetainedFragment.addBackgroundJob(requestCode, this, callingFragTag, argStr1, argStr2, argStr3, argLong1, argBool1);
+    }
+
+    @Override
+//    public void onBgProcessResponse(int errorCode, int operation) {
+    public void onBgProcessResponse(int errorCode, BackgroundProcessor.MessageBgJob opData) {
+        LogMy.d(TAG,"In onBgProcessResponse: "+opData.requestCode+", "+errorCode);
 
         // Session timeout case - show dialog and logout - irrespective of invoked operation
         if(errorCode==ErrorCodes.SESSION_TIMEOUT || errorCode==ErrorCodes.NOT_LOGGED_IN) {
@@ -420,61 +421,81 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
         }
 
         try {
-            switch (operation) {
-                case MyRetainedFragment.REQUEST_LOGOUT:
-                    onLogoutResponse(errorCode);
-                    break;
-                case MyRetainedFragment.REQUEST_CHANGE_PASSWD:
-                    passwordChangeResponse(errorCode);
-                    break;
-                case MyRetainedFragment.REQUEST_CHANGE_MOBILE:
-                    onChangeMobileResponse(errorCode);
-                    break;
-                case MyRetainedFragment.REQUEST_FETCH_CB:
-                    onFetchCbResponse(errorCode);
-                    break;
-                case MyRetainedFragment.REQUEST_CHANGE_PIN:
-                    onPinChangeResponse(errorCode);
-                    break;
-                case MyRetainedFragment.REQUEST_FETCH_CUSTOMER_OPS:
-                    AppCommonUtil.cancelProgressDialog(true);
-                    if (errorCode == ErrorCodes.NO_ERROR) {
-                        startCustomerOpsFrag();
-                    } else if (errorCode == ErrorCodes.NO_DATA_FOUND) {
-                        String error = String.format(getString(R.string.ops_no_data_info), MyGlobalSettings.getOpsKeepDays().toString());
-                        DialogFragmentWrapper.createNotification(AppConstants.noDataFailureTitle, error, false, false)
-                                .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
-                    } else {
-                        DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
-                                .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
-                    }
-                    break;
-                case MyRetainedFragment.REQUEST_SAVE_CUST_ADDR:
-                    AppCommonUtil.cancelProgressDialog(true);
-                    if (errorCode == ErrorCodes.NO_ERROR) {
-                        Fragment currentFragment = getFragmentManager().findFragmentByTag(CUSTOMER_UPDATE_ADDRESS_FRAG);
-                        if(currentFragment != null && currentFragment.isVisible()) {
-                            // remove fragment
-                            getFragmentManager().popBackStackImmediate();
-                            // 'create order' fragment should already show updated address on resume
+            if(opData.callingFragTag!=null && !opData.callingFragTag.isEmpty()) {
+                // this operation was initiated by some fragment
+                // search the same and send op complete notification
+                Fragment callingFrag = getFragmentManager().findFragmentByTag(opData.callingFragTag);
+                if (callingFrag != null) {
+                    callingFrag.onActivityResult(opData.requestCode, Activity.RESULT_OK, null);
+                } else {
+                    LogMy.wtf(TAG, "In onBgProcessResponse: Calling fragment not found: "+opData.callingFragTag+", Op: "+opData.requestCode);
+                }
+                AppCommonUtil.cancelProgressDialog(true);
+
+            } else {
+                switch (opData.requestCode) {
+                    case MyRetainedFragment.REQUEST_LOGOUT:
+                        onLogoutResponse(errorCode);
+                        break;
+                    case MyRetainedFragment.REQUEST_CHANGE_PASSWD:
+                        passwordChangeResponse(errorCode);
+                        break;
+                    case MyRetainedFragment.REQUEST_CHANGE_MOBILE:
+                        onChangeMobileResponse(errorCode);
+                        break;
+                    case MyRetainedFragment.REQUEST_FETCH_CB:
+                        onFetchCbResponse(errorCode);
+                        break;
+                    case MyRetainedFragment.REQUEST_CHANGE_PIN:
+                        onPinChangeResponse(errorCode);
+                        break;
+                    case MyRetainedFragment.REQUEST_FETCH_CUSTOMER_OPS:
+                        AppCommonUtil.cancelProgressDialog(true);
+                        if (errorCode == ErrorCodes.NO_ERROR) {
+                            startCustomerOpsFrag();
+                        } else if (errorCode == ErrorCodes.NO_DATA_FOUND) {
+                            String error = String.format(getString(R.string.ops_no_data_info), MyGlobalSettings.getOpsKeepDays().toString());
+                            DialogFragmentWrapper.createNotification(AppConstants.noDataFailureTitle, error, false, false)
+                                    .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
                         } else {
-                            LogMy.e(TAG, "REQUEST_SAVE_CUST_ADDR: Latest Fragment mismatch: "+currentFragment.getTag());
+                            DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
+                                    .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
                         }
-                    } else {
-                        DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
-                                .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
-                    }
-                    break;
+                        break;
+                    case MyRetainedFragment.REQUEST_SAVE_CUST_ADDR:
+                        AppCommonUtil.cancelProgressDialog(true);
+                        if (errorCode == ErrorCodes.NO_ERROR) {
+                            Fragment currentFragment = getFragmentManager().findFragmentByTag(CUSTOMER_UPDATE_ADDRESS_FRAG);
+                            if (currentFragment != null && currentFragment.isVisible()) {
+                                // remove fragment
+                                getFragmentManager().popBackStackImmediate();
+                                // 'create order' fragment should already show updated address on resume
+                            } else {
+                                LogMy.e(TAG, "REQUEST_SAVE_CUST_ADDR: Latest Fragment mismatch: " + currentFragment.getTag());
+                            }
+                        } else {
+                            DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
+                                    .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
+                        }
+                        break;
+                    default:
+                        AppCommonUtil.cancelProgressDialog(true);
+                        LogMy.wtf(TAG,"Unexpceted background job opcode: "+opData.requestCode);
+                        break;
+                }
             }
 
             // This function will be repeatedly called
             // so, checking for device registration here
             // This so - as we dont know how much time the device registration may take - few millisec to few sec
             // If we do this somewhere else, we may not be able to catch it
-            if(mCustomerUser.isChkMsgDevReg()) {
+            if(mCustomerUser.isChkMsgDevReg() &&
+                    (opData.requestCode!=MyRetainedFragment.REQUEST_CHANGE_PASSWD &&
+                            opData.requestCode!=MyRetainedFragment.REQUEST_LOGOUT) ) {
                 // device registration completed
                 // start thread to verify registration and update customer object, if required
-                mRetainedFragment.checkMsgDevReg();
+                //mRetainedFragment.checkMsgDevReg();
+                mRetainedFragment.addBackgroundJob(MyRetainedFragment.REQUEST_MSG_DEV_REG_CHK, null, null, null, null, null, null, null);
             }
 
         } catch (Exception e) {
@@ -699,7 +720,8 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
                     .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
         } else {
             AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
-            mRetainedFragment.changeMobileNum();
+            //mRetainedFragment.changeMobileNum();
+            mRetainedFragment.addBackgroundJob(MyRetainedFragment.REQUEST_CHANGE_MOBILE, null, null, null, null, null, null, null);
         }
     }
 
@@ -712,7 +734,8 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
         } else {
             // show progress dialog
             AppCommonUtil.showProgressDialog(this, AppConstants.progressLogout);
-            mRetainedFragment.logoutCustomer();
+            //mRetainedFragment.logoutCustomer();
+            mRetainedFragment.addBackgroundJob(MyRetainedFragment.REQUEST_LOGOUT, null, null, null, null, null, null, null);
         }
     }
 
@@ -735,7 +758,8 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
     @Override
     public void onPasswdChangeData(String oldPasswd, String newPassword) {
         AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
-        mRetainedFragment.changePassword(oldPasswd, newPassword);
+        //mRetainedFragment.changePassword(oldPasswd, newPassword);
+        mRetainedFragment.addBackgroundJob(MyRetainedFragment.REQUEST_CHANGE_PASSWD, null, null, oldPasswd, newPassword, null, null, null);
     }
 
     private void passwordChangeResponse(int errorCode) {
@@ -756,13 +780,16 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
     @Override
     public void onPinChangeData(String oldPin, String newPin) {
         AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
-        mRetainedFragment.changePin(oldPin, newPin, null);
+        //mRetainedFragment.changePin(oldPin, newPin, null);
+        mRetainedFragment.addBackgroundJob(MyRetainedFragment.REQUEST_CHANGE_PIN, null, null, oldPin, newPin, null, null, null);
     }
 
     @Override
     public void onPinResetData(String secret) {
         AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
-        mRetainedFragment.changePin(null, null, secret);
+        //mRetainedFragment.changePin(null, null, secret);
+        mRetainedFragment.addBackgroundJob(MyRetainedFragment.REQUEST_CHANGE_PIN, null, null, null, null, secret, null, null);
+
     }
 
     private void onPinChangeResponse(int errorCode) {
@@ -872,7 +899,75 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
         LogMy.d(TAG,"In onUpdateAddress: "+addr.getId());
         AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
         mRetainedFragment.mCustAddrToSave = addr;
-        mRetainedFragment.saveCustAddress(setAsDefault);
+        //mRetainedFragment.saveCustAddress(setAsDefault);
+        mRetainedFragment.addBackgroundJob(MyRetainedFragment.REQUEST_SAVE_CUST_ADDR, null, null, null, null, null, null, setAsDefault);
+    }
+
+    @Override
+    public void askSingleChoice(ArrayList<String> items, String title, Fragment callback, int requestCode) {
+        // start generic list fragment
+        if (mFragMgr.findFragmentByTag(GENERIC_SINGLE_CHOICE_FRAG) == null) {
+
+            Fragment fragment = GenericListFragment.getInstance(-1, items, title);
+            fragment.setTargetFragment(callback, requestCode);
+
+            // Add over the existing fragment
+            FragmentTransaction transaction = mFragMgr.beginTransaction();
+            transaction.replace(R.id.fragment_container_1, fragment, GENERIC_SINGLE_CHOICE_FRAG);
+            transaction.addToBackStack(GENERIC_SINGLE_CHOICE_FRAG);
+
+            // Commit the transaction
+            transaction.commit();
+        }
+    }
+
+    /*
+     * Generic List Fragment Interface implementation
+     */
+    @Override
+    public void onListItemSelected(int index, String text) {
+        Fragment currentFragment = getFragmentManager().findFragmentByTag(GENERIC_SINGLE_CHOICE_FRAG);
+        if(currentFragment != null && currentFragment.isVisible()) {
+            // update selected address id
+            Intent intent = new Intent();
+            intent.putExtra(GenericListFragment.EXTRA_SELECTION,index);
+            intent.putExtra(GenericListFragment.EXTRA_SELECTION_INDEX,text);
+
+            currentFragment.getTargetFragment().onActivityResult(currentFragment.getTargetRequestCode(),
+                    Activity.RESULT_OK, intent);
+
+            // remove fragment
+            getFragmentManager().popBackStackImmediate();
+            // 'create order' fragment should already show updated address on resume
+        } else {
+            LogMy.wtf(TAG, "In onListItemSelected: Latest Fragment mismatch: "+currentFragment.getTag());
+        }
+    }
+
+    @Override
+    public void setToolbarForFrag(int iconResId, String title, String subTitle) {
+        if(title!=null) {
+            mTbTitle.setVisibility(View.VISIBLE);
+            mTbTitle.setText(title);
+        } else {
+            mTbTitle.setVisibility(View.GONE);
+        }
+
+        if(subTitle!=null) {
+            mTbTitle2.setVisibility(View.VISIBLE);
+            mTbTitle2.setText(title);
+        } else {
+            mTbTitle2.setVisibility(View.GONE);
+        }
+
+        if(iconResId!=-1 && iconResId!=0) {
+            mTbImage.setVisibility(View.VISIBLE);
+            mTbImage.setImageResource(iconResId);
+        } else {
+            mTbImage.setVisibility(View.GONE);
+        }
+
+        setDrawerState(false);
     }
 
     @Override
@@ -1053,6 +1148,13 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
                         .show(mFragMgr, DIALOG_BACK_BUTTON);
             } else {
                 mFragMgr.popBackStackImmediate();
+
+                // earlier shown fragment may have changed the toolbar contents
+                // restore the same - if home fragment is visible
+                if ((mMchntListFragment != null && mMchntListFragment.isVisible()) ||
+                        mFragMgr.getBackStackEntryCount() == 0) {
+                    updateTbForCustomer();
+                }
             }
         } catch (Exception e) {
             AppCommonUtil.cancelProgressDialog(true);
@@ -1083,7 +1185,8 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
         } else {
             AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
             //mRetainedFragment.fetchCashback(mGetCbSince, this);
-            mRetainedFragment.fetchCashback((long)0, this);
+            //mRetainedFragment.fetchCashback((long)0, this);
+            mRetainedFragment.addBackgroundJob(MyRetainedFragment.REQUEST_FETCH_CB, this, null, null, null, null, (long)0, null);
         }
     }
 

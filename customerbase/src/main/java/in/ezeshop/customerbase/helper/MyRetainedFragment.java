@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,7 @@ import in.ezeshop.appbase.utilities.RetainedFragment;
 public class MyRetainedFragment extends RetainedFragment {
     private static final String TAG = "CustApp-MyRetainedFragment";
 
-    // Requests that this fragment executes in backend
+    // Requests that this fragment can execute in background
     public static final int REQUEST_LOGIN = 0;
     public static final int REQUEST_LOGOUT = 1;
     public static final int REQUEST_GENERATE_PWD = 2;
@@ -40,6 +41,7 @@ public class MyRetainedFragment extends RetainedFragment {
     public static final int REQUEST_AUTO_LOGIN = 11;
     public static final int REQUEST_MSG_DEV_REG_CHK = 12;
     public static final int REQUEST_SAVE_CUST_ADDR = 13;
+    public static final int REQUEST_FETCH_AREAS = 14;
 
     // Threads taken care by this fragment
     private MyBackgroundProcessor<String> mBackgroundProcessor;
@@ -92,50 +94,70 @@ public class MyRetainedFragment extends RetainedFragment {
     /*
      * Methods to add request for processing by background thread
      */
-    public void tryAutoLogin() {
-        mBackgroundProcessor.addAutoLoginReq();
+    public void addBackgroundJob(int requestCode, Context ctxt, String callingFragTag,
+                                String argStr1, String argStr2, String argStr3, Long argLong1, Boolean argBool1) {
+        // transparently pass to background thread
+        mBackgroundProcessor.addBackgroundJob(requestCode, ctxt, callingFragTag, argStr1, argStr2, argStr3, argLong1, argBool1);
+    }
+
+    /*public void tryAutoLogin() {
+        //mBackgroundProcessor.addAutoLoginReq();
+        mBackgroundProcessor.addBackgroundJob(REQUEST_AUTO_LOGIN, null, null, null, null, null, null,null);
     }
     public void loginCustomer(String loginId, String password) {
-        mBackgroundProcessor.addLoginRequest(loginId, password);
+//        mBackgroundProcessor.addLoginRequest(loginId, password);
+        mBackgroundProcessor.addBackgroundJob(REQUEST_LOGIN, null, null, loginId, password, null, null,null);
     }
     public void logoutCustomer() {
-        mBackgroundProcessor.addLogoutRequest();
+        //mBackgroundProcessor.addLogoutRequest();
+        mBackgroundProcessor.addBackgroundJob(REQUEST_LOGOUT, null, null, null, null, null, null, null);
     }
     public void generatePassword(String loginId, String secret1) {
-        mBackgroundProcessor.addPasswordRequest(loginId, secret1);
+        //mBackgroundProcessor.addPasswordRequest(loginId, secret1);
+        mBackgroundProcessor.addBackgroundJob(REQUEST_GENERATE_PWD, null, null, loginId, secret1, null, null, null);
     }
     public void changePassword(String oldPasswd, String newPasswd) {
-        mBackgroundProcessor.addPasswdChangeReq(oldPasswd, newPasswd);
+        //mBackgroundProcessor.addPasswdChangeReq(oldPasswd, newPasswd);
+        mBackgroundProcessor.addBackgroundJob(REQUEST_CHANGE_PASSWD, null, null, oldPasswd, newPasswd, null, null, null);
     }
     public void changeMobileNum() {
-        mBackgroundProcessor.addChangeMobileRequest();
+        //mBackgroundProcessor.addChangeMobileRequest();
+        mBackgroundProcessor.addBackgroundJob(REQUEST_CHANGE_MOBILE, null, null, null, null, null, null, null);
     }
     public void fetchCashback(Long updatedSince, Context ctxt) {
-        mBackgroundProcessor.addFetchCbRequest(updatedSince, ctxt);
+        //mBackgroundProcessor.addFetchCbRequest(updatedSince, ctxt);
+        mBackgroundProcessor.addBackgroundJob(REQUEST_FETCH_CB, ctxt, null, null, null, null, updatedSince, null);
     }
     public void changePin(String oldPin, String newPin, String secret) {
-        mBackgroundProcessor.addPinChangeRequest(oldPin, newPin, secret);
+        //mBackgroundProcessor.addPinChangeRequest(oldPin, newPin, secret);
+        mBackgroundProcessor.addBackgroundJob(REQUEST_CHANGE_PIN, null, null, oldPin, newPin, secret, null, null);
     }
     public void fetchTransactions(String whereClause) {
-        mBackgroundProcessor.addFetchTxnsRequest(whereClause);
+        //mBackgroundProcessor.addFetchTxnsRequest(whereClause);
+        mBackgroundProcessor.addBackgroundJob(REQUEST_FETCH_TXNS, null, null, whereClause, null, null, null, null);
     }
     public void fetchTxnFiles(Context context) {
-        mBackgroundProcessor.addFetchTxnFilesRequest(context);
+        //mBackgroundProcessor.addFetchTxnFilesRequest(context);
+        mBackgroundProcessor.addBackgroundJob(REQUEST_FETCH_TXN_FILES, context, null, null, null, null, null, null);
     }
     public void enableAccount(String loginId, String passwd) {
-        mBackgroundProcessor.addEnableRequest(loginId, passwd);
+        //mBackgroundProcessor.addEnableRequest(loginId, passwd);
+        mBackgroundProcessor.addBackgroundJob(REQUEST_ENABLE_ACC, null, null, loginId, passwd, null, null, null);
     }
     public void fetchCustomerOps() {
-        mBackgroundProcessor.addCustomerOpsReq();
+        //mBackgroundProcessor.addCustomerOpsReq();
+        mBackgroundProcessor.addBackgroundJob(REQUEST_FETCH_CUSTOMER_OPS, null, null, null, null, null, null, null);
     }
 
     public void checkMsgDevReg() {
-        mBackgroundProcessor.addCheckMsgDevRegReq();
+        //mBackgroundProcessor.addCheckMsgDevRegReq();
+        mBackgroundProcessor.addBackgroundJob(REQUEST_MSG_DEV_REG_CHK, null, null, null, null, null, null, null);
     }
 
     public void saveCustAddress(Boolean setAsDefault) {
-        mBackgroundProcessor.saveCustAddrReq(setAsDefault);
-    }
+        //mBackgroundProcessor.saveCustAddrReq(setAsDefault);
+        mBackgroundProcessor.addBackgroundJob(REQUEST_SAVE_CUST_ADDR, null, null, null, null, null, null, setAsDefault);
+    }*/
 
     @Override
     protected void doOnActivityCreated() {

@@ -39,6 +39,7 @@ public class AppAlarms {
     private static String FILE_DOWNLOAD_FAILED = "fileDownloadFailed";
     private static String ALARM_INVALID_MERCHANT_STATE = "invalidMerchantState";
     private static String ALARM_WTF = "iShudNotBeHere";
+    private static String ALARM_APP_EXCEPTION = "appException";
     private static String ALARM_SERVICE_NOT_AVAILABLE = "serviceNotAvailable";
 
     // Exception logging methods
@@ -146,6 +147,16 @@ public class AppAlarms {
                 ALARM_SEVERITY_FATAL+ALARM_CSV_DELIM +
                 ALARM_IGNORE_IF_NOT_MANY+ALARM_CSV_DELIM +
                 ALARM_WTF+ALARM_CSV_DELIM +
+                methodName+ALARM_CSV_DELIM +
+                getParamStr(params));
+    }
+    public static void exception(String userId, int userType, String methodName, Map<String,String> params) {
+        raiseAlarm(String.valueOf(System.currentTimeMillis())+ALARM_CSV_DELIM +
+                userId+ALARM_CSV_DELIM +
+                DbConstants.userTypeDesc[userType]+ALARM_CSV_DELIM +
+                ALARM_SEVERITY_ERROR+ALARM_CSV_DELIM +
+                ALARM_IGNORE_IF_NOT_MANY+ALARM_CSV_DELIM +
+                ALARM_APP_EXCEPTION+ALARM_CSV_DELIM +
                 methodName+ALARM_CSV_DELIM +
                 getParamStr(params));
     }

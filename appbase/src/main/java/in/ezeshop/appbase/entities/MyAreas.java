@@ -28,7 +28,7 @@ public class MyAreas {
     // AreaID -> Area object
     private static HashMap<String,Areas> mIdToAreas;
 
-    public static int initSync() {
+    public static int fetchAreas(String city) {
 
         try {
             if (mCityToAreas == null) {
@@ -49,9 +49,12 @@ public class MyAreas {
 
             // Fetch all Areas from DB
             BackendlessDataQuery dataQuery = new BackendlessDataQuery();
-            //dataQuery.setWhereClause("validated = true");
+            if(city!=null && !city.isEmpty()) {
+                dataQuery.setWhereClause("city.city = '"+city+"'");
+            }
             QueryOptions queryOptions = new QueryOptions();
             queryOptions.addRelated("city");
+            queryOptions.addSortByOption("areaName ASC");
             dataQuery.setQueryOptions(queryOptions);
             dataQuery.setPageSize(CommonConstants.DB_QUERY_PAGE_SIZE);
 
@@ -75,7 +78,7 @@ public class MyAreas {
                 collection = collection.nextPage();
             }
         } catch (Exception e) {
-            LogMy.e(TAG,"Exception  in MyAreas:initSync",e);
+            LogMy.e(TAG,"Exception  in MyAreas:fetchAreas",e);
             mCityToAreas = null;
             mIdToAreas = null;
             return ErrorCodes.GENERAL_ERROR;
@@ -97,7 +100,10 @@ public class MyAreas {
             areaList = new ArrayList<>();
             mCityToAreas.put(cityName, areaList);
         }
-        areaList.add(item);
+        if(item.getValidated()) {
+            // adding only validated areas
+            areaList.add(item);
+        }
 
         // add to city->areaNames hash
         ArrayList<String> areaNamesList = mCityToAreaNames.get(cityName);
@@ -113,7 +119,7 @@ public class MyAreas {
         }
     }
 
-    public static CharSequence[] getAreaNameList(String city) {
+    public static ArrayList<String> getAreaNameList(String city) {
         if(mCityToAreaNames==null) {
             LogMy.e(TAG,"getAreaValueSet: mCityToAreaNames store is null");
             return null;
@@ -123,7 +129,8 @@ public class MyAreas {
             LogMy.e(TAG,"getAreaValueSet: No areas available for "+city);
             return null;
         }
-        return areaNameList.toArray(new CharSequence[areaNameList.size()]);
+        //return areaNameList.toArray(new CharSequence[areaNameList.size()]);
+        return areaNameList;
     }
 
     public static Areas getAreaObject(String city, String areaName) {

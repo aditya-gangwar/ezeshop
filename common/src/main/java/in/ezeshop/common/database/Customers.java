@@ -9,49 +9,37 @@ import com.backendless.persistence.BackendlessDataQuery;
 
 public class Customers
 {
-  private String objectId;
-  private String ownerId;
-  private java.util.Date created;
-  private java.util.Date updated;
-
-  // personal details
-  private String mobile_num;
-  private String name;
-  private Integer sex;
   private String dob;
-  private String city;
-  private java.util.List<CustAddress> addresses;
-  private String defaultAddressId;
-
-  private String private_id;
+  private java.util.Date updated;
+  private String name;
   private String namak;
   private Boolean first_login_ok;
   private String txn_tables;
   private String regMchntId;
+  private String ownerId;
+  private java.util.Date created;
   private String msgDevId;
+  private String objectId;
   private String txn_pin;
   private java.util.Date delLocalFilesReq;
+  private String mobile_num;
   private java.util.Date status_update_time;
   private Boolean debugLogs;
+  private String private_id;
+  private String defaultAddressId;
   private java.util.Date regDate;
+  private Integer sex;
+  private String city;
   private String cashback_table;
   private Integer admin_status;
   private String status_reason;
-
+  private java.util.List<CustAddress> addresses;
   public String getDob()
   {
     return dob;
   }
 
-  public String getCity() {
-    return city;
-  }
-
-  public void setCity(String city) {
-    this.city = city;
-  }
-
-  public void setDob(String dob )
+  public void setDob( String dob )
   {
     this.dob = dob;
   }
@@ -224,6 +212,16 @@ public class Customers
   public void setSex( Integer sex )
   {
     this.sex = sex;
+  }
+
+  public String getCity()
+  {
+    return city;
+  }
+
+  public void setCity( String city )
+  {
+    this.city = city;
   }
 
   public String getCashback_table()

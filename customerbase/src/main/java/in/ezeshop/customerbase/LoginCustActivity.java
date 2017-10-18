@@ -31,6 +31,7 @@ import java.util.Map;
 
 import in.ezeshop.appbase.SingleWebViewActivity;
 import in.ezeshop.appbase.utilities.AppAlarms;
+import in.ezeshop.appbase.utilities.BackgroundProcessor;
 import in.ezeshop.appbase.utilities.OnSingleClickListener;
 import in.ezeshop.appbase.utilities.RootUtil;
 import in.ezeshop.common.constants.CommonConstants;
@@ -291,7 +292,8 @@ public class LoginCustActivity extends AppCompatActivity implements
             mLoginButton.setEnabled(false);
             // show progress dialog
             AppCommonUtil.showProgressDialog(this, AppConstants.progressLogin);
-            mWorkFragment.loginCustomer(mLoginId, mPassword);
+            //mWorkFragment.loginCustomer(mLoginId, mPassword);
+            mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_LOGIN, null, null, mLoginId, mPassword, null, null,null);
         }
     }
 
@@ -315,8 +317,9 @@ public class LoginCustActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onBgProcessResponse(int errorCode, int operation) {
-        LogMy.d(TAG, "In onBgProcessResponse: "+operation+", "+errorCode);
+//    public void onBgProcessResponse(int errorCode, int operation) {
+    public void onBgProcessResponse(int errorCode, BackgroundProcessor.MessageBgJob opData) {
+        LogMy.d(TAG, "In onBgProcessResponse: "+opData.requestCode+", "+errorCode);
 
         // Session timeout case - show dialog and logout - irrespective of invoked operation
         /*if(errorCode==ErrorCodes.SESSION_TIMEOUT &&
@@ -329,7 +332,7 @@ public class LoginCustActivity extends AppCompatActivity implements
 
         if(errorCode==ErrorCodes.INTERNET_OK_SERVICE_NOK) {
             AppCommonUtil.cancelProgressDialog(true);
-            if (operation == MyRetainedFragment.REQUEST_AUTO_LOGIN) {
+            if (opData.requestCode == MyRetainedFragment.REQUEST_AUTO_LOGIN) {
                 mLoginButton.setEnabled(true);
             }
 
@@ -350,7 +353,7 @@ public class LoginCustActivity extends AppCompatActivity implements
 
         try {
 
-            if (operation == MyRetainedFragment.REQUEST_AUTO_LOGIN) {
+            if (opData.requestCode == MyRetainedFragment.REQUEST_AUTO_LOGIN) {
                 AppCommonUtil.cancelProgressDialog(true);
                 if (errorCode == ErrorCodes.NO_ERROR) {
                     mLoginId = CustomerUser.getInstance().getCustomer().getMobile_num();
@@ -359,7 +362,7 @@ public class LoginCustActivity extends AppCompatActivity implements
                     processManualLogin();
                 }
 
-            } else if (operation == MyRetainedFragment.REQUEST_LOGIN) {
+            } else if (opData.requestCode == MyRetainedFragment.REQUEST_LOGIN) {
                 AppCommonUtil.cancelProgressDialog(true);
                 if (errorCode == ErrorCodes.NO_ERROR) {
                     onLoginSuccess();
@@ -402,7 +405,7 @@ public class LoginCustActivity extends AppCompatActivity implements
                             .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
                 }
 
-            } else if (operation == MyRetainedFragment.REQUEST_GENERATE_PWD) {
+            } else if (opData.requestCode == MyRetainedFragment.REQUEST_GENERATE_PWD) {
                 AppCommonUtil.cancelProgressDialog(true);
                 if (errorCode == ErrorCodes.NO_ERROR) {
                     // Show success notification dialog
@@ -427,7 +430,7 @@ public class LoginCustActivity extends AppCompatActivity implements
                 }
                 mProcessingResetPasswd = false;
 
-            } else if (operation == MyRetainedFragment.REQUEST_ENABLE_ACC) {
+            } else if (opData.requestCode == MyRetainedFragment.REQUEST_ENABLE_ACC) {
                 AppCommonUtil.cancelProgressDialog(true);
                 if (errorCode == ErrorCodes.NO_ERROR) {
                     // Show success notification dialog
@@ -448,7 +451,7 @@ public class LoginCustActivity extends AppCompatActivity implements
             }
         } catch (Exception e) {
             AppCommonUtil.cancelProgressDialog(true);
-            LogMy.e(TAG, "Exception in LoginCustActivity:onBgProcessResponse: "+operation+": "+errorCode, e);
+            LogMy.e(TAG, "Exception in LoginCustActivity:onBgProcessResponse: "+opData.requestCode+": "+errorCode, e);
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), false, true)
                     .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
         }
@@ -549,7 +552,8 @@ public class LoginCustActivity extends AppCompatActivity implements
         if(secret1!=null) {
             // show progress dialog
             AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
-            mWorkFragment.generatePassword(mLoginId, secret1);
+            //mWorkFragment.generatePassword(mLoginId, secret1);
+            mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_GENERATE_PWD, null, null, mLoginId, secret1, null, null, null);
         } else {
             mProcessingResetPasswd = false;
         }
@@ -564,7 +568,8 @@ public class LoginCustActivity extends AppCompatActivity implements
 
         // show progress dialog
         AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
-        mWorkFragment.enableAccount(mLoginId, mPassword);
+        //mWorkFragment.enableAccount(mLoginId, mPassword);
+        mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_ENABLE_ACC, null, null, mLoginId, mPassword, null, null, null);
     }
 
     /**

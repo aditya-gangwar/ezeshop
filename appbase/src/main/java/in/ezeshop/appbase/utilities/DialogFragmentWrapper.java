@@ -137,7 +137,7 @@ public class DialogFragmentWrapper extends DialogFragment {
                             Intent intent = new Intent();
                             intent.putExtra(EXTRA_SELECTION,items[which]);
                             intent.putExtra(EXTRA_SELECTION_INDEX,which);
-                            getTargetFragment().onActivityResult(getTargetRequestCode(), ErrorCodes.NO_ERROR, intent);
+                            getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
                         } else if (mListener != null) {
                             mListener.onDialogResult(getTag(), which, null);
                         }

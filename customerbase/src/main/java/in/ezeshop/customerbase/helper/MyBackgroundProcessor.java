@@ -17,6 +17,7 @@ import java.util.List;
 
 import in.ezeshop.appbase.backendAPI.CommonServices;
 import in.ezeshop.appbase.constants.AppConstants;
+import in.ezeshop.appbase.entities.MyAreas;
 import in.ezeshop.appbase.entities.MyCashback;
 import in.ezeshop.appbase.entities.MyTransaction;
 import in.ezeshop.appbase.utilities.FileFetchr;
@@ -67,7 +68,23 @@ public class MyBackgroundProcessor <T> extends BackgroundProcessor<T> {
     /*
      * Add request methods
      */
-    public void addAutoLoginReq() {
+    public void addBackgroundJob(int requestCode, Context ctxt, String callingFragTag,
+                                 String argStr1, String argStr2, String argStr3, Long argLong1, Boolean argBool1) {
+        LogMy.d(TAG,"Adding background job: "+requestCode);
+
+        MessageBgJob data = new MessageBgJob();
+        data.requestCode = requestCode;
+        data.ctxt = ctxt;
+        data.callingFragTag = callingFragTag;
+        data.argStr1 = argStr1;
+        data.argStr2 = argStr2;
+        data.argStr3 = argStr3;
+        data.argLong1 = argLong1;
+        data.argBool1 = argBool1;
+        mRequestHandler.obtainMessage(requestCode, data).sendToTarget();
+    }
+
+    /*public void addAutoLoginReq() {
         mRequestHandler.obtainMessage(MyRetainedFragment.REQUEST_AUTO_LOGIN, null).sendToTarget();
     }
     public void addLoginRequest(String userId, String password) {
@@ -131,7 +148,7 @@ public class MyBackgroundProcessor <T> extends BackgroundProcessor<T> {
     }
     public void saveCustAddrReq(Boolean setAsDefault) {
         mRequestHandler.obtainMessage(MyRetainedFragment.REQUEST_SAVE_CUST_ADDR, setAsDefault).sendToTarget();
-    }
+    }*/
 
 
     @Override
@@ -144,36 +161,37 @@ public class MyBackgroundProcessor <T> extends BackgroundProcessor<T> {
             return ErrorCodes.NO_INTERNET_CONNECTION;
         }*/
 
+        MessageBgJob data = (MessageBgJob)msg.obj;
         switch(msg.what) {
             case MyRetainedFragment.REQUEST_LOGIN:
-                error = loginCustomer((MessageLogin) msg.obj);
+                error = loginCustomer(data);
                 break;
             case MyRetainedFragment.REQUEST_LOGOUT:
                 error = logout();
                 break;
             case MyRetainedFragment.REQUEST_GENERATE_PWD:
-                error = generatePassword((MessageLogin) msg.obj);
+                error = generatePassword(data);
                 break;
             case MyRetainedFragment.REQUEST_CHANGE_PASSWD:
-                error = changePassword((MessageChangePassword) msg.obj);
+                error = changePassword(data);
                 break;
             case MyRetainedFragment.REQUEST_CHANGE_MOBILE:
                 error = changeMobileNum();
                 break;
             case MyRetainedFragment.REQUEST_FETCH_CB:
-                error = fetchCashbacks((MessageGetCb) msg.obj);
+                error = fetchCashbacks(data);
                 break;
             case MyRetainedFragment.REQUEST_CHANGE_PIN:
-                error = changePin((MessageChangePin) msg.obj);
+                error = changePin(data);
                 break;
             case MyRetainedFragment.REQUEST_FETCH_TXNS:
-                error = fetchTransactions((String) msg.obj);
+                error = fetchTransactions(data.argStr1);
                 break;
             case MyRetainedFragment.REQUEST_FETCH_TXN_FILES:
-                error = fetchTxnFiles((Context) msg.obj);
+                error = fetchTxnFiles(data.ctxt);
                 break;
             case MyRetainedFragment.REQUEST_ENABLE_ACC:
-                error = enableAccount((MessageLogin) msg.obj);
+                error = enableAccount(data);
                 break;
             case MyRetainedFragment.REQUEST_FETCH_CUSTOMER_OPS:
                 error = fetchCustomerOps();
@@ -185,7 +203,10 @@ public class MyBackgroundProcessor <T> extends BackgroundProcessor<T> {
                 error = chkMsgDevReg();
                 break;
             case MyRetainedFragment.REQUEST_SAVE_CUST_ADDR:
-                error = saveCustAddress((Boolean) msg.obj);
+                error = saveCustAddress(data.argBool1);
+                break;
+            case MyRetainedFragment.REQUEST_FETCH_AREAS:
+                error = MyAreas.fetchAreas(data.argStr1);
                 break;
         }
         return error;
@@ -206,21 +227,21 @@ public class MyBackgroundProcessor <T> extends BackgroundProcessor<T> {
         return CustomerUser.tryAutoLogin();
     }
 
-    private int loginCustomer(MessageLogin msg) {
+    private int loginCustomer(MessageBgJob opData) {
         LogMy.d(TAG, "In loginCustomer");
-        return CustomerUser.login(msg.userId, msg.password);
+        return CustomerUser.login(opData.argStr1, opData.argStr2);
     }
 
     private int logout() {
         return CustomerUser.logout();
     }
 
-    private int generatePassword(MessageLogin msg) {
-        return CustomerUser.resetPassword(msg.userId, msg.password);
+    private int generatePassword(MessageBgJob opData) {
+        return CustomerUser.resetPassword(opData.argStr1, opData.argStr2);
     }
 
-    private int changePassword(MessageChangePassword msg) {
-        return CustomerUser.getInstance().changePassword(msg.oldPasswd, msg.newPasswd);
+    private int changePassword(MessageBgJob opData) {
+        return CustomerUser.getInstance().changePassword(opData.argStr1, opData.argStr2);
     }
 
     private int changeMobileNum() {
@@ -228,10 +249,10 @@ public class MyBackgroundProcessor <T> extends BackgroundProcessor<T> {
                 mRetainedFragment.mNewMobileNum, mRetainedFragment.mOtpMobileChange);
     }
 
-    private int fetchCashbacks(MessageGetCb msg) {
+    private int fetchCashbacks(MessageBgJob opData) {
         mRetainedFragment.mLastFetchCashbacks = null;
         try {
-            List<Cashback> cashbacks = CustomerUser.getInstance().fetchCashbacks(msg.updatedSince);
+            List<Cashback> cashbacks = CustomerUser.getInstance().fetchCashbacks(opData.argLong1);
 
             if(cashbacks.size() > 0) {
                 mRetainedFragment.mLastFetchCashbacks = new ArrayList<>(cashbacks.size());
@@ -245,7 +266,7 @@ public class MyBackgroundProcessor <T> extends BackgroundProcessor<T> {
                 // fetch mchnt DPs for newly fetched cashbacks - if not already in memory
                 // ignore any error
                 try {
-                    fetchMchntDpFiles(msg.ctxt);
+                    fetchMchntDpFiles(opData.ctxt);
                 } catch(Exception ex) {
                     LogMy.e(TAG,"Exception from fetchMchntDpFiles",ex);
                 }
@@ -298,8 +319,8 @@ public class MyBackgroundProcessor <T> extends BackgroundProcessor<T> {
         return errorCode;
     }
 
-    private int changePin(MessageChangePin msg) {
-        return CustomerUser.getInstance().changePin(msg.oldPin, msg.newPin, msg.secret);
+    private int changePin(MessageBgJob opData) {
+        return CustomerUser.getInstance().changePin(opData.argStr1, opData.argStr2, opData.argStr3);
     }
 
     private int fetchTransactions(String query) {
@@ -394,9 +415,9 @@ public class MyBackgroundProcessor <T> extends BackgroundProcessor<T> {
         return ErrorCodes.NO_ERROR;
     }
 
-    private int enableAccount(MessageLogin msg) {
+    private int enableAccount(MessageBgJob opData) {
         LogMy.d(TAG, "In enableAccount");
-        return CustomerUser.enableAccount(msg.userId, msg.password,
+        return CustomerUser.enableAccount(opData.argStr1, opData.argStr2,
                 mRetainedFragment.mAccEnableOtp, mRetainedFragment.mAccEnablePin);
     }
 

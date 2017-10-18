@@ -66,7 +66,7 @@ public class MyCities
                 collection = collection.nextPage();
             }
         } catch (Exception e) {
-            LogMy.e(TAG,"Exception  in MyCities:initSync",e);
+            LogMy.e(TAG,"Exception  in MyCities:fetchAreas",e);
             mObjectMap = null;
             mCityValueSet = null;
             return ErrorCodes.GENERAL_ERROR;

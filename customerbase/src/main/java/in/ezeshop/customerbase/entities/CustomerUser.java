@@ -287,17 +287,19 @@ public class CustomerUser {
     }
 
     public int saveCustAddress(CustAddress addr, Boolean setAsDefault) {
-        LogMy.d(TAG, "In saveCustAddress");
+        LogMy.d(TAG, "In saveCustAddress: "+addr.getArea().getValidated());
         try {
             mAddresses = CustomerServices.getInstance().saveCustAddress(addr, setAsDefault);
             LogMy.d(TAG,"saveCustAddress success: "+mAddresses.size());
 
             // If new area add case - update area list too
-            int status = MyAreas.initSync();
-            if( status != ErrorCodes.NO_ERROR ) {
-                // add manually - even though 'area id' will be missing
-                LogMy.e(TAG,"Area list resync failed");
-                MyAreas.addArea(addr.getArea());
+            if(!addr.getArea().getValidated()) {
+                int status = MyAreas.fetchAreas(addr.getArea().getCity().getCity());
+                if (status != ErrorCodes.NO_ERROR) {
+                    // add manually - even though 'area id' will be missing
+                    LogMy.e(TAG, "Area list resync failed");
+                    MyAreas.addArea(addr.getArea());
+                }
             }
         } catch (BackendlessException e) {
             LogMy.e(TAG,"saveCustAddress failed: "+e.toString());
@@ -525,10 +527,10 @@ public class CustomerUser {
         if( status != ErrorCodes.NO_ERROR ) {
             return status;
         }
-        status = MyAreas.initSync();
+        /*status = MyAreas.fetchAreas();
         if( status != ErrorCodes.NO_ERROR ) {
             return status;
-        }
+        }*/
 
         return status;
     }
@@ -562,8 +564,9 @@ public class CustomerUser {
         }
 
         // extract addresses from customer object and reset it to null
-        // 'addresses' field is not actually stored in DB -a nd only used as transport during login
+        // 'addresses' field is not actually stored in DB - and only used as transport during login
         mAddresses = mCustomer.getAddresses();
+        // important to reset to null - so as does not get stored in DB
         mCustomer.setAddresses(null);
         if(mAddresses==null) {
             LogMy.d(TAG,"Customer addresses are null");

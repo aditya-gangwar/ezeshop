@@ -62,12 +62,12 @@ public class CreateOrderFragment extends BaseFragment implements
     private Integer mBackstackFlag;
 
     // Part of instance state: to be restored in event of fragment recreation
-    private boolean mPrescripsDisabled;
+    //private boolean mPrescripsDisabled;
 
     // Container Activity must implement this interface
     public interface CreateOrderFragmentIf {
         MyRetainedFragment getRetainedFragment();
-        void setDrawerState(boolean isEnabled);
+        void setToolbarForFrag(int iconResId, String title, String subTitle);
         void onChooseAddress();
         void onSelectMerchant();
         void onOrderCreate();
@@ -120,7 +120,7 @@ public class CreateOrderFragment extends BaseFragment implements
                 // Either fragment 'create' or 'backstack' case
                 if (mBackstackFlag==null) {
                     // fragment create case - initialize member variables
-                    mPrescripsDisabled = false;
+                    //mPrescripsDisabled = false;
                     mBackstackFlag = 123; // dummy memory allocation - to check for backstack scenarios later
                     // On first create set 'default address' as selected address
                     mRetainedFragment.mSelectedAddrId = CustomerUser.getInstance().getCustomer().getDefaultAddressId();
@@ -131,17 +131,16 @@ public class CreateOrderFragment extends BaseFragment implements
                 }
             } else {
                 // fragment recreate case - restore member variables
-                mPrescripsDisabled = savedInstanceState.getBoolean("mPrescripsDisabled");
+                //mPrescripsDisabled = savedInstanceState.getBoolean("mPrescripsDisabled");
             }
 
             //setup all listeners
             initListeners();
-
             // Update view - only to be done only after values are restored above
             initDisplay();
 
         } catch (Exception e) {
-            LogMy.e(TAG, "Exception in CustomerTransactionFragment:onActivityCreated", e);
+            LogMy.e(TAG, "Exception in onActivityCreated", e);
             DialogFragmentWrapper dialog = DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), true, true);
             dialog.setTargetFragment(this, REQ_NOTIFY_ERROR_EXIT);
             dialog.show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
@@ -151,7 +150,8 @@ public class CreateOrderFragment extends BaseFragment implements
 
     private void initDisplay() {
         refreshPrescripImgs();
-        refreshAddress();
+        mInputComments.clearFocus();
+        mBtnAddPrescrip.requestFocus();
     }
 
     private void refreshAddress() {
@@ -189,6 +189,7 @@ public class CreateOrderFragment extends BaseFragment implements
             // Make all invisible first
             for(int i=0; i<CommonConstants.MAX_PRESCRIPS_PER_ORDER; i++) {
                 mPrescripImgLytArr[i].setVisibility(View.GONE);
+                mPrescripImgArr[i].setImageResource(R.drawable.ic_description_black_18dp);
             }
 
             int indx = 0;
@@ -255,7 +256,7 @@ public class CreateOrderFragment extends BaseFragment implements
                 }
             }
         } catch (Exception e) {
-            LogMy.e(TAG, "Exception in CashTxnFragment:onTouch", e);
+            LogMy.e(TAG, "Exception in onTouch", e);
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), true, true)
                     .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
         }
@@ -299,7 +300,7 @@ public class CreateOrderFragment extends BaseFragment implements
 
             }
         } catch (Exception e) {
-            LogMy.e(TAG, "Exception in CashTxnFragment:onTouch", e);
+            LogMy.e(TAG, "Exception in handleBtnClick", e);
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), true, true)
                     .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
         }
@@ -374,7 +375,7 @@ public class CreateOrderFragment extends BaseFragment implements
                 for (File img :
                         imageFiles) {
                     if(!img.exists()) {
-                        LogMy.e(TAG,"Picked image file does not exist");
+                        LogMy.wtf(TAG,"Picked image file does not exist");
                         AppCommonUtil.toast(getActivity(),"Image upload failed");
                         return;
                     }
@@ -384,11 +385,13 @@ public class CreateOrderFragment extends BaseFragment implements
                     if(mRetainedFragment.mPrescripImgs.size() < CommonConstants.MAX_PRESCRIPS_PER_ORDER) {
                         try {
                             File compressedImage = new Compressor(getActivity())
+                                    .setMaxWidth(AppConstants.IMG_PRESCRIP_MAX_WIDTH)
+                                    .setMaxHeight(AppConstants.IMG_PRESCRIP_MAX_HEIGHT)
                                     .setQuality(AppConstants.IMG_PRESCRIP_COMPRESS_RATIO)
                                     .setCompressFormat(Bitmap.CompressFormat.WEBP)
                                     .compressToFile(img);
                             LogMy.d(TAG,"Image compress: "+(img.length()/1024)+", "+(compressedImage.length()/1024));
-                            mRetainedFragment.mPrescripImgs.add(img);
+                            mRetainedFragment.mPrescripImgs.add(compressedImage);
 
                         } catch(Exception e) {
                             LogMy.e(TAG,"Failed to compress image",e);
@@ -406,7 +409,6 @@ public class CreateOrderFragment extends BaseFragment implements
                     String str = ignored+" images ignored, as upto "+ CommonConstants.MAX_PRESCRIPS_PER_ORDER +" prescriptions are allowed per order.";
                     DialogFragmentWrapper.createNotification(AppConstants.generalInfoTitle,
                             str, true, false).show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
-                    //AppCommonUtil.toast(getActivity(), ignored+" images ignored, as upto 4 prescriptions are allowed per order.");
                 }
             }
 
@@ -444,7 +446,7 @@ public class CreateOrderFragment extends BaseFragment implements
                     break;
             }
         } catch (Exception e) {
-            LogMy.e(TAG, "Exception in Fragment: ", e);
+            LogMy.e(TAG, "Exception in onActivityResult", e);
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), true, true)
                     .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
         }
@@ -515,12 +517,14 @@ public class CreateOrderFragment extends BaseFragment implements
     @Override
     public void onResume() {
         super.onResume();
-        mCallback.setDrawerState(false);
+        mCallback.setToolbarForFrag(-1,"Create Order",null);
 
         try {
+            // intentionally calling it from here - as the source data can be modfied outside of this fragment too
+            refreshAddress();
             //refreshPrescripImgs();
         } catch (Exception e) {
-            LogMy.e(TAG, "Exception in CustomerTransactionFragment:onResume", e);
+            LogMy.e(TAG, "Exception in onResume", e);
             DialogFragmentWrapper dialog = DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), true, true);
             dialog.setTargetFragment(this, REQ_NOTIFY_ERROR_EXIT);
             dialog.show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
@@ -540,7 +544,7 @@ public class CreateOrderFragment extends BaseFragment implements
     public void onSaveInstanceState(Bundle outState) {
         LogMy.d(TAG, "In onSaveInstanceState");
         super.onSaveInstanceState(outState);
-        outState.putBoolean("mPrescripsDisabled", mPrescripsDisabled);
+        //outState.putBoolean("mPrescripsDisabled", mPrescripsDisabled);
     }
 
     @Override public void onDestroyView() {

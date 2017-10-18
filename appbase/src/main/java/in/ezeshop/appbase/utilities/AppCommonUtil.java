@@ -103,6 +103,10 @@ public class AppCommonUtil {
             LogMy.d(TAG,"custAddrDiffAndCopy: Area not same");
             return false;
         }
+        if(!lhs.getArea().getCity().getCity().equals(rhs.getArea().getCity().getCity())) {
+            LogMy.d(TAG,"custAddrDiffAndCopy: City not same");
+            return false;
+        }
         if(!lhs.getText1().equals(rhs.getText1())) {
             LogMy.d(TAG,"custAddrDiffAndCopy: Address text not same");
             return false;
