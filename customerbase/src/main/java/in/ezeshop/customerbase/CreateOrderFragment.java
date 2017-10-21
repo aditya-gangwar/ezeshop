@@ -36,6 +36,7 @@ import in.ezeshop.common.CommonUtils;
 import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.ErrorCodes;
 import in.ezeshop.common.database.CustAddress;
+import in.ezeshop.common.database.Merchants;
 import in.ezeshop.customerbase.entities.CustomerUser;
 import in.ezeshop.customerbase.helper.MyRetainedFragment;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
@@ -62,14 +63,14 @@ public class CreateOrderFragment extends BaseFragment implements
     private Integer mBackstackFlag;
 
     // Part of instance state: to be restored in event of fragment recreation
-    //private boolean mPrescripsDisabled;
+    private String mSelectedAreaId;
 
     // Container Activity must implement this interface
     public interface CreateOrderFragmentIf {
         MyRetainedFragment getRetainedFragment();
         void setToolbarForFrag(int iconResId, String title, String subTitle);
         void onChooseAddress();
-        void onSelectMerchant();
+        void onChooseMerchant(String areaId);
         void onOrderCreate();
     }
 
@@ -131,7 +132,7 @@ public class CreateOrderFragment extends BaseFragment implements
                 }
             } else {
                 // fragment recreate case - restore member variables
-                //mPrescripsDisabled = savedInstanceState.getBoolean("mPrescripsDisabled");
+                mSelectedAreaId = savedInstanceState.getString("mSelectedAreaId");
             }
 
             //setup all listeners
@@ -154,6 +155,29 @@ public class CreateOrderFragment extends BaseFragment implements
         mBtnAddPrescrip.requestFocus();
     }
 
+    private void refreshMerchant() {
+        LogMy.d(TAG,"In refreshMerchant");
+
+        Merchants selMchnt = null;
+        if(mRetainedFragment.mSelectedMchntId!=null && !mRetainedFragment.mSelectedMchntId.isEmpty() &&
+                mSelectedAreaId!=null && !mSelectedAreaId.isEmpty()) {
+            // select merchant object from the list
+            List<Merchants> mchnts = mRetainedFragment.mAreaToMerchants.get(mSelectedAreaId);
+            for (Merchants m : mchnts) {
+                if(m.getAuto_id().equals(mRetainedFragment.mSelectedMchntId)) {
+                    selMchnt = m;
+                }
+            }
+        }
+        if(selMchnt!=null) {
+            mBtnChangeMchnt.setText("CHANGE");
+            mInputMchnt.setText(CommonUtils.getMchntAddressStrWithName(selMchnt));
+        } else {
+            mBtnChangeMchnt.setText("SELECT");
+            mInputMchnt.setText("");
+        }
+    }
+
     private void refreshAddress() {
         LogMy.d(TAG,"In refreshAddress");
 
@@ -162,8 +186,7 @@ public class CreateOrderFragment extends BaseFragment implements
         CustAddress selAddr = null;
 
         if( !(mRetainedFragment.mSelectedAddrId==null || allAddress==null || allAddress.isEmpty() || mRetainedFragment.mSelectedAddrId.isEmpty()) ) {
-            for (CustAddress addr :
-                    allAddress) {
+            for (CustAddress addr : allAddress) {
                 if(addr.getId().equals(mRetainedFragment.mSelectedAddrId)) {
                     selAddr = addr;
                 }
@@ -173,9 +196,11 @@ public class CreateOrderFragment extends BaseFragment implements
         if(selAddr!=null) {
             mBtnChangeAddr.setText("CHANGE");
             mInputAddress.setText(CommonUtils.getCustAddrStrWithName(selAddr));
+            mSelectedAreaId = selAddr.getAreaId();
         } else {
             mBtnChangeAddr.setText("SELECT");
             mInputAddress.setText("");
+            mSelectedAreaId = "";
         }
     }
 
@@ -294,6 +319,7 @@ public class CreateOrderFragment extends BaseFragment implements
 
             } else if (i == mBtnChangeMchnt.getId()) {
                 // show 'choose merchant' fragment
+                mCallback.onChooseMerchant(mSelectedAreaId);
 
             } else if (i == mBtnConfirm.getId()) {
                 // process order
@@ -372,8 +398,7 @@ public class CreateOrderFragment extends BaseFragment implements
                 // Do check for maximum prescriptions per order
                 int ignored = 0;
                 int newImgs = 0;
-                for (File img :
-                        imageFiles) {
+                for (File img : imageFiles) {
                     if(!img.exists()) {
                         LogMy.wtf(TAG,"Picked image file does not exist");
                         AppCommonUtil.toast(getActivity(),"Image upload failed");
@@ -388,10 +413,29 @@ public class CreateOrderFragment extends BaseFragment implements
                                     .setMaxWidth(AppConstants.IMG_PRESCRIP_MAX_WIDTH)
                                     .setMaxHeight(AppConstants.IMG_PRESCRIP_MAX_HEIGHT)
                                     .setQuality(AppConstants.IMG_PRESCRIP_COMPRESS_RATIO)
-                                    .setCompressFormat(Bitmap.CompressFormat.WEBP)
+                                    .setCompressFormat(AppCommonUtil.getImgCompressFormat())
                                     .compressToFile(img);
-                            LogMy.d(TAG,"Image compress: "+(img.length()/1024)+", "+(compressedImage.length()/1024));
-                            mRetainedFragment.mPrescripImgs.add(compressedImage);
+                            LogMy.d(TAG, "Image compress: " + (img.length() / 1024) + ", " + (compressedImage.length() / 1024));
+
+                            LogMy.d(TAG,"Before rename: "+compressedImage.getAbsolutePath());
+                            File newFile = new File(compressedImage.getParent(),
+                                    CommonUtils.getCustPrescripFilename(CustomerUser.getInstance().getCustomer().getPrivate_id()));
+                            if( compressedImage.renameTo(newFile) ) {
+                                // file rename success
+                                LogMy.d(TAG,"After rename: "+newFile.getAbsolutePath());
+
+                                if(newFile.exists()) {
+                                    mRetainedFragment.mPrescripImgs.add(newFile);
+                                    if (compressedImage.exists()) {
+                                        getActivity().deleteFile(compressedImage.getName());
+                                    }
+                                } else {
+                                    LogMy.wtf(TAG, "onImagesPicked: New file after rename does not exist");
+                                    mRetainedFragment.mPrescripImgs.add(compressedImage);
+                                }
+                            } else {
+                                mRetainedFragment.mPrescripImgs.add(compressedImage);
+                            }
 
                         } catch(Exception e) {
                             LogMy.e(TAG,"Failed to compress image",e);
@@ -522,7 +566,7 @@ public class CreateOrderFragment extends BaseFragment implements
         try {
             // intentionally calling it from here - as the source data can be modfied outside of this fragment too
             refreshAddress();
-            //refreshPrescripImgs();
+            refreshMerchant();
         } catch (Exception e) {
             LogMy.e(TAG, "Exception in onResume", e);
             DialogFragmentWrapper dialog = DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), true, true);
@@ -544,7 +588,7 @@ public class CreateOrderFragment extends BaseFragment implements
     public void onSaveInstanceState(Bundle outState) {
         LogMy.d(TAG, "In onSaveInstanceState");
         super.onSaveInstanceState(outState);
-        //outState.putBoolean("mPrescripsDisabled", mPrescripsDisabled);
+        outState.putString("mSelectedAreaId", mSelectedAreaId);
     }
 
     @Override public void onDestroyView() {

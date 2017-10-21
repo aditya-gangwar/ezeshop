@@ -2,9 +2,7 @@ package in.ezeshop.common.database;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
-import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
-import com.backendless.geo.GeoPoint;
 import com.backendless.persistence.BackendlessDataQuery;
 
 public class Customers
@@ -33,7 +31,7 @@ public class Customers
   private String cashback_table;
   private Integer admin_status;
   private String status_reason;
-  private java.util.List<CustAddress> addresses;
+  private java.util.List<CustAddress> addressesNIDB;
   public String getDob()
   {
     return dob;
@@ -254,14 +252,14 @@ public class Customers
     this.status_reason = status_reason;
   }
 
-  public java.util.List<CustAddress> getAddresses()
+  public java.util.List<CustAddress> getAddressesNIDB()
   {
-    return addresses;
+    return addressesNIDB;
   }
 
-  public void setAddresses( java.util.List<CustAddress> addresses )
+  public void setAddressesNIDB(java.util.List<CustAddress> addressesNIDB)
   {
-    this.addresses = addresses;
+    this.addressesNIDB = addressesNIDB;
   }
 
                                                     

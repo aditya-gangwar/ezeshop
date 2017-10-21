@@ -167,6 +167,10 @@ public class MyGlobalSettings
     public static String getContactUrl() {
         return (String) getValue(GlobalSettingConstants.SETTINGS_CONTACT_US_URL);
     }
+    public static Integer getDeliveryCharges() {
+        return (Integer) getValue(GlobalSettingConstants.SETTINGS_DELIVERY_CHARGES);
+    }
+
 
     private static Object getValue(String gSettingKey) {
         if(mRunMode==RunMode.backend) {

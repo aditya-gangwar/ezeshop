@@ -37,6 +37,7 @@ import in.ezeshop.appbase.entities.MyCashback;
 import in.ezeshop.appbase.utilities.BackgroundProcessor;
 import in.ezeshop.common.MyGlobalSettings;
 import in.ezeshop.common.database.CustAddress;
+import in.ezeshop.common.database.Merchants;
 import in.ezeshop.customerbase.entities.CustomerStats;
 import in.ezeshop.customerbase.entities.CustomerUser;
 import in.ezeshop.customerbase.helper.MyRetainedFragment;
@@ -58,7 +59,8 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
         PinResetDialog.PinResetDialogIf, PinChangeDialog.PinChangeDialogIf,
         MchntDetailsDialogCustApp.MerchantDetailsDialogIf, CustomerOpListFrag.CustomerOpListFragIf,
         CreateOrderFragment.CreateOrderFragmentIf, ChooseAddressFragment.ChooseAddressFragmentIf,
-        UpdateAddressFragment.UpdateAddressFragmentIf, GenericListFragment.GenericListFragmentIf {
+        UpdateAddressFragment.UpdateAddressFragmentIf, GenericListFragment.GenericListFragmentIf,
+        ChooseMerchantFrag.ChooseMerchantFragIf {
 
     private static final String TAG = "CustApp-CashbackActivity";
     public static final String INTENT_EXTRA_USER_TOKEN = "extraUserToken";
@@ -83,6 +85,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
     private static final String CUSTOMER_CHOOSE_ADDRESS_FRAG = "CustomerChooseAddressFrag";
     private static final String CUSTOMER_UPDATE_ADDRESS_FRAG = "CustomerUpdateAddressFrag";
     private static final String GENERIC_SINGLE_CHOICE_FRAG = "CustomerChooseAreaFrag";
+    private static final String CUSTOMER_CHOOSE_MERCHANT_FRAG = "CustomerChooseMchntFrag";
 
     MyRetainedFragment mRetainedFragment;
     FragmentManager mFragMgr;
@@ -478,6 +481,18 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
                                     .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
                         }
                         break;
+                    case MyRetainedFragment.REQUEST_FETCH_MCHNT_BY_AREA:
+                        AppCommonUtil.cancelProgressDialog(true);
+                        if (errorCode == ErrorCodes.NO_ERROR) {
+                            startChooseMerchantFragment(opData.argStr1);
+                        } else {
+                            DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
+                                    .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
+                        }
+                        break;
+                    case MyRetainedFragment.REQUEST_MSG_DEV_REG_CHK:
+                        // do nothing
+                        break;
                     default:
                         AppCommonUtil.cancelProgressDialog(true);
                         LogMy.wtf(TAG,"Unexpceted background job opcode: "+opData.requestCode);
@@ -510,76 +525,49 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
         LogMy.d(TAG, "In onFetchCbResponse: " + errorCode);
         AppCommonUtil.cancelProgressDialog(true);
 
-        // read data from file, ir-respective of result from DB i.e. error, 0 records or whatever
-        // dont read though - if records fetched are from scratch
-        /*if(mGetCbSince != 0) {
-            // some data was there in file earlier - read the same
-            if(!processCbDataFile(true)) {
-                // if some error in reading file - fetch all records from scratch
-                mGetCbSince = 0;
-                fetchCbData();
-                return;
+        if(errorCode==ErrorCodes.NO_ERROR) {
+            if(mRetainedFragment.mCashbacks == null) {
+                LogMy.wtf(TAG,"In onFetchCbResponse: Cashback store is null, even if no error");
+            } else {
+                startCashbackListFrag();
             }
-        }*/
+        } else if(errorCode==ErrorCodes.NO_DATA_FOUND) {
+            startErrorFrag(true,
+                    "You are not registered with any Merchant yet",
+                    "Get registered to save more!");
+        } else {
+            // Failed to fetch new data - show old one, if available
+            DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
+                    .show(mFragMgr, DIALOG_NOTIFY_CB_FETCH_ERROR);
 
-        // If here, means:
-        // - either DB data was fetched from scratch
-        // - or data available locally, and is read successfully in memory
+            // but you will need to capture 'back button press' in dialog too
+            if(mRetainedFragment.mCashbacks == null) {
+                startErrorFrag(false, null, null);
+            } else {
+                startCashbackListFrag();
+            }
+        }
 
-        if(errorCode==ErrorCodes.NO_ERROR || errorCode==ErrorCodes.NO_DATA_FOUND) {
+        /*if(errorCode==ErrorCodes.NO_ERROR || errorCode==ErrorCodes.NO_DATA_FOUND) {
             // check if any data fetched
             if(mRetainedFragment.mLastFetchCashbacks!=null && mRetainedFragment.mLastFetchCashbacks.size() > 0 ) {
 
                 if(mRetainedFragment.mCashbacks == null) {
-                    // records fetched from scratch - no need to check for file
-                    LogMy.d(TAG, "All fetched Cb records are from scratch: " + mRetainedFragment.mLastFetchCashbacks.size());
                     mRetainedFragment.mCashbacks = new HashMap<>();
-                    //mRetainedFragment.stats = new CustomerStats();
                 }
                 // add all fetched records to the 'cashback store'
-                // this will override any existing daat from file, with latest data from DB
-                for (MyCashback cb :
-                        mRetainedFragment.mLastFetchCashbacks) {
-                    LogMy.d(TAG,"Adding CB row from DB to local store: "+cb.getMerchantId()+", "+cb.getClCredit());
+                for (MyCashback cb : mRetainedFragment.mLastFetchCashbacks) {
                     mRetainedFragment.mCashbacks.put(cb.getMerchantId(), cb);
-                    // Add to total stats
-                    //mRetainedFragment.stats.addToStats(cb);
                 }
                 // reset to null
                 mRetainedFragment.mLastFetchCashbacks = null;
-                // set time for current set of records
-                //mRetainedFragment.mCbsUpdateTime = new Date();
 
-                // write complete 'in memory cashback store' to the file
-                //writeCbsToFile();
-
+                startCashbackListFrag();
             } else {
                 LogMy.d(TAG, "No data available in DB");
-                /*if(mRetainedFragment.mCashbacks != null) {
-                    // local data available from file - mark the same as latest
-                    mRetainedFragment.mCbsUpdateTime = new Date();
-                }*/
-            }
-
-            // Final merged CB records should be in 'mRetainedFragment.mCashbacks' now
-            if(mRetainedFragment.mCashbacks == null) {
-                // No data available locally - none fetched from DB
-                // The customer has no cashbacks yet
                 startErrorFrag(true,
                         "You are not registered with any Merchant yet",
                         "Get registered to save more!");
-            } else {
-                // I shouldn't be here
-                // if no data returned from DB - then none shud be in local store too
-                // TODO: raise alarm
-
-                // write all data with time to the local file
-                /*if(!writeCbsToFile())
-                {
-                    // try to delete file, like if partially created
-                    deleteCbFile();
-                }*/
-                startCashbackListFrag();
             }
 
         } else {
@@ -594,7 +582,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
             } else {
                 startCashbackListFrag();
             }
-        }
+        }*/
     }
 
     /*private void deleteCbFile() {
@@ -858,13 +846,39 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
     }
 
     @Override
-    public void onSelectMerchant() {
+    public void onChooseMerchant(String areaId) {
+        if(mRetainedFragment.mAreaToMerchants==null ||
+                mRetainedFragment.mAreaToMerchants.get(areaId)==null) {
+            // try fetching merchants delivering in this area from DB
+            AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
+            mRetainedFragment.addBackgroundJob(MyRetainedFragment.REQUEST_FETCH_MCHNT_BY_AREA, this, null,
+                    areaId, null, null, null, null);
 
+        } else {
+            startChooseMerchantFragment(areaId);
+        }
     }
 
     /*
-     * Choose Address Fragment Interface implementation
+     * Choose Merchant Fragment Interface implementation
      */
+    @Override
+    public void onSelectMerchant(String mchntId) {
+        Fragment currentFragment = getFragmentManager().findFragmentByTag(CUSTOMER_CHOOSE_MERCHANT_FRAG);
+        if(currentFragment != null && currentFragment.isVisible()) {
+            // update selected address id
+            mRetainedFragment.mSelectedMchntId = mchntId;
+            // remove fragment
+            getFragmentManager().popBackStackImmediate();
+            // 'create order' fragment should already show updated address on resume
+        } else {
+            LogMy.wtf(TAG, "In onSelectMerchant: Latest Fragment mismatch: "+currentFragment.getTag());
+        }
+    }
+
+    /*
+         * Choose Address Fragment Interface implementation
+         */
     @Override
     public void onSelectAddress(String addrId) {
         Fragment currentFragment = getFragmentManager().findFragmentByTag(CUSTOMER_CHOOSE_ADDRESS_FRAG);
@@ -875,7 +889,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
             getFragmentManager().popBackStackImmediate();
             // 'create order' fragment should already show updated address on resume
         } else {
-            LogMy.e(TAG, "In onSelectAddress: Latest Fragment mismatch: "+currentFragment.getTag());
+            LogMy.wtf(TAG, "In onSelectAddress: Latest Fragment mismatch: "+currentFragment.getTag());
         }
     }
 
@@ -892,7 +906,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
     }
 
     /*
-     * Choose Address Fragment Interface implementation
+     * Update Address Fragment Interface implementation
      */
     @Override
     public void onUpdateAddress(CustAddress addr, boolean setAsDefault) {
@@ -955,7 +969,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
 
         if(subTitle!=null) {
             mTbTitle2.setVisibility(View.VISIBLE);
-            mTbTitle2.setText(title);
+            mTbTitle2.setText(subTitle);
         } else {
             mTbTitle2.setVisibility(View.GONE);
         }
@@ -1001,6 +1015,20 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
         } else if(tag.equals(DIALOG_SESSION_TIMEOUT)) {
             mExitAfterLogout = false;
             logoutCustomer();
+        }
+    }
+
+    private void startChooseMerchantFragment(String areaId) {
+        if (mFragMgr.findFragmentByTag(CUSTOMER_CHOOSE_MERCHANT_FRAG) == null) {
+            Fragment fragment = ChooseMerchantFrag.getInstance(areaId);
+            FragmentTransaction transaction = mFragMgr.beginTransaction();
+
+            // Add over the existing fragment
+            transaction.replace(R.id.fragment_container_1, fragment, CUSTOMER_CHOOSE_MERCHANT_FRAG);
+            transaction.addToBackStack(CUSTOMER_CHOOSE_MERCHANT_FRAG);
+
+            // Commit the transaction
+            transaction.commit();
         }
     }
 

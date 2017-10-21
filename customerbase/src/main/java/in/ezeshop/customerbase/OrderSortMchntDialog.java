@@ -14,35 +14,28 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import in.ezeshop.appbase.BaseDialog;
+import in.ezeshop.appbase.entities.MerchantWrapper;
 import in.ezeshop.appbase.entities.MyCashback;
 import in.ezeshop.appbase.utilities.AppCommonUtil;
 import in.ezeshop.appbase.utilities.LogMy;
 import in.ezeshop.appbase.utilities.OnSingleClickListener;
 
 /**
- * Created by adgangwa on 15-09-2016.
+ * Created by adgangwa on 21-10-2017.
  */
-public class SortMchntDialog extends BaseDialog {
-    public static final String TAG = "CustApp-SortMchntDialog";
+
+public class OrderSortMchntDialog extends BaseDialog {
+    public static final String TAG = "CustApp-OrderSortMchntDialog";
 
     public static final String ARG_SELECTED = "argSelected";
-    public static final String ARG_SHOW_ACC = "argShowAcc";
     public static final String EXTRA_SELECTION = "extraSelected";
 
-    //private SortMchntDialogIf mListener;
-
-    /*
-    public interface SortMchntDialogIf {
-        void onCustSortType(int sortType);
-    }*/
-
-    public static SortMchntDialog newInstance(int selectedSortType, boolean showAcc) {
-        LogMy.d(TAG, "Creating new SortMchntDialog instance: "+selectedSortType);
+    public static OrderSortMchntDialog newInstance(int selectedSortType) {
+        LogMy.d(TAG, "Creating new OrderSortMchntDialog instance: "+selectedSortType);
         Bundle args = new Bundle();
         args.putInt(ARG_SELECTED, selectedSortType);
-        args.putBoolean(ARG_SHOW_ACC, showAcc);
 
-        SortMchntDialog fragment = new SortMchntDialog();
+        OrderSortMchntDialog fragment = new OrderSortMchntDialog();
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,37 +44,19 @@ public class SortMchntDialog extends BaseDialog {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        /*
-        try {
-            mListener = (SortMchntDialogIf) getActivity();
-        } catch (ClassCastException e) {
-            throw new ClassCastException(getActivity().toString()
-                    + " must implement SortMchntDialogIf");
-        }*/
-
         // set selection
         int selected = getArguments().getInt(ARG_SELECTED);
         LogMy.d(TAG,"Setting selection to "+selected);
         switch (selected) {
-            case MyCashback.CB_CMP_TYPE_MCHNT_NAME:
+            case MerchantWrapper.MCHNT_CMP_TYPE_MCHNT_NAME:
                 mSortCustRadioGroup.check(mMchntName.getId());
                 break;
-            case MyCashback.CB_CMP_TYPE_UPDATE_TIME:
-                mSortCustRadioGroup.check(mUpdateTime.getId());
+            case MerchantWrapper.MCHNT_CMP_TYPE_CB_RATE:
+                mSortCustRadioGroup.check(mCbRate.getId());
                 break;
-            /*case MyCashback.CB_CMP_TYPE_MCHNT_CITY:
-                mSortCustRadioGroup.check(mMchntCity.getId());
-                break;*/
-            case MyCashback.CB_CMP_TYPE_ACC_BALANCE:
+            case MerchantWrapper.MCHNT_CMP_TYPE_ACC_BALANCE:
                 mSortCustRadioGroup.check(mBalanceAcc.getId());
                 break;
-            /*case MyCashback.CB_CMP_TYPE_CB_BALANCE:
-                mSortCustRadioGroup.check(mBalanceCb.getId());
-                break;*/
-        }
-
-        if(!getArguments().getBoolean(ARG_SHOW_ACC)) {
-            mBalanceAcc.setVisibility(View.GONE);
         }
 
     }
@@ -90,9 +65,8 @@ public class SortMchntDialog extends BaseDialog {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LogMy.d(TAG, "In onCreateDialog");
 
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_sort_merchant, null);
+        View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_order_sort_mchnt, null);
         initUiResources(v);
-
 
         // return new dialog
         final AlertDialog alertDialog =  new AlertDialog.Builder(getActivity()).setView(v)
@@ -103,7 +77,7 @@ public class SortMchntDialog extends BaseDialog {
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
-                AppCommonUtil.setDialogTextSize(SortMchntDialog.this, (AlertDialog) dialog);
+                AppCommonUtil.setDialogTextSize(OrderSortMchntDialog.this, (AlertDialog) dialog);
 
                 Button b = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
                 b.setOnClickListener(new OnSingleClickListener() {
@@ -111,22 +85,16 @@ public class SortMchntDialog extends BaseDialog {
                     public void onSingleClick(View v) {
 
                         int selectedId = mSortCustRadioGroup.getCheckedRadioButtonId();
-                        int selectedSortType = MyCashback.CB_CMP_TYPE_UPDATE_TIME;
+                        int selectedSortType = MerchantWrapper.MCHNT_CMP_TYPE_ACC_BALANCE;
 
-                        if (selectedId == R.id.lastTxnTime) {
-                            selectedSortType = MyCashback.CB_CMP_TYPE_UPDATE_TIME;
+                        if (selectedId == R.id.cbRate) {
+                            selectedSortType = MerchantWrapper.MCHNT_CMP_TYPE_CB_RATE;
 
                         } else if (selectedId == R.id.mchntName) {
-                            selectedSortType = MyCashback.CB_CMP_TYPE_MCHNT_NAME;
+                            selectedSortType = MerchantWrapper.MCHNT_CMP_TYPE_MCHNT_NAME;
 
-                        } /*else if (selectedId == R.id.cityName) {
-                            selectedSortType = MyCashback.CB_CMP_TYPE_MCHNT_CITY;
-
-                        } else if (selectedId == R.id.balanceCb) {
-                            selectedSortType = MyCashback.CB_CMP_TYPE_CB_BALANCE;
-
-                        }*/ else if (selectedId == R.id.balanceAcc) {
-                            selectedSortType = MyCashback.CB_CMP_TYPE_ACC_BALANCE;
+                        } else if (selectedId == R.id.balanceAcc) {
+                            selectedSortType = MerchantWrapper.MCHNT_CMP_TYPE_ACC_BALANCE;
 
                         }
 
@@ -179,18 +147,14 @@ public class SortMchntDialog extends BaseDialog {
 
     private RadioGroup mSortCustRadioGroup;
     private RadioButton mMchntName;
-    private RadioButton mUpdateTime;
-    //private RadioButton mMchntCity;
-
-    //private RadioButton mBalanceCb;
+    private RadioButton mCbRate;
     private RadioButton mBalanceAcc;
 
     private void initUiResources(View v) {
         mSortCustRadioGroup = (RadioGroup) v.findViewById(R.id.custSortRadioGroup);
         mMchntName = (RadioButton) v.findViewById(R.id.mchntName);
-        //mMchntCity = (RadioButton) v.findViewById(R.id.cityName);
-        mUpdateTime = (RadioButton) v.findViewById(R.id.lastTxnTime);
-        //mBalanceCb = (RadioButton) v.findViewById(R.id.balanceCb);
+        mCbRate = (RadioButton) v.findViewById(R.id.cbRate);
         mBalanceAcc = (RadioButton) v.findViewById(R.id.balanceAcc);
     }
 }
+

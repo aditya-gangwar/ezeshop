@@ -8,11 +8,13 @@ import com.backendless.persistence.QueryOptions;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import in.ezeshop.appbase.utilities.LogMy;
 import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.ErrorCodes;
 import in.ezeshop.common.database.Areas;
+import in.ezeshop.common.database.Merchants;
 
 /**
  * Created by adgangwa on 11-10-2017.

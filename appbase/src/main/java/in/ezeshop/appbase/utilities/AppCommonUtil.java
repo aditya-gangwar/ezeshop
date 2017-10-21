@@ -62,14 +62,12 @@ import in.ezeshop.common.database.Customers;
 import in.ezeshop.common.database.MerchantDevice;
 import in.ezeshop.common.database.MerchantOps;
 import in.ezeshop.common.database.Merchants;
-import in.ezeshop.common.database.Transaction;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -99,11 +97,11 @@ public class AppCommonUtil {
 
 
     public static boolean areCustAddressEqual(CustAddress lhs, CustAddress rhs) {
-        if(!lhs.getArea().getAreaName().equals(rhs.getArea().getAreaName())) {
+        if(!lhs.getAreaNIDB().getAreaName().equals(rhs.getAreaNIDB().getAreaName())) {
             LogMy.d(TAG,"custAddrDiffAndCopy: Area not same");
             return false;
         }
-        if(!lhs.getArea().getCity().getCity().equals(rhs.getArea().getCity().getCity())) {
+        if(!lhs.getAreaNIDB().getCity().getCity().equals(rhs.getAreaNIDB().getCity().getCity())) {
             LogMy.d(TAG,"custAddrDiffAndCopy: City not same");
             return false;
         }

@@ -10,6 +10,7 @@ import com.backendless.persistence.local.UserIdStorageFactory;
 import com.crashlytics.android.Crashlytics;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import in.ezeshop.appbase.backendAPI.CommonServices;
@@ -26,6 +27,7 @@ import in.ezeshop.common.database.CustomerOps;
 import in.ezeshop.appbase.utilities.AppCommonUtil;
 import in.ezeshop.appbase.utilities.LogMy;
 import in.ezeshop.common.database.Customers;
+import in.ezeshop.common.database.Merchants;
 import in.ezeshop.common.database.Transaction;
 import in.ezeshop.customerbase.backendAPI.CustomerServices;
 import in.ezeshop.customerbase.backendAPI.CustomerServicesNoLogin;
@@ -287,18 +289,18 @@ public class CustomerUser {
     }
 
     public int saveCustAddress(CustAddress addr, Boolean setAsDefault) {
-        LogMy.d(TAG, "In saveCustAddress: "+addr.getArea().getValidated());
+        LogMy.d(TAG, "In saveCustAddress: "+addr.getAreaNIDB().getValidated());
         try {
             mAddresses = CustomerServices.getInstance().saveCustAddress(addr, setAsDefault);
             LogMy.d(TAG,"saveCustAddress success: "+mAddresses.size());
 
             // If new area add case - update area list too
-            if(!addr.getArea().getValidated()) {
-                int status = MyAreas.fetchAreas(addr.getArea().getCity().getCity());
+            if(!addr.getAreaNIDB().getValidated()) {
+                int status = MyAreas.fetchAreas(addr.getAreaNIDB().getCity().getCity());
                 if (status != ErrorCodes.NO_ERROR) {
                     // add manually - even though 'area id' will be missing
                     LogMy.e(TAG, "Area list resync failed");
-                    MyAreas.addArea(addr.getArea());
+                    MyAreas.addArea(addr.getAreaNIDB());
                 }
             }
         } catch (BackendlessException e) {
@@ -565,9 +567,9 @@ public class CustomerUser {
 
         // extract addresses from customer object and reset it to null
         // 'addresses' field is not actually stored in DB - and only used as transport during login
-        mAddresses = mCustomer.getAddresses();
+        mAddresses = mCustomer.getAddressesNIDB();
         // important to reset to null - so as does not get stored in DB
-        mCustomer.setAddresses(null);
+        mCustomer.setAddressesNIDB(null);
         if(mAddresses==null) {
             LogMy.d(TAG,"Customer addresses are null");
             // Give memory - even if no element added

@@ -14,6 +14,7 @@ import in.ezeshop.common.database.Transaction;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by adgangwa on 08-10-2016.
@@ -22,6 +23,16 @@ public class CommonUtils {
 
     private static final SimpleDateFormat mSdfOnlyDateFilename = new SimpleDateFormat(CommonConstants.DATE_FORMAT_ONLY_DATE_FILENAME, CommonConstants.DATE_LOCALE);
     private static final SimpleDateFormat mSdfDateMMYYYY = new SimpleDateFormat(CommonConstants.DATE_FORMAT_MMYYYY, CommonConstants.DATE_LOCALE);
+
+
+    public static long getMyEpochSecs() {
+        long timeSecs = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+        return (timeSecs - CommonConstants.START_EPOCH_SECS);
+    }
+    public static long getMyEpochMilliSecs() {
+        return (System.currentTimeMillis() - CommonConstants.START_EPOCH_MILLI_SECS);
+    }
+
 
     public static boolean txnVerifyReq(Merchants merchant, Transaction txn) {
         //if(txn.getCancelTime()==null) {
@@ -73,10 +84,10 @@ public class CommonUtils {
     }
 
     /*
-     * Customer Address related
+     * Address related
      */
     public static String getCustAddrStrWithName(CustAddress addr) {
-        Areas area = addr.getArea();
+        Areas area = addr.getAreaNIDB();
         if(area==null) {
             return "";
         }
@@ -89,7 +100,7 @@ public class CommonUtils {
                 +getCustAddressStr(addr);
     }
     public static String getCustAddressStr(CustAddress addr) {
-        Areas area = addr.getArea();
+        Areas area = addr.getAreaNIDB();
         if(area==null) {
             return "";
         }
@@ -103,6 +114,34 @@ public class CommonUtils {
                 +city.getState()+
                 ((area.getPincode()==null||area.getPincode().isEmpty())?(""):(" - "+area.getPincode()))+"\n"
                 +"+91-"+addr.getContactNum();
+    }
+
+    public static String getMchntAddressStrWithName(Merchants mchnt) {
+        Areas area = mchnt.getAddress().getAreaNIDB();
+        if(area==null) {
+            return "";
+        }
+        Cities city = area.getCity();
+        if(city==null) {
+            return "";
+        }
+
+        return mchnt.getName()+"\n"
+                +mchnt.getAddress().getLine_1()+", "
+                +area.getAreaName();
+    }
+    public static String getMchntAddressStr(Merchants mchnt) {
+        Areas area = mchnt.getAddress().getAreaNIDB();
+        if(area==null) {
+            return "";
+        }
+        Cities city = area.getCity();
+        if(city==null) {
+            return "";
+        }
+
+        return mchnt.getAddress().getLine_1()+", "
+                +area.getAreaName();
     }
 
     /*
@@ -122,6 +161,20 @@ public class CommonUtils {
                 customerId.substring(0,2) + CommonConstants.FILE_PATH_SEPERATOR +
                 customerId.substring(0,4) + CommonConstants.FILE_PATH_SEPERATOR +
                 customerId;
+    }
+
+    public static String getCustPrescripDir(String customerId) {
+        // prescription directory: customers/prescriptions/<first 2 chars of customer id>/first 4 chars of customer id>/<customer id>/
+        return CommonConstants.CUSTOMER_PRESCRIPS_ROOT_DIR +
+                customerId.substring(0,2) + CommonConstants.FILE_PATH_SEPERATOR +
+                customerId.substring(0,4) + CommonConstants.FILE_PATH_SEPERATOR +
+                customerId;
+    }
+
+    public static String getCustPrescripFilename(String customerId) {
+        // File name: prn_<customer_id>_<epoch time>.webp
+        return CommonConstants.CUSTOMER_PRESCRIPS_FILE_PREFIX + customerId + "_" +
+                Base35.fromBase10(getMyEpochMilliSecs(),0) + "." + CommonConstants.PHOTO_FILE_FORMAT;
     }
 
     public static String getMerchantCustFilePath(String merchantId) {

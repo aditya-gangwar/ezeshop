@@ -56,6 +56,7 @@ public class GlobalSettingConstants {
     //public static final String SETTINGS_CUST_CARD_MAX_QTY = "Cust_Card_Max_Qty";
     public static final String SETTINGS_CONTACT_US_URL = "ContactUs_Url";
     //public static final String SETTINGS_CB_TXN_VERIFY_TYPE = "Cb_Txn_Verify_Method";
+    public static final String SETTINGS_DELIVERY_CHARGES = "Delivery_Charges";
 
     /*
      * Ones defined only in backend as constant values - as not used by App
@@ -130,6 +131,7 @@ public class GlobalSettingConstants {
         //aMap.put(SETTINGS_CUST_CARD_MIN_QTY, "10");
         //aMap.put(SETTINGS_CUST_CARD_MAX_QTY, "50");
         aMap.put(SETTINGS_CONTACT_US_URL, "http://www.myecash.in/contact-us");
+        aMap.put(SETTINGS_DELIVERY_CHARGES, "30");
         valuesGlobalSettings = Collections.unmodifiableMap(aMap);
     }
     /*static {
@@ -209,6 +211,8 @@ public class GlobalSettingConstants {
         aMap.put(SETTINGS_SERVICE_NA_URL, null);
         aMap.put(SETTINGS_MCHNT_TERMS_URL, null);
         aMap.put(SETTINGS_CUST_TERMS_URL, null);
+
+        aMap.put(SETTINGS_DELIVERY_CHARGES, "Delivery charges for online order to merchants");
         //aMap.put(SETTINGS_CUST_CARD_PRICE, null);
         //aMap.put(SETTINGS_CUST_CARD_MIN_QTY, null);
         //aMap.put(SETTINGS_CUST_CARD_MAX_QTY, null);
@@ -265,6 +269,7 @@ public class GlobalSettingConstants {
         //aMap.put(SETTINGS_CUST_CARD_MIN_QTY, DATATYPE_INT);
         //aMap.put(SETTINGS_CUST_CARD_MAX_QTY, DATATYPE_INT);
         aMap.put(SETTINGS_CONTACT_US_URL, DATATYPE_STRING);
+        aMap.put(SETTINGS_DELIVERY_CHARGES, DATATYPE_INT);
         valueTypesGlobalSettings = Collections.unmodifiableMap(aMap);
     }
 }

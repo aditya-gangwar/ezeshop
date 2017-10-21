@@ -425,7 +425,8 @@
                             android:gravity="start"
                             android:hint="Select Merchant for the Order"
                             android:paddingLeft="@dimen/large_space"
-                            android:text="Medindia Medical Store\nIndirapuram, Ghaziabad" />
+                            android:text="Medindia Medical Store\nIndirapuram, Ghaziabad"
+                            android:textColor="@color/secondary_text"/>
 
                     </LinearLayout>
                 </android.support.v7.widget.CardView>

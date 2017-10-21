@@ -79,8 +79,8 @@ public class MyMerchant {
         csvFields[MCHNT_CSV_CB_RATE] = merchant.getCb_rate();
         csvFields[MCHNT_CSV_BUSS_CATEGORY] = merchant.getBuss_category();
         csvFields[MCHNT_CSV_ADDR_LINE1] = merchant.getAddress().getLine_1();
-        csvFields[MCHNT_CSV_ADDR_CITY] = merchant.getAddress().getCity();
-        csvFields[MCHNT_CSV_ADDR_STATE] = merchant.getAddress().getState();
+        csvFields[MCHNT_CSV_ADDR_CITY] = merchant.getAddress().getAreaNIDB().getCity().getCity();
+        csvFields[MCHNT_CSV_ADDR_STATE] = merchant.getAddress().getAreaNIDB().getCity().getState();
         csvFields[MCHNT_CSV_STATUS] = String.valueOf(merchant.getAdmin_status());
         csvFields[MCHNT_CSV_STATUS_TIME] = Long.toString(merchant.getStatus_update_time().getTime());
         if(merchant.getRemoveReqDate()==null) {

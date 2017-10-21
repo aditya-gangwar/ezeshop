@@ -117,8 +117,7 @@ public class CashbackListFragment extends BaseFragment {
         if(mMyCbs!=null) {
             Collections.sort(mMyCbs, new MyCashback.MyCashbackComparator(sortType));
 
-            if (sortType != MyCashback.CB_CMP_TYPE_MCHNT_NAME &&
-                    sortType != MyCashback.CB_CMP_TYPE_MCHNT_CITY) {
+            if (sortType != MyCashback.CB_CMP_TYPE_MCHNT_NAME) {
                 // Make it in decreasing order - if not string comparison
                 Collections.reverse(mMyCbs);
             }

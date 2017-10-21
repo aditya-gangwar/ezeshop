@@ -1,7 +1,5 @@
 package in.ezeshop.appbase;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
@@ -47,7 +45,7 @@ public class GenericListFragment extends BaseFragment
     // Special member variable to identify backstack cases
     private Integer mBackstackFlag;
 
-    private RecyclerView mTxnRecyclerView;
+    private RecyclerView mRecyclerView;
     private GenericListFragmentIf mCallback;
     private GenericListAdapter mAdapter;
 
@@ -120,8 +118,8 @@ public class GenericListFragment extends BaseFragment
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_generic_list, container, false);
 
-        mTxnRecyclerView = (RecyclerView) view.findViewById(R.id.list_recycler_view);
-        mTxnRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.list_recycler_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         return view;
     }
@@ -194,7 +192,7 @@ public class GenericListFragment extends BaseFragment
         mToolbarTitle = title;
 
         mAdapter = new GenericListAdapter(mImgResId, mItems);
-        mTxnRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     /*@Override
@@ -276,7 +274,7 @@ public class GenericListFragment extends BaseFragment
                         //return;
 
                     LogMy.d(TAG,"In onSingleClick of txn list item");
-                    int pos = mTxnRecyclerView.getChildAdapterPosition(v);
+                    int pos = mRecyclerView.getChildAdapterPosition(v);
 
                     if (pos >= 0 && pos < getItemCount()) {
                         mCallback.onListItemSelected(pos, mItems.get(pos));

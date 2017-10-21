@@ -13,18 +13,34 @@ public class Address
   private java.util.Date created;
   private String pincode;
   private String objectId;
-  private String line_2;
   private Double latitude;
   private String ownerId;
-  private String city;
-  private String state;
+  private String areaId;
+  private Areas areaNIDB;
+  private String id;
 
-  public String getState() {
-    return state;
+  public String getAreaId() {
+    return areaId;
   }
 
-  public void setState(String state) {
-    this.state = state;
+  public void setAreaId(String areaId) {
+    this.areaId = areaId;
+  }
+
+  public Areas getAreaNIDB() {
+    return areaNIDB;
+  }
+
+  public void setAreaNIDB(Areas areaNIDB) {
+    this.areaNIDB = areaNIDB;
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
   }
 
   public String getLine_1()
@@ -72,16 +88,6 @@ public class Address
     return objectId;
   }
 
-  public String getLine_2()
-  {
-    return line_2;
-  }
-
-  public void setLine_2( String line_2 )
-  {
-    this.line_2 = line_2;
-  }
-
   public Double getLatitude()
   {
     return latitude;
@@ -95,16 +101,6 @@ public class Address
   public String getOwnerId()
   {
     return ownerId;
-  }
-
-  public String getCity()
-  {
-    return city;
-  }
-
-  public void setCity( String city )
-  {
-    this.city = city;
   }
 
                                                     

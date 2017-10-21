@@ -2,7 +2,6 @@ package in.ezeshop.customerbase;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,7 +10,6 @@ import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 
 import java.util.ArrayList;
@@ -142,14 +140,15 @@ public class UpdateAddressFragment extends BaseFragment {
         }
 
         if(editAddr!=null) {
-            Areas area = editAddr.getArea();
+            Areas area = editAddr.getAreaNIDB();
             Cities city = area.getCity();
 
             mInputCity.setText(city.getCity());
             mInputName.setText(editAddr.getToName());
             mInputContactNum.setText(editAddr.getContactNum());
             mInputAddress.setText(editAddr.getText1());
-            if(area.getValidated()) {
+            mInputArea.setText(area.getAreaName());
+            /*if(area.getValidated()) {
                 mInputArea.setText(area.getAreaName());
                 mCbxAreaNotListed.setChecked(false);
                 mLytOtherArea.setVisibility(View.GONE);
@@ -158,7 +157,7 @@ public class UpdateAddressFragment extends BaseFragment {
                 mCbxAreaNotListed.setChecked(true);
                 mCbxAreaNotListed.callOnClick(); // to do the processing associated with checkbox
                 mInputOtherArea.setText(area.getAreaName());
-            }
+            }*/
             mInputState.setText(city.getState());
             //mInputPincode.setText(area.getPincode());
 
@@ -187,8 +186,8 @@ public class UpdateAddressFragment extends BaseFragment {
                     mInputState.setText(city.getState());
                 }
             }
-            mCbxAreaNotListed.setChecked(false);
-            mLytOtherArea.setVisibility(View.GONE);
+            //mCbxAreaNotListed.setChecked(false);
+            //mLytOtherArea.setVisibility(View.GONE);
         }
         mCbxDefaultAddr.setChecked(false);
 
@@ -235,23 +234,23 @@ public class UpdateAddressFragment extends BaseFragment {
                 }
 
 
-            } else if(id==mCbxAreaNotListed.getId()) {
+            } /*else if(id==mCbxAreaNotListed.getId()) {
                 if(mCbxAreaNotListed.isChecked()) {
                     LogMy.d(TAG, "Area not listed checkbox: Checked");
-                    mLytOtherArea.setVisibility(View.VISIBLE);
+                    //mLytOtherArea.setVisibility(View.VISIBLE);
                     // make area non-editable
                     mLayoutArea.setAlpha(0.4f);
                     mInputArea.setOnClickListener(null);
                     mInputArea.setError(null);
                 } else {
                     LogMy.d(TAG, "Area not listed checkbox: Not Checked");
-                    mLytOtherArea.setVisibility(View.GONE);
+                    //mLytOtherArea.setVisibility(View.GONE);
                     // make area selectable
                     mLayoutArea.setAlpha(1.0f);
                     mInputArea.setOnClickListener(this);
                 }
 
-            } else if(id==mCbxDefaultAddr.getId()) {
+            } */else if(id==mCbxDefaultAddr.getId()) {
                 // do nothing
 
             } else if(id==mBtnUpdateAddr.getId()) {
@@ -268,7 +267,7 @@ public class UpdateAddressFragment extends BaseFragment {
                         if(!AppCommonUtil.areCustAddressEqual(editAddr,addr)) {
                             // something got modified
                             addr.setId(editAddr.getId()); // to identify to update existing address
-                            //addr.getArea().setValidated(editAddr.getArea().getValidated());
+                            //addr.getAreaNIDB().setValidated(editAddr.getAreaNIDB().getValidated());
                         } else {
                             AppCommonUtil.toast(getActivity(),"No Change");
                             update = false;
@@ -298,12 +297,13 @@ public class UpdateAddressFragment extends BaseFragment {
         addr.setContactNum(mInputContactNum.getText().toString());
 
         Areas area = null;
-        if(mCbxAreaNotListed.isChecked()) {
+        area = MyAreas.getAreaObject(mInputCity.getText().toString(), mInputArea.getText().toString());
+        /*if(mCbxAreaNotListed.isChecked()) {
 
             if(mEditAddressId!=null) {
                 // Address edit scenario
                 CustAddress editAddr = CustomerUser.getInstance().getAddress(mEditAddressId);
-                Areas oldArea = editAddr.getArea();
+                Areas oldArea = editAddr.getAreaNIDB();
 
                 // if area not changed - use existing area object
                 if(oldArea.getAreaName().equals(mInputOtherArea.getText().toString()) &&
@@ -325,9 +325,9 @@ public class UpdateAddressFragment extends BaseFragment {
 
         } else {
             area = MyAreas.getAreaObject(mInputCity.getText().toString(), mInputArea.getText().toString());
-        }
+        }*/
 
-        addr.setArea(area);
+        addr.setAreaNIDB(area);
         addr.setText1(mInputAddress.getText().toString());
         addr.setCustPrivateId(CustomerUser.getInstance().getCustomer().getPrivate_id());
 
@@ -357,26 +357,21 @@ public class UpdateAddressFragment extends BaseFragment {
         } else {
             mInputCity.setError(null);
         }
-        if(mCbxAreaNotListed.isChecked()) {
+        /*if(mCbxAreaNotListed.isChecked()) {
             if (mInputOtherArea.getText().toString().isEmpty()) {
                 mInputOtherArea.setError("Enter Area Name");
                 allok = false;
             } else {
                 mInputOtherArea.setError(null);
             }
-            /*status = ValidationHelper.validatePincode(mInputPincode.getText().toString());
-            if(status!=ErrorCodes.NO_ERROR) {
-                mInputPincode.setError(AppCommonUtil.getErrorDesc(status));
-                allok = false;
-            }*/
-        } else {
+        } else {*/
             if (mInputArea.getText().toString().isEmpty()) {
                 mInputArea.setError("Select Area");
                 allok = false;
             } else {
                 mInputArea.setError(null);
             }
-        }
+        //}
 
         if(mInputAddress.getText().toString().isEmpty()) {
             mInputAddress.setError("Enter Address");
@@ -442,7 +437,7 @@ public class UpdateAddressFragment extends BaseFragment {
         mInputCity.setOnClickListener(this);
         mInputArea.setOnClickListener(this);
         mCbxDefaultAddr.setOnClickListener(this);
-        mCbxAreaNotListed.setOnClickListener(this);
+        //mCbxAreaNotListed.setOnClickListener(this);
     }
 
     // UI Resources data members
@@ -453,9 +448,9 @@ public class UpdateAddressFragment extends BaseFragment {
     @BindView(R2.id.inputAddrLine1) TextInputEditText mInputAddress;
     @BindView(R2.id.layoutArea) View mLayoutArea;
     @BindView(R2.id.inputArea) TextInputEditText mInputArea;
-    @BindView(R2.id.cbx_areaNotListed) CheckBox mCbxAreaNotListed;
-    @BindView(R2.id.layoutOtherArea) View mLytOtherArea;
-    @BindView(R2.id.inputOtherArea) TextInputEditText mInputOtherArea;
+    //@BindView(R2.id.cbx_areaNotListed) CheckBox mCbxAreaNotListed;
+    //@BindView(R2.id.layoutOtherArea) View mLytOtherArea;
+    //@BindView(R2.id.inputOtherArea) TextInputEditText mInputOtherArea;
     @BindView(R2.id.inputState) TextInputEditText mInputState;
     //@BindView(R2.id.inputPincode) TextInputEditText mInputPincode;
     @BindView(R2.id.cbx_defaultAddress) CheckBox mCbxDefaultAddr;

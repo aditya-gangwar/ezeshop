@@ -6,6 +6,7 @@ import android.os.Handler;
 import java.io.File;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import in.ezeshop.appbase.entities.MyCashback;
 import in.ezeshop.appbase.utilities.TxnReportsHelper2;
 import in.ezeshop.common.database.CustAddress;
 import in.ezeshop.common.database.CustomerOps;
+import in.ezeshop.common.database.Merchants;
 import in.ezeshop.common.database.Transaction;
 import in.ezeshop.customerbase.entities.CustomerStats;
 import in.ezeshop.customerbase.entities.CustomerUser;
@@ -42,6 +44,7 @@ public class MyRetainedFragment extends RetainedFragment {
     public static final int REQUEST_MSG_DEV_REG_CHK = 12;
     public static final int REQUEST_SAVE_CUST_ADDR = 13;
     public static final int REQUEST_FETCH_AREAS = 14;
+    public static final int REQUEST_FETCH_MCHNT_BY_AREA = 15;
 
     // Threads taken care by this fragment
     private MyBackgroundProcessor<String> mBackgroundProcessor;
@@ -50,9 +53,12 @@ public class MyRetainedFragment extends RetainedFragment {
     public String mUserToken;
 
     // Cashback Data
-    public List<MyCashback> mLastFetchCashbacks;
+    //public List<MyCashback> mLastFetchCashbacks;
+    // MerchantID -> MyCashback object - collective - as fetched from DB
     public Map<String, MyCashback> mCashbacks;
     //public Date mCbsUpdateTime;
+    // Area ID -> Merchant object (delivering in this area)
+    public Map<String,List<Merchants>> mAreaToMerchants;
 
     // stats for the customer
     public CustomerStats stats;
@@ -79,16 +85,18 @@ public class MyRetainedFragment extends RetainedFragment {
     public List<File> mPrescripImgs;
     public String mSelectedAddrId;
     public CustAddress mCustAddrToSave;
+    public String mSelectedMchntId;
 
     public void reset() {
         LogMy.d(TAG,"In reset");
         mPinMobileChange = null;
         mNewMobileNum = null;
         mOtpMobileChange = null;
-        mLastFetchCashbacks = null;
+        //mLastFetchCashbacks = null;
         mPrescripImgs = null;
         mSelectedAddrId = null;
         mCustAddrToSave= null;
+        mSelectedMchntId = null;
     }
 
     /*

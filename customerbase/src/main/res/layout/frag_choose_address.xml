@@ -76,13 +76,14 @@
                         android:layout_marginTop="@dimen/small_space"
                         android:layout_marginBottom="@dimen/medium_space">
                         <TextView
-                            style="@style/Edittext_only_view_small"
+                            style="@style/Edittext_only_view_XS"
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:text="A-1103, Prateek Wisteria,\nSector 77, Noida,\nUttar Pradesh - 201301\n+91-8800191535"
                             android:id="@+id/input_address1"
                             android:gravity="start"
-                            android:hint="Provide Address for delivery"/>
+                            android:textColor="@color/secondary_text"
+                            android:hint="Provide Address for delivery" />
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
@@ -127,12 +128,13 @@
                         android:layout_marginTop="@dimen/small_space"
                         android:layout_marginBottom="@dimen/medium_space">
                         <TextView
-                            style="@style/Edittext_only_view_small"
+                            style="@style/Edittext_only_view_XS"
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:text="Aditya Gangwar\nA-1103, Prateek Wisteria, Sector 77\nNoida, Uttar Pradesh - 201301\n+91-8800191535"
                             android:id="@+id/input_address2"
                             android:gravity="start"
+                            android:textColor="@color/secondary_text"
                             android:hint="Provide Address for delivery"/>
 
                         <ImageView
@@ -180,12 +182,13 @@
                         android:layout_marginTop="@dimen/small_space"
                         android:layout_marginBottom="@dimen/medium_space">
                         <TextView
-                            style="@style/Edittext_only_view_small"
+                            style="@style/Edittext_only_view_XS"
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:text="Aditya Gangwar\nA-1103, Prateek Wisteria, Sector 77\nNoida, Uttar Pradesh - 201301\n+91-8800191535"
                             android:id="@+id/input_address3"
                             android:gravity="start"
+                            android:textColor="@color/secondary_text"
                             android:hint="Provide Address for delivery"/>
                         <ImageView
                             android:layout_width="wrap_content"
@@ -231,12 +234,13 @@
                         android:layout_marginTop="@dimen/small_space"
                         android:layout_marginBottom="@dimen/medium_space">
                         <TextView
-                            style="@style/Edittext_only_view_small"
+                            style="@style/Edittext_only_view_XS"
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:text="Aditya Gangwar\nA-1103, Prateek Wisteria, Sector 77\nNoida, Uttar Pradesh - 201301\n+91-8800191535"
                             android:id="@+id/input_address4"
                             android:gravity="start"
+                            android:textColor="@color/secondary_text"
                             android:hint="Provide Address for delivery"/>
                         <ImageView
                             android:layout_width="wrap_content"

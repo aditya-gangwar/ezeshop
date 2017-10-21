@@ -27,8 +27,8 @@
 
             <RadioButton
                 style="@style/radio_button_medium"
-                android:id="@+id/lastTxnTime"
-                android:text="Last Transaction Time" />
+                android:id="@+id/cbRate"
+                android:text="Cashback Rate (%)" />
 
             <!--RadioButton
                 style="@style/radio_button_medium"
@@ -36,8 +36,8 @@
                 android:text="Cashback Balance" /-->
 
             <RadioButton
-                style="@style/radio_button_medium"
                 android:id="@+id/mchntName"
+                style="@style/radio_button_medium"
                 android:text="Merchant Name" />
 
             <RadioButton

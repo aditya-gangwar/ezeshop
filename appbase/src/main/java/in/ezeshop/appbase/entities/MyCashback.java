@@ -29,7 +29,7 @@ public class MyCashback {
     //public static final int CB_CMP_TYPE_CB_DEBIT = 7;
     // Cashback sort by merchant attributes
     public static final int CB_CMP_TYPE_MCHNT_NAME = 8;
-    public static final int CB_CMP_TYPE_MCHNT_CITY = 9;
+    //public static final int CB_CMP_TYPE_MCHNT_CITY = 9;
 
     private Cashback mOldCashback;
     private Cashback mCurrCashback;
@@ -179,12 +179,12 @@ public class MyCashback {
                     return compare(lhs.getCbCredit(), rhs.getCbCredit());*/
                 /*case CB_CMP_TYPE_CB_DEBIT:
                     return compare(lhs.getCbRedeem(), rhs.getCbRedeem());
+                case CB_CMP_TYPE_MCHNT_CITY:
+                    return compare(lhs.getMerchant().getCity(), rhs.getMerchant().getCity());
                 case CB_CMP_TYPE_CB_BALANCE:
                     return compare(lhs.getCurrCbBalance(), rhs.getCurrCbBalance());*/
                 case CB_CMP_TYPE_MCHNT_NAME:
                     return compare(lhs.getMerchant().getName(), rhs.getMerchant().getName());
-                case CB_CMP_TYPE_MCHNT_CITY:
-                    return compare(lhs.getMerchant().getCity(), rhs.getMerchant().getCity());
             }
             return 0;
         }

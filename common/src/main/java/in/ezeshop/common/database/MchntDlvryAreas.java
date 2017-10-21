@@ -9,18 +9,18 @@ import com.backendless.persistence.BackendlessDataQuery;
 
 public class MchntDlvryAreas
 {
-  private Integer areaId;
+  private String areaId;
   private String ownerId;
   private java.util.Date created;
   private java.util.Date updated;
   private String merchantId;
   private String objectId;
-  public Integer getAreaId()
+  public String getAreaId()
   {
     return areaId;
   }
 
-  public void setAreaId( Integer areaId )
+  public void setAreaId( String areaId )
   {
     this.areaId = areaId;
   }

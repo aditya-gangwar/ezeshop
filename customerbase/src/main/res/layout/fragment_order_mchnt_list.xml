@@ -4,7 +4,7 @@
     style="@style/LL_Vertical_paddingSidesLarge"
     android:id="@+id/list_root"
     android:background="@color/bg_light_grey"
-    android:paddingTop="@dimen/XL_space">
+    android:paddingTop="@dimen/large_space">
 
     <TextView
         style="@style/Edittext_only_view_small"
@@ -12,15 +12,16 @@
         android:gravity="start"
         android:text="Select Merchant for this Order"/>
 
-    <CheckBox
-        style="@style/Edittext_only_view_small"
+    <!--CheckBox
+        style="@style/Edittext_only_view_XS_lessPad"
         android:layout_height="wrap_content"
         android:id="@+id/checkbox_showStores"
         android:paddingRight="@dimen/medium_space"
         android:layout_marginBottom="@dimen/medium_space"
         android:text="Only show Stores where I am already member"
         android:gravity="start|center_vertical"
-        android:onClick="onCheckboxClicked"/>
+        android:onClick="onCheckboxClicked"
+        android:textColor="@color/secondary_text"/-->
 
     <!--LinearLayout
         style="@style/LL_Horizontal_wrap"
@@ -48,8 +49,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/recyView_myMchntListOrder"
-        android:layout_marginTop="@dimen/medium_space">
+        android:id="@+id/recyView_myMchntListOrder">
     </android.support.v7.widget.RecyclerView>
 
     <!--LinearLayout

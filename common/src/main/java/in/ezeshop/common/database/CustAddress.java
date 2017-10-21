@@ -2,9 +2,7 @@ package in.ezeshop.common.database;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
-import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
-import com.backendless.geo.GeoPoint;
 import com.backendless.persistence.BackendlessDataQuery;
 
 public class CustAddress
@@ -19,7 +17,7 @@ public class CustAddress
   private String contactNum;
   private java.util.Date updated;
   private String areaId;
-  private Areas area;
+  private Areas areaNIDB;
   public String getOwnerId()
   {
     return ownerId;
@@ -100,14 +98,14 @@ public class CustAddress
     this.areaId = areaId;
   }
 
-  public Areas getArea()
+  public Areas getAreaNIDB()
   {
-    return area;
+    return areaNIDB;
   }
 
-  public void setArea( Areas area )
+  public void setAreaNIDB(Areas areaNIDB)
   {
-    this.area = area;
+    this.areaNIDB = areaNIDB;
   }
 
                                                     
