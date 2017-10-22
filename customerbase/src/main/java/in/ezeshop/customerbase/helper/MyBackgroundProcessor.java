@@ -5,7 +5,10 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 
+import com.backendless.Backendless;
+import com.backendless.HeadersManager;
 import com.backendless.exceptions.BackendlessException;
+import com.backendless.files.BackendlessFile;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,8 +25,10 @@ import in.ezeshop.appbase.entities.MyAreas;
 import in.ezeshop.appbase.entities.MyCashback;
 import in.ezeshop.appbase.entities.MyTransaction;
 import in.ezeshop.appbase.utilities.FileFetchr;
+import in.ezeshop.common.CommonUtils;
 import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.database.Cashback;
+import in.ezeshop.common.database.CustomerOrder;
 import in.ezeshop.common.database.Merchants;
 import in.ezeshop.common.database.Transaction;
 import in.ezeshop.customerbase.backendAPI.CustomerServices;
@@ -214,8 +219,48 @@ public class MyBackgroundProcessor <T> extends BackgroundProcessor<T> {
             case MyRetainedFragment.REQUEST_FETCH_MCHNT_BY_AREA:
                 error = fetchMchntsForDelivery(data);
                 break;
+            case MyRetainedFragment.REQUEST_CREATE_ORDER:
+                error = createCustomerOrder(data);
+                break;
         }
         return error;
+    }
+
+    private int createCustomerOrder(MessageBgJob opData) {
+        LogMy.d(TAG, "In createCustomerOrder");
+
+        if(CustomerUser.getInstance().isPseudoLoggedIn()) {
+            return ErrorCodes.OPERATION_NOT_ALLOWED;
+        }
+
+        try {
+            // First upload all prescriptions
+            List<String> urls = null;
+            if(mRetainedFragment.mPrescripImgs.size() > 0) {
+                urls = new ArrayList<>(mRetainedFragment.mPrescripImgs.size());
+                String remoteDir = CommonUtils.getCustPrescripDir(CustomerUser.getInstance().getCustomer().getPrivate_id());
+                for (File file :
+                        mRetainedFragment.mPrescripImgs) {
+                    String url = uploadFileSync(file, remoteDir);
+                    if(url==null) {
+                        return ErrorCodes.FILE_UPLOAD_FAILED;
+                    } else {
+                        urls.add(url);
+                    }
+                }
+            }
+            // Create order now
+            mRetainedFragment.mCustOrder = CustomerServices.getInstance().createCustomerOrder(
+                    mRetainedFragment.mCustOrder.getMerchantId(),
+                    mRetainedFragment.mCustOrder.getAddressId(),
+                    mRetainedFragment.mCustOrder.getCustComments(),
+                    urls);
+
+        } catch (BackendlessException e) {
+            LogMy.e(TAG,"createCustomerOrder failed: "+e.toString());
+            return AppCommonUtil.getLocalErrorCode(e);
+        }
+        return ErrorCodes.NO_ERROR;
     }
 
     private int saveCustAddress(Boolean setAsDefault) {
@@ -493,32 +538,21 @@ public class MyBackgroundProcessor <T> extends BackgroundProcessor<T> {
         }
     }
 
-    /*
-    private int downloadImageFile(MessageFileDownload msg) {
-        String filepath = msg.fileUrl;
-        String fileURL = CommonConstants.BACKEND_FILE_BASE_URL + filepath;
-        //String filename = filepath.substring(filepath.lastIndexOf('/')+1);
-        String filename = Uri.parse(fileURL).getLastPathSegment();
-        LogMy.d(TAG,"Fetching "+fileURL+", Filename: "+filename);
-
-        FileOutputStream fos;
+    private String uploadFileSync(File imgFile, String remoteDir) {
+        // upload file
         try {
-            byte[] bitmapBytes = new FileFetchr().getUrlBytes(fileURL, mRetainedFragment.mUserToken);
-            Bitmap bmp = BitmapFactory.decodeByteArray(bitmapBytes, 0, bitmapBytes.length);
+            for( String key : HeadersManager.getInstance().getHeaders().keySet() ) {
+                LogMy.d(TAG, "In uploadFileSync: " + key + "," + HeadersManager.getInstance().getHeaders().get(key));
+            }
 
-            fos = msg.ctxt.openFileOutput(filename, Context.MODE_PRIVATE);
-            bmp.compress(Bitmap.CompressFormat.WEBP, 100, fos);
-            fos.close();
+            BackendlessFile file = Backendless.Files.upload(imgFile, remoteDir, true);
+            LogMy.d(TAG, "File uploaded successfully at :" + file.getFileURL());
+            return file.getFileURL();
 
-        } catch(FileNotFoundException fnf) {
-            LogMy.d(TAG, "File not found: "+fnf.toString());
-            return ErrorCodes.FILE_NOT_FOUND;
-        } catch(IOException ioe) {
-            LogMy.e(TAG, "Failed to fetch file: "+ioe.toString());
-            return ErrorCodes.GENERAL_ERROR;
+        } catch(Exception e) {
+            LogMy.e(TAG, "File upload failed: " + e.toString());
         }
-        return ErrorCodes.NO_ERROR;
-    }*/
-
+        return null;
+    }
 
 }

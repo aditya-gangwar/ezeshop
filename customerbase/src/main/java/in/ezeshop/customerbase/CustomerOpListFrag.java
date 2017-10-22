@@ -51,7 +51,7 @@ public class CustomerOpListFrag extends BaseFragment {
             mCallback = (CustomerOpListFragIf) getActivity();
             mRetainedFragment = mCallback.getRetainedFragment();
 
-            mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.DATE_LOCALE);
+            mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.MY_LOCALE);
 
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString()

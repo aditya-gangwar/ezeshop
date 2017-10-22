@@ -30,7 +30,7 @@ public class TxnDetailsDialog extends BaseDialog {
     private static final String ARG_POSITION = "argPosition";
 
     private TxnDetailsDialogIf mCallback;
-    private SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.DATE_LOCALE);
+    private SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.MY_LOCALE);
 
     public interface TxnDetailsDialogIf {
         MyRetainedFragment getRetainedFragment();

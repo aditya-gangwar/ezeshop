@@ -21,15 +21,15 @@ import java.util.concurrent.TimeUnit;
  */
 public class CommonUtils {
 
-    private static final SimpleDateFormat mSdfOnlyDateFilename = new SimpleDateFormat(CommonConstants.DATE_FORMAT_ONLY_DATE_FILENAME, CommonConstants.DATE_LOCALE);
-    private static final SimpleDateFormat mSdfDateMMYYYY = new SimpleDateFormat(CommonConstants.DATE_FORMAT_MMYYYY, CommonConstants.DATE_LOCALE);
+    private static final SimpleDateFormat mSdfOnlyDateFilename = new SimpleDateFormat(CommonConstants.DATE_FORMAT_ONLY_DATE_FILENAME, CommonConstants.MY_LOCALE);
+    private static final SimpleDateFormat mSdfDateMMYYYY = new SimpleDateFormat(CommonConstants.DATE_FORMAT_MMYYYY, CommonConstants.MY_LOCALE);
 
 
-    public static long getMyEpochSecs() {
+    public static Long getMyEpochSecs() {
         long timeSecs = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
         return (timeSecs - CommonConstants.START_EPOCH_SECS);
     }
-    public static long getMyEpochMilliSecs() {
+    public static Long getMyEpochMilliSecs() {
         return (System.currentTimeMillis() - CommonConstants.START_EPOCH_MILLI_SECS);
     }
 
@@ -228,21 +228,16 @@ public class CommonUtils {
         return retValue;
     }
 
-    public static int getCustomerIdType(String id) {
+    /*public static int getCustomerIdType(String id) {
         switch (id.length()) {
             case CommonConstants.MOBILE_NUM_LENGTH:
                 return CommonConstants.ID_TYPE_MOBILE;
-            /*case CommonConstants.CUSTOMER_CARDID_LEN:
-                return CommonConstants.ID_TYPE_CARD;*/
             case CommonConstants.CUSTOMER_INTERNAL_ID_LEN:
                 return CommonConstants.ID_TYPE_AUTO;
             default:
-                /*if(id.startsWith(CommonConstants.MEMBER_CARD_ID_PREFIX)) {
-                    return CommonConstants.ID_TYPE_CARD;
-                }*/
                 throw new BackendlessException(String.valueOf(ErrorCodes.WRONG_INPUT_DATA), "Invalid customer ID: "+id);
         }
-    }
+    }*/
 
     public static int roundUpTo(int i, int v){
         return Math.round(i/v) * v;

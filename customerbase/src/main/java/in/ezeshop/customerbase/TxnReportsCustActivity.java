@@ -59,7 +59,7 @@ public class TxnReportsCustActivity extends BaseActivity implements
     private static final String DIALOG_MERCHANT_DETAILS = "dialogMerchantDetails";
 
     // All required date formatters
-    private SimpleDateFormat mSdfOnlyDateDisplay = new SimpleDateFormat(CommonConstants.DATE_FORMAT_ONLY_DATE_DISPLAY, CommonConstants.DATE_LOCALE);
+    private SimpleDateFormat mSdfOnlyDateDisplay = new SimpleDateFormat(CommonConstants.DATE_FORMAT_ONLY_DATE_DISPLAY, CommonConstants.MY_LOCALE);
 
     FragmentManager mFragMgr;
     MyRetainedFragment mWorkFragment;

@@ -387,9 +387,12 @@ public class TxnReportsHelper2 {
         whereClause.append(" AND archived = false");
 
         // customer and merchant id
-        if(mCustomerId.length() == CommonConstants.MOBILE_NUM_LENGTH) {
+        /*if(mCustomerId.length() == CommonConstants.MOBILE_NUM_LENGTH) {
             whereClause.append(" AND customer_id = '").append(mCustomerId).append("'");
         } else if(mCustomerId.length() == CommonConstants.CUSTOMER_INTERNAL_ID_LEN) {
+            whereClause.append(" AND cust_private_id = '").append(mCustomerId).append("'");
+        }*/
+        if(mCustomerId!=null && !mCustomerId.isEmpty()) {
             whereClause.append(" AND cust_private_id = '").append(mCustomerId).append("'");
         }
         if(mMerchantId!=null && !mMerchantId.isEmpty()) {

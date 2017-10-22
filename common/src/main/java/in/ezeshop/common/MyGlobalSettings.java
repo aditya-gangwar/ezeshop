@@ -276,7 +276,7 @@ public class MyGlobalSettings
                             if(setting.getValue_datatype()!=GlobalSettingConstants.DATATYPE_DATE) {
                                 gSetting.value = value.toString();
                             } else {
-                                SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.DATE_LOCALE);
+                                SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.MY_LOCALE);
                                 mSdfDateWithTime.setTimeZone(TimeZone.getTimeZone(CommonConstants.TIMEZONE));
                                 gSetting.value = mSdfDateWithTime.format(setting.getValue_date());
                             }

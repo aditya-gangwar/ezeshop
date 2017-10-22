@@ -12,7 +12,6 @@ import android.widget.EditText;
 import java.text.SimpleDateFormat;
 
 import in.ezeshop.appbase.BaseDialog;
-import in.ezeshop.common.CommonUtils;
 import in.ezeshop.common.DateUtil;
 import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.DbConstants;
@@ -27,8 +26,8 @@ import in.ezeshop.customerbase.entities.CustomerUser;
 public class CustDetailsDialogCustApp extends BaseDialog {
     private static final String TAG = "CustApp-CustomerDetailsDialog";
 
-    private SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.DATE_LOCALE);
-    private SimpleDateFormat mSdfDateOnly = new SimpleDateFormat(CommonConstants.DATE_FORMAT_ONLY_DATE_DISPLAY, CommonConstants.DATE_LOCALE);
+    private SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.MY_LOCALE);
+    private SimpleDateFormat mSdfDateOnly = new SimpleDateFormat(CommonConstants.DATE_FORMAT_ONLY_DATE_DISPLAY, CommonConstants.MY_LOCALE);
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

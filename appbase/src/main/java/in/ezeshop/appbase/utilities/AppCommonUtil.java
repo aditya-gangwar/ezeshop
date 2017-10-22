@@ -612,7 +612,7 @@ public class AppCommonUtil {
         // text shadow
         paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
 
-        SimpleDateFormat sdf = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.DATE_LOCALE);
+        SimpleDateFormat sdf = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.MY_LOCALE);
         String gText = sdf.format(new Date());
         // draw text to the Canvas bottom centre
         Rect bounds = new Rect();
@@ -970,7 +970,7 @@ public class AppCommonUtil {
     public static String getMchntRemovalDate(Date removeReqDate) {
         DateUtil reqTime = new DateUtil(removeReqDate);
         reqTime.addDays(MyGlobalSettings.getMchntExpiryDays());
-        SimpleDateFormat sdf = new SimpleDateFormat(CommonConstants.DATE_FORMAT_ONLY_DATE_DISPLAY, CommonConstants.DATE_LOCALE);
+        SimpleDateFormat sdf = new SimpleDateFormat(CommonConstants.DATE_FORMAT_ONLY_DATE_DISPLAY, CommonConstants.MY_LOCALE);
         //return "Removal on "+sdf.format(reqTime.getTime());
         return sdf.format(reqTime.getTime());
     }

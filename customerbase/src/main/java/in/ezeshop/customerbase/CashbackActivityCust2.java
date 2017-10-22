@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.StringTokenizer;
 
 import in.ezeshop.appbase.GenericListFragment;
 import in.ezeshop.appbase.OtpPinInputDialog;
@@ -78,6 +79,8 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
     private static final String DIALOG_PIN_RESET = "dialogPinReset";
     private static final String DIALOG_PIN_CHANGE = "dialogPinChange";
     private static final String DIALOG_CUSTOMER_DETAILS = "dialogCustomerDetails";
+    private static final String DIALOG_ORDER_CONFIRM = "dialogOrderConfirm";
+
     private static final String CUSTOMER_OPS_LIST_FRAG = "CustomerOpsListFrag";
     private static final String DIALOG_NOTIFY_CB_FETCH_ERROR = "dialogCbFetchError";
     private static final String DIALOG_SESSION_TIMEOUT = "dialogSessionTimeout";
@@ -125,6 +128,10 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
             mRetainedFragment = new MyRetainedFragment();
             // Tell it who it is working with.
             mFragMgr.beginTransaction().add(mRetainedFragment, RETAINED_FRAGMENT).commit();
+        }
+
+        if(mRetainedFragment.mCashbacks!=null) {
+            startCashbackListFrag();
         }
 
         // store passed logged in user token
@@ -493,6 +500,24 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
                     case MyRetainedFragment.REQUEST_MSG_DEV_REG_CHK:
                         // do nothing
                         break;
+                    case MyRetainedFragment.REQUEST_CREATE_ORDER:
+                        AppCommonUtil.cancelProgressDialog(true);
+                        if (errorCode == ErrorCodes.NO_ERROR) {
+                            // Reset to base fragment
+                            mRetainedFragment.reset();
+                            goToHomeFrag();
+
+                            // show success notification
+                            String msg = String.format(CommonConstants.MY_LOCALE, AppConstants.orderSuccessMsg,
+                                    mRetainedFragment.mCustOrder.getMerchantNIDB().getName(),
+                                    mRetainedFragment.mCustOrder.getId());
+                            DialogFragmentWrapper.createNotification(AppConstants.defaultSuccessTitle, msg, false, false)
+                                    .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
+                        } else {
+                            DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
+                                    .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
+                        }
+                        break;
                     default:
                         AppCommonUtil.cancelProgressDialog(true);
                         LogMy.wtf(TAG,"Unexpceted background job opcode: "+opData.requestCode);
@@ -519,6 +544,17 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), false, true)
                     .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
         }
+    }
+
+    private void goToHomeFrag() {
+        LogMy.d(TAG, "In goToHomeFrag");
+
+        // Pop all fragments uptil home fragment
+        if (mMchntListFragment!=null && !mMchntListFragment.isVisible()) {
+            mFragMgr.popBackStackImmediate(CASHBACK_LIST_FRAGMENT, 0);
+        }
+        updateTbForCustomer();
+        setDrawerState(true);
     }
 
     private void onFetchCbResponse(int errorCode) {
@@ -835,8 +871,14 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
      * Create Order Fragment Interface implementation
      */
     @Override
-    public void onOrderCreate() {
+    public void onOrderCreate(String mchntName, int freeDlvryMinAmt) {
+        // ask for confirmation
+        String msg = String.format(CommonConstants.MY_LOCALE, AppConstants.orderConfirmMsg,
+                mchntName, mRetainedFragment.mPrescripImgs.size(), mRetainedFragment.mCustOrder.getCustComments(),
+                MyGlobalSettings.getDeliveryCharges(),freeDlvryMinAmt);
 
+        DialogFragmentWrapper.createConfirmationDialog(AppConstants.orderConfirmTitle, msg, false, false)
+                .show(mFragMgr, DIALOG_ORDER_CONFIRM);
     }
 
     @Override
@@ -867,7 +909,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
         Fragment currentFragment = getFragmentManager().findFragmentByTag(CUSTOMER_CHOOSE_MERCHANT_FRAG);
         if(currentFragment != null && currentFragment.isVisible()) {
             // update selected address id
-            mRetainedFragment.mSelectedMchntId = mchntId;
+            mRetainedFragment.mCustOrder.setMerchantId(mchntId);
             // remove fragment
             getFragmentManager().popBackStackImmediate();
             // 'create order' fragment should already show updated address on resume
@@ -884,7 +926,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
         Fragment currentFragment = getFragmentManager().findFragmentByTag(CUSTOMER_CHOOSE_ADDRESS_FRAG);
         if(currentFragment != null && currentFragment.isVisible()) {
             // update selected address id
-            mRetainedFragment.mSelectedAddrId = addrId;
+            mRetainedFragment.mCustOrder.setAddressId(addrId);
             // remove fragment
             getFragmentManager().popBackStackImmediate();
             // 'create order' fragment should already show updated address on resume
@@ -944,8 +986,8 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
         if(currentFragment != null && currentFragment.isVisible()) {
             // update selected address id
             Intent intent = new Intent();
-            intent.putExtra(GenericListFragment.EXTRA_SELECTION,index);
-            intent.putExtra(GenericListFragment.EXTRA_SELECTION_INDEX,text);
+            intent.putExtra(GenericListFragment.EXTRA_SELECTION,text);
+            intent.putExtra(GenericListFragment.EXTRA_SELECTION_INDEX,index);
 
             currentFragment.getTargetFragment().onActivityResult(currentFragment.getTargetRequestCode(),
                     Activity.RESULT_OK, intent);
@@ -1015,6 +1057,12 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
         } else if(tag.equals(DIALOG_SESSION_TIMEOUT)) {
             mExitAfterLogout = false;
             logoutCustomer();
+
+        } else if(tag.equals(DIALOG_ORDER_CONFIRM)) {
+            // order confirmed
+            AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
+            mRetainedFragment.addBackgroundJob(MyRetainedFragment.REQUEST_CREATE_ORDER, this, null,
+                    null, null, null, null, null);
         }
     }
 

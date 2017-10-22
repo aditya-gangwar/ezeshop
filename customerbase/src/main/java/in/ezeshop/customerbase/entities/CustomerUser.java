@@ -290,6 +290,10 @@ public class CustomerUser {
 
     public int saveCustAddress(CustAddress addr, Boolean setAsDefault) {
         LogMy.d(TAG, "In saveCustAddress: "+addr.getAreaNIDB().getValidated());
+        if(mPseudoLoggedIn) {
+            return ErrorCodes.OPERATION_NOT_ALLOWED;
+        }
+
         try {
             mAddresses = CustomerServices.getInstance().saveCustAddress(addr, setAsDefault);
             LogMy.d(TAG,"saveCustAddress success: "+mAddresses.size());

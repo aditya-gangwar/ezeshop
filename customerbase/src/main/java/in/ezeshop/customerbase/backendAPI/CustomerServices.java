@@ -9,10 +9,13 @@ package in.ezeshop.customerbase.backendAPI;
 import com.backendless.Backendless;
 
 
+import java.util.List;
+
 import in.ezeshop.appbase.constants.AppConstants;
 import in.ezeshop.common.database.Cashback;
 import in.ezeshop.common.database.CustAddress;
 import in.ezeshop.common.database.CustomerOps;
+import in.ezeshop.common.database.CustomerOrder;
 import in.ezeshop.common.database.Merchants;
 import in.ezeshop.common.database.Transaction;
 
@@ -38,6 +41,12 @@ import in.ezeshop.common.database.Transaction;
         Backendless.setUrl( AppConstants.BACKENDLESS_HOST );
         // if you invoke this sample inside of android application, you should use overloaded "initApp" with "context" argument
         Backendless.initApp( AppConstants.BACKENDLESS_APP_ID, AppConstants.ANDROID_SECRET_KEY, CustomerServices.APP_VERSION );
+    }
+
+    public CustomerOrder createCustomerOrder(String mchntId, String addressId, String comments, java.util.List<String> prescripUrls)
+    {
+        Object[] args = new Object[]{mchntId,addressId,comments,prescripUrls};
+        return Backendless.CustomService.invoke( SERVICE_NAME, SERVICE_VERSION_NAME, "createCustomerOrder", args, CustomerOrder.class );
     }
 
     public java.util.List<Merchants> mchntsByDeliveryArea(String areadId)

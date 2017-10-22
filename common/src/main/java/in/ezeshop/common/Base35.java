@@ -17,14 +17,13 @@ public class Base35 {
         while (i > 0) {
             i = fromBase10(i, sb);
         }
-        //String base61 =  sb.reverse().toString();
-        sb.reverse();
 
         // add 0 as filler
         for (int toAppend = (idLen-sb.length()); toAppend>0; toAppend--) {
             sb.append('0');
         }
-        return sb.toString();
+
+        return sb.reverse().toString();
     }
 
     private static long fromBase10(long i, final StringBuilder sb) {

@@ -56,7 +56,7 @@ public class CommonConstants {
      */
     public static final String TIMEZONE = "Asia/Kolkata";
 
-    public static final Locale DATE_LOCALE = Locale.ENGLISH;
+    public static final Locale MY_LOCALE = Locale.ENGLISH;
     // used where only date (without time) is to be shown
     public static final String DATE_FORMAT_ONLY_DATE_DISPLAY = "dd MMM, yy";
     // used to specify 'date with no time' to the backend, like in where clause
@@ -87,7 +87,7 @@ public class CommonConstants {
     /*
      * Size, Length and Limits
      */
-    public static final int CUSTOMER_INTERNAL_ID_LEN = 6;
+    //public static final int CUSTOMER_INTERNAL_ID_LEN = 6;
     public static final int INTERNAL_USER_ID_LEN = 7;
     public static final int MERCHANT_ID_LEN = 8;
     public static final int MOBILE_NUM_LENGTH = 10;
@@ -95,7 +95,6 @@ public class CommonConstants {
     //public static final int CUSTOMER_CARDID_LEN = 11;
     // DOB in format 'DDMMYYYY'
     public static final int DOB_LEN = 8;
-    public static final int TRANSACTION_ID_LEN = 13;
     public static final int PIN_LEN = 4;
     public static final int OTP_LEN = 5;
     public static final int PINCODE_LEN = 6;

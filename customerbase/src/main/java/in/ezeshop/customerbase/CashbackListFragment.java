@@ -4,10 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -30,7 +28,6 @@ import java.util.List;
 import in.ezeshop.appbase.BaseFragment;
 import in.ezeshop.appbase.constants.AppConstants;
 import in.ezeshop.appbase.utilities.OnSingleClickListener;
-import in.ezeshop.common.MyGlobalSettings;
 import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.DbConstants;
 import in.ezeshop.common.constants.ErrorCodes;
@@ -82,7 +79,7 @@ public class CashbackListFragment extends BaseFragment {
             mCallback = (CashbackListFragmentIf) getActivity();
             mRetainedFragment = mCallback.getRetainedFragment();
 
-            mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.DATE_LOCALE);
+            mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.MY_LOCALE);
 
             // As the data is in Map - which cant be sorted
             // so create a local list from Map in retained fragment

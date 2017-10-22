@@ -158,7 +158,7 @@ public final class ValidationHelper{
         }
 
         return ErrorCodes.NO_ERROR;
-    }*/
+    }
 
     public static int validateCustInternalId(String value) {
         if (value==null || value.isEmpty() ) {
@@ -168,7 +168,7 @@ public final class ValidationHelper{
         } else {
             return ErrorCodes.NO_ERROR;
         }
-    }
+    }*/
 
     public static int validateInternalUserId(String value) {
         if (value==null || value.isEmpty() ) {

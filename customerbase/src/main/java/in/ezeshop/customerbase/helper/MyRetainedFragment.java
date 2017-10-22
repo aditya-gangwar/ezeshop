@@ -14,6 +14,7 @@ import in.ezeshop.appbase.entities.MyCashback;
 import in.ezeshop.appbase.utilities.TxnReportsHelper2;
 import in.ezeshop.common.database.CustAddress;
 import in.ezeshop.common.database.CustomerOps;
+import in.ezeshop.common.database.CustomerOrder;
 import in.ezeshop.common.database.Merchants;
 import in.ezeshop.common.database.Transaction;
 import in.ezeshop.customerbase.entities.CustomerStats;
@@ -45,6 +46,7 @@ public class MyRetainedFragment extends RetainedFragment {
     public static final int REQUEST_SAVE_CUST_ADDR = 13;
     public static final int REQUEST_FETCH_AREAS = 14;
     public static final int REQUEST_FETCH_MCHNT_BY_AREA = 15;
+    public static final int REQUEST_CREATE_ORDER = 16;
 
     // Threads taken care by this fragment
     private MyBackgroundProcessor<String> mBackgroundProcessor;
@@ -52,11 +54,9 @@ public class MyRetainedFragment extends RetainedFragment {
     public CustomerUser mCustomerUser;
     public String mUserToken;
 
-    // Cashback Data
-    //public List<MyCashback> mLastFetchCashbacks;
+    // In-memory stores
     // MerchantID -> MyCashback object - collective - as fetched from DB
     public Map<String, MyCashback> mCashbacks;
-    //public Date mCbsUpdateTime;
     // Area ID -> Merchant object (delivering in this area)
     public Map<String,List<Merchants>> mAreaToMerchants;
 
@@ -68,7 +68,6 @@ public class MyRetainedFragment extends RetainedFragment {
     public String mPinMobileChange;
     public String mNewMobileNum;
     public String mOtpMobileChange;
-    //public String mCardMobileChange;
 
     // members used by 'Txn Reports Activity' to store its state, and its fragments
     public List<String> mMissingFiles;
@@ -77,15 +76,16 @@ public class MyRetainedFragment extends RetainedFragment {
     public List<Transaction> mLastFetchTransactions;
 
     // params for enabling account
-    //public String mAccEnableCardNum;
     public String mAccEnablePin;
     public String mAccEnableOtp;
 
     // customer order/address related parameters
     public List<File> mPrescripImgs;
-    public String mSelectedAddrId;
+    public CustomerOrder mCustOrder;
+    //public String mSelectedAddrId;
+    //public String mSelectedMchntId;
+    //public String mOrderComments;
     public CustAddress mCustAddrToSave;
-    public String mSelectedMchntId;
 
     public void reset() {
         LogMy.d(TAG,"In reset");
@@ -94,9 +94,11 @@ public class MyRetainedFragment extends RetainedFragment {
         mOtpMobileChange = null;
         //mLastFetchCashbacks = null;
         mPrescripImgs = null;
-        mSelectedAddrId = null;
+        //mSelectedAddrId = null;
         mCustAddrToSave= null;
-        mSelectedMchntId = null;
+        //mSelectedMchntId = null;
+        //mOrderComments=null;
+        mCustOrder = null;
     }
 
     /*

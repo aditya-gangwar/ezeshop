@@ -13,7 +13,7 @@ import java.util.TimeZone;
 public class MyCustomer {
     private static final String TAG = "MyCustomer";
 
-    SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.DATE_LOCALE);
+    SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.MY_LOCALE);
 
     /*
      * Index of various parameters in CustomerDetails CSV records (rcvd as part of cashback object)

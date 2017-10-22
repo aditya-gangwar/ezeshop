@@ -130,7 +130,7 @@ public class SplashActivity extends AppCompatActivity
                     startLoginActivity();
                 } else {
                     // Add time at the end of error message
-                    SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.DATE_LOCALE);
+                    SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.MY_LOCALE);
                     String errorStr = AppCommonUtil.getErrorDesc(ErrorCodes.SERVICE_GLOBAL_DISABLED)
                             + mSdfDateWithTime.format(disabledUntil);
                     // Show error notification dialog

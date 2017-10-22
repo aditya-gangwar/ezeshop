@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +38,7 @@ public class MchntDetailsDialogCustApp extends BaseDialog {
     //private static final String ARG_CB_MCHNTID = "mchntId";
 
     private MerchantDetailsDialogIf mCallback;
-    private SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.DATE_LOCALE);
+    private SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.MY_LOCALE);
 
     public interface MerchantDetailsDialogIf {
         MyRetainedFragment getRetainedFragment();

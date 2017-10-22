@@ -53,6 +53,7 @@ public class UpdateAddressFragment extends BaseFragment {
 
     private UpdateAddressFragment.UpdateAddressFragmentIf mCallback;
     private MyRetainedFragment mRetainedFragment;
+    private String mSelectedArea;
 
     // Special member variable to identify backstack cases
     private Integer mBackstackFlag;
@@ -225,6 +226,7 @@ public class UpdateAddressFragment extends BaseFragment {
                         mCallback.startBgJob(MyRetainedFragment.REQUEST_FETCH_AREAS, getTag(),
                                 city,null,null,null,null);
                     } else {
+                        mSelectedArea = null;
                         mCallback.askSingleChoice(MyAreas.getAreaNameList(city), "Select Area", UpdateAddressFragment.this, REQUEST_AREA);
                     }
                     /*DialogFragmentWrapper dialog = DialogFragmentWrapper.createSingleChoiceDialog(getString(R.string.area_hint),
@@ -407,7 +409,10 @@ public class UpdateAddressFragment extends BaseFragment {
                 break;
             case REQUEST_AREA:
                 String areaStr = data.getStringExtra(GenericListFragment.EXTRA_SELECTION);
-                mInputArea.setText(areaStr);
+                //mInputArea.setText(areaStr);
+                // Cant set here directly - as mInputArea will be null currently
+                LogMy.d(TAG,"Setting mSelectedArea: "+areaStr);
+                mSelectedArea = areaStr;
                 //Areas area = MyAreas.getAreaObject(mInputCity.getText().toString(), areaStr);
                 //mInputPincode.setText(area.getPincode()==null?"":area.getPincode());
                 break;
@@ -460,10 +465,18 @@ public class UpdateAddressFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        mCallback.setToolbarForFrag(-1,"Update Address",null);
 
         try {
             //initUi();
+            if(mEditAddressId!=null) {
+                mCallback.setToolbarForFrag(-1, "Edit Address", null);
+            } else {
+                mCallback.setToolbarForFrag(-1, "Add New Address", null);
+            }
+            // As 'mSelectedArea' may get set outside this fragment - by askSingleChoice
+            if(mSelectedArea!=null) {
+                mInputArea.setText(mSelectedArea);
+            }
         } catch (Exception e) {
             LogMy.e(TAG, "Exception in CustomerTransactionFragment:onResume", e);
             DialogFragmentWrapper dialog = DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), true, true);

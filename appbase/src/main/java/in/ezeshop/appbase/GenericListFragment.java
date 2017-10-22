@@ -268,6 +268,8 @@ public class GenericListFragment extends BaseFragment
             mItems = items;
 
             mListener = new OnSingleClickListener() {
+                final List<String> data = mItems;
+
                 @Override
                 public void onSingleClick(View v) {
                     //if(!mCallback.getRetainedFragment().getResumeOk())
@@ -277,7 +279,7 @@ public class GenericListFragment extends BaseFragment
                     int pos = mRecyclerView.getChildAdapterPosition(v);
 
                     if (pos >= 0 && pos < getItemCount()) {
-                        mCallback.onListItemSelected(pos, mItems.get(pos));
+                        mCallback.onListItemSelected(pos, data.get(pos));
                     } else {
                         LogMy.wtf(TAG,"Invalid position in onClickListener of Generic list item: "+pos);
                     }

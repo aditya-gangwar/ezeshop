@@ -330,7 +330,7 @@
                             style="@style/MyEdittext_Small"
                             android:layout_marginTop="@dimen/large_space"
                             android:background="@drawable/round_rect_border"
-                            android:hint="Additional notes (optional)"
+                            android:hint="Comments"
                             android:maxLength="250"
                             android:visibility="visible" />
 

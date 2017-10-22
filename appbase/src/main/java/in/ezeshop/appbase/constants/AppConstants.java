@@ -176,6 +176,23 @@ public class AppConstants {
     public static final String custMobileChangeSuccessMsg = "Mobile Number changed successfully.\n\nPlease login again with new mobile number.";
     public static final String enableAccSuccessMsg = "Account is Active now. Please login to proceed.";
 
+    public static final String orderConfirmTitle = "Order Confirmation";
+    public static final String orderConfirmMsg = "Are you sure to send order to '%s' ?\n" +
+            "You will receive confirmation call from the merchant shortly.\n" +
+            "\n" +
+            "Prescriptions: %d added.\n" +
+            "Comments: %s\n" +
+            "Delivery charges: \u20B9 %d (Free if Bill > \u20B9 %d).\n" +
+            "Payment : Cash on delivery\n";
+
+    public static final String orderSuccessMsg = "Your order is sent to '%s' successfully.\n" +
+            "Your Order ID is '%s'\n" +
+            "\n" +
+            "Merchant will call you shortly for confirming order details.\n" +
+            "\n" +
+            "Payment is to be done in cash on delivery.\n";
+
+
     //public static final String noDebitWoCardMsg = "Debit not allowed without Customer Card.\n\nScan Card now ?\n";
 
     // Progress dialog messages

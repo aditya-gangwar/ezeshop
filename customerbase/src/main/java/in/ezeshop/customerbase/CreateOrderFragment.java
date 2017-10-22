@@ -36,6 +36,7 @@ import in.ezeshop.common.CommonUtils;
 import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.ErrorCodes;
 import in.ezeshop.common.database.CustAddress;
+import in.ezeshop.common.database.CustomerOrder;
 import in.ezeshop.common.database.Merchants;
 import in.ezeshop.customerbase.entities.CustomerUser;
 import in.ezeshop.customerbase.helper.MyRetainedFragment;
@@ -64,6 +65,8 @@ public class CreateOrderFragment extends BaseFragment implements
 
     // Part of instance state: to be restored in event of fragment recreation
     private String mSelectedAreaId;
+    private String mSelectedMchntName;
+    private int mFreeDlvryMinAmt;
 
     // Container Activity must implement this interface
     public interface CreateOrderFragmentIf {
@@ -71,7 +74,7 @@ public class CreateOrderFragment extends BaseFragment implements
         void setToolbarForFrag(int iconResId, String title, String subTitle);
         void onChooseAddress();
         void onChooseMerchant(String areaId);
-        void onOrderCreate();
+        void onOrderCreate(String mchntName, int freeDlvryMinAmt);
     }
 
     @Override
@@ -117,6 +120,10 @@ public class CreateOrderFragment extends BaseFragment implements
          * but not for 'backstack' scenarios
          */
         try {
+            if(mRetainedFragment.mCustOrder==null) {
+                mRetainedFragment.mCustOrder = new CustomerOrder();
+            }
+
             if(savedInstanceState==null) {
                 // Either fragment 'create' or 'backstack' case
                 if (mBackstackFlag==null) {
@@ -124,7 +131,7 @@ public class CreateOrderFragment extends BaseFragment implements
                     //mPrescripsDisabled = false;
                     mBackstackFlag = 123; // dummy memory allocation - to check for backstack scenarios later
                     // On first create set 'default address' as selected address
-                    mRetainedFragment.mSelectedAddrId = CustomerUser.getInstance().getCustomer().getDefaultAddressId();
+                    mRetainedFragment.mCustOrder.setAddressId(CustomerUser.getInstance().getCustomer().getDefaultAddressId());;
                 } else {
                     // backstack case - no need to initialize member variables
                     // as the same are automatically stored and restored
@@ -133,6 +140,8 @@ public class CreateOrderFragment extends BaseFragment implements
             } else {
                 // fragment recreate case - restore member variables
                 mSelectedAreaId = savedInstanceState.getString("mSelectedAreaId");
+                mSelectedMchntName = savedInstanceState.getString("mSelectedMchntName");
+                mFreeDlvryMinAmt = savedInstanceState.getInt("mFreeDlvryMinAmt");
             }
 
             //setup all listeners
@@ -158,13 +167,14 @@ public class CreateOrderFragment extends BaseFragment implements
     private void refreshMerchant() {
         LogMy.d(TAG,"In refreshMerchant");
 
+        String selMchntId = mRetainedFragment.mCustOrder.getMerchantId();
         Merchants selMchnt = null;
-        if(mRetainedFragment.mSelectedMchntId!=null && !mRetainedFragment.mSelectedMchntId.isEmpty() &&
+        if(selMchntId!=null && !selMchntId.isEmpty() &&
                 mSelectedAreaId!=null && !mSelectedAreaId.isEmpty()) {
             // select merchant object from the list
             List<Merchants> mchnts = mRetainedFragment.mAreaToMerchants.get(mSelectedAreaId);
             for (Merchants m : mchnts) {
-                if(m.getAuto_id().equals(mRetainedFragment.mSelectedMchntId)) {
+                if(m.getAuto_id().equals(selMchntId)) {
                     selMchnt = m;
                 }
             }
@@ -172,9 +182,13 @@ public class CreateOrderFragment extends BaseFragment implements
         if(selMchnt!=null) {
             mBtnChangeMchnt.setText("CHANGE");
             mInputMchnt.setText(CommonUtils.getMchntAddressStrWithName(selMchnt));
+            mSelectedMchntName = selMchnt.getName();
+            mFreeDlvryMinAmt = selMchnt.getFreeDlvrMinAmt();
         } else {
             mBtnChangeMchnt.setText("SELECT");
             mInputMchnt.setText("");
+            mSelectedMchntName = null;
+            mFreeDlvryMinAmt = -1;
         }
     }
 
@@ -183,11 +197,12 @@ public class CreateOrderFragment extends BaseFragment implements
 
         // First time - set to default address
         List<CustAddress> allAddress = CustomerUser.getInstance().getAllAddress();
-        CustAddress selAddr = null;
 
-        if( !(mRetainedFragment.mSelectedAddrId==null || allAddress==null || allAddress.isEmpty() || mRetainedFragment.mSelectedAddrId.isEmpty()) ) {
+        String selAddress = mRetainedFragment.mCustOrder.getAddressId();
+        CustAddress selAddr = null;
+        if( !(selAddress==null || allAddress==null || allAddress.isEmpty() || selAddress.isEmpty()) ) {
             for (CustAddress addr : allAddress) {
-                if(addr.getId().equals(mRetainedFragment.mSelectedAddrId)) {
+                if(addr.getId().equals(selAddress)) {
                     selAddr = addr;
                 }
             }
@@ -318,18 +333,60 @@ public class CreateOrderFragment extends BaseFragment implements
                 mCallback.onChooseAddress();
 
             } else if (i == mBtnChangeMchnt.getId()) {
-                // show 'choose merchant' fragment
-                mCallback.onChooseMerchant(mSelectedAreaId);
+                // delivery address should be set
+                if(mInputAddress.getText().toString().isEmpty() ||
+                        mRetainedFragment.mCustOrder.getAddressId()==null) {
+                    AppCommonUtil.toast(getActivity(), "Set Delivery Address");
+                } else {
+                    // show 'choose merchant' fragment
+                    mCallback.onChooseMerchant(mSelectedAreaId);
+                }
 
             } else if (i == mBtnConfirm.getId()) {
                 // process order
-
+                if(validate()) {
+                    mRetainedFragment.mCustOrder.setCustComments(mInputComments.getText().toString());
+                    mCallback.onOrderCreate(mSelectedMchntName, mFreeDlvryMinAmt);
+                }
             }
         } catch (Exception e) {
             LogMy.e(TAG, "Exception in handleBtnClick", e);
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), true, true)
                     .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
         }
+    }
+
+    private boolean validate() {
+        boolean allok = true;
+
+        // either of prescription or comments are required
+        if(mInputComments.getText().toString().isEmpty()) {
+            if(mRetainedFragment.mPrescripImgs.size()<1) {
+                allok = false;
+                DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle,
+                        "Add either a medicine Prescription or enter item names in 'Comments' section", true, true)
+                        .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
+            }
+        }
+
+        // both delivery address and merchant is mandatory
+        if(mInputAddress.getText().toString().isEmpty() ||
+                mRetainedFragment.mCustOrder.getAddressId()==null) {
+            allok = false;
+            mInputAddress.setError("Delivery address missing");
+            AppCommonUtil.toast(getActivity(), "Delivery address missing");
+        }
+
+        if(mInputMchnt.getText().toString().isEmpty() ||
+                mRetainedFragment.mCustOrder.getMerchantId()==null) {
+            mInputMchnt.setError("Delivery address missing");
+            if(allok) {
+                allok = false;
+                AppCommonUtil.toast(getActivity(), "Select Merchant for order");
+            }
+        }
+
+        return  allok;
     }
 
     private void handleImgUploadReq() {
@@ -394,6 +451,7 @@ public class CreateOrderFragment extends BaseFragment implements
 
             @Override
             public void onImagesPicked(List<File> imageFiles, EasyImage.ImageSource source, int type) {
+                AppCommonUtil.showProgressDialog(getActivity(),AppConstants.progressDefault);
                 // Append picked image(s) to the store
                 // Do check for maximum prescriptions per order
                 int ignored = 0;
@@ -401,6 +459,7 @@ public class CreateOrderFragment extends BaseFragment implements
                 for (File img : imageFiles) {
                     if(!img.exists()) {
                         LogMy.wtf(TAG,"Picked image file does not exist");
+                        AppCommonUtil.cancelProgressDialog(true);
                         AppCommonUtil.toast(getActivity(),"Image upload failed");
                         return;
                     }
@@ -449,6 +508,8 @@ public class CreateOrderFragment extends BaseFragment implements
                 if(newImgs>0) {
                     refreshPrescripImgs();
                 }
+
+                AppCommonUtil.cancelProgressDialog(true);
                 if(ignored>0) {
                     String str = ignored+" images ignored, as upto "+ CommonConstants.MAX_PRESCRIPS_PER_ORDER +" prescriptions are allowed per order.";
                     DialogFragmentWrapper.createNotification(AppConstants.generalInfoTitle,
