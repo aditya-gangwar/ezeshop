@@ -28,9 +28,19 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <meta-data
+        <!--meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
-            android:value="barcode" />
+            android:value="barcode" /-->
+
+        <receiver android:name="in.ezeshop.appbase.utilities.MsgPushReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
+                <category android:name="in.ezeshop.appbase.utilities"/>
+            </intent-filter>
+        </receiver>
+        <service android:name="in.ezeshop.appbase.utilities.MsgPushService" />
 
         <activity
             android:name=".SplashActivity"

@@ -125,9 +125,9 @@ public class TxnListFragment extends BaseFragment {
 
             mRetainedFragment = mCallback.getRetainedFragment();
 
-            mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.DATE_LOCALE);
-            mSdfOnlyDateCSV = new SimpleDateFormat(CommonConstants.DATE_FORMAT_ONLY_DATE_CSV, CommonConstants.DATE_LOCALE);
-            mSdfOnlyTimeCSV = new SimpleDateFormat(CommonConstants.DATE_FORMAT_ONLY_TIME_24_CSV, CommonConstants.DATE_LOCALE);
+            mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.MY_LOCALE);
+            mSdfOnlyDateCSV = new SimpleDateFormat(CommonConstants.DATE_FORMAT_ONLY_DATE_CSV, CommonConstants.MY_LOCALE);
+            mSdfOnlyTimeCSV = new SimpleDateFormat(CommonConstants.DATE_FORMAT_ONLY_TIME_24_CSV, CommonConstants.MY_LOCALE);
             //updateUI();
 
             // get arguments and store in instance
@@ -288,7 +288,7 @@ public class TxnListFragment extends BaseFragment {
             // register with download manager, so as can be seen by clicking 'Downloads' icon
             DownloadManager manager = (DownloadManager) getActivity().getSystemService(AppCompatActivity.DOWNLOAD_SERVICE);
 
-            SimpleDateFormat ddMM = new SimpleDateFormat(CommonConstants.DATE_FORMAT_DDMM, CommonConstants.DATE_LOCALE);
+            SimpleDateFormat ddMM = new SimpleDateFormat(CommonConstants.DATE_FORMAT_DDMM, CommonConstants.MY_LOCALE);
             String startDate = ddMM.format(mStartTime);
             String endDate = ddMM.format(mEndTime);
 
@@ -355,9 +355,11 @@ public class TxnListFragment extends BaseFragment {
             sb.append(String.format(CSV_REPORT_HEADER_2,user.getMerchantName())).append(CommonConstants.NEWLINE_SEP);
             sb.append(String.format(CSV_REPORT_HEADER_3,user.getMerchant().getAddress().getLine_1(),user.getMerchantId()))
                     .append(CommonConstants.NEWLINE_SEP);
-            sb.append(String.format(CSV_REPORT_HEADER_4,user.getMerchant().getAddress().getCity(),startDate,endDate))
+            sb.append(String.format(CSV_REPORT_HEADER_4,
+                    (user.getMerchant().getAddress().getAreaNIDB().getAreaName()+","+user.getMerchant().getAddress().getAreaNIDB().getCity().getCity())
+                    ,startDate,endDate))
                     .append(CommonConstants.NEWLINE_SEP);
-            sb.append(String.format(CSV_REPORT_HEADER_5,user.getMerchant().getAddress().getState()))
+            sb.append(String.format(CSV_REPORT_HEADER_5,user.getMerchant().getAddress().getAreaNIDB().getCity().getState()))
                     .append(CommonConstants.NEWLINE_SEP);
             sb.append(CSV_REPORT_HEADER_6).append(CommonConstants.NEWLINE_SEP);
             sb.append(CSV_REPORT_HEADER_7).append(CommonConstants.NEWLINE_SEP);

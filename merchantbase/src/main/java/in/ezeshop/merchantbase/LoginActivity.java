@@ -29,6 +29,7 @@ import com.helpshift.support.Support;
 import in.ezeshop.appbase.PasswdChangeDialog;
 import in.ezeshop.appbase.SingleWebViewActivity;
 import in.ezeshop.appbase.constants.AppConstants;
+import in.ezeshop.appbase.utilities.BackgroundProcessor;
 import in.ezeshop.appbase.utilities.OnSingleClickListener;
 import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.DbConstants;
@@ -315,7 +316,9 @@ public class LoginActivity extends AppCompatActivity implements
             mLoginButton.setEnabled(false);
             // show progress dialog
             AppCommonUtil.showProgressDialog(this, AppConstants.progressLogin);
-            mWorkFragment.loginUser(mLoginId, mPassword, AppCommonUtil.getDeviceId(this), null);
+            //mWorkFragment.loginUser(mLoginId, mPassword, AppCommonUtil.getDeviceId(this), null);
+            mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_LOGIN, null, null,
+                    mLoginId, mPassword, null, null, null);
         }
     }
 
@@ -343,12 +346,15 @@ public class LoginActivity extends AppCompatActivity implements
     public void onPinOtp(String pinOrOtp, String tag) {
         if(tag.equals(DIALOG_PIN_LOGIN_NEW_DEVICE)) {
             AppCommonUtil.showProgressDialog(this, AppConstants.progressLogin);
-            mWorkFragment.loginUser(mLoginId, mPassword, AppCommonUtil.getDeviceId(this), pinOrOtp);
+            //mWorkFragment.loginUser(mLoginId, mPassword, AppCommonUtil.getDeviceId(this), pinOrOtp);
+            mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_LOGIN, null, null,
+                    mLoginId, mPassword, pinOrOtp, null, null);
         }
     }
 
     @Override
-    public void onBgProcessResponse(int errorCode, int operation) {
+//    public void onBgProcessResponse(int errorCode, int operation) {
+    public void onBgProcessResponse(int errorCode, BackgroundProcessor.MessageBgJob opData) {
         LogMy.d(TAG, "In onBgProcessResponse");
 
         // Session timeout case - show dialog and logout - irrespective of invoked operation
@@ -361,7 +367,7 @@ public class LoginActivity extends AppCompatActivity implements
 
         if(errorCode==ErrorCodes.INTERNET_OK_SERVICE_NOK) {
             AppCommonUtil.cancelProgressDialog(true);
-            if (operation == MyRetainedFragment.REQUEST_LOGIN) {
+            if (opData.requestCode == MyRetainedFragment.REQUEST_LOGIN) {
                 mLoginButton.setEnabled(true);
             }
 
@@ -381,7 +387,7 @@ public class LoginActivity extends AppCompatActivity implements
         }
 
         try {
-            if (operation == MyRetainedFragment.REQUEST_LOGIN) {
+            if (opData.requestCode == MyRetainedFragment.REQUEST_LOGIN) {
                 AppCommonUtil.cancelProgressDialog(true);
                 if (errorCode == ErrorCodes.NO_ERROR) {
                     onLoginSuccess();
@@ -410,7 +416,7 @@ public class LoginActivity extends AppCompatActivity implements
                     MerchantUser.reset();
                 }
 
-            } else if (operation == MyRetainedFragment.REQUEST_GENERATE_MERCHANT_PWD) {
+            } else if (opData.requestCode == MyRetainedFragment.REQUEST_GENERATE_MERCHANT_PWD) {
                 AppCommonUtil.cancelProgressDialog(true);
                 if (errorCode == ErrorCodes.NO_ERROR) {
                     // Show success notification dialog
@@ -435,7 +441,7 @@ public class LoginActivity extends AppCompatActivity implements
                 }
                 mProcessingPasswd = false;
 
-            } else if(operation == MyRetainedFragment.REQUEST_CHANGE_PASSWD) {
+            } else if(opData.requestCode == MyRetainedFragment.REQUEST_CHANGE_PASSWD) {
                 LogMy.d(TAG, "In passwordChangeResponse: " + errorCode);
                 AppCommonUtil.cancelProgressDialog(true);
                 mProcessingPasswd = false;
@@ -453,7 +459,7 @@ public class LoginActivity extends AppCompatActivity implements
                     mPasswdChangePending = true;
                 }
 
-            } else if (operation == MyRetainedFragment.REQUEST_FORGOT_ID) {
+            } else if (opData.requestCode == MyRetainedFragment.REQUEST_FORGOT_ID) {
                 AppCommonUtil.cancelProgressDialog(true);
                 if (errorCode == ErrorCodes.NO_ERROR) {
                     // Show success notification dialog
@@ -467,7 +473,7 @@ public class LoginActivity extends AppCompatActivity implements
             }
         } catch (Exception e) {
             AppCommonUtil.cancelProgressDialog(true);
-            LogMy.e(TAG, "Exception in LoginActivity:onBgProcessResponse: "+operation+": "+errorCode, e);
+            LogMy.e(TAG, "Exception in LoginActivity:onBgProcessResponse: "+opData.requestCode+": "+errorCode, e);
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), false, true)
                     .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
         }
@@ -583,7 +589,9 @@ public class LoginActivity extends AppCompatActivity implements
         if(dob!=null) {
             // show progress dialog
             AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
-            mWorkFragment.generatePassword(dob, AppCommonUtil.getDeviceId(this), mLoginId);
+            //mWorkFragment.generatePassword(dob, AppCommonUtil.getDeviceId(this), mLoginId);
+            mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_GENERATE_MERCHANT_PWD, null, null,
+                    dob, mLoginId, null, null, null);
         } else {
             mProcessingPasswd = false;
         }
@@ -594,7 +602,9 @@ public class LoginActivity extends AppCompatActivity implements
         if(mobileNum!=null) {
             // show progress dialog
             AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
-            mWorkFragment.forgotId(mobileNum, AppCommonUtil.getDeviceId(this));
+            //mWorkFragment.forgotId(mobileNum, AppCommonUtil.getDeviceId(this));
+            mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_FORGOT_ID, null, null,
+                    mobileNum, null, null, null, null);
         }
     }
 
@@ -652,7 +662,9 @@ public class LoginActivity extends AppCompatActivity implements
             } else {
                 // show progress dialog
                 AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
-                mWorkFragment.changePassword(oldPasswd, newPassword);
+                //mWorkFragment.changePassword(oldPasswd, newPassword);
+                mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_CHANGE_PASSWD, null, null,
+                        oldPasswd, newPassword, null, null, null);
             }
         }
     }

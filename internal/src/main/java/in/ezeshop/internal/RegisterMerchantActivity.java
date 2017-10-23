@@ -28,6 +28,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import in.ezeshop.appbase.utilities.BackgroundProcessor;
 import in.ezeshop.internal.entities.AgentUser;
 import in.ezeshop.appbase.entities.MyBusinessCategories;
 import in.ezeshop.appbase.entities.MyCities;
@@ -98,7 +99,7 @@ public class RegisterMerchantActivity extends AppCompatActivity
         }
 
         // fetch 'business category' and 'cities' value sets asynchronously
-        MyCities.init();
+        MyCities.initSync();
         MyBusinessCategories.init();
 
         // Location related
@@ -187,8 +188,8 @@ public class RegisterMerchantActivity extends AppCompatActivity
             case DIALOG_CITY:
                 String city = String.valueOf(MyCities.getCityValueSet()[indexOrResultCode]);
                 Cities cityObj = MyCities.getCityWithName(city);
-                mAddress.setCity(cityObj.getCity());
-                mAddress.setState(cityObj.getState());
+                //mAddress.setCity(cityObj.getCity());
+                //mAddress.setState(cityObj.getState());
                 mCityTextRes.setText(city);
                 mCityTextRes.setError(null);
                 mStateTextRes.setText(cityObj.getState());
@@ -286,10 +287,11 @@ public class RegisterMerchantActivity extends AppCompatActivity
     }
 
     @Override
-    public void onBgProcessResponse(int errorCode, int operation) {
+//    public void onBgProcessResponse(int errorCode, int operation) {
+    public void onBgProcessResponse(int errorCode, BackgroundProcessor.MessageBgJob opData) {
         LogMy.d(TAG, "In onBgProcessResponse");
 
-        if(operation== MyRetainedFragment.REQUEST_REGISTER_MERCHANT) {
+        if(opData.requestCode== MyRetainedFragment.REQUEST_REGISTER_MERCHANT) {
             AppCommonUtil.cancelProgressDialog(true);
             if(errorCode==ErrorCodes.NO_ERROR) {
                 //mMerchant = mMerchantUser.getMerchant();
@@ -390,7 +392,7 @@ public class RegisterMerchantActivity extends AppCompatActivity
             sb.append("DoB; ");
         }
 
-        if(mAddress.getCity() == null) {
+        if(mAddress.getAreaNIDB() == null) {
             mCityTextRes.setError("Select city");
             valid = false;
             sb.append("Address city; ");
@@ -405,12 +407,12 @@ public class RegisterMerchantActivity extends AppCompatActivity
             sb.append("Address; ");
         }
 
-        errorCode = ValidationHelper.validatePincode(mPincodeRes.getText().toString());
+        /*errorCode = ValidationHelper.validatePincode(mPincodeRes.getText().toString());
         if( errorCode != ErrorCodes.NO_ERROR ) {
             valid = false;
             mPincodeRes.setError(AppCommonUtil.getErrorDesc(errorCode));
             sb.append("Pincode; ");
-        }
+        }*/
 
         /*if(currentLatitude==0 || currentLongitude==0) {
             valid = false;
@@ -502,7 +504,7 @@ public class RegisterMerchantActivity extends AppCompatActivity
     private EditText    mCityTextRes;
     private EditText    mStateTextRes;
     private EditText    mAddressTextRes1;
-    private EditText    mPincodeRes;
+    //private EditText    mPincodeRes;
     private Button      mRegisterButton;
 
     private void bindUiResources() {
@@ -521,7 +523,7 @@ public class RegisterMerchantActivity extends AppCompatActivity
         mCityTextRes        = (EditText) findViewById(R.id.edittext_city);
         mStateTextRes       = (EditText) findViewById(R.id.edittext_state);
         mAddressTextRes1     = (EditText) findViewById(R.id.input_address_1);
-        mPincodeRes     = (EditText) findViewById(R.id.input_pincode);
+        //mPincodeRes     = (EditText) findViewById(R.id.input_pincode);
         //mTermsCheckBox      = (CheckBox) findViewById(R.id.checkBox_terms);
         mRegisterButton     = (Button) findViewById(R.id.btn_register);
         //mLoginLink          = (TextView) findViewById(R.id.link_login);
@@ -537,7 +539,7 @@ public class RegisterMerchantActivity extends AppCompatActivity
         mWorkFragment.mCurrMerchant.setEmail(mEmailTextRes.getText().toString());
         mWorkFragment.mCurrMerchant.setDob(mDoBTextRes.getText().toString());
         mAddress.setLine_1(mAddressTextRes1.getText().toString());
-        mAddress.setPincode(mPincodeRes.getText().toString());
+        //mAddress.setPincode(mPincodeRes.getText().toString());
         //mTermsAgreed = mTermsCheckBox.isChecked();
     }
 

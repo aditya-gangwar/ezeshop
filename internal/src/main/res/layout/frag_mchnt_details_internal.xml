@@ -383,7 +383,7 @@
                 android:text="TBS"/>
         </LinearLayout>
 
-        <LinearLayout
+        <!--LinearLayout
             style="@style/LL_Vertical">
 
             <LinearLayout
@@ -472,7 +472,7 @@
                     android:text="TBS"
                     android:paddingTop="0dp"/>
             </LinearLayout>
-        </LinearLayout>
+        </LinearLayout-->
 
         <Space
             android:layout_width="match_parent"

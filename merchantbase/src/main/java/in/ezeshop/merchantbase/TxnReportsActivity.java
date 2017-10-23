@@ -20,13 +20,9 @@ import android.widget.LinearLayout;
 import in.ezeshop.appbase.BaseActivity;
 import in.ezeshop.appbase.MyDatePickerDialog;
 import in.ezeshop.appbase.constants.AppConstants;
-import in.ezeshop.appbase.entities.MyTransaction;
-import in.ezeshop.appbase.utilities.AppAlarms;
+import in.ezeshop.appbase.utilities.BackgroundProcessor;
 import in.ezeshop.appbase.utilities.TxnReportsHelper2;
-import in.ezeshop.appbase.utilities.ValidationHelper;
-import in.ezeshop.common.CommonUtils;
 import in.ezeshop.common.constants.CommonConstants;
-import in.ezeshop.common.constants.DbConstants;
 import in.ezeshop.common.constants.ErrorCodes;
 import in.ezeshop.common.MyGlobalSettings;
 import in.ezeshop.common.database.Transaction;
@@ -37,13 +33,10 @@ import in.ezeshop.appbase.utilities.LogMy;
 import in.ezeshop.merchantbase.entities.MerchantUser;
 import in.ezeshop.merchantbase.helper.MyRetainedFragment;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.TimeZone;
 
 /**
@@ -65,7 +58,7 @@ public class TxnReportsActivity extends BaseActivity implements
 
     private static final String TAG = "MchntApp-TxnReportsActivity";
 
-    public static final String EXTRA_CUSTOMER_ID = "extraCustId";
+    public static final String EXTRA_CUSTOMER_MOBILE = "extraCustMobile";
     //public static final int RC_BARCODE_CAPTURE_TXN_VERIFY = 9007;
 
     private static final String RETAINED_FRAGMENT = "retainedFragReports";
@@ -80,7 +73,7 @@ public class TxnReportsActivity extends BaseActivity implements
     //private static final String DIALOG_OTP_CANCEL_TXN = "dialogOtpTxn";
 
     // All required date formatters
-    private SimpleDateFormat mSdfOnlyDateDisplay = new SimpleDateFormat(CommonConstants.DATE_FORMAT_ONLY_DATE_DISPLAY, CommonConstants.DATE_LOCALE);
+    private SimpleDateFormat mSdfOnlyDateDisplay = new SimpleDateFormat(CommonConstants.DATE_FORMAT_ONLY_DATE_DISPLAY, CommonConstants.MY_LOCALE);
 
     FragmentManager mFragMgr;
     MyRetainedFragment mWorkFragment;
@@ -144,9 +137,9 @@ public class TxnReportsActivity extends BaseActivity implements
         } else {
             mLastTxnPos = -1;
         }
-        mInputCustId.setText(getIntent().getStringExtra(EXTRA_CUSTOMER_ID));
+        mInputCustMobile.setText(getIntent().getStringExtra(EXTRA_CUSTOMER_MOBILE));
 
-        mInputCustId.setOnTouchListener(new View.OnTouchListener() {
+        mInputCustMobile.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -218,21 +211,11 @@ public class TxnReportsActivity extends BaseActivity implements
                     mWorkFragment.mLastFetchTransactions.clear();
                     mWorkFragment.mLastFetchTransactions = null;
                 }
-                mCustomerId = mInputCustId.getText().toString();
-                if (mCustomerId.length() > 0 &&
-                        mCustomerId.length() != CommonConstants.CUSTOMER_INTERNAL_ID_LEN) {
-                    if(mCustomerId.length() == CommonConstants.MOBILE_NUM_LENGTH) {
+                mCustomerId = mInputCustMobile.getText().toString();
 
-                    } else {
-                        mInputCustId.setError(AppCommonUtil.getErrorDesc(ErrorCodes.INVALID_LENGTH));
-                    }
+                if (mCustomerId.length() > 0 && mCustomerId.length() != CommonConstants.MOBILE_NUM_LENGTH) {
+                    mInputCustMobile.setError(AppCommonUtil.getErrorDesc(ErrorCodes.INVALID_LENGTH));
                     return;
-
-                    /*if( mCustomerId.length() != CommonConstants.CUSTOMER_INTERNAL_ID_LEN &&
-                            mCustomerId.length() != CommonConstants.MOBILE_NUM_LENGTH ) {
-                        mInputCustId.setError(AppCommonUtil.getErrorDesc(ErrorCodes.INVALID_LENGTH));
-                        return;
-                    }*/
                 }
 
                 //fetchReportData();
@@ -277,7 +260,7 @@ public class TxnReportsActivity extends BaseActivity implements
     @Override
     public void onDateSelected(Date argDate, String tag) {
         LogMy.d(TAG, "Selected date: " + argDate.toString());
-        //SimpleDateFormat format = new SimpleDateFormat(AppConstants.DATE_FORMAT_ONLY_DATE_DISPLAY, AppConstants.DATE_LOCALE);
+        //SimpleDateFormat format = new SimpleDateFormat(AppConstants.DATE_FORMAT_ONLY_DATE_DISPLAY, AppConstants.MY_LOCALE);
         if(tag.equals(DIALOG_DATE_FROM)) {
             mFromDate = argDate;
             mInputDateFrom.setText(mSdfOnlyDateDisplay.format(mFromDate));
@@ -294,7 +277,9 @@ public class TxnReportsActivity extends BaseActivity implements
     public void fetchTxnsFromDB(String whereClause) {
         // show progress dialog
         AppCommonUtil.showProgressDialog(this, AppConstants.progressReports);
-        mWorkFragment.fetchTransactions(whereClause);
+        //mWorkFragment.fetchTransactions(whereClause);
+        mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_FETCH_TXNS, null, null,
+                whereClause, null, null, null, null);
     }
 
     @Override
@@ -302,7 +287,9 @@ public class TxnReportsActivity extends BaseActivity implements
         mWorkFragment.mMissingFiles = missingFiles;
         // show progress dialog
         AppCommonUtil.showProgressDialog(this, AppConstants.progressReports);
-        mWorkFragment.fetchTxnFiles(this);
+        //mWorkFragment.fetchTxnFiles(this);
+        mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_FETCH_TXN_FILES, this, null,
+                null, null, null, null, null);
     }
 
     @Override
@@ -320,7 +307,8 @@ public class TxnReportsActivity extends BaseActivity implements
     }
 
     @Override
-    public void onBgProcessResponse(int errorCode, int operation) {
+//    public void onBgProcessResponse(int errorCode, int operation) {
+    public void onBgProcessResponse(int errorCode, BackgroundProcessor.MessageBgJob opData) {
         AppCommonUtil.cancelProgressDialog(true);
 
         // Session timeout case - show dialog and logout - irrespective of invoked operation
@@ -331,7 +319,7 @@ public class TxnReportsActivity extends BaseActivity implements
         }
 
         try {
-            switch(operation) {
+            switch(opData.requestCode) {
                 case MyRetainedFragment.REQUEST_FETCH_TXNS:
                     if (errorCode == ErrorCodes.NO_ERROR ||
                             errorCode == ErrorCodes.NO_DATA_FOUND) {
@@ -451,7 +439,7 @@ public class TxnReportsActivity extends BaseActivity implements
 
         } catch (Exception e) {
             AppCommonUtil.cancelProgressDialog(true);
-            LogMy.e(TAG, "Exception is ReportsActivity:onBgProcessResponse: "+operation+": "+errorCode, e);
+            LogMy.e(TAG, "Exception is ReportsActivity:onBgProcessResponse: "+opData.requestCode+": "+errorCode, e);
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), false, true)
                     .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
         }
@@ -482,7 +470,9 @@ public class TxnReportsActivity extends BaseActivity implements
                     .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
         } else {
             AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
-            mWorkFragment.fetchCashback(internalId);
+            //mWorkFragment.fetchCashback(internalId);
+            mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_GET_CASHBACK, null, null,
+                    internalId, null, null, null, null);
         }
     }
 
@@ -749,7 +739,7 @@ public class TxnReportsActivity extends BaseActivity implements
     private EditText mLabelInfo;
     private EditText mInputDateFrom;
     private EditText mInputDateTo;
-    private EditText mInputCustId;
+    private EditText mInputCustMobile;
     private AppCompatButton mBtnGetReport;
 
     private LinearLayout mMainLayout;
@@ -759,7 +749,7 @@ public class TxnReportsActivity extends BaseActivity implements
         mLabelInfo = (EditText) findViewById(R.id.label_info);
         mInputDateFrom = (EditText) findViewById(R.id.input_date_from);
         mInputDateTo = (EditText) findViewById(R.id.input_date_to);
-        mInputCustId = (EditText) findViewById(R.id.input_customer_id);
+        mInputCustMobile = (EditText) findViewById(R.id.input_customer_mobile);
         mBtnGetReport = (AppCompatButton) findViewById(R.id.btn_get_report);
 
         mMainLayout = (LinearLayout) findViewById(R.id.layout_report_main);

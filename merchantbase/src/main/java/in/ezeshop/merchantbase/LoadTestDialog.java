@@ -88,13 +88,13 @@ public class LoadTestDialog extends BaseDialog {
     }
 
     private boolean validate() {
-        int error = ValidationHelper.validateCustInternalId(mInputCustId.getText().toString());
+        /*int error = ValidationHelper.validateCustInternalId(mInputCustId.getText().toString());
         if(error != ErrorCodes.NO_ERROR) {
             mInputCustId.setError(AppCommonUtil.getErrorDesc(error));
             return false;
-        }
+        }*/
 
-        error = ValidationHelper.validatePin(mInputPin.getText().toString());
+        int error = ValidationHelper.validatePin(mInputPin.getText().toString());
         if(error != ErrorCodes.NO_ERROR) {
             mInputPin.setError(AppCommonUtil.getErrorDesc(error));
             return false;

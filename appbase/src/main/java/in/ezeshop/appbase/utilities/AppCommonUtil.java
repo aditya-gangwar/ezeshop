@@ -42,9 +42,12 @@ import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.Counters;
+import com.backendless.DeviceRegistration;
+import com.backendless.Messaging;
 import com.backendless.exceptions.BackendlessException;
 
 import in.ezeshop.appbase.R;
+import in.ezeshop.appbase.backendAPI.CommonServices;
 import in.ezeshop.appbase.constants.AppConstants;
 import in.ezeshop.common.DateUtil;
 import in.ezeshop.common.MyErrorParams;
@@ -90,12 +93,57 @@ public class AppCommonUtil {
         AppCommonUtil.mUserType = userType;
     }
 
-    // Store params (if returned) frm last backend request
+    // Store params (if returned) from last backend request
     // As there's only single background thread interacting with backend
     // so this shud work fine for now
     public static MyErrorParams mErrorParams = new MyErrorParams();
 
 
+    /*
+     * Functions related to device registration for in-app notifications
+     */
+    public static void submitDevRegForMsging() {
+        LogMy.d(TAG, "Trying to register this device for messaging");
+        Backendless.Messaging.registerDevice(AppConstants.PUSH_MSG_SEND_ID);
+        LogMy.d(TAG, "Device register request submitted successfully");
+
+        // The device is not registered yet completely - and only the request is submitted
+        // It may take upto few seconds while registration gets completed/updated in google servers
+        // Once registration is done, backendless will call 'onRegistered()' function of 'MsgPushService' class
+    }
+
+    // Check if this device's id is registered with backendless/google for push in-app notification
+    // If yes, return the 'device id', else return 'null'
+    public static String checkDevRegForMsging() {
+        LogMy.d(TAG, "In checkDevRegForMsging");
+
+        try {
+            // to check this device's registration - retrieve registration data for this device
+            DeviceRegistration regData = Backendless.Messaging.getDeviceRegistration();
+            String newDevId = regData.getDeviceId();
+            if (newDevId == null || newDevId.isEmpty()) {
+                LogMy.d(TAG, "This device is not registered for messaging: " + Messaging.DEVICE_ID);
+                return null;
+            }
+
+            // If here - means this device is registered with google for messaging
+            return newDevId;
+
+        } catch (Exception e) {
+            if ( e instanceof BackendlessException &&
+                    ((BackendlessException) e).getCode().equals(ErrorCodes.BL_ERROR_MSGING_UNKNOWN_DEV) ) {
+                // This device is not registered for messaging
+                LogMy.d(TAG, "This device is not registered for messaging: " + Messaging.DEVICE_ID);
+                return null;
+            } else {
+                throw e;
+            }
+        }
+    }
+
+    /*
+     * Functions related to Customer and Merchant Addresses
+     */
     public static boolean areCustAddressEqual(CustAddress lhs, CustAddress rhs) {
         if(!lhs.getAreaNIDB().getAreaName().equals(rhs.getAreaNIDB().getAreaName())) {
             LogMy.d(TAG,"custAddrDiffAndCopy: Area not same");

@@ -25,7 +25,7 @@ import in.ezeshop.appbase.utilities.LogMy;
 public class GlobalSettingsListFrag extends Fragment {
     private static final String TAG = "AgentApp-GlobalSettingsListFrag";
 
-    private SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.DATE_LOCALE);
+    private SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.MY_LOCALE);
     private RecyclerView mRecyclerView;
 
     public interface GlobalSettingsListFragIf {
@@ -147,7 +147,7 @@ public class GlobalSettingsListFrag extends Fragment {
             mCallback = (GlobalSettingsListFragIf) getActivity();
             mRetainedFragment = mCallback.getRetainedFragment();
 
-            mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.DATE_LOCALE);
+            mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.MY_LOCALE);
 
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString()

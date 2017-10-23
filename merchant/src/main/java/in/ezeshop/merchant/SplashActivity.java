@@ -94,7 +94,7 @@ public class SplashActivity extends AppCompatActivity
             } else if (errorCode == ErrorCodes.SERVICE_GLOBAL_DISABLED) {
                 // Add time at the end of error message
                 Date disabledUntil = MyGlobalSettings.getServiceDisabledUntil();
-                SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.DATE_LOCALE);
+                SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.MY_LOCALE);
                 String errorStr = AppCommonUtil.getErrorDesc(ErrorCodes.SERVICE_GLOBAL_DISABLED)
                         + mSdfDateWithTime.format(disabledUntil);
                 // Show error notification dialog

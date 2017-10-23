@@ -49,6 +49,16 @@ public class Merchants
   private String regFormNum;
   private Integer admin_status;
   private Address address;
+  private String msgDevId;
+
+  public String getMsgDevId() {
+    return msgDevId;
+  }
+
+  public void setMsgDevId(String msgDevId) {
+    this.msgDevId = msgDevId;
+  }
+
   public Boolean getInvoiceNumOnlyNumbers()
   {
     return invoiceNumOnlyNumbers;

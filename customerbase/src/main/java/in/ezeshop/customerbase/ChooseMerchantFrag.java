@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.List;
 
 import in.ezeshop.appbase.BaseFragment;
-import in.ezeshop.appbase.GenericListFragment;
 import in.ezeshop.appbase.constants.AppConstants;
 import in.ezeshop.appbase.entities.MerchantWrapper;
 import in.ezeshop.appbase.entities.MyCashback;
@@ -342,7 +341,7 @@ public class ChooseMerchantFrag extends BaseFragment
                 mMerchantDp.setImageBitmap(dp);
             }
 
-            mAddress.setText(CommonUtils.getMchntAddressStr(merchant));
+            mAddress.setText(CommonUtils.getMchntAddrStrShort(merchant));
 
             String delInfo;
             if(merchant.getFreeDlvrMinAmt()>0) {

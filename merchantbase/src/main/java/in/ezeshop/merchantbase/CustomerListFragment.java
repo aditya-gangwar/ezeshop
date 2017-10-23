@@ -104,8 +104,8 @@ public class CustomerListFragment extends BaseFragment {
             mCallback = (CustomerListFragmentIf) getActivity();
             mRetainedFragment = mCallback.getRetainedFragment();
 
-            mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.DATE_LOCALE);
-            mSdfOnlyDateFilename = new SimpleDateFormat(CommonConstants.DATE_FORMAT_ONLY_DATE_FILENAME, CommonConstants.DATE_LOCALE);
+            mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.MY_LOCALE);
+            mSdfOnlyDateFilename = new SimpleDateFormat(CommonConstants.DATE_FORMAT_ONLY_DATE_FILENAME, CommonConstants.MY_LOCALE);
 
             if(mRetainedFragment.mLastFetchCashbacks==null) {
                 mRetainedFragment.mLastFetchCashbacks = new ArrayList<>();

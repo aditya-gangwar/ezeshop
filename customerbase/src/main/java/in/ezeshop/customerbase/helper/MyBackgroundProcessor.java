@@ -51,7 +51,7 @@ public class MyBackgroundProcessor <T> extends BackgroundProcessor<T> {
         mRetainedFragment = retainedFragment;
     }
 
-    private class MessageLogin implements Serializable {
+    /*private class MessageLogin implements Serializable {
         public String userId;
         public String password;
     }
@@ -71,10 +71,10 @@ public class MyBackgroundProcessor <T> extends BackgroundProcessor<T> {
     private class MessageFileDownload implements Serializable {
         public Context ctxt;
         public String fileUrl;
-    }
+    }*/
 
     /*
-     * Add request methods
+     * Add request method
      */
     public void addBackgroundJob(int requestCode, Context ctxt, String callingFragTag,
                                  String argStr1, String argStr2, String argStr3, Long argLong1, Boolean argBool1) {
@@ -233,9 +233,9 @@ public class MyBackgroundProcessor <T> extends BackgroundProcessor<T> {
             return ErrorCodes.OPERATION_NOT_ALLOWED;
         }
 
+        List<String> urls = null;
         try {
             // First upload all prescriptions
-            List<String> urls = null;
             if(mRetainedFragment.mPrescripImgs.size() > 0) {
                 urls = new ArrayList<>(mRetainedFragment.mPrescripImgs.size());
                 String remoteDir = CommonUtils.getCustPrescripDir(CustomerUser.getInstance().getCustomer().getPrivate_id());
@@ -249,6 +249,15 @@ public class MyBackgroundProcessor <T> extends BackgroundProcessor<T> {
                     }
                 }
             }
+        } catch (Exception e) {
+            LogMy.e(TAG,"createCustomerOrder: File upload failed: "+e.toString(),e);
+            if(e instanceof BackendlessException) {
+                return AppCommonUtil.getLocalErrorCode((BackendlessException) e);
+            } else {
+                return ErrorCodes.GENERAL_ERROR;
+            }
+        }
+        try{
             // Create order now
             mRetainedFragment.mCustOrder = CustomerServices.getInstance().createCustomerOrder(
                     mRetainedFragment.mCustOrder.getMerchantId(),

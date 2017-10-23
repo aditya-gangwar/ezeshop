@@ -174,7 +174,7 @@ public class DashboardFragment extends BaseFragment {
         total_cashback.setText(AppCommonUtil.getAmtStr(mMerchantStats.getCb_credit()));
 
         // update time
-        SimpleDateFormat sdf = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.DATE_LOCALE);
+        SimpleDateFormat sdf = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.MY_LOCALE);
         Date updateTime = mMerchantStats.getUpdated();
         if(updateTime==null) {
             updateTime = mMerchantStats.getCreated();

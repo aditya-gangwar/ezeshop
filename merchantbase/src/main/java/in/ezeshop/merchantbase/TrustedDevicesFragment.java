@@ -71,7 +71,7 @@ public class TrustedDevicesFragment extends BaseFragment {
 
             // update values against available devices
             List<MerchantDevice> devices = MerchantUser.getInstance().getTrustedDeviceList();
-            //SimpleDateFormat sdf = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.DATE_LOCALE);
+            //SimpleDateFormat sdf = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.MY_LOCALE);
 
             int cnt = (devices.size() < CommonConstants.MAX_DEVICES_PER_MERCHANT) ? devices.size() : CommonConstants.MAX_DEVICES_PER_MERCHANT;
             for (int i = 0; i < cnt; i++) {

@@ -158,17 +158,17 @@ public final class ValidationHelper{
         }
 
         return ErrorCodes.NO_ERROR;
-    }
+    }*/
 
     public static int validateCustInternalId(String value) {
         if (value==null || value.isEmpty() ) {
             return ErrorCodes.EMPTY_VALUE;
-        } else if (value.length() != CommonConstants.CUSTOMER_INTERNAL_ID_LEN) {
+        } /*else if (value.length() != CommonConstants.CUSTOMER_INTERNAL_ID_LEN) {
             return ErrorCodes.INVALID_LENGTH;
-        } else {
+        } */else {
             return ErrorCodes.NO_ERROR;
         }
-    }*/
+    }
 
     public static int validateInternalUserId(String value) {
         if (value==null || value.isEmpty() ) {

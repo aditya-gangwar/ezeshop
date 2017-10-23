@@ -102,7 +102,7 @@ public class MyRetainedFragment extends RetainedFragment {
     }
 
     /*
-     * Methods to add request for processing by background thread
+     * Method to add request for processing by background thread
      */
     public void addBackgroundJob(int requestCode, Context ctxt, String callingFragTag,
                                 String argStr1, String argStr2, String argStr3, Long argLong1, Boolean argBool1) {

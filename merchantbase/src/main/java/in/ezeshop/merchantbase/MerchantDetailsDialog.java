@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import in.ezeshop.appbase.BaseDialog;
 import in.ezeshop.appbase.constants.AppConstants;
+import in.ezeshop.common.CommonUtils;
 import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.DbConstants;
 import in.ezeshop.common.MyGlobalSettings;
@@ -27,8 +28,8 @@ import java.text.SimpleDateFormat;
 public class MerchantDetailsDialog extends BaseDialog {
     private static final String TAG = "MchntApp-MerchantDetailsDialog";
 
-    private final SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.DATE_LOCALE);
-    private final SimpleDateFormat mSdfOnlyDate = new SimpleDateFormat(CommonConstants.DATE_FORMAT_ONLY_DATE_DISPLAY, CommonConstants.DATE_LOCALE);
+    private final SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.MY_LOCALE);
+    private final SimpleDateFormat mSdfOnlyDate = new SimpleDateFormat(CommonConstants.DATE_FORMAT_ONLY_DATE_DISPLAY, CommonConstants.MY_LOCALE);
 
     /*
     private MerchantDetailsDialogIf mCallback;
@@ -116,10 +117,10 @@ public class MerchantDetailsDialog extends BaseDialog {
         String phone = AppConstants.PHONE_COUNTRY_CODE+merchant.getContactPhone();
         mInputContactNum.setText(phone);
 
-        mAddress.setText(merchant.getAddress().getLine_1());
-        mCity.setText(merchant.getAddress().getCity());
-        mState.setText(merchant.getAddress().getState());
-        mPincode.setText(merchant.getAddress().getPincode());
+        mAddress.setText(CommonUtils.getMchntAddressStr(merchant));
+        //mCity.setText(merchant.getAddress().getAreaNIDB().getCity().getCity());
+        //mState.setText(merchant.getAddress().getAreaNIDB().getCity().getState());
+        //mPincode.setText(merchant.getAddress().getPincode());
     }
 
     @Override
@@ -162,9 +163,9 @@ public class MerchantDetailsDialog extends BaseDialog {
     private EditText mInputEmail;
 
     private EditText mAddress;
-    private EditText mCity;
-    private EditText mState;
-    private EditText mPincode;
+    //private EditText mCity;
+    //private EditText mState;
+    //private EditText mPincode;
 
 
     private void bindUiResources(View v) {
@@ -190,9 +191,9 @@ public class MerchantDetailsDialog extends BaseDialog {
         mInputEmail = (EditText) v.findViewById(R.id.input_merchant_email);
 
         mAddress = (EditText) v.findViewById(R.id.input_address);
-        mCity = (EditText) v.findViewById(R.id.input_city);
-        mState = (EditText) v.findViewById(R.id.input_state);
-        mPincode = (EditText) v.findViewById(R.id.input_pincode);
+        //mCity = (EditText) v.findViewById(R.id.input_city);
+        //mState = (EditText) v.findViewById(R.id.input_state);
+        //mPincode = (EditText) v.findViewById(R.id.input_pincode);
     }
 }
 

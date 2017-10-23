@@ -39,7 +39,8 @@ public class CustomerRegDialog extends BaseDialog {
 
     public interface CustomerRegFragmentIf {
         //void onCustomerRegOk(String mobileNum, String dob, int sex, String cardId, String otp, String firstName, String lastName);
-        void onCustomerRegOk(String mobileNum, String dob, int sex, String otp, String firstName, String lastName);
+        //void onCustomerRegOk(String mobileNum, String dob, int sex, String otp, String firstName, String lastName);
+        void onCustomerRegOk(String mobileNum, String fullName, String otp);
         void onCustomerRegReset();
         MyRetainedFragment getRetainedFragment();
         //void restartTxn();
@@ -313,12 +314,16 @@ public class CustomerRegDialog extends BaseDialog {
                                 //scannedCardId,
                                 mInputOtp.getText().toString(),
                                 mInputFirstName.getText().toString(),
-                                "");*/
+                                "");
                         mCallback.onCustomerRegOk(
                                 mInputMobileNum.getText().toString(),
                                 "", CommonConstants.SEX_UNKNOWN,
                                 mInputOtp.getText().toString(),
-                                mInputFirstName.getText().toString(),"");
+                                mInputFirstName.getText().toString(),"");*/
+                        mCallback.onCustomerRegOk(
+                                mInputMobileNum.getText().toString(),
+                                mInputFirstName.getText().toString(),
+                                mInputOtp.getText().toString());
                         wantToCloseDialog = true;
                     }
 

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import in.ezeshop.common.CommonUtils;
 import in.ezeshop.internal.entities.AgentUser;
 import in.ezeshop.internal.helper.MyRetainedFragment;
 import in.ezeshop.appbase.BaseFragment;
@@ -28,7 +29,7 @@ public class MerchantDetailsFragment extends BaseFragment {
 
     private static final String DIALOG_DISABLE_MCHNT = "disableMerchant";
 
-    private final SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.DATE_LOCALE);
+    private final SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.MY_LOCALE);
 
     public interface MerchantDetailsFragmentIf {
         MyRetainedFragment getRetainedFragment();
@@ -96,16 +97,17 @@ public class MerchantDetailsFragment extends BaseFragment {
         mContactPhone.setText(phone);
         mInputEmail.setText(merchant.getEmail());
 
-        mAddress.setText(merchant.getAddress().getLine_1());
-        mCity.setText(merchant.getAddress().getCity());
+        mAddress.setText(CommonUtils.getMchntAddressStr(merchant));
+        /*mCity.setText(merchant.getAddress().getCity());
         mState.setText(merchant.getAddress().getState());
-        mPincode.setText(merchant.getAddress().getPincode());
+        mPincode.setText(merchant.getAddress().getPincode());*/
 
         mCbRate.setText(merchant.getCb_rate());
         mAddCashStatus.setText(merchant.getCl_add_enable().toString());
-        String txt = "AC Debit: "+merchant.getCl_debit_limit_for_pin()+
-                "; AC Credit: "+merchant.getCl_credit_limit_for_pin()+
-                "; CB Debit: "+merchant.getCb_debit_limit_for_pin();
+        String txt = "AC Debit: "+merchant.getCl_debit_limit_for_pin()
+                + "; AC Credit: "+merchant.getCl_credit_limit_for_pin()
+                //+ "; CB Debit: "+merchant.getCb_debit_limit_for_pin()
+                ;
         mPinLimits.setText(txt);
 
         if( status!=DbConstants.USER_STATUS_ACTIVE && (mAccStatus.getVisibility()==View.VISIBLE) ) {
@@ -176,9 +178,9 @@ public class MerchantDetailsFragment extends BaseFragment {
     private EditText mInputEmail;
 
     private EditText mAddress;
-    private EditText mCity;
-    private EditText mState;
-    private EditText mPincode;
+    //private EditText mCity;
+    //private EditText mState;
+    //private EditText mPincode;
 
     private EditText mCbRate;
     private EditText mAddCashStatus;
@@ -210,9 +212,9 @@ public class MerchantDetailsFragment extends BaseFragment {
         mInputEmail = (EditText) v.findViewById(R.id.input_merchant_email);
 
         mAddress = (EditText) v.findViewById(R.id.input_address);
-        mCity = (EditText) v.findViewById(R.id.input_city);
-        mState = (EditText) v.findViewById(R.id.input_state);
-        mPincode = (EditText) v.findViewById(R.id.input_pincode);
+        //mCity = (EditText) v.findViewById(R.id.input_city);
+        //mState = (EditText) v.findViewById(R.id.input_state);
+        //mPincode = (EditText) v.findViewById(R.id.input_pincode);
 
         mCbRate = (EditText) v.findViewById(R.id.input_cbrate);
         mAddCashStatus = (EditText) v.findViewById(R.id.input_addcash);

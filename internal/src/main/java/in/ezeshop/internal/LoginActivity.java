@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import in.ezeshop.appbase.utilities.BackgroundProcessor;
 import in.ezeshop.internal.entities.AgentUser;
 import in.ezeshop.internal.helper.MyRetainedFragment;
 import in.ezeshop.appbase.constants.AppConstants;
@@ -265,8 +266,6 @@ public class LoginActivity extends AppCompatActivity implements
                 .show();
     }
 
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
@@ -363,10 +362,11 @@ public class LoginActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onBgProcessResponse(int errorCode, int operation) {
+//    public void onBgProcessResponse(int errorCode, int operation) {
+    public void onBgProcessResponse(int errorCode, BackgroundProcessor.MessageBgJob opData) {
         LogMy.d(TAG, "In onBgProcessResponse");
 
-        if(operation==MyRetainedFragment.REQUEST_LOGIN)
+        if(opData.requestCode==MyRetainedFragment.REQUEST_LOGIN)
         {
             AppCommonUtil.cancelProgressDialog(true);
             if(errorCode == ErrorCodes.NO_ERROR) {
@@ -377,7 +377,7 @@ public class LoginActivity extends AppCompatActivity implements
                 DialogFragmentWrapper.createNotification(AppConstants.loginFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
                         .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
             }
-        } else if(operation== MyRetainedFragment.REQUEST_GENERATE_PWD) {
+        } else if(opData.requestCode== MyRetainedFragment.REQUEST_GENERATE_PWD) {
             AppCommonUtil.cancelProgressDialog(true);
             if(errorCode == ErrorCodes.NO_ERROR) {
                 // Show success notification dialog

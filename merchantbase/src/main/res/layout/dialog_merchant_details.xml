@@ -384,7 +384,7 @@
                     android:text="TBS"/>
             </LinearLayout>
 
-            <LinearLayout
+            <!--LinearLayout
                 style="@style/LL_Vertical">
 
                 <LinearLayout
@@ -395,15 +395,6 @@
                         android:src="@drawable/ic_place_white_18dp"
                         android:visibility="invisible"
                         android:paddingTop="0dp"/>
-                    <!--EditText
-                        style="@style/Edittext_only_view_small"
-                        android:layout_height="wrap_content"
-                        android:layout_width="0dp"
-                        android:text="City"
-                        android:layout_weight="45"
-                        android:gravity="left|bottom"
-                        android:layout_gravity="bottom"
-                        android:paddingTop="0dp"/-->
                     <EditText
                         style="@style/Edittext_only_view_small"
                         android:layout_marginEnd="@dimen/medium_space"
@@ -424,15 +415,6 @@
                         android:src="@drawable/ic_place_white_18dp"
                         android:visibility="invisible"
                         android:paddingTop="0dp"/>
-                    <!--EditText
-                        style="@style/Edittext_only_view_small"
-                        android:layout_height="wrap_content"
-                        android:layout_width="0dp"
-                        android:text="State"
-                        android:layout_weight="45"
-                        android:gravity="left|bottom"
-                        android:layout_gravity="bottom"
-                        android:paddingTop="0dp"/-->
                     <EditText
                         style="@style/Edittext_only_view_small"
                         android:layout_marginEnd="@dimen/medium_space"
@@ -453,15 +435,6 @@
                         android:src="@drawable/ic_place_white_18dp"
                         android:visibility="invisible"
                         android:paddingTop="0dp"/>
-                    <!--EditText
-                        style="@style/Edittext_only_view_small"
-                        android:layout_height="wrap_content"
-                        android:layout_width="0dp"
-                        android:text="PIN Code"
-                        android:layout_weight="45"
-                        android:gravity="left|bottom"
-                        android:layout_gravity="bottom"
-                        android:paddingTop="0dp"/-->
                     <EditText
                         style="@style/Edittext_only_view_small"
                         android:layout_marginEnd="@dimen/medium_space"
@@ -473,7 +446,7 @@
                         android:text="TBS"
                         android:paddingTop="0dp"/>
                 </LinearLayout>
-            </LinearLayout>
+            </LinearLayout-->
         </LinearLayout>
     </ScrollView>
 

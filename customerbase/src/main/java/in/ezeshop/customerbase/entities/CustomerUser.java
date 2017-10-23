@@ -10,13 +10,13 @@ import com.backendless.persistence.local.UserIdStorageFactory;
 import com.crashlytics.android.Crashlytics;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import in.ezeshop.appbase.backendAPI.CommonServices;
 import in.ezeshop.appbase.constants.AppConstants;
 import in.ezeshop.appbase.entities.MyAreas;
 import in.ezeshop.appbase.entities.MyCities;
+import in.ezeshop.appbase.utilities.MsgPushService;
 import in.ezeshop.common.MyGlobalSettings;
 import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.DbConstants;
@@ -27,7 +27,6 @@ import in.ezeshop.common.database.CustomerOps;
 import in.ezeshop.appbase.utilities.AppCommonUtil;
 import in.ezeshop.appbase.utilities.LogMy;
 import in.ezeshop.common.database.Customers;
-import in.ezeshop.common.database.Merchants;
 import in.ezeshop.common.database.Transaction;
 import in.ezeshop.customerbase.backendAPI.CustomerServices;
 import in.ezeshop.customerbase.backendAPI.CustomerServicesNoLogin;
@@ -44,7 +43,7 @@ public class CustomerUser {
     private boolean mPseudoLoggedIn;
     private String mUserToken;
     // Flag to indicate, if this device's registration for push messaging is to be checked
-    private boolean mChkMsgDevReg;
+    //private boolean mChkMsgDevReg;
     // List of addresses
     private List<CustAddress> mAddresses;
 
@@ -66,7 +65,7 @@ public class CustomerUser {
             LogMy.d(TAG, "Creating CustomerUser instance");
             mInstance = new CustomerUser();
             mInstance.mPseudoLoggedIn = false;
-            mInstance.mChkMsgDevReg = false;
+            //mInstance.mChkMsgDevReg = false;
         }
     }
 
@@ -148,7 +147,7 @@ public class CustomerUser {
             }
 
             // register device for push messages
-            mInstance.regDevForMsging();
+            mInstance.processDevRegForMsging();
 
         } catch (BackendlessException e) {
             LogMy.e(TAG,"Login failed: "+e.toString());
@@ -158,51 +157,77 @@ public class CustomerUser {
         return ErrorCodes.NO_ERROR;
     }
 
-    private void regDevForMsging() {
-        LogMy.d(TAG, "In regDevForMsging: "+ Messaging.DEVICE_ID);
-        if(mInstance.getCustomer()==null) {
+    /*
+     * If no 'device id' present in Customer object -OR- 'device id' present is not same as this device's id
+     * then, register this device's id with google for messaging and save the same in Customer object
+     */
+    private void processDevRegForMsging() {
+        LogMy.d(TAG, "In processDevRegForMsging: "+ Messaging.DEVICE_ID);
+        if(mInstance.getCustomer()==null || mPseudoLoggedIn) {
             return;
         }
 
         try {
             String curDevId = mInstance.getCustomer().getMsgDevId();
             if(curDevId==null || curDevId.isEmpty() || !curDevId.equals(Messaging.DEVICE_ID)) {
-                LogMy.d(TAG, "Trying to register this device for messaging");
-                Backendless.Messaging.registerDevice(AppConstants.PUSH_MSG_SEND_ID);
-                LogMy.d(TAG, "Device registered succesfully for messaging");
+                // Most probably first login case
+                // Register this device's id with google for messaging
+                LogMy.d(TAG, "First login case probably");
+                AppCommonUtil.submitDevRegForMsging();
+
+                // The device is not registered yet completely - and only the request is submitted
+                // It may take upto few seconds while registration gets completed/updated in google servers
+                // So, we are not updating 'device id' in Customer object yet
+                // Once registration is done, backendless will call 'onRegistered()' function of 'MsgPushService' class
+                // We will update 'device id' in Customer object only after that
 
             } else {
+                // Customer object has some device id set - but it may be different than current device's id
+                // i.e. scenario wherein user logged with another device previously
+                // So, check if current device's id is registered
+                // If not, register the same and update in Customer object
+                // If registered, check if its same as that in Customer object - if not, update the same.
+
                 LogMy.d(TAG, "Device probably already registered: "+curDevId);
                 if(checkMsgDevReg()==ErrorCodes.DEV_NOT_REG_FOR_MSGING) {
                     // as not registered, so try to register again
                     LogMy.e(TAG, "Device not registered anymore, so trying to register again");
-                    Backendless.Messaging.registerDevice(AppConstants.PUSH_MSG_SEND_ID);
-                    LogMy.d(TAG, "Device registered succesfully for messaging");
+                    AppCommonUtil.submitDevRegForMsging();
                 }
             }
         } catch(Exception e) {
             LogMy.e(TAG,"Device registration for messaging failed: "+e.toString());
         }
+
     }
 
+    // Check if current device is registered with google for messaging
+    // If no, return error.
+    // If yes, check if same device id is there in Customer object.
+    //      If not, update the same and return Success
+    //      If yes, return Success
     public int checkMsgDevReg() {
         LogMy.d(TAG, "In checkMsgDevReg");
-        setChkMsgDevReg(false);
-
-        if(mInstance.getCustomer()==null) {
+        if (mInstance.getCustomer() == null || mPseudoLoggedIn) {
             return ErrorCodes.GENERAL_ERROR;
         }
 
+        //setChkMsgDevReg(false);
+        // Set flag to - disable checking again for 'device registration'
+        // This gets set to true in 'onRegistered()' function of 'MsgPushService' class
+        // i.e. when any previously sent registration request gets completed
+        MsgPushService.setChkMsgDevReg(false);
+
         try {
-            // to check this device's registration - retrive registration data for this device
-            DeviceRegistration regData = Backendless.Messaging.getDeviceRegistration();
-            String newDevId = regData.getDeviceId();
-            if(newDevId==null || newDevId.isEmpty()) {
-                LogMy.d(TAG,"This device is not registered for messaging: "+Messaging.DEVICE_ID);
+            // to check this device's registration - retrieve registration data for this device
+            String newDevId = AppCommonUtil.checkDevRegForMsging();
+            if (newDevId == null || newDevId.isEmpty()) {
+                LogMy.d(TAG, "This device is not registered for messaging: " + Messaging.DEVICE_ID);
                 return ErrorCodes.DEV_NOT_REG_FOR_MSGING;
             }
 
-            if(mCustomer.getMsgDevId()==null || mCustomer.getMsgDevId().isEmpty() || !mCustomer.getMsgDevId().equals(newDevId)) {
+            // Checking for 'mCustomer.getMsgDevId()' is not required but still doing
+            if (mCustomer.getMsgDevId() == null || mCustomer.getMsgDevId().isEmpty() || !mCustomer.getMsgDevId().equals(newDevId)) {
                 LogMy.d(TAG, "Trying to update customer object for deviceId: " + newDevId);
                 String updatedDevId = CommonServices.getInstance().setMsgDeviceId(mInstance.getCustomer().getMobile_num(), newDevId);
                 mCustomer.setMsgDevId(updatedDevId);
@@ -213,79 +238,9 @@ public class CustomerUser {
             return ErrorCodes.NO_ERROR;
 
         } catch (Exception e) {
-            if(e instanceof BackendlessException) {
-                if(((BackendlessException) e).getCode().equals(ErrorCodes.BL_ERROR_MSGING_UNKNOWN_DEV)) {
-                    // This device is not registered for messaging
-                    LogMy.d(TAG,"This device is not registered for messaging: "+Messaging.DEVICE_ID);
-                    return ErrorCodes.DEV_NOT_REG_FOR_MSGING;
-                }
-                LogMy.e(TAG,"BackendlessException in checkMsgDevReg: "+e.toString());
-                return AppCommonUtil.getLocalErrorCode((BackendlessException)e);
-            }
-
-            LogMy.e(TAG,"Exception in checkMsgDevReg: "+e.toString());
-            return ErrorCodes.GENERAL_ERROR;
+            LogMy.e(TAG, "BackendlessException in checkMsgDevReg: " + e.toString());
+            return AppCommonUtil.getLocalErrorCode((BackendlessException) e);
         }
-
-        /*Backendless.Messaging.getRegistrations(new AsyncCallback<DeviceRegistration>() {
-            @Override
-            public void handleResponse(DeviceRegistration response) {
-                String devId = response.getDeviceId();
-                LogMy.d(TAG, "Received device registration data: " + devId);
-
-                try {
-                    String curDevId = mInstance.getCustomer().getMsgDevId();
-                    if (curDevId == null || curDevId.isEmpty() || !curDevId.equals(devId)) {
-                        LogMy.d(TAG, "Trying to update customer object for deviceId: " + response.getDeviceId());
-                        String newDevId = CommonServices.getInstance().setMsgDeviceId(mInstance.getCustomer().getMobile_num(), devId);
-                        mInstance.getCustomer().setMsgDevId(newDevId);
-                    }
-                } catch (Exception e) {
-                    LogMy.e(TAG,"Failed to update customer object for msgDevId: "+e.toString());
-                    if(devId!=null) {
-                        // error after device registration - deregister the device
-                        try {
-                            Backendless.Messaging.unregisterDevice();
-                        } catch (Exception ex) {
-                            LogMy.e(TAG,"Exception during device deregistration: "+ex.toString());
-                            LogMy.e(TAG,"Failed to deregister the device: "+devId);
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void handleFault(BackendlessFault fault) {
-                LogMy.e(TAG,"Failed to receive Device registration data: "+fault.toString());
-            }
-        });*/
-
-
-        /*String newDevId = null;
-        try {
-            newDevId = Backendless.Messaging.getDeviceRegistration().getDeviceId();
-            if(newDevId==null || newDevId.isEmpty()) {
-                LogMy.d(TAG, "Msg Device Id not available");
-                return;
-            }
-
-            LogMy.d(TAG, "Trying to update customer object for deviceId: " + newDevId);
-            mInstance.mCustomer.setMsgDevId(newDevId);
-            mInstance.mCustomer = Backendless.Persistence.save(mInstance.mCustomer);
-            LogMy.d(TAG, "Updated device registration Id: " + mInstance.mCustomer.getMsgDevId());
-
-        } catch (Exception e) {
-            LogMy.e(TAG,"Failed to update customer object for msgDevId: "+e.toString());
-            if(newDevId!=null) {
-                // error after device registration - deregister the device
-                try {
-                    Backendless.Messaging.unregisterDevice();
-                } catch (Exception ex) {
-                    LogMy.e(TAG,"Exception during device deregistration: "+ex.toString());
-                    LogMy.e(TAG,"Failed to deregister the device: "+newDevId);
-                }
-            }
-        }*/
     }
 
     public int saveCustAddress(CustAddress addr, Boolean setAsDefault) {
@@ -462,13 +417,13 @@ public class CustomerUser {
         return mPseudoLoggedIn;
     }
 
-    public boolean isChkMsgDevReg() {
+    /*public boolean isChkMsgDevReg() {
         return mChkMsgDevReg;
     }
 
     public synchronized void setChkMsgDevReg(boolean chkMsgDevReg) {
         this.mChkMsgDevReg = chkMsgDevReg;
-    }
+    }*/
 
     public List<CustAddress> getAllAddress() {
         return mAddresses;

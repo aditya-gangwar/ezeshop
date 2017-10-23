@@ -156,7 +156,7 @@
                 style="@style/Divider_vertical_Medium"/-->
             <EditText
                 style="@style/MyEdittext_Medium"
-                android:id="@+id/input_customer_id"
+                android:id="@+id/input_customer_mobile"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:hint="Mobile Number"

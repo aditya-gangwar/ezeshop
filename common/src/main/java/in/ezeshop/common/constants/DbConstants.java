@@ -109,30 +109,27 @@ public class DbConstants {
     public static final String TXN_CUSTOMER_PIN_NOT_USED = "No";
     public static final String TXN_CUSTOMER_OTP_USED = "OTP";
 
-    // Merchant Orders Table values
-    public enum MCHNT_ORDER_STATUS {
+    // Customer Orders Table values
+    public enum CUSTOMER_ORDER_STATUS {
         New,
-        InProcess,
-        Shipped,
-        PaymentVerifyPending,
-        PaymentFailed,
-        Completed,
+        Accepted,
+        Dispatched,
+        Delivered,
+        Cancelled,
         Rejected;
 
-        public static String toString(MCHNT_ORDER_STATUS status) {
+        public static String toString(CUSTOMER_ORDER_STATUS status) {
             switch (status) {
                 case New:
                     return "New";
-                case InProcess:
-                    return "In Process";
-                case Shipped:
-                    return "Shipped";
-                case PaymentVerifyPending:
-                    return "Payment Verification Pending";
-                case PaymentFailed:
-                    return "Payment Failed";
-                case Completed:
-                    return "Completed";
+                case Accepted:
+                    return "Accepted";
+                case Dispatched:
+                    return "Dispatched";
+                case Delivered:
+                    return "Delivered";
+                case Cancelled:
+                    return "Cancelled";
                 case Rejected:
                     return "Rejected";
                 default:
@@ -141,20 +138,18 @@ public class DbConstants {
         }
 
         // reverse of toString
-        public static MCHNT_ORDER_STATUS fromString(String status) {
+        public static CUSTOMER_ORDER_STATUS fromString(String status) {
             switch (status) {
                 case "New":
                     return New;
-                case "In Process":
-                    return InProcess;
-                case "Shipped":
-                    return Shipped;
-                case "Payment Verification Pending":
-                    return PaymentVerifyPending;
-                case "Payment Failed":
-                    return PaymentFailed;
-                case "Completed":
-                    return Completed;
+                case "Accepted":
+                    return Accepted;
+                case "Dispatched":
+                    return Dispatched;
+                case "Delivered":
+                    return Delivered;
+                case "Cancelled":
+                    return Cancelled;
                 case "Rejected":
                     return Rejected;
                 default:
@@ -162,6 +157,11 @@ public class DbConstants {
             }
         }
     }
+
+    public static String custOrderStatusChgReasons[] = {
+            "Not Attended",
+            "Invalid"
+    };
 
     // SKU to Item Name mapping
     /*public static final String SKU_CUSTOMER_CARDS = "1001";

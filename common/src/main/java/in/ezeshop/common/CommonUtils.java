@@ -140,6 +140,22 @@ public class CommonUtils {
             return "";
         }
 
+        return mchnt.getAddress().getLine_1()+"\n"
+                +area.getAreaName()+", "+city.getCity()+"\n"
+                +city.getState()+
+                ((area.getPincode()==null||area.getPincode().isEmpty())?(""):(" - "+area.getPincode()));
+    }
+
+    public static String getMchntAddrStrShort(Merchants mchnt) {
+        Areas area = mchnt.getAddress().getAreaNIDB();
+        if(area==null) {
+            return "";
+        }
+        Cities city = area.getCity();
+        if(city==null) {
+            return "";
+        }
+
         return mchnt.getAddress().getLine_1()+", "
                 +area.getAreaName();
     }

@@ -12,6 +12,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import in.ezeshop.appbase.utilities.BackgroundProcessor;
+import in.ezeshop.customerbase.CashbackActivityCust2;
 import in.ezeshop.internal.entities.AgentUser;
 import in.ezeshop.internal.helper.MyRetainedFragment;
 import in.ezeshop.appbase.PasswdChangeDialog;
@@ -23,7 +25,6 @@ import in.ezeshop.common.constants.ErrorCodes;
 import in.ezeshop.appbase.utilities.AppCommonUtil;
 import in.ezeshop.appbase.utilities.DialogFragmentWrapper;
 import in.ezeshop.appbase.utilities.LogMy;
-import in.ezeshop.customerbase.CashbackActivityCust;
 import in.ezeshop.customerbase.entities.CustomerUser;
 import in.ezeshop.merchantbase.CashbackActivity;
 import in.ezeshop.merchantbase.entities.MerchantUser;
@@ -113,7 +114,8 @@ public class ActionsActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onBgProcessResponse(int errorCode, int operation) {
+//    public void onBgProcessResponse(int errorCode, int operation) {
+    public void onBgProcessResponse(int errorCode, BackgroundProcessor.MessageBgJob opData) {
         // Session timeout case - show dialog and logout - irrespective of invoked operation
         if(errorCode==ErrorCodes.SESSION_TIMEOUT || errorCode==ErrorCodes.NOT_LOGGED_IN) {
             AppCommonUtil.cancelProgressDialog(true);
@@ -123,7 +125,7 @@ public class ActionsActivity extends AppCompatActivity implements
         }
 
         try {
-            switch(operation) {
+            switch(opData.requestCode) {
                 case MyRetainedFragment.REQUEST_LOGOUT:
                     AppCommonUtil.cancelProgressDialog(true);
                     AgentUser.reset();
@@ -291,7 +293,7 @@ public class ActionsActivity extends AppCompatActivity implements
             }
         } catch (Exception e) {
             AppCommonUtil.cancelProgressDialog(true);
-            LogMy.e(TAG, "Exception in CashbackActivity:onBgProcessResponse: "+operation+": "+errorCode, e);
+            LogMy.e(TAG, "Exception in CashbackActivity:onBgProcessResponse: "+opData.requestCode+": "+errorCode, e);
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), false, true)
                     .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
         }
@@ -437,8 +439,8 @@ public class ActionsActivity extends AppCompatActivity implements
     public void launchCustApp() {
         // pseudo login done - launch cashback activity
         //Start Cashback Activity
-        Intent intent = new Intent( this, CashbackActivityCust.class );
-        intent.putExtra(CashbackActivityCust.INTENT_EXTRA_USER_TOKEN, AgentUser.getInstance().getUserToken());
+        Intent intent = new Intent( this, CashbackActivityCust2.class );
+        intent.putExtra(CashbackActivityCust2.INTENT_EXTRA_USER_TOKEN, AgentUser.getInstance().getUserToken());
         // clear Login activity from backstack
         //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

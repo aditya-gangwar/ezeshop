@@ -1,4 +1,4 @@
-package in.ezeshop.customerbase.helper;
+package in.ezeshop.appbase.utilities;
 
 import com.backendless.push.BackendlessBroadcastReceiver;
 import com.backendless.push.BackendlessPushService;
@@ -7,11 +7,11 @@ import com.backendless.push.BackendlessPushService;
  * Created by adgangwa on 27-09-2017.
  */
 
-public class CustPushReceiver extends BackendlessBroadcastReceiver
+public class MsgPushReceiver extends BackendlessBroadcastReceiver
 {
     @Override
     public Class<? extends BackendlessPushService> getServiceClass()
     {
-        return CustPushService.class;
+        return MsgPushService.class;
     }
 }

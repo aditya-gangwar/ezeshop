@@ -28,8 +28,8 @@ public class CustomerDetailsFragment extends BaseFragment {
     private static final String DIALOG_DISABLE_CUST = "disableCustomer";
     //private static final String DIALOG_DISABLE_CARD = "disableCard";
 
-    private final SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.DATE_LOCALE);
-    private SimpleDateFormat mSdfDateOnly = new SimpleDateFormat(CommonConstants.DATE_FORMAT_ONLY_DATE_DISPLAY, CommonConstants.DATE_LOCALE);
+    private final SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.MY_LOCALE);
+    private SimpleDateFormat mSdfDateOnly = new SimpleDateFormat(CommonConstants.DATE_FORMAT_ONLY_DATE_DISPLAY, CommonConstants.MY_LOCALE);
 
     public interface CustomerDetailsFragmentIf {
         MyRetainedFragment getRetainedFragment();

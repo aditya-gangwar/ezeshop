@@ -52,21 +52,17 @@ public class MyRetainedFragment extends RetainedFragment {
     public static final int REQUEST_GENERATE_MERCHANT_PWD = 10;
     public static final int REQUEST_ADD_CUSTOMER_OP = 11;
     public static final int REQUEST_CHANGE_PASSWD = 12;
-    //public static final int REQUEST_DELETE_TRUSTED_DEVICE = 13;
     public static final int REQUEST_CHANGE_MOBILE = 14;
     public static final int REQUEST_MERCHANT_STATS = 15;
     public static final int REQUEST_FORGOT_ID = 16;
-    public static final int REQUEST_UPLOAD_IMG = 17;
+    //public static final int REQUEST_UPLOAD_IMG = 17;
     public static final int REQUEST_ARCHIVE_TXNS = 18;
     public static final int REQUEST_CUST_DATA_FILE_DOWNLOAD = 19;
     public static final int REQUEST_FETCH_MERCHANT_OPS = 20;
-    //public static final int REQUEST_CANCEL_TXN = 21;
-    //public static final int REQUEST_CRT_MCHNT_ORDER = 22;
-    //public static final int REQUEST_FETCH_MERCHANT_ORDERS = 23;
-    //public static final int REQUEST_DELETE_MCHNT_ORDER = 24;
     public static final int REQUEST_GEN_TXN_OTP = 25;
     public static final int REQUEST_LOAD_TEST = 26;
     public static final int REQUEST_GET_CUST_ID = 27;
+    public static final int REQUEST_MSG_DEV_REG_CHK = 28;
 
     // Threads taken care by this fragment
     private MyBackgroundProcessor<String> mBackgroundProcessor;
@@ -74,34 +70,26 @@ public class MyRetainedFragment extends RetainedFragment {
 
     public String mUserToken;
     public MerchantUser mMerchantUser;
+
     // Current objects - should be reset after each transaction
     public String mCustMobile;
-    //public String mCustCardId;
-    //public boolean mCardPresented;
-    //public String mCardImageFilename;
+    public String mCustRegName;
     // this is used differently in different cases
     public String mTempStr;
-
-    public String mCustRegName;
-    //public String mCustRegLastName;
-    //public String mCustRegDob; // DDMMYYYY format
-    //public int mCustSex;
 
     public MyCashback mCurrCashback;
     public MyCustomer mCurrCustomer;
     public MyTransaction mCurrTransaction;
+    public int mBillTotal;
+
     public MerchantStats mMerchantStats;
     public List<MyCashback> mLastFetchCashbacks;
     public List<MerchantOps> mLastFetchMchntOps;
     public Bitmap mLastFetchedImage;
-    //public List<MerchantOrders> mLastFetchMchntOrders;
 
-    public int mBillTotal;
-    // mCbExcludedTotal is not used - should always be 0
-    //public int mCbExcludedTotal;
     // mOrderItems is not used - to be removed
-    public List<OrderItem> mOrderItems;
-    public int toDeleteTrustedDeviceIndex = -1;
+    // public List<OrderItem> mOrderItems;
+    //public int toDeleteTrustedDeviceIndex = -1;
 
     public MyCustomerOps mCustomerOp;
     // params for merchant mobile number change operation
@@ -110,11 +98,9 @@ public class MyRetainedFragment extends RetainedFragment {
     public String mOtpMobileChange;
 
     // members used by 'Txn Reports Activity' to store its state, and its fragments
-    //public List<String> mAllFiles = new ArrayList<>();
     public List<String> mMissingFiles;
     // 'Txn Reports Activity' store the helper instance here in onSaveInstance
     public TxnReportsHelper2 mTxnReportHelper;
-    //public List<Transaction> mTxnsFromCsv = new ArrayList<>();
     public int mSummary[] = new int[AppConstants.INDEX_SUMMARY_MAX_VALUE];
     public List<Transaction> mLastFetchTransactions;
 
@@ -127,15 +113,9 @@ public class MyRetainedFragment extends RetainedFragment {
         mLastFetchTransactions = null;
         mLastFetchedImage = null;
         mLastFetchMchntOps = null;
-        //mLastFetchMchntOrders = null;
 
         mCustMobile = null;
-        //mCustCardId = null;
-        //mCardImageFilename = null;
-        //mCardPresented = false;
-        toDeleteTrustedDeviceIndex = -1;
-
-        mOrderItems = null;
+        //mOrderItems = null;
         //mCbExcludedTotal = 0;
         mBillTotal = 0;
 
@@ -145,17 +125,22 @@ public class MyRetainedFragment extends RetainedFragment {
         mOtpMobileChange = null;
 
         mCustRegName = null;
-        //mCustRegLastName = null;
-        //mCustRegDob = null;
-        //mCustSex = -1;
 
         if(AppConstants.USE_CRASHLYTICS) {
             Crashlytics.setString(AppConstants.CLTS_INPUT_CUST_MOBILE, "");
-            //Crashlytics.setString(AppConstants.CLTS_INPUT_CUST_CARD, "");
         }
     }
 
-    public void fetchMerchantsOps() {
+    /*
+    * Method to add request for processing by background thread
+    */
+    public void addBackgroundJob(int requestCode, Context ctxt, String callingFragTag,
+                                 String argStr1, String argStr2, String argStr3, Long argLong1, Boolean argBool1) {
+        // transparently pass to background thread
+        mBackgroundProcessor.addBackgroundJob(requestCode, ctxt, callingFragTag, argStr1, argStr2, argStr3, argLong1, argBool1);
+    }
+
+    /*public void fetchMerchantsOps() {
         mBackgroundProcessor.addMerchantOpsReq();
     }
 
@@ -167,13 +152,13 @@ public class MyRetainedFragment extends RetainedFragment {
 
     public void changeMobileNum() {
         mBackgroundProcessor.addChangeMobileRequest();
-    }
+    }*/
 
     /*public void deleteDevice(String curDeviceId) {
         mBackgroundProcessor.addDeleteDeviceRequest(toDeleteTrustedDeviceIndex, curDeviceId);
     }*/
 
-    public void uploadImageFile(Context ctxt, String localStoredFileName, String remoteFileName, String remoteDir) {
+    /*public void uploadImageFile(Context ctxt, String localStoredFileName, String remoteFileName, String remoteDir) {
         // get file object for the stored file
         File txnImage = new File(ctxt.getFilesDir() + "/" + localStoredFileName);
         // check if image of card exists
@@ -203,11 +188,11 @@ public class MyRetainedFragment extends RetainedFragment {
         }
     }
 
-    /*public void uploadImageFile(File file, String remoteDir) {
+    public void uploadImageFile(File file, String remoteDir) {
         mBackgroundProcessor.addImgUploadRequest(file, remoteDir);
     }*/
 
-    public void changePassword(String oldPasswd, String newPasswd) {
+    /*public void changePassword(String oldPasswd, String newPasswd) {
         mBackgroundProcessor.changePassword(oldPasswd, newPasswd);
     }
 
@@ -257,7 +242,7 @@ public class MyRetainedFragment extends RetainedFragment {
 
     public void downloadCustDataFile(Context ctxt, String fileURL) {
         mBackgroundProcessor.addCustFileDownloadReq(ctxt, fileURL);
-    }
+    }*/
 
     public void fetchImageFile(String url) {
         LogMy.d(TAG, "In fetchImageFile: "+url);
@@ -277,9 +262,9 @@ public class MyRetainedFragment extends RetainedFragment {
         mBackgroundProcessor.addCancelTxnReq(txnId, cardId, pin, isOtp);
     }*/
 
-    public void generateTxnOtp(String custMobileOrId) {
+    /*public void generateTxnOtp(String custMobileOrId) {
         mBackgroundProcessor.addGenTxnOtpReq(custMobileOrId);
-    }
+    }*/
 
     /*public void createMchntOrder(String sku, int qty, int totalPrice) {
         mBackgroundProcessor.createMchntOrder(sku, qty, totalPrice);
@@ -291,13 +276,13 @@ public class MyRetainedFragment extends RetainedFragment {
         mBackgroundProcessor.addDeleteMchntOrder(orderId);
     }*/
 
-    public void startLoadTest(String custId, String pin, int reps) {
+    /*public void startLoadTest(String custId, String pin, int reps) {
         mBackgroundProcessor.addLoadTestReq(custId, pin, reps);
-    }
+    }*/
 
-    public void getCustomerId(String custMobile) {
+    /*public void getCustomerId(String custMobile) {
         mBackgroundProcessor.addCustIdReq(custMobile);
-    }
+    }*/
 
 
     @Override
@@ -352,12 +337,14 @@ public class MyRetainedFragment extends RetainedFragment {
 
         @Override
         protected void onPostExecute(Bitmap image) {
+            BackgroundProcessor.MessageBgJob opdata = new BackgroundProcessor.MessageBgJob();
+            opdata.requestCode = REQUEST_IMAGE_DOWNLOAD;
             if(image==null) {
-                mCallback.onBgProcessResponse(ErrorCodes.GENERAL_ERROR, REQUEST_IMAGE_DOWNLOAD);
+                mCallback.onBgProcessResponse(ErrorCodes.GENERAL_ERROR, opdata);
             } else {
                 mLastFetchedImage = image;
                 //mMerchantUser.setDisplayImage(image);
-                mCallback.onBgProcessResponse(ErrorCodes.NO_ERROR, REQUEST_IMAGE_DOWNLOAD);
+                mCallback.onBgProcessResponse(ErrorCodes.NO_ERROR, opdata);
             }
         }
     }

@@ -34,9 +34,9 @@ public class CustomerDetailsDialog extends BaseDialog {
     private static final String ARG_GETTXNS_BTN = "getTxnsBtn";
 
     private CustomerDetailsDialogIf mCallback;
-    private SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.DATE_LOCALE);
+    private SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.MY_LOCALE);
 
-    private String mCustPrivateId;
+    private String mCustMobile;
 
     public interface CustomerDetailsDialogIf {
         MyRetainedFragment getRetainedFragment();
@@ -70,7 +70,7 @@ public class CustomerDetailsDialog extends BaseDialog {
         int position = getArguments().getInt(ARG_CB_POSITION, -1);
         if(position>=0) {
             cb = mCallback.getRetainedFragment().mLastFetchCashbacks.get(position);
-            mCustPrivateId = cb.getCustomer().getPrivateId();
+            mCustMobile = cb.getCustomer().getMobileNum();
             //cust = cb.getCustomer();
         }
         initDialogView(cb);
@@ -86,7 +86,7 @@ public class CustomerDetailsDialog extends BaseDialog {
                 dialog.dismiss();
                 break;
             case DialogInterface.BUTTON_NEUTRAL:
-                mCallback.getCustTxns(mCustPrivateId);
+                mCallback.getCustTxns(mCustMobile);
                 dialog.dismiss();
                 break;
         }
@@ -104,7 +104,7 @@ public class CustomerDetailsDialog extends BaseDialog {
         bindUiResources(v);
         if(savedInstanceState!=null) {
             LogMy.d(TAG,"Restoring");
-            mCustPrivateId = savedInstanceState.getString("mCustPrivateId");
+            mCustMobile = savedInstanceState.getString("mCustMobile");
         }
 
         boolean showGetTxns = getArguments().getBoolean(ARG_GETTXNS_BTN, true);
@@ -334,6 +334,6 @@ public class CustomerDetailsDialog extends BaseDialog {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("mCustPrivateId", mCustPrivateId);
+        outState.putString("mCustMobile", mCustMobile);
     }
 }

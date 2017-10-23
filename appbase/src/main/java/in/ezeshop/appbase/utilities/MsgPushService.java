@@ -1,4 +1,4 @@
-package in.ezeshop.customerbase.helper;
+package in.ezeshop.appbase.utilities;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -9,16 +9,23 @@ import android.support.v4.app.NotificationCompat;
 
 import com.backendless.push.BackendlessPushService;
 
-import in.ezeshop.appbase.utilities.LogMy;
-import in.ezeshop.customerbase.entities.CustomerUser;
-
 /**
  * Created by adgangwa on 27-09-2017.
  */
 
-public class CustPushService extends BackendlessPushService
+public class MsgPushService extends BackendlessPushService
 {
     private static final String TAG = "CustApp-CustPushService";
+
+    private static boolean mChkMsgDevReg;
+
+    public static boolean isChkMsgDevReg() {
+        return mChkMsgDevReg;
+    }
+
+    public static void setChkMsgDevReg(boolean mChkMsgDevReg) {
+        MsgPushService.mChkMsgDevReg = mChkMsgDevReg;
+    }
 
     @Override
     public void onRegistered(Context context, String registrationId )
@@ -26,7 +33,8 @@ public class CustPushService extends BackendlessPushService
         LogMy.d(TAG, "In onRegistered");
         //super.onRegistered(context, registrationId);
 
-        CustomerUser.getInstance().setChkMsgDevReg(true);
+        //CustomerUser.getInstance().setChkMsgDevReg(true);
+        setChkMsgDevReg(true);
     }
 
     @Override

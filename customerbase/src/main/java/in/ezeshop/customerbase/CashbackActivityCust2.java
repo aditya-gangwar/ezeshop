@@ -36,6 +36,7 @@ import in.ezeshop.appbase.SingleWebViewActivity;
 import in.ezeshop.appbase.entities.MyAreas;
 import in.ezeshop.appbase.entities.MyCashback;
 import in.ezeshop.appbase.utilities.BackgroundProcessor;
+import in.ezeshop.appbase.utilities.MsgPushService;
 import in.ezeshop.common.MyGlobalSettings;
 import in.ezeshop.common.database.CustAddress;
 import in.ezeshop.common.database.Merchants;
@@ -529,7 +530,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
             // so, checking for device registration here
             // This so - as we dont know how much time the device registration may take - few millisec to few sec
             // If we do this somewhere else, we may not be able to catch it
-            if(mCustomerUser.isChkMsgDevReg() &&
+            if(MsgPushService.isChkMsgDevReg() &&
                     (opData.requestCode!=MyRetainedFragment.REQUEST_CHANGE_PASSWD &&
                             opData.requestCode!=MyRetainedFragment.REQUEST_LOGOUT) ) {
                 // device registration completed

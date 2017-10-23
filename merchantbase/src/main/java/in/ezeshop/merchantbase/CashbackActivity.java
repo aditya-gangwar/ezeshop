@@ -4,6 +4,7 @@ package in.ezeshop.merchantbase;
  * Created by adgangwa on 23-02-2016.
  */
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -34,6 +35,8 @@ import com.helpshift.support.Support;
 import in.ezeshop.appbase.*;
 import in.ezeshop.appbase.constants.AppConstants;
 
+import in.ezeshop.appbase.utilities.BackgroundProcessor;
+import in.ezeshop.appbase.utilities.MsgPushService;
 import in.ezeshop.common.CommonUtils;
 import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.DbConstants;
@@ -280,7 +283,8 @@ public class CashbackActivity extends BaseActivity implements
                     // fetch merchant stats from backend
                     // this builds fresh 'all customer details' file too
                     AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
-                    mWorkFragment.fetchMerchantStats();
+                    //mWorkFragment.fetchMerchantStats();
+                    mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_MERCHANT_STATS, null, null, null, null, null, null, null);
 
                 } else {
                     onMerchantStatsResult(ErrorCodes.NO_ERROR);
@@ -296,7 +300,8 @@ public class CashbackActivity extends BaseActivity implements
 
             } else if(i == R.id.menu_operations) {
                 AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
-                mWorkFragment.fetchMerchantsOps();
+                //mWorkFragment.fetchMerchantsOps();
+                mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_FETCH_MERCHANT_OPS, null, null, null, null, null, null, null);
             }
             else if (i == R.id.menu_settings) {
                 startSettingsFragment();
@@ -650,7 +655,8 @@ public class CashbackActivity extends BaseActivity implements
 
             // fetch merchant stats from backend
             // this builds fresh 'all customer details' file too
-            mWorkFragment.fetchMerchantStats();
+            //mWorkFragment.fetchMerchantStats();
+            mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_MERCHANT_STATS, null, null, null, null, null, null, null);
 
         } else {
             // check if file locally available (it should be) - from last fetch
@@ -732,7 +738,9 @@ public class CashbackActivity extends BaseActivity implements
                     .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
         } else {
             AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
-            mWorkFragment.executeCustomerOp();
+            //mWorkFragment.executeCustomerOp();
+            mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_ADD_CUSTOMER_OP, null, null,
+                    null, null, null, null, null);
         }
     }
 
@@ -830,15 +838,15 @@ public class CashbackActivity extends BaseActivity implements
     }
 
     @Override
-    public void getCustTxns(String id) {
+    public void getCustTxns(String mobileId) {
         restartTxn();
-        startTxnReportsActivity(id);
+        startTxnReportsActivity(mobileId);
     }
 
-    private void startTxnReportsActivity(String custId) {
+    private void startTxnReportsActivity(String mobileId) {
         // start reports activity
         Intent intent = new Intent( this, TxnReportsActivity.class );
-        intent.putExtra(TxnReportsActivity.EXTRA_CUSTOMER_ID, custId);
+        intent.putExtra(TxnReportsActivity.EXTRA_CUSTOMER_MOBILE, mobileId);
         startActivityForResult(intent, RC_TXN_REPORT);
     }
 
@@ -892,7 +900,9 @@ public class CashbackActivity extends BaseActivity implements
         if ( resultCode == ErrorCodes.NO_ERROR) {
             // show progress dialog
             AppCommonUtil.showProgressDialog(this, AppConstants.progressLogout);
-            mWorkFragment.logoutMerchant();
+            //mWorkFragment.logoutMerchant();
+            mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_LOGOUT_MERCHANT, null, null,
+                    null, null, null, null, null);
         }
         return resultCode;
     }
@@ -908,7 +918,9 @@ public class CashbackActivity extends BaseActivity implements
         } else {
             // show progress dialog
             AppCommonUtil.showProgressDialog(this, AppConstants.progressSettings);
-            mWorkFragment.updateMerchantSettings();
+            //mWorkFragment.updateMerchantSettings();
+            mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_UPDATE_MERCHANT_SETTINGS, null, null,
+                    null, null, null, null, null);
         }
     }
 
@@ -922,7 +934,9 @@ public class CashbackActivity extends BaseActivity implements
         } else {
             // show progress dialog
             AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
-            mWorkFragment.changePassword(oldPasswd, newPassword);
+            //mWorkFragment.changePassword(oldPasswd, newPassword);
+            mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_CHANGE_PASSWD, null, null,
+                    oldPasswd, newPassword, null, null, null);
         }
     }
 
@@ -953,8 +967,9 @@ public class CashbackActivity extends BaseActivity implements
     }*/
 
     @Override
-    public void onBgProcessResponse(int errorCode, int operation) {
-        LogMy.d(TAG,"In onBgProcessResponse: "+operation+", "+errorCode);
+//    public void onBgProcessResponse(int errorCode, int operation) {
+    public void onBgProcessResponse(int errorCode, BackgroundProcessor.MessageBgJob opData) {
+        LogMy.d(TAG,"In onBgProcessResponse: "+opData.requestCode+", "+errorCode);
 
         // this may get chnaged by background processor - like in case of 'change mobile'
         mMerchant = mMerchantUser.getMerchant();
@@ -968,47 +983,59 @@ public class CashbackActivity extends BaseActivity implements
         }
 
         try {
-            switch(operation) {
-                case MyRetainedFragment.REQUEST_FETCH_MERCHANT_OPS:
-                    AppCommonUtil.cancelProgressDialog(true);
-                    if(errorCode==ErrorCodes.NO_ERROR) {
-                        startMerchantOpsFrag();
-                    } else if(errorCode==ErrorCodes.NO_DATA_FOUND){
-                        String error = String.format(getString(R.string.ops_no_data_info), MyGlobalSettings.getOpsKeepDays().toString());
-                        DialogFragmentWrapper.createNotification(AppConstants.noDataFailureTitle, error, false, false)
-                                .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
-                    } else {
-                        DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
-                                .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
-                    }
-                    break;
-                case MyRetainedFragment.REQUEST_ARCHIVE_TXNS:
-                    // do nothing
-                    break;
-                case MyRetainedFragment.REQUEST_IMAGE_DOWNLOAD:
-                    onMerchantDpDownload(errorCode);
-                    break;
-                case MyRetainedFragment.REQUEST_GET_CASHBACK:
-                    onCashbackResponse(errorCode);
-                    break;
-                case MyRetainedFragment.REQUEST_REGISTER_CUSTOMER:
-                    onCustRegResponse(errorCode);
-                    break;
-                case MyRetainedFragment.REQUEST_COMMIT_TRANS:
-                    onCommitTransResponse(errorCode);
-                    break;
-                case MyRetainedFragment.REQUEST_UPDATE_MERCHANT_SETTINGS:
-                    onSettingsUpdateResponse(errorCode);
-                    break;
-                case MyRetainedFragment.REQUEST_LOGOUT_MERCHANT:
-                    onLogoutResponse(errorCode);
-                    break;
-                case MyRetainedFragment.REQUEST_ADD_CUSTOMER_OP:
-                    onCustomerOpResult(errorCode);
-                    break;
-                case MyRetainedFragment.REQUEST_CHANGE_PASSWD:
-                    passwordChangeResponse(errorCode);
-                    break;
+            if(opData.callingFragTag!=null && !opData.callingFragTag.isEmpty()) {
+                // this operation was initiated by some fragment
+                // search the same and send op complete notification
+                Fragment callingFrag = getFragmentManager().findFragmentByTag(opData.callingFragTag);
+                if (callingFrag != null) {
+                    callingFrag.onActivityResult(opData.requestCode, Activity.RESULT_OK, null);
+                } else {
+                    LogMy.wtf(TAG, "In onBgProcessResponse: Calling fragment not found: " + opData.callingFragTag + ", Op: " + opData.requestCode);
+                }
+                AppCommonUtil.cancelProgressDialog(true);
+
+            } else {
+                switch (opData.requestCode) {
+                    case MyRetainedFragment.REQUEST_FETCH_MERCHANT_OPS:
+                        AppCommonUtil.cancelProgressDialog(true);
+                        if (errorCode == ErrorCodes.NO_ERROR) {
+                            startMerchantOpsFrag();
+                        } else if (errorCode == ErrorCodes.NO_DATA_FOUND) {
+                            String error = String.format(getString(R.string.ops_no_data_info), MyGlobalSettings.getOpsKeepDays().toString());
+                            DialogFragmentWrapper.createNotification(AppConstants.noDataFailureTitle, error, false, false)
+                                    .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
+                        } else {
+                            DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
+                                    .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
+                        }
+                        break;
+                    case MyRetainedFragment.REQUEST_ARCHIVE_TXNS:
+                        // do nothing
+                        break;
+                    case MyRetainedFragment.REQUEST_IMAGE_DOWNLOAD:
+                        onMerchantDpDownload(errorCode);
+                        break;
+                    case MyRetainedFragment.REQUEST_GET_CASHBACK:
+                        onCashbackResponse(errorCode);
+                        break;
+                    case MyRetainedFragment.REQUEST_REGISTER_CUSTOMER:
+                        onCustRegResponse(errorCode);
+                        break;
+                    case MyRetainedFragment.REQUEST_COMMIT_TRANS:
+                        onCommitTransResponse(errorCode);
+                        break;
+                    case MyRetainedFragment.REQUEST_UPDATE_MERCHANT_SETTINGS:
+                        onSettingsUpdateResponse(errorCode);
+                        break;
+                    case MyRetainedFragment.REQUEST_LOGOUT_MERCHANT:
+                        onLogoutResponse(errorCode);
+                        break;
+                    case MyRetainedFragment.REQUEST_ADD_CUSTOMER_OP:
+                        onCustomerOpResult(errorCode);
+                        break;
+                    case MyRetainedFragment.REQUEST_CHANGE_PASSWD:
+                        passwordChangeResponse(errorCode);
+                        break;
                 /*case MyRetainedFragment.REQUEST_DELETE_TRUSTED_DEVICE:
                     AppCommonUtil.cancelProgressDialog(true);
                     if(errorCode == ErrorCodes.NO_ERROR) {
@@ -1028,36 +1055,36 @@ public class CashbackActivity extends BaseActivity implements
                                 .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
                     }
                     break;*/
-                //case RetainedFragment.REQUEST_ADD_MERCHANT_OP:
-                case MyRetainedFragment.REQUEST_CHANGE_MOBILE:
-                    onChangeMobileResponse(errorCode);
-                    break;
-                case MyRetainedFragment.REQUEST_MERCHANT_STATS:
-                    if(errorCode == ErrorCodes.NO_ERROR) {
-                        // store the fetched stats in shared preference in CSV format
-                        setStoredMchntStats(MyMerchantStats.toCsvString(mWorkFragment.mMerchantStats));
-                    }
-                    onMerchantStatsResult(errorCode);
-                    break;
-                case MyRetainedFragment.REQUEST_CUST_DATA_FILE_DOWNLOAD:
-                    AppCommonUtil.cancelProgressDialog(true);
-                    // start customer list fragment
-                    if(errorCode==ErrorCodes.NO_ERROR) {
-                        startCustomerListFrag();
-                    } else {
-                        // remove local stored stats - so as file is created again next time
-                        setStoredMchntStats(null);
-                        //raise alarm
-                        Map<String,String> params = new HashMap<>();
-                        params.put("opCode",String.valueOf(MyRetainedFragment.REQUEST_CUST_DATA_FILE_DOWNLOAD));
-                        params.put("erroCode",String.valueOf(errorCode));
-                        AppAlarms.fileDownloadFailed(mMerchant.getAuto_id(),DbConstants.USER_TYPE_MERCHANT,"onBgProcessResponse",params);
-                        // show error
-                        DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
-                                .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
-                    }
-                    break;
-                case MyRetainedFragment.REQUEST_UPLOAD_IMG:
+                    //case RetainedFragment.REQUEST_ADD_MERCHANT_OP:
+                    case MyRetainedFragment.REQUEST_CHANGE_MOBILE:
+                        onChangeMobileResponse(errorCode);
+                        break;
+                    case MyRetainedFragment.REQUEST_MERCHANT_STATS:
+                        if (errorCode == ErrorCodes.NO_ERROR) {
+                            // store the fetched stats in shared preference in CSV format
+                            setStoredMchntStats(MyMerchantStats.toCsvString(mWorkFragment.mMerchantStats));
+                        }
+                        onMerchantStatsResult(errorCode);
+                        break;
+                    case MyRetainedFragment.REQUEST_CUST_DATA_FILE_DOWNLOAD:
+                        AppCommonUtil.cancelProgressDialog(true);
+                        // start customer list fragment
+                        if (errorCode == ErrorCodes.NO_ERROR) {
+                            startCustomerListFrag();
+                        } else {
+                            // remove local stored stats - so as file is created again next time
+                            setStoredMchntStats(null);
+                            //raise alarm
+                            Map<String, String> params = new HashMap<>();
+                            params.put("opCode", String.valueOf(MyRetainedFragment.REQUEST_CUST_DATA_FILE_DOWNLOAD));
+                            params.put("erroCode", String.valueOf(errorCode));
+                            AppAlarms.fileDownloadFailed(mMerchant.getAuto_id(), DbConstants.USER_TYPE_MERCHANT, "onBgProcessResponse", params);
+                            // show error
+                            DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
+                                    .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
+                        }
+                        break;
+                /*case MyRetainedFragment.REQUEST_UPLOAD_IMG:
                     if(errorCode==ErrorCodes.NO_ERROR) {
                         LogMy.d(TAG,"Uploaded image file successfully");
                     } else {
@@ -1068,7 +1095,7 @@ public class CashbackActivity extends BaseActivity implements
                         params.put("erroCode",String.valueOf(errorCode));
                         AppAlarms.fileUploadFailed(mMerchant.getAuto_id(),DbConstants.USER_TYPE_MERCHANT,"onBgProcessResponse",params);
                     }
-                    break;
+                    break;*/
                 /*case MyRetainedFragment.REQUEST_CRT_MCHNT_ORDER:
                 case MyRetainedFragment.REQUEST_DELETE_MCHNT_ORDER:
                     AppCommonUtil.cancelProgressDialog(true);
@@ -1109,36 +1136,54 @@ public class CashbackActivity extends BaseActivity implements
                                 .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
                     }
                     break;*/
-                case MyRetainedFragment.REQUEST_GEN_TXN_OTP:
-                    AppCommonUtil.cancelProgressDialog(true);
-                    // ask for customer OTP
-                    if(errorCode == ErrorCodes.OTP_GENERATED) {
-                        TxnPinInputDialog dialog = TxnPinInputDialog.newInstance(
-                                mWorkFragment.mCurrTransaction.getTransaction().getCl_credit(),
-                                mWorkFragment.mCurrTransaction.getTransaction().getCl_debit(),
-                                //mWorkFragment.mCurrTransaction.getTransaction().getCb_debit(),
-                                mWorkFragment.mCurrTransaction.getTransaction().getCl_overdraft(),
-                                true);
-                        dialog.show(mFragMgr, DIALOG_OTP_CASH_TXN);
-                    } else {
-                        DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
-                                .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
-                    }
-                    break;
-                case MyRetainedFragment.REQUEST_LOAD_TEST:
-                    AppCommonUtil.cancelProgressDialog(true);
-                    if(errorCode == ErrorCodes.OTP_GENERATED) {
-                        DialogFragmentWrapper.createNotification(AppConstants.defaultSuccessTitle, "Load completed successfully", false, false)
-                                .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
-                    } else {
-                        DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
-                                .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
-                    }
-                    break;
+                    case MyRetainedFragment.REQUEST_GEN_TXN_OTP:
+                        AppCommonUtil.cancelProgressDialog(true);
+                        // ask for customer OTP
+                        if (errorCode == ErrorCodes.OTP_GENERATED) {
+                            TxnPinInputDialog dialog = TxnPinInputDialog.newInstance(
+                                    mWorkFragment.mCurrTransaction.getTransaction().getCl_credit(),
+                                    mWorkFragment.mCurrTransaction.getTransaction().getCl_debit(),
+                                    //mWorkFragment.mCurrTransaction.getTransaction().getCb_debit(),
+                                    mWorkFragment.mCurrTransaction.getTransaction().getCl_overdraft(),
+                                    true);
+                            dialog.show(mFragMgr, DIALOG_OTP_CASH_TXN);
+                        } else {
+                            DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
+                                    .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
+                        }
+                        break;
+                    case MyRetainedFragment.REQUEST_MSG_DEV_REG_CHK:
+                        // do nothing
+                        break;
+                    case MyRetainedFragment.REQUEST_LOAD_TEST:
+                        AppCommonUtil.cancelProgressDialog(true);
+                        if (errorCode == ErrorCodes.OTP_GENERATED) {
+                            DialogFragmentWrapper.createNotification(AppConstants.defaultSuccessTitle, "Load completed successfully", false, false)
+                                    .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
+                        } else {
+                            DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
+                                    .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
+                        }
+                        break;
+                }
             }
+
+            // This function will be repeatedly called
+            // so, checking for device registration here
+            // This so - as we dont know how much time the device registration may take - few millisec to few sec
+            // If we do this somewhere else, we may not be able to catch it
+            if(MsgPushService.isChkMsgDevReg() &&
+                    (opData.requestCode!=MyRetainedFragment.REQUEST_CHANGE_PASSWD &&
+                            opData.requestCode!=MyRetainedFragment.REQUEST_LOGOUT_MERCHANT) ) {
+                // device registration completed
+                // start thread to verify registration and update customer object, if required
+                //mRetainedFragment.checkMsgDevReg();
+                mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_MSG_DEV_REG_CHK, null, null, null, null, null, null, null);
+            }
+
         } catch (Exception e) {
             AppCommonUtil.cancelProgressDialog(true);
-            LogMy.e(TAG, "Exception in CashbackActivity:onBgProcessResponse: "+operation+": "+errorCode, e);
+            LogMy.e(TAG, "Exception in CashbackActivity:onBgProcessResponse: "+opData.requestCode+": "+errorCode, e);
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), false, true)
                     .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
         }
@@ -1162,8 +1207,10 @@ public class CashbackActivity extends BaseActivity implements
             } else if(mLastMenuItemId==R.id.menu_customers) {
                 // customer data scenario - download the data file
                 AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
-                mWorkFragment.downloadCustDataFile(this,
-                        CommonUtils.getMerchantCustFilePath(mMerchant.getAuto_id()));
+                /*mWorkFragment.downloadCustDataFile(this,
+                        CommonUtils.getMerchantCustFilePath(mMerchant.getAuto_id()));*/
+                mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_CUST_DATA_FILE_DOWNLOAD, this, null,
+                        CommonUtils.getMerchantCustFilePath(mMerchant.getAuto_id()), null, null, null, null);
             }
         } else {
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
@@ -1268,7 +1315,8 @@ public class CashbackActivity extends BaseActivity implements
                     .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
         } else {
             AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
-            mWorkFragment.changeMobileNum();
+            //mWorkFragment.changeMobileNum();
+            mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_CHANGE_MOBILE, null, null, null, null, null, null, null);
         }
     }
 
@@ -1497,7 +1545,9 @@ public class CashbackActivity extends BaseActivity implements
         } else if(verifyType==AppConstants.TXN_VERIFY_OTP) {
             // generate otp
             AppCommonUtil.showProgressDialog(CashbackActivity.this, AppConstants.progressDefault);
-            mWorkFragment.generateTxnOtp(mWorkFragment.mCurrCustomer.getPrivateId());
+            //mWorkFragment.generateTxnOtp(mWorkFragment.mCurrCustomer.getPrivateId());
+            mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_GEN_TXN_OTP, null, null,
+                    mWorkFragment.mCurrCustomer.getPrivateId(), null, null, null, null);
         }
     }
 
@@ -1530,7 +1580,9 @@ public class CashbackActivity extends BaseActivity implements
                 }
             }*/
 
-            mWorkFragment.commitCashTransaction(pin, isOtp);
+            //mWorkFragment.commitCashTransaction(pin, isOtp);
+            mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_COMMIT_TRANS, null, null,
+                    pin, null, null, null, isOtp);
         }
     }
 
@@ -1675,7 +1727,8 @@ public class CashbackActivity extends BaseActivity implements
 
     @Override
 //    public void onCustomerRegOk(String mobileNum, String dob, int sex, String cardId, String otp, String firstName, String lastName) {
-    public void onCustomerRegOk(String mobileNum, String dob, int sex, String otp, String firstName, String lastName) {
+//    public void onCustomerRegOk(String mobileNum, String dob, int sex, String otp, String firstName, String lastName) {
+    public void onCustomerRegOk(String mobileNum, String fullName, String otp) {
 
         int resultCode = AppCommonUtil.isNetworkAvailableAndConnected(this);
         if ( resultCode != ErrorCodes.NO_ERROR) {
@@ -1688,13 +1741,15 @@ public class CashbackActivity extends BaseActivity implements
             // start in background thread
             //mWorkFragment.registerCustomer(mobileNum, dob, sex, cardId, otp, firstName, lastName);
             // sending qrcode param as empty always - as cards are not used now
-            mWorkFragment.registerCustomer(mobileNum, dob, sex, "", otp, firstName, lastName);
+            //mWorkFragment.registerCustomer(mobileNum, dob, sex, "", otp, firstName, lastName);
+            mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_REGISTER_CUSTOMER, null, null,
+                    mobileNum, fullName, otp, null, null);
             // update values
             mWorkFragment.mCustMobile = mobileNum;
             //mWorkFragment.mCustCardId = cardId;
             //mWorkFragment.mCardPresented = true;
 
-            mWorkFragment.mCustRegName = firstName;
+            mWorkFragment.mCustRegName = fullName;
             //mWorkFragment.mCustRegLastName = lastName;
             //mWorkFragment.mCustRegDob = dob;
             //mWorkFragment.mCustSex = sex;
@@ -1755,7 +1810,9 @@ public class CashbackActivity extends BaseActivity implements
                     }
 
                     AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
-                    mWorkFragment.fetchCashback(mobileNum);
+                    //mWorkFragment.fetchCashback(mobileNum);
+                    mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_GET_CASHBACK, null, null,
+                            mobileNum, null, null, null, null);
                     //startBillingFragment();
                 }
             }
@@ -1771,7 +1828,9 @@ public class CashbackActivity extends BaseActivity implements
     @Override
     public void onTestLoad(String custId, String pin, int reps) {
         AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
-        mWorkFragment.startLoadTest(custId, pin, reps);
+        //mWorkFragment.startLoadTest(custId, pin, reps);
+        mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_LOAD_TEST, null, null,
+                custId, pin, null, (long)reps, null);
     }
 
     /*private void startCardScan() {

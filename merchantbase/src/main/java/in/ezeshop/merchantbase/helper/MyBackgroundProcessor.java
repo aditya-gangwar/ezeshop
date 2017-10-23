@@ -9,6 +9,7 @@ import com.backendless.exceptions.BackendlessException;
 
 import in.ezeshop.appbase.backendAPI.CommonServices;
 import in.ezeshop.appbase.constants.AppConstants;
+import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.ErrorCodes;
 import in.ezeshop.common.database.Cashback;
 import in.ezeshop.common.database.MerchantStats;
@@ -41,6 +42,26 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
         super(responseHandler);
         mRetainedFragment = retainedFragment;
     }
+
+    /*
+     * Add request method
+     */
+    public void addBackgroundJob(int requestCode, Context ctxt, String callingFragTag,
+                                 String argStr1, String argStr2, String argStr3, Long argLong1, Boolean argBool1) {
+        LogMy.d(TAG,"Adding background job: "+requestCode);
+
+        MessageBgJob data = new MessageBgJob();
+        data.requestCode = requestCode;
+        data.ctxt = ctxt;
+        data.callingFragTag = callingFragTag;
+        data.argStr1 = argStr1;
+        data.argStr2 = argStr2;
+        data.argStr3 = argStr3;
+        data.argLong1 = argLong1;
+        data.argBool1 = argBool1;
+        mRequestHandler.obtainMessage(requestCode, data).sendToTarget();
+    }
+
 
     private class MessageLogin implements Serializable {
         public String userId;
@@ -106,7 +127,7 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
     /*
      * Add request methods - Assumes that MerchantUser is instantiated
      */
-    public void addMerchantOpsReq() {
+    /*public void addMerchantOpsReq() {
         mRequestHandler.obtainMessage(MyRetainedFragment.REQUEST_FETCH_MERCHANT_OPS, null).sendToTarget();
     }
 
@@ -116,7 +137,7 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
 
     public void addMerchantStatsRequest() {
         mRequestHandler.obtainMessage(MyRetainedFragment.REQUEST_MERCHANT_STATS,null).sendToTarget();
-    }
+    }*/
 
     /*public void addDeleteDeviceRequest(Integer index, String curDeviceId) {
         MessageDelDevice msg = new MessageDelDevice();
@@ -125,7 +146,7 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
         mRequestHandler.obtainMessage(MyRetainedFragment.REQUEST_DELETE_TRUSTED_DEVICE, msg).sendToTarget();
     }*/
 
-    public void addChangeMobileRequest() {
+    /*public void addChangeMobileRequest() {
         mRequestHandler.obtainMessage(MyRetainedFragment.REQUEST_CHANGE_MOBILE,null).sendToTarget();
     }
     public void addImgUploadRequest(File file, String remoteDir) {
@@ -146,6 +167,13 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
         LogMy.d(TAG, "In addCustomerOp");
         mRequestHandler.obtainMessage(MyRetainedFragment.REQUEST_ADD_CUSTOMER_OP,null).sendToTarget();
     }
+    public void addForgotIdRequest(String mobileNum, String deviceId) {
+        LogMy.d(TAG, "In addForgotIdRequest");
+        MessageForgotId msg = new MessageForgotId();
+        msg.deviceId = deviceId;
+        msg.mobileNum = mobileNum;
+        mRequestHandler.obtainMessage(MyRetainedFragment.REQUEST_FORGOT_ID, msg).sendToTarget();
+    }
     public void addPasswordRequest(String brandName, String deviceId, String userId) {
         LogMy.d(TAG, "In addPasswordRequest");
         MessageResetPassword msg = new MessageResetPassword();
@@ -153,13 +181,6 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
         msg.deviceId = deviceId;
         msg.userId = userId;
         mRequestHandler.obtainMessage(MyRetainedFragment.REQUEST_GENERATE_MERCHANT_PWD, msg).sendToTarget();
-    }
-    public void addForgotIdRequest(String mobileNum, String deviceId) {
-        LogMy.d(TAG, "In addForgotIdRequest");
-        MessageForgotId msg = new MessageForgotId();
-        msg.deviceId = deviceId;
-        msg.mobileNum = mobileNum;
-        mRequestHandler.obtainMessage(MyRetainedFragment.REQUEST_FORGOT_ID, msg).sendToTarget();
     }
     public void addCommitTransRequest(String pin, boolean isOtp) {
         LogMy.d(TAG, "In addCommitTransRequest");
@@ -215,7 +236,7 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
         msg.ctxt = context;
         msg.fileUrl = fileURL;
         mRequestHandler.obtainMessage(MyRetainedFragment.REQUEST_CUST_DATA_FILE_DOWNLOAD, msg).sendToTarget();
-    }
+    }*/
     /*public void addCancelTxnReq(String txnId, String cardId, String pin, boolean isOtp) {
         MessageCancelTxn msg = new MessageCancelTxn();
         msg.cardId = cardId;
@@ -223,11 +244,11 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
         msg.pin = pin;
         msg.isOtp = isOtp;
         mRequestHandler.obtainMessage(MyRetainedFragment.REQUEST_CANCEL_TXN, msg).sendToTarget();
-    }*/
+    }
     public void addGenTxnOtpReq(String custMobileOrId) {
         mRequestHandler.obtainMessage(MyRetainedFragment.REQUEST_GEN_TXN_OTP, custMobileOrId).sendToTarget();
     }
-    /*public void createMchntOrder(String sku, int qty, int totalPrice) {
+    public void createMchntOrder(String sku, int qty, int totalPrice) {
         MessageMcntOrder msg = new MessageMcntOrder();
         msg.qty = qty;
         msg.skuOrId = sku;
@@ -239,7 +260,7 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
     }
     public void addDeleteMchntOrder(String orderId) {
         mRequestHandler.obtainMessage(MyRetainedFragment.REQUEST_DELETE_MCHNT_ORDER, orderId).sendToTarget();
-    }*/
+    }
 
     public void addLoadTestReq(String custId, String pin, int reps) {
         MessageLoadTest msg = new MessageLoadTest();
@@ -251,7 +272,7 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
 
     public void addCustIdReq(String custMobile) {
         mRequestHandler.obtainMessage(MyRetainedFragment.REQUEST_GET_CUST_ID, custMobile).sendToTarget();
-    }
+    }*/
 
     @Override
     protected int handleMsg(Message msg) {
@@ -264,19 +285,20 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
                 return ErrorCodes.NO_INTERNET_CONNECTION;
             }*/
 
+            MessageBgJob data = (MessageBgJob)msg.obj;
             switch (msg.what) {
                 case MyRetainedFragment.REQUEST_GET_CASHBACK:
-                    error = getCashback((String) msg.obj);
+                    error = getCashback(data);
                     break;
                 case MyRetainedFragment.REQUEST_LOGIN:
-                    error = loginMerchant((MessageLogin) msg.obj);
+                    error = loginMerchant(data);
                     break;
                 case MyRetainedFragment.REQUEST_REGISTER_CUSTOMER:
-                    error = registerCustomer((MessageCustRegister) msg.obj);
+                    error = registerCustomer(data);
                     break;
                 case MyRetainedFragment.REQUEST_COMMIT_TRANS:
                     //commitCashTrans((Transaction) msg.obj);
-                    error = commitCashTrans((MessageTxnCommit) msg.obj);
+                    error = commitCashTrans(data);
                     break;
                 case MyRetainedFragment.REQUEST_UPDATE_MERCHANT_SETTINGS:
                     error = updateMerchantSettings();
@@ -285,24 +307,24 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
                     error = logoutMerchant();
                     break;
                 case MyRetainedFragment.REQUEST_FETCH_TXNS:
-                    error = fetchTransactions((String) msg.obj);
+                    error = fetchTransactions(data);
                     break;
                 case MyRetainedFragment.REQUEST_FETCH_TXN_FILES:
-                    error = fetchTxnFiles((Context) msg.obj);
+                    error = fetchTxnFiles(data);
                     break;
                 case MyRetainedFragment.REQUEST_GENERATE_MERCHANT_PWD:
-                    error = generatePassword((MessageResetPassword) msg.obj);
+                    error = generatePassword(data);
                     break;
                 case MyRetainedFragment.REQUEST_ADD_CUSTOMER_OP:
                     error = executeCustOp();
                     break;
                 case MyRetainedFragment.REQUEST_CHANGE_PASSWD:
-                    error = changePassword((MessageChangePassword) msg.obj);
+                    error = changePassword(data);
                     break;
-                case MyRetainedFragment.REQUEST_UPLOAD_IMG:
-                    error = uploadImgFile((MessageImgUpload) msg.obj);
+                /*case MyRetainedFragment.REQUEST_UPLOAD_IMG:
+                    error = uploadImgFile(data);
                     break;
-                /*case MyRetainedFragment.REQUEST_DELETE_TRUSTED_DEVICE:
+                case MyRetainedFragment.REQUEST_DELETE_TRUSTED_DEVICE:
                     error = deleteDevice((MessageDelDevice) msg.obj);
                     break;*/
                 case MyRetainedFragment.REQUEST_CHANGE_MOBILE:
@@ -312,13 +334,13 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
                     error = fetchMerchantStats();
                     break;
                 case MyRetainedFragment.REQUEST_FORGOT_ID:
-                    error = forgotId((MessageForgotId) msg.obj);
+                    error = forgotId(data);
                     break;
                 case MyRetainedFragment.REQUEST_ARCHIVE_TXNS:
                     error = archiveTxns();
                     break;
                 case MyRetainedFragment.REQUEST_CUST_DATA_FILE_DOWNLOAD:
-                    error = downloadFile((MessageFileDownload) msg.obj);
+                    error = downloadFile(data.ctxt, data.argStr1);
                     break;
                 case MyRetainedFragment.REQUEST_FETCH_MERCHANT_OPS:
                     error = fetchMerchantOps();
@@ -336,14 +358,16 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
                     error = deleteMchntOrder((String) msg.obj);
                     break;*/
                 case MyRetainedFragment.REQUEST_GEN_TXN_OTP:
-                    error = genTxnOtp((String) msg.obj);
+                    error = genTxnOtp(data);
                     break;
                 case MyRetainedFragment.REQUEST_LOAD_TEST:
-                    MessageLoadTest data = (MessageLoadTest)msg.obj;
-                    error = MerchantUser.getInstance().startLoad(data.custId, data.pin, data.reps);
+                    error = MerchantUser.getInstance().startLoad(data.argStr1, data.argStr2, data.argLong1);
                     break;
                 case MyRetainedFragment.REQUEST_GET_CUST_ID:
-                    error = getCustomerId((String) msg.obj);
+                    error = getCustomerId(data);
+                    break;
+                case MyRetainedFragment.REQUEST_MSG_DEV_REG_CHK:
+                    error = chkMsgDevReg();
                     break;
             }
         } catch (Exception e) {
@@ -351,6 +375,11 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
             error = ErrorCodes.GENERAL_ERROR;
         }
         return error;
+    }
+
+    private int chkMsgDevReg() {
+        LogMy.d(TAG, "In chkMsgDevReg");
+        return MerchantUser.getInstance().checkMsgDevReg();
     }
 
     private int fetchMerchantOps() {
@@ -371,9 +400,9 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
         return MerchantUser.getInstance().archiveTxns();
     }
 
-    private int loginMerchant(MessageLogin msg) {
+    private int loginMerchant(MessageBgJob opData) {
         LogMy.d(TAG, "In loginMerchant");
-        return MerchantUser.login(msg.userId, msg.passwd, msg.deviceId, msg.otp);
+        return MerchantUser.login(opData.argStr1, opData.argStr2, "", opData.argStr3);
     }
     
     private int fetchMerchantStats() {
@@ -403,7 +432,7 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
         return MerchantUser.getInstance().deleteTrustedDevice(msg.index, msg.curDeviceId);
     }*/
 
-    private int uploadImgFile(MessageImgUpload msg) {
+    /*private int uploadImgFile(MessageBgJob opData) {
         File file = msg.file;
         try {
             MerchantUser.getInstance().uploadImgFile(file, msg.remoteDir);
@@ -422,10 +451,10 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
             }
         }
         return ErrorCodes.NO_ERROR;
-    }
+    }*/
 
-    private int changePassword(MessageChangePassword data) {
-        return MerchantUser.getInstance().changePassword(data.oldPasswd, data.newPasswd);
+    private int changePassword(MessageBgJob opData) {
+        return MerchantUser.getInstance().changePassword(opData.argStr1, opData.argStr2);
     }
 
     private int executeCustOp() {
@@ -452,21 +481,21 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
         return ErrorCodes.NO_ERROR;
     }
 
-    private int generatePassword(MessageResetPassword msg) {
-        return MerchantUser.resetPassword(msg.brandName, msg.userId, msg.deviceId);
+    private int generatePassword(MessageBgJob opData) {
+        return MerchantUser.resetPassword(opData.argStr1,opData.argStr2, "");
     }
 
-    private int forgotId(MessageForgotId msg) {
-        return MerchantUser.forgotId(msg.mobileNum, msg.deviceId);
+    private int forgotId(MessageBgJob opData) {
+        return MerchantUser.forgotId(opData.argStr1, "");
     }
 
-    private int registerCustomer(MessageCustRegister data) {
+    private int registerCustomer(MessageBgJob opData) {
         mRetainedFragment.mCurrCashback = null;
         mRetainedFragment.mCurrCustomer = null;
 
         try {
-            Cashback cashback = MerchantUser.getInstance().registerCustomer(data.mobileNum, data.dob, data.sex, data.qrCode,
-                    data.otp, data.firstName, data.lastName);
+            Cashback cashback = MerchantUser.getInstance().registerCustomer(opData.argStr1, "", CommonConstants.SEX_UNKNOWN, "",
+                    opData.argStr3, opData.argStr2, "");
 
             /*mRetainedFragment.mCurrCashback = new MyCashback();
             mRetainedFragment.mCurrCashback.init(cashback, true);*/
@@ -490,12 +519,12 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
         return ErrorCodes.NO_ERROR;
     }
 
-    private int getCashback(String custId) {
+    private int getCashback(MessageBgJob opData) {
         mRetainedFragment.mCurrCashback = null;
         mRetainedFragment.mCurrCustomer = null;
 
         try {
-            Cashback cashback = MerchantUser.getInstance().fetchCashback(custId);
+            Cashback cashback = MerchantUser.getInstance().fetchCashback(opData.argStr1);
 
             /*mRetainedFragment.mCurrCashback = new MyCashback();
             mRetainedFragment.mCurrCashback.init(cashback, true);*/
@@ -516,16 +545,16 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
         return ErrorCodes.NO_ERROR;
     }
 
-    private int commitCashTrans(MessageTxnCommit msg) {
-        int errorCode =  MerchantUser.getInstance().commitTxn(mRetainedFragment.mCurrTransaction, msg.pin, msg.isOtp, false);
+    private int commitCashTrans(MessageBgJob opData) {
+        int errorCode =  MerchantUser.getInstance().commitTxn(mRetainedFragment.mCurrTransaction, opData.argStr1, opData.argBool1, false);
         if(errorCode==ErrorCodes.NO_ERROR) {
             mRetainedFragment.mCurrCashback.setCashback(mRetainedFragment.mCurrTransaction.getTransaction().getCashback());
         }
         return errorCode;
     }
 
-    private int genTxnOtp(String custMobileOrId) {
-        return MerchantUser.getInstance().genTxnOtp(custMobileOrId);
+    private int genTxnOtp(MessageBgJob opData) {
+        return MerchantUser.getInstance().genTxnOtp(opData.argStr1);
     }
 
     private int updateMerchantSettings() {
@@ -536,12 +565,12 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
         return MerchantUser.logoutSync();
     }
 
-    private int fetchTransactions(String query) {
+    private int fetchTransactions(MessageBgJob opData) {
         mRetainedFragment.mLastFetchTransactions = null;
 
         try {
             isSessionValid();
-            mRetainedFragment.mLastFetchTransactions = MyTransaction.fetch(query, MerchantUser.getInstance().getMerchant().getTxn_table());
+            mRetainedFragment.mLastFetchTransactions = MyTransaction.fetch(opData.argStr1, MerchantUser.getInstance().getMerchant().getTxn_table());
             if (mRetainedFragment.mLastFetchTransactions == null || mRetainedFragment.mLastFetchTransactions.size() == 0) {
                 return ErrorCodes.NO_DATA_FOUND;
             }
@@ -612,9 +641,9 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
         return status;
     }*/
 
-    private int getCustomerId(String custMobile) {
+    private int getCustomerId(MessageBgJob opData) {
         try {
-            mRetainedFragment.mTempStr = CommonServices.getInstance().getCustomerId(custMobile);
+            mRetainedFragment.mTempStr = CommonServices.getInstance().getCustomerId(opData.argStr1);
 
         } catch(BackendlessException e) {
             LogMy.e(TAG, "getCustomerId failed: " + e.toString());
@@ -624,7 +653,7 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
     }
 
 
-    private int fetchTxnFiles(Context ctxt) {
+    private int fetchTxnFiles(MessageBgJob opData) {
         int errorCode = ErrorCodes.NO_ERROR;
 
         try {
@@ -636,13 +665,13 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
         // create a copy of list
         List<String> missingFiles = new ArrayList<>(mRetainedFragment.mMissingFiles);
 
-        MessageFileDownload msg = new MessageFileDownload();
+        //MessageFileDownload msg = new MessageFileDownload();
         for(int i=0; i<missingFiles.size(); i++) {
             // convert filepath to complete URL
             //https://api.backendless.com/09667f8b-98a7-e6b9-ffeb-b2b6ee831a00/v1/files/<filepath>
-            msg.ctxt = ctxt;
-            msg.fileUrl = missingFiles.get(i);
-            errorCode = downloadFile(msg);
+            //msg.ctxt = opData.ctxt;
+            //msg.fileUrl = missingFiles.get(i);
+            errorCode = downloadFile(opData.ctxt, missingFiles.get(i));
             //remove from missing files list
             if(errorCode==ErrorCodes.NO_ERROR) {
                 LogMy.d(TAG,"Txn file found remotely, removing from missing list: "+missingFiles.get(i));
@@ -653,9 +682,9 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
         return errorCode;
     }
 
-    private int downloadFile(MessageFileDownload msg) {
+    private int downloadFile(Context ctxt, String filepath) {
         try {
-            String filepath = msg.fileUrl;
+            //String filepath = msg.fileUrl;
             String fileURL = AppConstants.BACKEND_FILE_BASE_URL + filepath;
             //String filename = filepath.substring(filepath.lastIndexOf('/')+1);
             String filename = Uri.parse(fileURL).getLastPathSegment();
@@ -664,7 +693,7 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
             byte[] bytes = new FileFetchr().getUrlBytes(fileURL, mRetainedFragment.mUserToken);
 
             FileOutputStream outputStream;
-            outputStream = msg.ctxt.openFileOutput(filename, Context.MODE_PRIVATE);
+            outputStream = ctxt.openFileOutput(filename, Context.MODE_PRIVATE);
             outputStream.write(bytes);
             outputStream.close();
 
