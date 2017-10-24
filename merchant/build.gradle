@@ -1,4 +1,4 @@
-buildscript {
+/*buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
     }
@@ -6,9 +6,10 @@ buildscript {
     dependencies {
         classpath 'io.fabric.tools:gradle:1.+'
     }
-}
+}*/
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
+apply plugin: 'com.jakewharton.butterknife'
 
 android {
     signingConfigs {
@@ -40,15 +41,23 @@ android {
     }
 }
 
-repositories {
-    maven { url "https://jitpack.io" }
-    maven { url 'https://maven.fabric.io/public' }
+allprojects {
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven { url "https://jitpack.io" }
+        maven { url 'https://maven.fabric.io/public' }
+    }
 }
 
+
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: '../libs')
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     //compile project(':merchantbase')
     debugCompile project(path: ':merchantbase', configuration: 'debug')
     releaseCompile project(path: ':merchantbase', configuration: 'release')
+
+    compile 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 }

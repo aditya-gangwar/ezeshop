@@ -151,6 +151,16 @@ public class CommonConstants {
     //public static final int ID_TYPE_CARD = 1;
     public static final int ID_TYPE_AUTO = 2;
 
+    // user facing id prefixes - in caps
+    public static String TXN_ID_PREFIX = "T";
+    public static String CUST_ORDER_ID_PREFIX = "C";
+    // internal id prefixes - in small
+    public static String CUST_PRIVATE_ID_PREFIX = "i";
+    public static String CUST_ADDR_ID_PREFIX = "a";
+    public static String AREA_ID_PREFIX = "r";
+    public static String CUST_PRESCRIPTION_ID_PREFIX = "p";
+
+
     /*
      * Other common constants
      */

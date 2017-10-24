@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="?android:attr/windowBackground">
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo_success_96dp"
+        android:background="@color/bg_light_grey_dark"
+        android:paddingTop="@dimen/XL_space"/>
+
+
+    <TextView
+        style="@style/Edittext_only_view_medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="SUCCESS"
+        android:background="@color/bg_light_grey_dark"
+        android:paddingTop="@dimen/large_space"
+        android:textColor="@color/green_positive"
+        android:textStyle="bold"/>
+
+    <TextView
+        style="@style/Edittext_only_view_small"
+        android:id="@+id/input_mchnt_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Jairam Medical Stores"
+        android:textStyle="bold"
+        android:background="@color/bg_light_grey_dark"
+        android:paddingTop="@dimen/XL_space"/>
+
+    <TextView
+        style="@style/Edittext_only_view_small"
+        android:id="@+id/input_orderId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Order ID: C11457809347821"
+        android:textStyle="italic"
+        android:background="@color/bg_light_grey_dark"
+        android:paddingBottom="@dimen/large_space"/>
+
+    <View
+        style="@style/Divider_horizontal_Large" />
+
+
+    <LinearLayout
+        style="@style/LL_Horizontal_paddingSidesXL"
+        android:layout_marginTop="@dimen/XXXXL_space">
+
+        <LinearLayout
+            style="@style/LL_Vertical"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingTop="@dimen/edittext_padding"
+                android:src="@drawable/ic_description_black_24dp"
+                android:tint="@color/primary"/>
+
+            <TextView
+                style="@style/Edittext_only_view_XS"
+                android:gravity="center"
+                android:text="Order sent to Merchant" />
+
+        </LinearLayout>
+
+        <View
+            style="@style/Divider_horizontal_Large"
+            android:layout_width="0dp"
+            android:layout_weight="1"/>
+
+        <LinearLayout
+            style="@style/LL_Vertical"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingTop="@dimen/edittext_padding"
+                android:src="@drawable/ic_call_black_24dp"
+                android:tint="@color/primary"/>
+
+            <TextView
+                style="@style/Edittext_only_view_XS"
+                android:gravity="center"
+                android:text="Receive Call from Merchant" />
+
+        </LinearLayout>
+
+        <View
+            style="@style/Divider_horizontal_Large"
+            android:layout_width="0dp"
+            android:layout_weight="1"/>
+
+        <LinearLayout
+            style="@style/LL_Vertical"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingTop="@dimen/edittext_padding"
+                android:src="@drawable/ic_motorcycle_black_24dp"
+                android:tint="@color/primary"/>
+
+            <TextView
+                style="@style/Edittext_only_view_XS"
+                android:gravity="center"
+                android:text="Delivery at your doorstep" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout style="@style/LL_Vertical_paddingSidesXL"
+        android:layout_marginTop="@dimen/XXXXL_space">
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_marginRight="@dimen/small_space"
+                android:paddingTop="@dimen/edittext_padding"
+                android:src="@drawable/ic_info_outline_black_18dp"
+                android:tint="@color/icon_grey"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/info_1"
+                style="@style/Edittext_only_view_small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:textColor="@color/secondary_text"
+                android:text="You can provide more order details when you receive call from the Merchant." />
+        </LinearLayout>
+
+        <LinearLayout style="@style/LL_Horizontal_wrap">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/small_space"
+                android:src="@drawable/ic_info_outline_black_18dp"
+                android:tint="@color/icon_grey"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/info_3"
+                style="@style/Edittext_only_view_small"
+                android:layout_width="wrap_content"
+                android:textColor="@color/secondary_text"
+                android:gravity="left|center_vertical"
+                android:text="Payment is to be done in Cash on delivery." />
+        </LinearLayout>
+
+
+    </LinearLayout>
+</LinearLayout>

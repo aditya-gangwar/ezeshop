@@ -504,16 +504,17 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
                     case MyRetainedFragment.REQUEST_CREATE_ORDER:
                         AppCommonUtil.cancelProgressDialog(true);
                         if (errorCode == ErrorCodes.NO_ERROR) {
-                            // Reset to base fragment
-                            mRetainedFragment.reset();
-                            goToHomeFrag();
-
                             // show success notification
                             String msg = String.format(CommonConstants.MY_LOCALE, AppConstants.orderSuccessMsg,
                                     mRetainedFragment.mCustOrder.getMerchantNIDB().getName(),
                                     mRetainedFragment.mCustOrder.getId());
                             DialogFragmentWrapper.createNotification(AppConstants.defaultSuccessTitle, msg, false, false)
                                     .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
+
+                            // Reset to base fragment
+                            mRetainedFragment.reset();
+                            goToHomeFrag();
+
                         } else {
                             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
                                     .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);

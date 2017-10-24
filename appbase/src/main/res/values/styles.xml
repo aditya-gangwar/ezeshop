@@ -482,6 +482,13 @@
         <item name="android:focusable">false</item>
     </style>
 
+    <style name="Edittext_only_view_bg_small_morePad" parent="Edittext_only_view_bg_small">
+        <item name="android:paddingLeft">@dimen/edittext_padding_more</item>
+        <item name="android:paddingRight">@dimen/edittext_padding_more</item>
+        <item name="android:paddingBottom">@dimen/edittext_padding_more</item>
+        <item name="android:paddingTop">@dimen/edittext_padding_more</item>
+    </style>
+
     <style name="Edittext_only_view_bg_small" parent="Edittext_only_click_bg_small">
         <item name="android:clickable">false</item>
         <item name="android:focusable">false</item>
@@ -580,6 +587,13 @@
         <item name="android:textSize">@dimen/text_size_medium</item>
     </style>
 
+    <style name="MyEdittext_Small_morePad" parent="MyEdittext_Small">
+        <item name="android:paddingLeft">@dimen/edittext_padding_more</item>
+        <item name="android:paddingRight">@dimen/edittext_padding_more</item>
+        <item name="android:paddingBottom">@dimen/edittext_padding_more</item>
+        <item name="android:paddingTop">@dimen/edittext_padding_more</item>
+    </style>
+
     <style name="MyEdittext_Small" parent="MyEdittext_base">
         <item name="android:textSize">@dimen/text_size_small</item>
     </style>
@@ -594,6 +608,7 @@
         <!--item name="android:textColor">@drawable/edit_text_selector</item-->
         <item name="android:textColor">@color/primary_text</item>
         <item name="android:inputType">none|textNoSuggestions|textMultiLine</item>
+        <item name="android:includeFontPadding">true</item>
     </style>
 
     <!--style name="MyTextAppearance" parent="TextAppearance.AppCompat">
