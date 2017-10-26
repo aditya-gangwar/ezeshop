@@ -34,6 +34,7 @@ public class Merchants
   private String txn_table;
   private String auto_id;
   private String contactPhone;
+  private String contactPhone2;
   private Integer freeDlvrMinAmt;
   private Boolean invoiceNumOptional;
   private java.util.Date removeReqDate;
@@ -287,6 +288,14 @@ public class Merchants
   public void setContactPhone( String contactPhone )
   {
     this.contactPhone = contactPhone;
+  }
+
+  public String getContactPhone2() {
+    return contactPhone2;
+  }
+
+  public void setContactPhone2(String contactPhone2) {
+    this.contactPhone2 = contactPhone2;
   }
 
   public Integer getFreeDlvrMinAmt()

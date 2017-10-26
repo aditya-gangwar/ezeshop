@@ -36,6 +36,15 @@ public class Cashback
   //private Merchants merchant;
   private Date lastTxnTime;
   private String lastTxnId;
+  private Merchants merchantNIDB;
+
+  public Merchants getMerchantNIDB() {
+    return merchantNIDB;
+  }
+
+  public void setMerchantNIDB(Merchants merchantNIDB) {
+    this.merchantNIDB = merchantNIDB;
+  }
 
   /*public Integer getCb_eligible_amt() {
     return cb_eligible_amt;

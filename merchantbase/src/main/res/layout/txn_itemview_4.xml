@@ -68,8 +68,6 @@
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:layout_weight="40"
-            android:paddingTop="0dp"
-            android:paddingBottom="0dp"
             android:textColor="@color/secondary_text"
             android:gravity="start"/>
 
@@ -88,8 +86,6 @@
                 android:layout_width="0dp"
                 android:layout_weight="60"
                 android:text="Cashback :"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp"
                 android:gravity="end"
                 android:textColor="@color/secondary_text" />
 
@@ -100,8 +96,6 @@
                 android:layout_weight="40"
                 android:paddingLeft="0dp"
                 android:layout_height="wrap_content"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp"
                 android:gravity="end"
                 android:text="\u20B9 999999"
                 android:textColor="@color/secondary_text"/>
@@ -125,12 +119,21 @@
             android:focusable="false">
 
             <ImageView
+                android:id="@+id/txn_ic_onlineOrder"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_shopping_cart_black_18dp"
+                android:tint="@color/green_positive"
+                android:paddingLeft="@dimen/edittext_padding_less"/>
+
+            <ImageView
                 android:id="@+id/txn_ic_overdraft"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:src="@drawable/ic_account_balance_wallet_white_18dp"
                 android:tint="@color/red_negative"
-                android:padding="@dimen/edittext_padding_less"/>
+                android:padding="@dimen/edittext_padding_less"
+                android:layout_marginLeft="@dimen/small_space"/>
 
             <!--TextView
                 style="@style/Edittext_only_view_small_lessPad"
@@ -144,17 +147,14 @@
 
             <!--TextView
                 style="@style/Edittext_only_view_small_lessPad"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:background="@drawable/rounnd_rect_blue"
                 android:id="@+id/refund_label"
-                android:text="Refund"
+                android:text="Online Order"
                 android:layout_below="@id/txn_customer_id"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:textColor="@color/white"
-                android:layout_marginRight="@dimen/small_space"/-->
+                android:textColor="@color/white"/-->
 
         </LinearLayout>
 

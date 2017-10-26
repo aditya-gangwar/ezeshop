@@ -1,12 +1,8 @@
-package in.ezeshop.appbase.entities;
+/*package in.ezeshop.appbase.entities;
 
 import java.util.Comparator;
 
 import in.ezeshop.common.database.Merchants;
-
-/**
- * Created by adgangwa on 20-10-2017.
- */
 
 public class MerchantWrapper {
     private static final String TAG = "BaseApp-MyMerchant";
@@ -50,9 +46,6 @@ public class MerchantWrapper {
         this.mAccBalance = mAccBalance;
     }
 
-    /*
-         * comparator functions for sorting
-         */
     public static class MerchantComparator implements Comparator<MerchantWrapper> {
 
         int mCompareType;
@@ -90,3 +83,4 @@ public class MerchantWrapper {
     }
 
 }
+*/

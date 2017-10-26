@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -581,6 +582,33 @@ public class AppCommonUtil {
     /*
      * Image Processing functions
      */
+    public static Bitmap getLocalBitmap(Context ctxt, String filename, float radiusInDp) {
+        if(filename!=null) {
+            File file = ctxt.getFileStreamPath(filename);
+            if(file!=null) {
+                Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+                if(bitmap==null) {
+                    LogMy.e(TAG,"Not able to decode mchnt dp file: "+file.getName());
+                } else {
+                    LogMy.d(TAG,"Decoded file as bitmap: "+file.getPath());
+                    if(radiusInDp > 0) {
+                        // convert to round image
+                        //float radiusInDp = getResources().getDimension(R.dimen.dp_item_image_width);
+                        float radiusInPixels = AppCommonUtil.dipToPixels(ctxt, radiusInDp);
+
+                        Bitmap scaledImg = Bitmap.createScaledBitmap(bitmap, (int) radiusInPixels, (int) radiusInPixels, true);
+                        return AppCommonUtil.getCircleBitmap(scaledImg);
+                    } else {
+                        return bitmap;
+                    }
+                }
+            } else {
+                LogMy.e(TAG,"Image file not available locally: "+filename);
+            }
+        }
+        return null;
+    }
+
     public static boolean createImageFromBitmap(Bitmap bmp, File to) {
         boolean status = true;
         FileOutputStream fileOutputStream = null;

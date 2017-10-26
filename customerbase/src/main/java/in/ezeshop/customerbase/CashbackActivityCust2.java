@@ -81,6 +81,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
     private static final String DIALOG_PIN_CHANGE = "dialogPinChange";
     private static final String DIALOG_CUSTOMER_DETAILS = "dialogCustomerDetails";
     private static final String DIALOG_ORDER_CONFIRM = "dialogOrderConfirm";
+    private static final String DIALOG_ORDER_SUCCESS = "dialogSuccessOrder";
 
     private static final String CUSTOMER_OPS_LIST_FRAG = "CustomerOpsListFrag";
     private static final String DIALOG_NOTIFY_CB_FETCH_ERROR = "dialogCbFetchError";
@@ -504,12 +505,17 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
                     case MyRetainedFragment.REQUEST_CREATE_ORDER:
                         AppCommonUtil.cancelProgressDialog(true);
                         if (errorCode == ErrorCodes.NO_ERROR) {
-                            // show success notification
-                            String msg = String.format(CommonConstants.MY_LOCALE, AppConstants.orderSuccessMsg,
+                            // show success dialog
+                            CustOrderSuccessDialog dialog = CustOrderSuccessDialog.newInstance(
+                                    mRetainedFragment.mCustOrder.getMerchantNIDB().getName(),
+                                    mRetainedFragment.mCustOrder.getId() );
+                            dialog.show(mFragMgr, DIALOG_ORDER_SUCCESS);
+
+                            /*String msg = String.format(CommonConstants.MY_LOCALE, AppConstants.orderSuccessMsg,
                                     mRetainedFragment.mCustOrder.getMerchantNIDB().getName(),
                                     mRetainedFragment.mCustOrder.getId());
                             DialogFragmentWrapper.createNotification(AppConstants.defaultSuccessTitle, msg, false, false)
-                                    .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
+                                    .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);*/
 
                             // Reset to base fragment
                             mRetainedFragment.reset();

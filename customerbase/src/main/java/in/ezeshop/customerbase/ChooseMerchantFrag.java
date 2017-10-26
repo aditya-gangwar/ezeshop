@@ -26,7 +26,6 @@ import java.util.List;
 
 import in.ezeshop.appbase.BaseFragment;
 import in.ezeshop.appbase.constants.AppConstants;
-import in.ezeshop.appbase.entities.MerchantWrapper;
 import in.ezeshop.appbase.entities.MyCashback;
 import in.ezeshop.appbase.utilities.AppCommonUtil;
 import in.ezeshop.appbase.utilities.DialogFragmentWrapper;
@@ -47,6 +46,7 @@ public class ChooseMerchantFrag extends BaseFragment
     private static final String TAG = "CustApp-ChooseMerchantFrag";
 
     private static final String DIALOG_SORT_MCHNT_TYPES = "dialogSortMchnt";
+    private static final String DIALOG_MERCHANT_DETAILS = "dialogMerchantDetails";
 
     private static final String ARG_AREA_ID = "areaId";
     private static final String ARG_TOOLBAR_TITLE = "toolbarTitle";
@@ -65,7 +65,8 @@ public class ChooseMerchantFrag extends BaseFragment
     }
 
     private RecyclerView mRecyclerView;
-    private List<MerchantWrapper> mMerchants;
+    //private List<MerchantWrapper> mData;
+    private List<MyCashback> mData;
 
     // instance state - store and restore
     private int mSelectedSortType;
@@ -92,7 +93,7 @@ public class ChooseMerchantFrag extends BaseFragment
             if(savedInstanceState!=null) {
                 mSelectedSortType = savedInstanceState.getInt("mSelectedSortType");
             } else {
-                mSelectedSortType= MerchantWrapper.MCHNT_CMP_TYPE_ACC_BALANCE;
+                mSelectedSortType= MyCashback.CB_CMP_TYPE_ACC_BALANCE;
             }
             refreshData();
 
@@ -112,17 +113,17 @@ public class ChooseMerchantFrag extends BaseFragment
     }
 
     private void sortList(int sortType) {
-        if(mMerchants !=null) {
-            Collections.sort(mMerchants, new MerchantWrapper.MerchantComparator(sortType));
+        if(mData !=null) {
+            Collections.sort(mData, new MyCashback.MyCashbackComparator(sortType));
 
-            if (sortType != MerchantWrapper.MCHNT_CMP_TYPE_MCHNT_NAME) {
+            if (sortType != MyCashback.CB_CMP_TYPE_MCHNT_NAME) {
                 // Make it in decreasing order - if not string comparison
-                Collections.reverse(mMerchants);
+                Collections.reverse(mData);
             }
             // store existing sortType
             mSelectedSortType = sortType;
         } else {
-            LogMy.wtf(TAG,"In sortList: mMerchants is null");
+            LogMy.wtf(TAG,"In sortList: mData is null");
         }
     }
 
@@ -138,18 +139,18 @@ public class ChooseMerchantFrag extends BaseFragment
     }
 
     private void updateUI() {
-        if(mMerchants !=null) {
-            mAdapter = new MchntAdapter(mMerchants);
+        if(mData !=null) {
+            mAdapter = new MchntAdapter(mData);
             mRecyclerView.setAdapter(mAdapter);
         } else {
-            LogMy.e(TAG,"In updateUI: mMerchants is null");
+            LogMy.e(TAG,"In updateUI: mData is null");
         }
     }
 
     public void refreshData() {
         if(mRetainedFragment.mAreaToMerchants!=null) {
             List<Merchants> mchnts = mRetainedFragment.mAreaToMerchants.get(getArguments().getString(ARG_AREA_ID));
-            mMerchants = new ArrayList<>(mchnts.size());
+            mData = new ArrayList<>(mchnts.size());
             for (Merchants m :
                     mchnts) {
                 // Check existing Cashback list - to find account balance
@@ -157,8 +158,15 @@ public class ChooseMerchantFrag extends BaseFragment
                 if(mRetainedFragment.mCashbacks!=null) {
                     cb = mRetainedFragment.mCashbacks.get(m.getAuto_id());
                 }
-                int accBal = cb==null?0:cb.getCurrAccBalance();
-                mMerchants.add(new MerchantWrapper(m,null,accBal));
+                if(cb!=null) {
+                    // already available - add the same to data
+                    mData.add(cb);
+                } else {
+                    // create new object with Merchants object
+                    mData.add(new MyCashback(m));
+                }
+                //int accBal = cb==null?0:cb.getCurrAccBalance();
+                //mData.add(new MerchantWrapper(m,null,accBal));
             }
 
             sortList(mSelectedSortType);
@@ -176,7 +184,7 @@ public class ChooseMerchantFrag extends BaseFragment
         }
         try {
             if (requestCode == REQ_SORT_MCHNT_TYPES) {
-                int sortType = data.getIntExtra(SortMchntDialog.EXTRA_SELECTION, MerchantWrapper.MCHNT_CMP_TYPE_ACC_BALANCE);
+                int sortType = data.getIntExtra(SortMchntDialog.EXTRA_SELECTION, MyCashback.CB_CMP_TYPE_ACC_BALANCE);
                 sortList(sortType);
                 updateUI();
             }
@@ -222,7 +230,7 @@ public class ChooseMerchantFrag extends BaseFragment
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
                         // Do something when collapsed
-                        mAdapter.setFilter(mMerchants);
+                        mAdapter.setFilter(mData);
                         return true; // Return true to collapse action view
                     }
 
@@ -236,7 +244,7 @@ public class ChooseMerchantFrag extends BaseFragment
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        final List<MerchantWrapper> filteredItems = filter(mMerchants, newText);
+        final List<MyCashback> filteredItems = filter(mData, newText);
 
         mAdapter.setFilter(filteredItems);
         return true;
@@ -247,12 +255,12 @@ public class ChooseMerchantFrag extends BaseFragment
         return false;
     }
 
-    private List<MerchantWrapper> filter(List<MerchantWrapper> items, String query) {
+    private List<MyCashback> filter(List<MyCashback> items, String query) {
         query = query.toLowerCase();
-        final List<MerchantWrapper> filteredItems = new ArrayList<>();
-        for (MerchantWrapper item : items) {
-            if ( item.getmMerchant().getName().toLowerCase().contains(query) ||
-                    item.getmMerchant().getAddress().getLine_1().toLowerCase().contains(query)) {
+        final List<MyCashback> filteredItems = new ArrayList<>();
+        for (MyCashback item : items) {
+            if ( item.getMerchant().getName().toLowerCase().contains(query) ||
+                    item.getMerchant().getAddress().getLine_1().toLowerCase().contains(query)) {
                 filteredItems.add(item);
             }
         }
@@ -310,6 +318,8 @@ public class ChooseMerchantFrag extends BaseFragment
 
     private class MchntHolder extends RecyclerView.ViewHolder {
 
+        private MyCashback mMchnt;
+
         private TextView mMerchantName;
         private TextView mBtnDEtails;
 
@@ -331,8 +341,9 @@ public class ChooseMerchantFrag extends BaseFragment
             mCbRate = (TextView)  itemView.findViewById(R.id.input_cbRate);
         }
 
-        public void bindCb(MerchantWrapper mchnt) {
-            Merchants merchant = mchnt.getmMerchant();
+        public void bindCb(MyCashback mchnt) {
+            mMchnt = mchnt;
+            Merchants merchant = mchnt.getMerchant();
 
             mMerchantName.setText(merchant.getName());
 
@@ -353,9 +364,19 @@ public class ChooseMerchantFrag extends BaseFragment
             }
             mDeliveryInfo.setText(delInfo);
 
-            AppCommonUtil.showAmtColor(getActivity(),null,mAccBalance,mchnt.getmAccBalance(),false);
+            AppCommonUtil.showAmtColor(getActivity(),null,mAccBalance,mchnt.getCurrAccBalance(),false);
             String cbStr = "@"+merchant.getCb_rate()+"%";
             mCbRate.setText(cbStr);
+
+            mBtnDEtails.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Show merchant details dialog
+                    mRetainedFragment.mSelectCashback = mMchnt;
+                    MchntDetailsDialogCustApp dialog = MchntDetailsDialogCustApp.newInstance(mMchnt.isAccDataAvailable());
+                    dialog.show(getFragmentManager(), DIALOG_MERCHANT_DETAILS);
+                }
+            });
         }
 
         private Bitmap getMchntDp(String filename) {
@@ -388,10 +409,10 @@ public class ChooseMerchantFrag extends BaseFragment
 
     private class MchntAdapter extends RecyclerView.Adapter<MchntHolder> {
 
-        private List<MerchantWrapper> mItems;
+        private List<MyCashback> mItems;
         private View.OnClickListener mListener;
 
-        public MchntAdapter(List<MerchantWrapper> mchnts) {
+        public MchntAdapter(List<MyCashback> mchnts) {
             mItems = mchnts;
             mListener = new OnSingleClickListener() {
                 @Override
@@ -403,7 +424,7 @@ public class ChooseMerchantFrag extends BaseFragment
 
                     int pos = mRecyclerView.getChildAdapterPosition(v);
                     if (pos >= 0 && pos < getItemCount()) {
-                        mCallback.onSelectMerchant(mItems.get(pos).getmMerchant().getAuto_id());
+                        mCallback.onSelectMerchant(mItems.get(pos).getMerchant().getAuto_id());
                     } else {
                         LogMy.e(TAG,"Invalid position in onClickListener of customer list item: "+pos);
                     }
@@ -420,7 +441,7 @@ public class ChooseMerchantFrag extends BaseFragment
 
         @Override
         public void onBindViewHolder(MchntHolder holder, int position) {
-            MerchantWrapper m = mItems.get(position);
+            MyCashback m = mItems.get(position);
             holder.itemView.setOnClickListener(mListener);
             holder.bindCb(m);
         }
@@ -430,7 +451,7 @@ public class ChooseMerchantFrag extends BaseFragment
             return mItems.size();
         }
 
-        public void setFilter(List<MerchantWrapper> items) {
+        public void setFilter(List<MyCashback> items) {
             mItems = new ArrayList<>();
             mItems.addAll(items);
             notifyDataSetChanged();

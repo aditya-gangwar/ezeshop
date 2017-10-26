@@ -358,9 +358,9 @@ public class MyBackgroundProcessor <T> extends BackgroundProcessor<T> {
 
                 List<String> dpFileNames = new ArrayList<>(cashbacks.size());
                 for (Cashback cb : cashbacks) {
-                    MyCashback myCb = new MyCashback(cb, false);
+                    MyCashback myCb = new MyCashback(cb);
                     mRetainedFragment.mCashbacks.put(myCb.getMerchantId(), myCb);
-                    dpFileNames.add(myCb.getMerchant().getDpFilename());
+                    dpFileNames.add(myCb.getMerchant().getDisplayImage());
                     //myCb.init(cb, false);
                     //mRetainedFragment.mLastFetchCashbacks.add(myCb);
                 }

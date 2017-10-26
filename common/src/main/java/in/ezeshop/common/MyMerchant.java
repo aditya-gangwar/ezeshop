@@ -1,12 +1,9 @@
-package in.ezeshop.common;
+/*package in.ezeshop.common;
 
 import java.util.Date;
 
 import in.ezeshop.common.database.Merchants;
 
-/**
- * Created by adgangwa on 25-09-2016.
- */
 public class MyMerchant {
     private static final String TAG = "MyMerchant";
 
@@ -102,9 +99,6 @@ public class MyMerchant {
         return sb.toString();
     }
 
-    /*
-     * Getter methods
-     */
     public String getName() {
         return mName;
     }
@@ -162,3 +156,4 @@ public class MyMerchant {
     }
 }
 
+*/

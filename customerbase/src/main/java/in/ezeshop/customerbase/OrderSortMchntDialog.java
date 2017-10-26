@@ -14,7 +14,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import in.ezeshop.appbase.BaseDialog;
-import in.ezeshop.appbase.entities.MerchantWrapper;
 import in.ezeshop.appbase.entities.MyCashback;
 import in.ezeshop.appbase.utilities.AppCommonUtil;
 import in.ezeshop.appbase.utilities.LogMy;
@@ -48,13 +47,13 @@ public class OrderSortMchntDialog extends BaseDialog {
         int selected = getArguments().getInt(ARG_SELECTED);
         LogMy.d(TAG,"Setting selection to "+selected);
         switch (selected) {
-            case MerchantWrapper.MCHNT_CMP_TYPE_MCHNT_NAME:
+            case MyCashback.CB_CMP_TYPE_MCHNT_NAME:
                 mSortCustRadioGroup.check(mMchntName.getId());
                 break;
-            case MerchantWrapper.MCHNT_CMP_TYPE_CB_RATE:
+            case MyCashback.CB_CMP_TYPE_CB_RATE:
                 mSortCustRadioGroup.check(mCbRate.getId());
                 break;
-            case MerchantWrapper.MCHNT_CMP_TYPE_ACC_BALANCE:
+            case MyCashback.CB_CMP_TYPE_ACC_BALANCE:
                 mSortCustRadioGroup.check(mBalanceAcc.getId());
                 break;
         }
@@ -85,16 +84,16 @@ public class OrderSortMchntDialog extends BaseDialog {
                     public void onSingleClick(View v) {
 
                         int selectedId = mSortCustRadioGroup.getCheckedRadioButtonId();
-                        int selectedSortType = MerchantWrapper.MCHNT_CMP_TYPE_ACC_BALANCE;
+                        int selectedSortType = MyCashback.CB_CMP_TYPE_ACC_BALANCE;
 
                         if (selectedId == R.id.cbRate) {
-                            selectedSortType = MerchantWrapper.MCHNT_CMP_TYPE_CB_RATE;
+                            selectedSortType = MyCashback.CB_CMP_TYPE_CB_RATE;
 
                         } else if (selectedId == R.id.mchntName) {
-                            selectedSortType = MerchantWrapper.MCHNT_CMP_TYPE_MCHNT_NAME;
+                            selectedSortType = MyCashback.CB_CMP_TYPE_MCHNT_NAME;
 
                         } else if (selectedId == R.id.balanceAcc) {
-                            selectedSortType = MerchantWrapper.MCHNT_CMP_TYPE_ACC_BALANCE;
+                            selectedSortType = MyCashback.CB_CMP_TYPE_ACC_BALANCE;
 
                         }
 

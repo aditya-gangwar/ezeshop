@@ -59,6 +59,8 @@ public class MyRetainedFragment extends RetainedFragment {
     public Map<String, MyCashback> mCashbacks;
     // Area ID -> Merchant object (delivering in this area)
     public Map<String,List<Merchants>> mAreaToMerchants;
+    // Temporary store to pass MyCashback object across fragment in same activity (i.e. one owning this retainedFragment object)
+    public MyCashback mSelectCashback;
 
     // stats for the customer
     public CustomerStats stats;
@@ -99,6 +101,7 @@ public class MyRetainedFragment extends RetainedFragment {
         //mSelectedMchntId = null;
         //mOrderComments=null;
         mCustOrder = null;
+        mSelectCashback= null;
     }
 
     /*

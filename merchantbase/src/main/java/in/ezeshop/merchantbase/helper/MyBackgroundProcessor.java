@@ -499,7 +499,7 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
 
             /*mRetainedFragment.mCurrCashback = new MyCashback();
             mRetainedFragment.mCurrCashback.init(cashback, true);*/
-            mRetainedFragment.mCurrCashback = new MyCashback(cashback, true);
+            mRetainedFragment.mCurrCashback = new MyCashback(cashback);
             mRetainedFragment.mCurrCustomer = mRetainedFragment.mCurrCashback.getCustomer();
 
         } catch (Exception e) {
@@ -528,7 +528,7 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
 
             /*mRetainedFragment.mCurrCashback = new MyCashback();
             mRetainedFragment.mCurrCashback.init(cashback, true);*/
-            mRetainedFragment.mCurrCashback = new MyCashback(cashback, true);
+            mRetainedFragment.mCurrCashback = new MyCashback(cashback);
             mRetainedFragment.mCurrCustomer = mRetainedFragment.mCurrCashback.getCustomer();
 
         } catch (Exception e) {
@@ -548,7 +548,7 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
     private int commitCashTrans(MessageBgJob opData) {
         int errorCode =  MerchantUser.getInstance().commitTxn(mRetainedFragment.mCurrTransaction, opData.argStr1, opData.argBool1, false);
         if(errorCode==ErrorCodes.NO_ERROR) {
-            mRetainedFragment.mCurrCashback.setCashback(mRetainedFragment.mCurrTransaction.getTransaction().getCashback());
+            mRetainedFragment.mCurrCashback.resetOnlyCashback(mRetainedFragment.mCurrTransaction.getTransaction().getCashback());
         }
         return errorCode;
     }

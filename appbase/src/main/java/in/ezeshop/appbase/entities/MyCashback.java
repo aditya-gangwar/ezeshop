@@ -1,14 +1,17 @@
 package in.ezeshop.appbase.entities;
 
-import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
+import in.ezeshop.appbase.utilities.LogMy;
 import in.ezeshop.common.CommonUtils;
 import in.ezeshop.common.CsvConverter;
 import in.ezeshop.common.MyCustomer;
-import in.ezeshop.common.MyMerchant;
 import in.ezeshop.common.database.Cashback;
-import in.ezeshop.appbase.utilities.LogMy;
+import in.ezeshop.common.database.Customers;
+import in.ezeshop.common.database.Merchants;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -22,58 +25,62 @@ public class MyCashback {
     public static final int CB_CMP_TYPE_UPDATE_TIME = 0;
     public static final int CB_CMP_TYPE_BILL_AMT = 1;
     public static final int CB_CMP_TYPE_ACC_BALANCE = 2;
-    //public static final int CB_CMP_TYPE_ACC_ADD = 3;
-    //public static final int CB_CMP_TYPE_ACC_DEBIT = 4;
-    //public static final int CB_CMP_TYPE_CB_BALANCE = 5;
-    //public static final int CB_CMP_TYPE_CB_ADD = 6;
-    //public static final int CB_CMP_TYPE_CB_DEBIT = 7;
     // Cashback sort by merchant attributes
     public static final int CB_CMP_TYPE_MCHNT_NAME = 8;
-    //public static final int CB_CMP_TYPE_MCHNT_CITY = 9;
+    public static final int CB_CMP_TYPE_CB_RATE = 3;
 
-    private Cashback mOldCashback;
-    private Cashback mCurrCashback;
+    //private Cashback mOldCashback;
 
-    // customer/merchant associated with this cashback object
-    // they are provided by the backend in the other_details field as CSV string
+    // Any of below can be 'null'
+    // so should be handles so in the class
+
+    // if null means relationship between merchant - customer dont exist yet
+    private Cashback mCashback;
+    // One of below will usually be null - depending upon which app this class is used by
+    // can be null - when this class is used by merchant app - as merchant object is same (part of MerchantUser class)
+    private Merchants mMerchant;
+    // can be null - when this class is used by customer app - as customer object is same (part of CustomerUser class)
     private MyCustomer mCustomer;
-    private MyMerchant mMerchant;
-    private Bitmap mDpMerchant;
 
-    public MyCashback(Cashback cb, boolean callingUserIsMchnt) {
-        init(cb,callingUserIsMchnt);
+    // store account balance of old cashback - in case of cashback object replacement
+    private int mOldAccBalance;
+
+    /* Constructors */
+    public MyCashback(Cashback cb) {
+        reset(cb);
     }
 
-    public MyCashback(String csvRecord, boolean callingUserIsMchnt) {
-        //init(cb,callingUserIsMchnt);
-        init(CsvConverter.cbFromCsvStr(csvRecord), callingUserIsMchnt);
+    public MyCashback(String csvRecord) {
+        reset(CsvConverter.cbFromCsvStr(csvRecord));
+    }
+
+    public MyCashback(Merchants mchnt) {
+        mCashback = null;
+        mMerchant = mchnt;
+        mCustomer = null;
     }
 
     /*
      * Init object values from given CSV string
      * containing both 'cashback' and 'customer/merchant' data in single record
      */
-    /*public void init(String csvRecord, boolean callingUserIsMchnt) {
-        init(CsvConverter.cbFromCsvStr(csvRecord), callingUserIsMchnt);
-    }*/
-
-    private void init(Cashback cb, boolean callingUserIsMchnt) {
-        mCurrCashback = cb;
-        LogMy.d(TAG,"Init MyCashback, other details: "+mCurrCashback.getOther_details());
-
-        if(callingUserIsMchnt) {
+    private void reset(Cashback cb) {
+        //mOldCashback = mCashback;
+        mCashback = cb;
+        if(cb.getMerchantNIDB()!=null) {
+            mMerchant = cb.getMerchantNIDB();
+        }
+        if(mCashback.getOther_details()!=null && mCashback.getOther_details().isEmpty()) {
             mCustomer = new MyCustomer();
-            mCustomer.init(mCurrCashback.getOther_details());
-        } else {
-            mMerchant = new MyMerchant();
-            mMerchant.init(mCurrCashback.getOther_details());
+            mCustomer.init(mCashback.getOther_details());
         }
     }
 
     // Current cashback operations
-    public void setCashback(Cashback currCashback) {
-        mOldCashback = mCurrCashback;
-        mCurrCashback = currCashback;
+    public void resetOnlyCashback(Cashback currCashback) {
+        //mOldCashback = mCashback;
+        mOldAccBalance = CommonUtils.getAccBalance(mCashback);
+        mCashback = currCashback;
     }
 
     /*
@@ -83,72 +90,60 @@ public class MyCashback {
         return mCustomer;
     }
 
-    public MyMerchant getMerchant() {
+    public Merchants getMerchant() {
         return mMerchant;
     }
 
     public String getMerchantId() {
-        return mCurrCashback.getMerchant_id();
-    }
-
-    public Bitmap getDpMerchant() {
-        return mDpMerchant;
-    }
-
-    public void setDpMerchant(Bitmap mDpMerchant) {
-        this.mDpMerchant = mDpMerchant;
+        return mCashback.getMerchant_id();
     }
 
     /*
      * Current cashback Getter methods
      */
-    public Cashback getCurrCashback() {
-        return mCurrCashback;
+    public boolean isAccDataAvailable() {
+        return mCashback!=null;
     }
-
     public int getCurrAccBalance() {
-        return CommonUtils.getAccBalance(mCurrCashback);
+        return CommonUtils.getAccBalance(mCashback);
     }
     public int getCurrAccTotalAdd() {
-        return (mCurrCashback.getCl_credit() + mCurrCashback.getCb_credit() + mCurrCashback.getExtra_cb_credit());
+        return mCashback ==null?0:(mCashback.getCl_credit() + mCashback.getCb_credit() + mCashback.getExtra_cb_credit());
     }
     public int getClCredit() {
-        return mCurrCashback.getCl_credit();
+        return mCashback ==null?0: mCashback.getCl_credit();
     }
     public int getCurrAccTotalCb() {
-        return (mCurrCashback.getCb_credit() + mCurrCashback.getExtra_cb_credit());
+        return mCashback ==null?0:(mCashback.getCb_credit() + mCashback.getExtra_cb_credit());
     }
 
     public int getCurrAccTotalDebit() {
-        return (mCurrCashback.getCl_debit() + mCurrCashback.getCl_overdraft());
+        return mCashback ==null?0:(mCashback.getCl_debit() + mCashback.getCl_overdraft());
     }
 
     public int getCurrAccOverdraft() {
-        return mCurrCashback.getCl_overdraft();
+        return mCashback ==null?0: mCashback.getCl_overdraft();
     }
 
     public int getBillAmt() {
-        return mCurrCashback.getTotal_billed();
+        return mCashback ==null?0: mCashback.getTotal_billed();
     }
-    public int getCurrClDebit() { return mCurrCashback.getCl_debit(); }
+    public int getCurrClDebit() { return mCashback ==null?0: mCashback.getCl_debit(); }
 
     public Date getLastTxnTime() {
         // updateTime will be null if no txn done after registration - use createTime in that case
-        return (mCurrCashback.getLastTxnTime()==null ? getCreateTime():mCurrCashback.getLastTxnTime());
+        return mCashback ==null?null:(mCashback.getLastTxnTime()==null ? getCreateTime(): mCashback.getLastTxnTime());
     }
     public Date getCreateTime() {
-        return mCurrCashback==null?null:mCurrCashback.getCreated();
+        return mCashback ==null?null: mCashback.getCreated();
     }
 
     /*
      * Old cashback Getter methods
      */
-    /*public int getOldCbBalance() {
-        return mOldCashback==null?0:(mOldCashback.getCb_credit() - mOldCashback.getCb_debit());
-    }*/
     public int getOldClBalance() {
-        //return mOldCashback==null?0:(mOldCashback.getCl_credit() - mOldCashback.getCl_debit());
-        return CommonUtils.getAccBalance(mOldCashback);
+        //return mOldCashback==null?0:CommonUtils.getAccBalance(mOldCashback);
+        return mOldAccBalance;
     }
 
     /*
@@ -164,29 +159,26 @@ public class MyCashback {
         @Override
         public int compare(MyCashback lhs, MyCashback rhs) {
             // TODO: Handle null x or y values
-            switch (mCompareType) {
-                case CB_CMP_TYPE_UPDATE_TIME:
-                    return compare(lhs.getLastTxnTime().getTime(), rhs.getLastTxnTime().getTime());
-                case CB_CMP_TYPE_BILL_AMT:
-                    return compare(lhs.getBillAmt(), rhs.getBillAmt());
-                case CB_CMP_TYPE_ACC_BALANCE:
-                    return compare(lhs.getCurrAccBalance(), rhs.getCurrAccBalance());
-                /*case CB_CMP_TYPE_ACC_ADD:
-                    return compare(lhs.getClCredit(), rhs.getClCredit());
-                case CB_CMP_TYPE_ACC_DEBIT:
-                    return compare(lhs.getCurrClDebit(), rhs.getCurrClDebit());
-                case CB_CMP_TYPE_CB_ADD:
-                    return compare(lhs.getCbCredit(), rhs.getCbCredit());*/
-                /*case CB_CMP_TYPE_CB_DEBIT:
-                    return compare(lhs.getCbRedeem(), rhs.getCbRedeem());
-                case CB_CMP_TYPE_MCHNT_CITY:
-                    return compare(lhs.getMerchant().getCity(), rhs.getMerchant().getCity());
-                case CB_CMP_TYPE_CB_BALANCE:
-                    return compare(lhs.getCurrCbBalance(), rhs.getCurrCbBalance());*/
-                case CB_CMP_TYPE_MCHNT_NAME:
-                    return compare(lhs.getMerchant().getName(), rhs.getMerchant().getName());
+            try {
+                switch (mCompareType) {
+                    case CB_CMP_TYPE_UPDATE_TIME:
+                        return compare(lhs.getLastTxnTime().getTime(), rhs.getLastTxnTime().getTime());
+                    case CB_CMP_TYPE_BILL_AMT:
+                        return compare(lhs.getBillAmt(), rhs.getBillAmt());
+                    case CB_CMP_TYPE_ACC_BALANCE:
+                        return compare(lhs.getCurrAccBalance(), rhs.getCurrAccBalance());
+                    case CB_CMP_TYPE_MCHNT_NAME:
+                        return compare(lhs.getMerchant().getName(), rhs.getMerchant().getName());
+                    case CB_CMP_TYPE_CB_RATE:
+                        return compare(lhs.getMerchant().getCb_rate(), rhs.getMerchant().getCb_rate());
+                    default:
+                        return 0;
+                }
+            } catch (Exception ex) {
+                // ignore exception
+                LogMy.e(TAG,"Exception in MyCashbackComparator:compare",ex);
+                return 0;
             }
-            return 0;
         }
         private static int compare(long a, long b) {
             return a < b ? -1

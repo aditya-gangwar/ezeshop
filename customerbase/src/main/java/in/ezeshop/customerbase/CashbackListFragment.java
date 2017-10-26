@@ -32,10 +32,10 @@ import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.DbConstants;
 import in.ezeshop.common.constants.ErrorCodes;
 import in.ezeshop.appbase.entities.MyCashback;
-import in.ezeshop.common.MyMerchant;
 import in.ezeshop.appbase.utilities.AppCommonUtil;
 import in.ezeshop.appbase.utilities.DialogFragmentWrapper;
 import in.ezeshop.appbase.utilities.LogMy;
+import in.ezeshop.common.database.Merchants;
 import in.ezeshop.customerbase.helper.MyRetainedFragment;
 
 /**
@@ -391,21 +391,22 @@ public class CashbackListFragment extends BaseFragment {
 
         public void bindCb(MyCashback cb) {
             mCb = cb;
-            MyMerchant merchant = mCb.getMerchant();
+            Merchants merchant = mCb.getMerchant();
 
-            Bitmap dp = getMchntDp(merchant.getDpFilename());
+            Bitmap dp = AppCommonUtil.getLocalBitmap(getActivity(),
+                    merchant.getDisplayImage(), getResources().getDimension(R.dimen.dp_item_image_width));
             if(dp!=null) {
-                mCb.setDpMerchant(dp);
+                //mCb.setDpMerchant(dp);
                 mMerchantDp.setImageBitmap(dp);
             }
 
             mMerchantName.setText(merchant.getName());
-            if(merchant.getStatus()== DbConstants.USER_STATUS_UNDER_CLOSURE) {
+            if(merchant.getAdmin_status()== DbConstants.USER_STATUS_UNDER_CLOSURE) {
                 mMchntStatusAlert.setVisibility(View.VISIBLE);
             } else {
                 mMchntStatusAlert.setVisibility(View.GONE);
             }
-            String txt = merchant.getCity();
+            String txt = merchant.getAddress().getAreaNIDB().getAreaName()+", "+merchant.getAddress().getAreaNIDB().getCity().getCity();
             mAreaNdCity.setText(txt);
             //txt = "Last: "+mSdfDateWithTime.format(cb.getLastTxnTime());
             txt = mSdfDateWithTime.format(cb.getLastTxnTime());
@@ -414,31 +415,6 @@ public class CashbackListFragment extends BaseFragment {
             AppCommonUtil.showAmtColor(getActivity(),null,mAccBalance,mCb.getCurrAccBalance(),false);
         }
 
-        private Bitmap getMchntDp(String filename) {
-            if(filename!=null) {
-                File file = getActivity().getFileStreamPath(filename);
-                if(file!=null) {
-                    Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
-                    if(bitmap==null) {
-                        LogMy.e(TAG,"Not able to decode mchnt dp file: "+file.getName());
-                    } else {
-                        LogMy.d(TAG,"Decoded file as bitmap: "+file.getPath());
-                        // convert to round image
-                        float radiusInDp = getResources().getDimension(R.dimen.dp_item_image_width);
-                        float radiusInPixels = AppCommonUtil.dipToPixels(getActivity(), radiusInDp);
-
-                        Bitmap scaledImg = Bitmap.createScaledBitmap(bitmap,(int)radiusInPixels,(int)radiusInPixels,true);
-                        Bitmap roundImage = AppCommonUtil.getCircleBitmap(scaledImg);
-                        return roundImage;
-                    }
-                } else {
-                    LogMy.e(TAG,"Mchnt Dp file not available locally: "+filename);
-                }
-            }
-            return null;
-        }
-
-
     }
 
     private class CbAdapter extends RecyclerView.Adapter<CbHolder> {
@@ -446,7 +422,7 @@ public class CashbackListFragment extends BaseFragment {
 
         private int selected_position = -1;
         private View.OnClickListener mListener;
-        private View.OnTouchListener mTouchListener;
+        //private View.OnTouchListener mTouchListener;
 
         public CbAdapter(List<MyCashback> cbs) {
             mCbs = cbs;
@@ -467,7 +443,9 @@ public class CashbackListFragment extends BaseFragment {
 
                     if (pos >= 0 && pos < getItemCount()) {
                         // show detailed dialog
-                        MchntDetailsDialogCustApp dialog = MchntDetailsDialogCustApp.newInstance(mCbs.get(pos).getMerchantId(),true);
+                        //MchntDetailsDialogCustApp dialog = MchntDetailsDialogCustApp.newInstance(mCbs.get(pos).getMerchantId(),true);
+                        mRetainedFragment.mSelectCashback = mCbs.get(pos);
+                        MchntDetailsDialogCustApp dialog = MchntDetailsDialogCustApp.newInstance(mRetainedFragment.mSelectCashback.isAccDataAvailable());
                         dialog.show(getFragmentManager(), DIALOG_MERCHANT_DETAILS);
                     } else {
                         LogMy.e(TAG,"Invalid position in onClickListener of customer list item: "+pos);
@@ -475,7 +453,7 @@ public class CashbackListFragment extends BaseFragment {
                 }
             };
 
-            mTouchListener = new View.OnTouchListener() {
+            /*mTouchListener = new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     LogMy.d(TAG,"In OnTouchListener of merchant list item");
@@ -500,7 +478,7 @@ public class CashbackListFragment extends BaseFragment {
 
                     return true;
                 }
-            };
+            };*/
         }
 
         @Override

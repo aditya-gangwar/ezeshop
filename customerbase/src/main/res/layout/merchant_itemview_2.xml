@@ -52,12 +52,11 @@
                         android:layout_height="match_parent"
                         android:layout_width="wrap_content"
                         android:text="Ganga Stores and Cosmetics"
-                        android:textStyle="bold"
                         android:gravity="left"
                         android:textColor="@color/subheading"/>
                     <ImageView
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:id="@+id/icon_mchnt_status_alert"
                         android:src="@drawable/ic_warning_white_18dp"
                         android:tint="@color/red_negative"
@@ -72,7 +71,7 @@
                     android:focusable="false">
 
                     <TextView
-                        style="@style/Edittext_only_view_small_lessPad"
+                        style="@style/Edittext_only_view_XS_lessPad"
                         android:id="@+id/mchnt_area_city"
                         android:layout_height="wrap_content"
                         android:layout_width="0dp"
@@ -101,7 +100,7 @@
                     android:focusable="false">
 
                     <TextView
-                        style="@style/Edittext_only_view_small_lessPad"
+                        style="@style/Edittext_only_view_XS_lessPad"
                         android:id="@+id/input_last_txn"
                         android:layout_height="wrap_content"
                         android:layout_width="0dp"
@@ -112,7 +111,7 @@
                         android:textColor="@color/secondary_text"/>
 
                     <TextView
-                        style="@style/Edittext_only_view_medium_lessPad"
+                        style="@style/Edittext_only_view_small_lessPad"
                         android:id="@+id/input_acc_bal"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"

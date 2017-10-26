@@ -9,7 +9,6 @@
 
     <EditText
         style="@style/Edittext_only_view_small_more_pad"
-        android:id="@+id/label_cash_pay_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="false"
@@ -27,6 +26,45 @@
 
         <LinearLayout
             style="@style/LL_Vertical">
+
+            <LinearLayout
+                style="@style/LL_Horizontal_paddingSidesLarge"
+                android:paddingTop="@dimen/XXL_space">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_shopping_cart_black_18dp"
+                    android:tint="@color/primary" />
+
+                <EditText
+                    style="@style/Edittext_only_view_small_more_pad"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="40"
+                    android:gravity="left|center_vertical"
+                    android:text="Order ID" />
+                <!--View
+                    style="@style/Divider_vertical_Medium"/-->
+                <EditText
+                    style="@style/Edittext_only_view_bg_small_morePad"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:gravity="center"
+                    android:text="C" />
+
+                <EditText
+                    android:id="@+id/input_orderid"
+                    style="@style/MyEdittext_Small_morePad"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="50"
+                    android:gravity="left"
+                    android:hint="Order ID"
+                    android:inputType="number" />
+            </LinearLayout>
 
             <LinearLayout
                 style="@style/LL_Horizontal_paddingSidesLarge"
@@ -111,43 +149,6 @@
                     android:gravity="left"
                     android:drawablePadding="@dimen/medium_space"
                     android:background="@drawable/round_rect_border"/>
-            </LinearLayout>
-
-            <LinearLayout
-                style="@style/LL_Horizontal_paddingSidesLarge"
-                android:paddingTop="@dimen/XXL_space">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_description_black_18dp"
-                    android:tint="@color/primary"/>
-                <EditText
-                    style="@style/Edittext_only_view_small_more_pad"
-                    android:layout_height="wrap_content"
-                    android:layout_width="0dp"
-                    android:text="Order ID"
-                    android:layout_weight="40"
-                    android:gravity="left|center_vertical"
-                    android:layout_gravity="bottom"/>
-                <!--View
-                    style="@style/Divider_vertical_Medium"/-->
-                <EditText
-                    style="@style/Edittext_only_view_bg_small_morePad"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="C"
-                    android:layout_weight="10"
-                    android:gravity="center"/>
-                <EditText
-                    style="@style/MyEdittext_Small_morePad"
-                    android:id="@+id/input_orderid"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:hint="Order ID"
-                    android:layout_weight="50"
-                    android:inputType="textCapCharacters"
-                    android:gravity="left"/>
             </LinearLayout>
 
             <!--EditText
@@ -291,7 +292,7 @@
                 style="@style/button_normal_thin"
                 android:id="@+id/btn_search"
                 android:layout_width="match_parent"
-                android:text="Search"
+                android:text="Apply"
                 android:layout_marginTop="@dimen/XXXXL_space"/>
 
         </LinearLayout>

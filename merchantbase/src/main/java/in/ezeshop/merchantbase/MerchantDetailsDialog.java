@@ -83,7 +83,7 @@ public class MerchantDetailsDialog extends BaseDialog {
         mStoreName.setText(merchant.getName());
         mStoreCategory.setText(merchant.getBuss_category());
         mMerchantId.setText(merchant.getAuto_id());
-        mInputContactName.setText(merchant.getContactName());
+        //mInputContactName.setText(merchant.getContactName());
         mInputMobileNum.setText(merchant.getMobile_num());
         mRegisteredOn.setText(mSdfOnlyDate.format(merchant.getCreated()));
         mExpiringOn.setText(mSdfOnlyDate.format(AppCommonUtil.getExpiryDate(merchant)));
@@ -144,7 +144,7 @@ public class MerchantDetailsDialog extends BaseDialog {
 
     private ImageView mDisplayImage;
     private EditText mInputMobileNum;
-    private EditText mInputContactName;
+    //private EditText mInputContactName;
     private EditText mStoreName;
     private EditText mStoreCategory;
 
@@ -175,7 +175,7 @@ public class MerchantDetailsDialog extends BaseDialog {
         mStoreCategory = (EditText) v.findViewById(R.id.input_store_category);
 
         mMerchantId = (EditText) v.findViewById(R.id.input_merchant_id);
-        mInputContactName = (EditText) v.findViewById(R.id.input_contact_name);
+        //mInputContactName = (EditText) v.findViewById(R.id.input_contact_name);
         mInputMobileNum = (EditText) v.findViewById(R.id.input_merchant_mobile);
         mRegisteredOn = (EditText) v.findViewById(R.id.input_registered_on);
         mExpiringOn = (EditText) v.findViewById(R.id.input_expiring_on);

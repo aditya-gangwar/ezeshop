@@ -384,7 +384,9 @@ public class TxnReportsCustActivity extends BaseActivity implements
 
     @Override
     public void showMchntDetails(String mchntId) {
-        MchntDetailsDialogCustApp dialog = MchntDetailsDialogCustApp.newInstance(mchntId, false);
+        //MchntDetailsDialogCustApp dialog = MchntDetailsDialogCustApp.newInstance(mchntId, false);
+        mWorkFragment.mSelectCashback = mWorkFragment.mCashbacks.get(mchntId);
+        MchntDetailsDialogCustApp dialog = MchntDetailsDialogCustApp.newInstance(mWorkFragment.mSelectCashback.isAccDataAvailable());
         dialog.show(getFragmentManager(), DIALOG_MERCHANT_DETAILS);
     }
 
