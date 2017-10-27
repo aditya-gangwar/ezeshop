@@ -57,6 +57,7 @@ public class CashbackListFragment extends BaseFragment {
     public interface CashbackListFragmentIf {
         MyRetainedFragment getRetainedFragment();
         boolean refreshMchntList();
+        void showMchntDetails(MyCashback data);
         void setDrawerState(boolean isEnabled);
     }
 
@@ -444,9 +445,10 @@ public class CashbackListFragment extends BaseFragment {
                     if (pos >= 0 && pos < getItemCount()) {
                         // show detailed dialog
                         //MchntDetailsDialogCustApp dialog = MchntDetailsDialogCustApp.newInstance(mCbs.get(pos).getMerchantId(),true);
-                        mRetainedFragment.mSelectCashback = mCbs.get(pos);
+                        mCallback.showMchntDetails(mCbs.get(pos));
+                        /*mRetainedFragment.mSelectCashback = mCbs.get(pos);
                         MchntDetailsDialogCustApp dialog = MchntDetailsDialogCustApp.newInstance(mRetainedFragment.mSelectCashback.isAccDataAvailable());
-                        dialog.show(getFragmentManager(), DIALOG_MERCHANT_DETAILS);
+                        dialog.show(getFragmentManager(), DIALOG_MERCHANT_DETAILS);*/
                     } else {
                         LogMy.e(TAG,"Invalid position in onClickListener of customer list item: "+pos);
                     }

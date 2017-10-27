@@ -59,7 +59,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
         PasswdChangeDialog.PasswdChangeDialogIf, MobileChangeDialog.MobileChangeDialogIf,
         OtpPinInputDialog.OtpPinInputDialogIf, CashbackListFragment.CashbackListFragmentIf,
         PinResetDialog.PinResetDialogIf, PinChangeDialog.PinChangeDialogIf,
-        MchntDetailsDialogCustApp.MerchantDetailsDialogIf, CustomerOpListFrag.CustomerOpListFragIf,
+        MchntDetailsFragCustApp.MchntDetailsFragCustAppIf, CustomerOpListFrag.CustomerOpListFragIf,
         CreateOrderFragment.CreateOrderFragmentIf, ChooseAddressFragment.ChooseAddressFragmentIf,
         UpdateAddressFragment.UpdateAddressFragmentIf, GenericListFragment.GenericListFragmentIf,
         ChooseMerchantFrag.ChooseMerchantFragIf {
@@ -91,6 +91,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
     private static final String CUSTOMER_UPDATE_ADDRESS_FRAG = "CustomerUpdateAddressFrag";
     private static final String GENERIC_SINGLE_CHOICE_FRAG = "CustomerChooseAreaFrag";
     private static final String CUSTOMER_CHOOSE_MERCHANT_FRAG = "CustomerChooseMchntFrag";
+    private static final String MCHNT_DETAILS_FRAGMENT = "MchntDetailsFragment";
 
     MyRetainedFragment mRetainedFragment;
     FragmentManager mFragMgr;
@@ -855,6 +856,26 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
                 DialogFragmentWrapper.createNotification(AppConstants.pinResetFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
                         .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
             }
+        }
+    }
+
+    @Override
+    public void showMchntDetails(MyCashback data) {
+        // start mchnt details fragment
+        mRetainedFragment.mSelectCashback = data;
+        Fragment fragment = mFragMgr.findFragmentByTag(MCHNT_DETAILS_FRAGMENT);
+        if (fragment == null) {
+            LogMy.d(TAG,"Creating new mchnt details fragment");
+            // Create new fragment and transaction
+            fragment = MchntDetailsFragCustApp.newInstance(data.isAccDataAvailable());
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+            // Add over the existing fragment
+            transaction.replace(R.id.fragment_container_1, fragment, CUSTOMER_CHOOSE_MERCHANT_FRAG);
+            transaction.addToBackStack(CUSTOMER_CHOOSE_MERCHANT_FRAG);
+
+            // Commit the transaction
+            transaction.commit();
         }
     }
 

@@ -114,7 +114,7 @@ public class MerchantDetailsDialog extends BaseDialog {
         }
 
         mInputEmail.setText(merchant.getEmail());
-        String phone = AppConstants.PHONE_COUNTRY_CODE+merchant.getContactPhone();
+        String phone = AppConstants.PHONE_COUNTRY_CODE_DISPLAY +merchant.getContactPhone();
         mInputContactNum.setText(phone);
 
         mAddress.setText(CommonUtils.getMchntAddressStr(merchant));

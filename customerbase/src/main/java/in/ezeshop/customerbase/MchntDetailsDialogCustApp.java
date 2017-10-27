@@ -1,4 +1,4 @@
-package in.ezeshop.customerbase;
+/*package in.ezeshop.customerbase;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -31,9 +31,6 @@ import in.ezeshop.common.database.Merchants;
 import in.ezeshop.customerbase.entities.CustomerUser;
 import in.ezeshop.customerbase.helper.MyRetainedFragment;
 
-/**
- * Created by adgangwa on 21-05-2016.
- */
 public class MchntDetailsDialogCustApp extends BaseDialog {
     private static final String TAG = "CustApp-MerchantDetailsDialog";
     private static final String ARG_GETTXNS_BTN = "getTxnsBtn";
@@ -69,7 +66,7 @@ public class MchntDetailsDialogCustApp extends BaseDialog {
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
                     + " must implement MerchantDetailsDialogIf");
-        }
+        }*/
 
         /*mMerchantId = getArguments().getString(ARG_CB_MCHNTID, null);
         if(savedInstanceState!=null) {
@@ -90,6 +87,12 @@ public class MchntDetailsDialogCustApp extends BaseDialog {
             mchnt = accData.getMerchant();
         }*/
 
+        /*mBtnCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+
         initDialogView(mCallback.getRetainedFragment().mSelectCashback);
 
         if(mCallback.getRetainedFragment().mSelectCashback==null) {
@@ -109,7 +112,7 @@ public class MchntDetailsDialogCustApp extends BaseDialog {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        View v = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_mchnt_details_for_cust, null);
+        View v = LayoutInflater.from(getActivity()).inflate(R.layout.frag_mchnt_details_for_cust, null);
 
         bindUiResources(v);
         boolean showGetTxns = getArguments().getBoolean(ARG_GETTXNS_BTN, true);
@@ -177,12 +180,12 @@ public class MchntDetailsDialogCustApp extends BaseDialog {
                         AppCommonUtil.getMchntRemovalDate(merchant.getRemoveReqDate())));
             } else {
                 mLayoutExpNotice.setVisibility(View.GONE);
-            }
+            }*/
 
             /*if(cb.getDpMerchant()!=null) {
                 mImgMerchant.setImageBitmap(cb.getDpMerchant());
             }*/
-            Bitmap dp = AppCommonUtil.getLocalBitmap(getActivity(),
+            /*Bitmap dp = AppCommonUtil.getLocalBitmap(getActivity(),
                     merchant.getDisplayImage(), getResources().getDimension(R.dimen.dp_item_image_width));
             if (dp != null) {
                 mImgMerchant.setImageBitmap(dp);
@@ -201,15 +204,11 @@ public class MchntDetailsDialogCustApp extends BaseDialog {
             }
             mCbRate.setText(textCbRate);
 
-            String phone = AppConstants.PHONE_COUNTRY_CODE+merchant.getContactPhone();
-            mInputContactPhone.setText(phone);
+            String phone = AppConstants.PHONE_COUNTRY_CODE_DISPLAY+merchant.getContactPhone();
             if(merchant.getContactPhone2()!=null && !merchant.getContactPhone2().isEmpty()) {
-                mLytContactPhone2.setVisibility(View.VISIBLE);
-                phone = AppConstants.PHONE_COUNTRY_CODE+merchant.getContactPhone2();
-                mInputContactPhone2.setText(phone);
-            } else {
-                mLytContactPhone2.setVisibility(View.GONE);
+                phone = phone + ", " + AppConstants.PHONE_COUNTRY_CODE_DISPLAY+merchant.getContactPhone2();
             }
+            mInputContactPhone.setText(phone);
 
             mAddress.setText(CommonUtils.getMchntAddressStr(merchant));
         } else {
@@ -251,8 +250,7 @@ public class MchntDetailsDialogCustApp extends BaseDialog {
     private EditText mCbRate;
     private EditText mPpCbDetails;
     private EditText mInputContactPhone;
-    private View mLytContactPhone2;
-    private EditText mInputContactPhone2;
+    private TextView mBtnCall;
     private EditText mAddress;
 
     private View mNonMemberInfo;
@@ -288,8 +286,9 @@ public class MchntDetailsDialogCustApp extends BaseDialog {
         mInputAccTotalDebit = (EditText) v.findViewById(R.id.input_acc_debit);
 
         mInputContactPhone = (EditText) v.findViewById(R.id.input_contactNum);
-        mLytContactPhone2 = v.findViewById(R.id.lyt_contactNum2);
-        mInputContactPhone2 = (EditText) v.findViewById(R.id.input_contactNum2);
+        mBtnCall = (TextView) v.findViewById(R.id.btn_call);
+        //mLytContactPhone2 = v.findViewById(R.id.lyt_contactNum2);
+        //mInputContactPhone2 = (EditText) v.findViewById(R.id.input_contactNum2);
         mAddress = (EditText) v.findViewById(R.id.input_address);
 
         mLayoutExpNotice = v.findViewById(R.id.layout_expiry_notice);
@@ -301,4 +300,4 @@ public class MchntDetailsDialogCustApp extends BaseDialog {
         super.onSaveInstanceState(outState);
         //outState.putString("mMerchantId", mMerchantId);
     }
-}
+}*/

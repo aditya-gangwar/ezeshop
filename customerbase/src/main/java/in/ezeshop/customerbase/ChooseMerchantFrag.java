@@ -61,6 +61,7 @@ public class ChooseMerchantFrag extends BaseFragment
     public interface ChooseMerchantFragIf {
         MyRetainedFragment getRetainedFragment();
         void setToolbarForFrag(int iconResId, String title, String subTitle);
+        void showMchntDetails(MyCashback data);
         void onSelectMerchant(String mchntId);
     }
 
@@ -372,9 +373,10 @@ public class ChooseMerchantFrag extends BaseFragment
                 @Override
                 public void onClick(View v) {
                     // Show merchant details dialog
-                    mRetainedFragment.mSelectCashback = mMchnt;
+                    mCallback.showMchntDetails(mMchnt);
+                    /*mRetainedFragment.mSelectCashback = mMchnt;
                     MchntDetailsDialogCustApp dialog = MchntDetailsDialogCustApp.newInstance(mMchnt.isAccDataAvailable());
-                    dialog.show(getFragmentManager(), DIALOG_MERCHANT_DETAILS);
+                    dialog.show(getFragmentManager(), DIALOG_MERCHANT_DETAILS);*/
                 }
             });
         }

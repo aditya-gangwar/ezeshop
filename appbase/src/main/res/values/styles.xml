@@ -132,6 +132,11 @@
         <item name="android:background">@color/white</item>
     </style>
 
+    <style name="button_inverted_thin" parent="button_normal_thin">
+        <item name="android:textColor">@color/subheading</item>
+        <item name="android:background">@color/button_fill_inverted</item>
+    </style>
+
     <style name="button_normal_thin" parent="button_normal">
         <item name="android:padding">@dimen/small_space</item>
         <item name="android:minHeight">@dimen/button_width_thin</item>

@@ -44,7 +44,7 @@ public class TxnReportsCustActivity extends BaseActivity implements
         MyRetainedFragment.RetainedFragmentIf,
         MyDatePickerDialog.MyDatePickerIf, TxnListFragment.TxnListFragmentIf,
         DialogFragmentWrapper.DialogFragmentWrapperIf, TxnDetailsDialog.TxnDetailsDialogIf,
-        TxnReportsHelper2.TxnReportsHelper2If, MchntDetailsDialogCustApp.MerchantDetailsDialogIf {
+        TxnReportsHelper2.TxnReportsHelper2If, MchntDetailsFragCustApp.MchntDetailsFragCustAppIf {
     private static final String TAG = "CustApp-TxnReportsActivity";
 
     public static final String EXTRA_MERCHANT_ID = "extraMchntId";
@@ -56,6 +56,7 @@ public class TxnReportsCustActivity extends BaseActivity implements
     private static final String DIALOG_ERROR_NOTIFY = "DialogErrorNotify";
 
     private static final String TXN_LIST_FRAGMENT = "TxnListFragment";
+    private static final String MCHNT_DETAILS_FRAGMENT = "MchntDetailsFragment";
     private static final String DIALOG_MERCHANT_DETAILS = "dialogMerchantDetails";
 
     // All required date formatters
@@ -386,13 +387,36 @@ public class TxnReportsCustActivity extends BaseActivity implements
     public void showMchntDetails(String mchntId) {
         //MchntDetailsDialogCustApp dialog = MchntDetailsDialogCustApp.newInstance(mchntId, false);
         mWorkFragment.mSelectCashback = mWorkFragment.mCashbacks.get(mchntId);
-        MchntDetailsDialogCustApp dialog = MchntDetailsDialogCustApp.newInstance(mWorkFragment.mSelectCashback.isAccDataAvailable());
-        dialog.show(getFragmentManager(), DIALOG_MERCHANT_DETAILS);
+        /*MchntDetailsDialogCustApp dialog = MchntDetailsDialogCustApp.newInstance(false);
+        dialog.show(getFragmentManager(), DIALOG_MERCHANT_DETAILS);*/
+        // start mchnt details fragment
+        Fragment fragment = mFragMgr.findFragmentByTag(MCHNT_DETAILS_FRAGMENT);
+        if (fragment == null) {
+            LogMy.d(TAG,"Creating new mchnt details fragment");
+
+            // Create new fragment and transaction
+            fragment = MchntDetailsFragCustApp.newInstance(false);
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+            // Add over the existing fragment
+            mMainLayout.setVisibility(View.GONE);
+            mFragmentContainer.setVisibility(View.VISIBLE);
+            transaction.replace(R.id.fragment_container_report, fragment, MCHNT_DETAILS_FRAGMENT);
+            transaction.addToBackStack(MCHNT_DETAILS_FRAGMENT);
+
+            // Commit the transaction
+            transaction.commit();
+        }
     }
 
     @Override
     public void getMchntTxns(String id, String name) {
         // do nothing - as 'Get Txns' button is not shown
+    }
+
+    @Override
+    public void setToolbarForFrag(int iconResId, String title, String subTitle) {
+        setToolbarTitle(title);
     }
 
     /*@Override

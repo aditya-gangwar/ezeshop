@@ -93,7 +93,7 @@ public class MerchantDetailsFragment extends BaseFragment {
         mInputReason.setText(merchant.getStatus_reason());
 
         mContactName.setText(merchant.getContactName());
-        String phone = AppConstants.PHONE_COUNTRY_CODE+merchant.getContactPhone();
+        String phone = AppConstants.PHONE_COUNTRY_CODE_DISPLAY +merchant.getContactPhone();
         mContactPhone.setText(phone);
         mInputEmail.setText(merchant.getEmail());
 
