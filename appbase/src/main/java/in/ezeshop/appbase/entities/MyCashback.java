@@ -1,17 +1,12 @@
 package in.ezeshop.appbase.entities;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import in.ezeshop.appbase.utilities.LogMy;
 import in.ezeshop.common.CommonUtils;
 import in.ezeshop.common.CsvConverter;
 import in.ezeshop.common.MyCustomer;
 import in.ezeshop.common.database.Cashback;
-import in.ezeshop.common.database.Customers;
 import in.ezeshop.common.database.Merchants;
 
-import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -47,11 +42,11 @@ public class MyCashback {
 
     /* Constructors */
     public MyCashback(Cashback cb) {
-        reset(cb);
+        init(cb);
     }
 
     public MyCashback(String csvRecord) {
-        reset(CsvConverter.cbFromCsvStr(csvRecord));
+        init(CsvConverter.cbFromCsvStr(csvRecord));
     }
 
     public MyCashback(Merchants mchnt) {
@@ -64,13 +59,13 @@ public class MyCashback {
      * Init object values from given CSV string
      * containing both 'cashback' and 'customer/merchant' data in single record
      */
-    private void reset(Cashback cb) {
+    private void init(Cashback cb) {
         //mOldCashback = mCashback;
         mCashback = cb;
         if(cb.getMerchantNIDB()!=null) {
             mMerchant = cb.getMerchantNIDB();
         }
-        if(mCashback.getOther_details()!=null && mCashback.getOther_details().isEmpty()) {
+        if(mCashback.getOther_details()!=null && !mCashback.getOther_details().isEmpty()) {
             mCustomer = new MyCustomer();
             mCustomer.init(mCashback.getOther_details());
         }

@@ -103,6 +103,7 @@ public class CashPaid2 implements Serializable, View.OnTouchListener {
     }
 
     public void onCustomAmtEnter(String newValue, boolean noMinCheck) {
+        LogMy.d(TAG,"In refreshValues: "+newValue+" ,"+noMinCheck);
         mNoMinCheck = noMinCheck;
         setCustomAmtText(newValue);
         handleCustomAmtEnter();
@@ -278,24 +279,24 @@ public class CashPaid2 implements Serializable, View.OnTouchListener {
     }
 
     private void markInputAmt(int i) {
-        LogMy.d(TAG,"In markInputAmt: "+i);
+        //LogMy.d(TAG,"In markInputAmt: "+i);
         markInputAmt(mInputCashPay[i]);
         markedStatus[i] = true;
     }
     private void markInputAmt(AppCompatButton et) {
-        LogMy.d(TAG,"In markInputAmt");
+        //LogMy.d(TAG,"In markInputAmt");
         et.setTextColor(ContextCompat.getColor(mActivity, R.color.green_positive));
         et.setTypeface(null, Typeface.BOLD);
         //et.setBackgroundResource(R.drawable.round_rect_border_selected);
     }
 
     private void unmarkInputAmt(int i) {
-        LogMy.d(TAG,"In unmarkInputAmt: "+i);
+        //LogMy.d(TAG,"In unmarkInputAmt: "+i);
         unmarkInputAmt(mInputCashPay[i]);
         markedStatus[i] = false;
     }
     private void unmarkInputAmt(AppCompatButton et) {
-        LogMy.d(TAG,"In unmarkInputAmt");
+        //LogMy.d(TAG,"In unmarkInputAmt");
         et.setTextColor(ContextCompat.getColor(mActivity, R.color.secondary_text));
         et.setTypeface(null, Typeface.NORMAL);
         //et.setBackgroundResource(0);

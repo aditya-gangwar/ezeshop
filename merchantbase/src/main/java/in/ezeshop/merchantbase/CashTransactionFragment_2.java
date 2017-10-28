@@ -126,6 +126,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        LogMy.d(TAG, "In onCreateView");
         View v = inflater.inflate(R.layout.fragment_cash_txn_5, container, false);
 
         // access to UI elements
@@ -138,6 +139,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        LogMy.d(TAG, "In onActivityCreated");
         super.onActivityCreated(savedInstanceState);
 
         try {
@@ -433,6 +435,13 @@ public class CashTransactionFragment_2 extends BaseFragment implements
             if (mDebitClStatus == STATUS_AUTO) {
                 mMinCashToPay = mMinCashToPay - Math.min(mClBalance, mMinCashToPay);
             }
+            if(mOverdraftStatus == STATUS_AUTO) {
+                mMinCashToPay = mMinCashToPay - Math.min(Math.abs(mOverdraft), MyGlobalSettings.getAccOverdraftLimit());
+            }
+
+            if(mMinCashToPay<0) {
+                mMinCashToPay = 0;
+            }
         //}
         LogMy.d(TAG,"Exiting calcMinCashToPay: "+mMinCashToPay);
     }
@@ -608,6 +617,8 @@ public class CashTransactionFragment_2 extends BaseFragment implements
 
                     } else if(mDebitCashload > 0) {
                         // already set for debit, clear it on touch
+                        // if 'overdraft' set - clear that also - as its not possible to not deduct balance from account and do overdraft only
+                        setOverdraftStatus(STATUS_CLEARED);
                         setDebitClStatus(STATUS_CLEARED);
                         calcAndSetAmts(false);
 
@@ -704,7 +715,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
                             if(mReturnCash==0) {
                                 AppCommonUtil.toast(getActivity(), "Balance Already Zero");
                             } else {
-                                // activating overdraft means activating cl_denit also
+                                // activating overdraft means activating cl_debit also
                                 // this as before calculating overdraft - any amount in account is need to be debit
                                 if(mDebitClStatus==STATUS_CLEARED) {
                                     setDebitClStatus(STATUS_AUTO);
@@ -770,6 +781,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
     }
 
     private void initListeners() {
+        LogMy.d(TAG, "In initListeners");
         // can change bill amount
         mImgBill.setOnTouchListener(this);
         mLabelBill.setOnTouchListener(this);
@@ -919,14 +931,6 @@ public class CashTransactionFragment_2 extends BaseFragment implements
     private void initAmtUiStates() {
         LogMy.d(TAG, "In initAmtUiStates");
 
-        // Cash Paid section
-        if(mCashPaidHelper==null) {
-            calcMinCashToPay();
-            mCashPaidHelper = new CashPaid2(mMinCashToPay, (mOverdraftStatus==STATUS_AUTO),
-                    mRetainedFragment.mBillTotal, this, getActivity());
-        }
-        mCashPaidHelper.initView(getView());
-
         // Init 'add cash' status
         if(mMerchantUser.getMerchant().getCl_add_enable()) {
 
@@ -972,6 +976,14 @@ public class CashTransactionFragment_2 extends BaseFragment implements
             setAddCbStatus(STATUS_DISABLED);
         }
 
+        // Cash Paid section
+        if(mCashPaidHelper==null) {
+            calcMinCashToPay();
+            mCashPaidHelper = new CashPaid2(mMinCashToPay, (mOverdraftStatus==STATUS_AUTO),
+                    mRetainedFragment.mBillTotal, this, getActivity());
+        }
+        mCashPaidHelper.initView(getView());
+
     }
 
     /*
@@ -1008,7 +1020,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
             setDebitClStatus(newStatus);
         }
 
-        // 'debit cash' status
+        // 'overdraft' status
         if(mOverdraftStatus < STATUS_DISABLED) {
             // not permanently disabled
             int newStatus;
@@ -1048,6 +1060,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
     private AppCompatButton mInputToPayCash;
 
     private void bindUiResources(View v) {
+        LogMy.d(TAG, "In bindUiResources");
 
         //mCoordinatorLayout = v.findViewById(R.id.myCoordinatorLayout);
 
@@ -1076,6 +1089,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
 
     @Override
     public void onResume() {
+        LogMy.d(TAG, "In onResume");
         super.onResume();
         mCallback.setDrawerState(false);
 
@@ -1098,8 +1112,27 @@ public class CashTransactionFragment_2 extends BaseFragment implements
 
     @Override
     public void onPause() {
+        LogMy.d(TAG, "In onPause");
         super.onPause();
         AppCommonUtil.cancelToast();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        LogMy.d(TAG, "In onStop");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        LogMy.d(TAG, "In onDestroyView");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        LogMy.d(TAG, "In onStart");
     }
 
     @Override

@@ -87,8 +87,8 @@
                         android:id="@+id/icon_account"
                         android:src="@drawable/ic_account_balance_wallet_white_18dp"
                         android:paddingTop="0dp"
-                        android:tint="@color/primary"
-                        android:padding="@dimen/edittext_padding_less"/>
+                        android:paddingBottom="@dimen/edittext_padding_less"
+                        android:tint="@color/primary"/>
 
                 </LinearLayout>
 

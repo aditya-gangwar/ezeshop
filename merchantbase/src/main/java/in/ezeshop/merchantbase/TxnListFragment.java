@@ -630,7 +630,7 @@ public class TxnListFragment extends BaseFragment {
             AppCommonUtil.showAmtColor(getActivity(), mLabelAcc, mAccountAmt, value, true);
 
             // show/hide overdraft icon
-            mImgOverdraft.setVisibility( value>0?View.GONE:View.VISIBLE);
+            mImgOverdraft.setVisibility( txn.getCl_overdraft()>0?View.VISIBLE:View.GONE);
 
             /*mBillAmount.setText(AppCommonUtil.getNegativeAmtStr(mTxn.getTotal_billed(), true));
             // set account add/debit amount

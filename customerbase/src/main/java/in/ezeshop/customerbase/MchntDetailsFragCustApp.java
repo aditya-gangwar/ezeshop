@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 import in.ezeshop.appbase.BaseFragment;
+import in.ezeshop.appbase.GenericListDialog;
 import in.ezeshop.appbase.constants.AppConstants;
 import in.ezeshop.appbase.entities.MyCashback;
 import in.ezeshop.appbase.utilities.AppCommonUtil;
@@ -37,7 +38,8 @@ import pl.aprilapps.easyphotopicker.EasyImage;
  * Created by adgangwa on 28-10-2017.
  */
 
-public class MchntDetailsFragCustApp extends BaseFragment {
+public class MchntDetailsFragCustApp extends BaseFragment
+        implements GenericListDialog.GenericListDialogIf {
     private static final String TAG = "CustApp-MchntDetailsFragCustApp";
 
     private static final String ARG_GETTXNS_BTN = "getTxnsBtn";
@@ -59,7 +61,7 @@ public class MchntDetailsFragCustApp extends BaseFragment {
     private MchntDetailsFragCustAppIf mCallback;
 
     private String mMerchantId;
-    List<String> mMchntNumbers = new ArrayList<>(10);
+    ArrayList<String> mMchntNumbers = new ArrayList<>(10);
 
     public static MchntDetailsFragCustApp newInstance(boolean showGetTxnsBtn) {
         LogMy.d(TAG, "Creating new MchntDetailsFragCustApp instance: ");
@@ -209,10 +211,12 @@ public class MchntDetailsFragCustApp extends BaseFragment {
             if (id == mBtnCall.getId()) {
 
                 if(mMchntNumbers.size() > 1) {
-                    DialogFragmentWrapper dialog = DialogFragmentWrapper.createSingleChoiceDialog("Select Number to Call",
+                    /*DialogFragmentWrapper dialog = DialogFragmentWrapper.createSingleChoiceDialog("Select Number to Call",
                             mMchntNumbers.toArray(new String[mMchntNumbers.size()]), 0, true);
                     dialog.setTargetFragment(this,REQUEST_CALL_NUMBER);
-                    dialog.show(getFragmentManager(), DIALOG_CALL_NUMBER);
+                    dialog.show(getFragmentManager(), DIALOG_CALL_NUMBER);*/
+                    GenericListDialog.getInstance(R.drawable.ic_call_black_18dp,mMchntNumbers,"Select Number to Dial")
+                            .show(getFragmentManager(), DIALOG_CALL_NUMBER);
                 } else {
                     dialNumber(mMchntNumbers.get(0));
                 }
@@ -245,17 +249,23 @@ public class MchntDetailsFragCustApp extends BaseFragment {
     }
 
     @Override
+    public void onListItemSelected(int index, String text) {
+        LogMy.d(TAG, "In onListItemSelected :" + index + ", " + text);
+        dialNumber(mMchntNumbers.get(index));
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         LogMy.d(TAG, "In onActivityResult :" + requestCode + ", " + resultCode);
         if(resultCode != Activity.RESULT_OK) {
             return;
         }
-        switch (requestCode) {
+        /*switch (requestCode) {
             case REQUEST_CALL_NUMBER:
                 String number = data.getStringExtra(DialogFragmentWrapper.EXTRA_SELECTION);
                 dialNumber(number);
                 break;
-        }
+        }*/
     }
 
     private void initListeners() {

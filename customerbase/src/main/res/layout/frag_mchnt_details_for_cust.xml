@@ -200,6 +200,7 @@
 
                 <ImageView
                     style="@style/Imageview_Left_Column"
+                    android:paddingTop="@dimen/edittext_padding_less"
                     android:src="@drawable/ic_place_white_18dp"/>
                 <EditText
                     style="@style/Edittext_only_view_small_lessPad"
@@ -207,13 +208,13 @@
                     android:id="@+id/input_address"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="TBS"/>
+                    android:text="abcdef\niugdolkd\nsaiusdskl"/>
             </LinearLayout>
 
             <LinearLayout
                 style="@style/LL_Horizontal_wrap"
                 android:id="@+id/layout_extra_details"
-                android:paddingTop="@dimen/large_space"
+                android:paddingTop="@dimen/XL_space"
                 android:paddingBottom="@dimen/medium_space">
 
                 <View
@@ -329,16 +330,18 @@
                             style="@style/Edittext_only_view_small_lessPad"
                             android:layout_height="match_parent"
                             android:layout_width="0dp"
-                            android:text="   |--- Total Add"
+                            android:text="|--- Total Add"
                             android:layout_weight="40"
-                            android:gravity="left|center_vertical"/>
+                            android:gravity="left|center_vertical"
+                            android:textColor="@color/secondary_text"/>
                         <EditText
                             style="@style/Edittext_only_view_small_lessPad"
                             android:gravity="left|center"
                             android:id="@+id/input_acc_add"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:text="+ \u20B9 NA"/>
+                            android:text="+ \u20B9 NA"
+                            android:textColor="@color/secondary_text"/>
                     </LinearLayout>
                     <LinearLayout
                         style="@style/LL_Horizontal_wrap"
@@ -408,15 +411,17 @@
                             style="@style/Edittext_only_view_small_lessPad"
                             android:layout_height="match_parent"
                             android:layout_width="0dp"
-                            android:text="   |--- Total Debit"
+                            android:text="|--- Total Debit"
                             android:layout_weight="40"
-                            android:gravity="left|center_vertical"/>
+                            android:gravity="left|center_vertical"
+                            android:textColor="@color/secondary_text"/>
                         <EditText
                             style="@style/Edittext_only_view_small_lessPad"
                             android:id="@+id/input_acc_debit"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:text="- \u20B9 NA"/>
+                            android:text="- \u20B9 NA"
+                            android:textColor="@color/secondary_text"/>
                     </LinearLayout>
             </LinearLayout>
 

@@ -8,7 +8,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -27,19 +26,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.StringTokenizer;
 
-import in.ezeshop.appbase.GenericListFragment;
+import in.ezeshop.appbase.GenericListSearchFrag;
 import in.ezeshop.appbase.OtpPinInputDialog;
 import in.ezeshop.appbase.SingleWebViewActivity;
-import in.ezeshop.appbase.entities.MyAreas;
 import in.ezeshop.appbase.entities.MyCashback;
 import in.ezeshop.appbase.utilities.BackgroundProcessor;
 import in.ezeshop.appbase.utilities.MsgPushService;
 import in.ezeshop.common.MyGlobalSettings;
 import in.ezeshop.common.database.CustAddress;
-import in.ezeshop.common.database.Merchants;
 import in.ezeshop.customerbase.entities.CustomerStats;
 import in.ezeshop.customerbase.entities.CustomerUser;
 import in.ezeshop.customerbase.helper.MyRetainedFragment;
@@ -61,7 +56,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
         PinResetDialog.PinResetDialogIf, PinChangeDialog.PinChangeDialogIf,
         MchntDetailsFragCustApp.MchntDetailsFragCustAppIf, CustomerOpListFrag.CustomerOpListFragIf,
         CreateOrderFragment.CreateOrderFragmentIf, ChooseAddressFragment.ChooseAddressFragmentIf,
-        UpdateAddressFragment.UpdateAddressFragmentIf, GenericListFragment.GenericListFragmentIf,
+        UpdateAddressFragment.UpdateAddressFragmentIf, GenericListSearchFrag.GenericListFragmentIf,
         ChooseMerchantFrag.ChooseMerchantFragIf {
 
     private static final String TAG = "CustApp-CashbackActivity";
@@ -993,7 +988,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
         // start generic list fragment
         if (mFragMgr.findFragmentByTag(GENERIC_SINGLE_CHOICE_FRAG) == null) {
 
-            Fragment fragment = GenericListFragment.getInstance(-1, items, title);
+            Fragment fragment = GenericListSearchFrag.getInstance(-1, items, title);
             fragment.setTargetFragment(callback, requestCode);
 
             // Add over the existing fragment
@@ -1015,8 +1010,8 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
         if(currentFragment != null && currentFragment.isVisible()) {
             // update selected address id
             Intent intent = new Intent();
-            intent.putExtra(GenericListFragment.EXTRA_SELECTION,text);
-            intent.putExtra(GenericListFragment.EXTRA_SELECTION_INDEX,index);
+            intent.putExtra(GenericListSearchFrag.EXTRA_SELECTION,text);
+            intent.putExtra(GenericListSearchFrag.EXTRA_SELECTION_INDEX,index);
 
             currentFragment.getTargetFragment().onActivityResult(currentFragment.getTargetRequestCode(),
                     Activity.RESULT_OK, intent);

@@ -138,10 +138,11 @@ public class TxnConfirmFragment extends BaseFragment {
         AppCommonUtil.showAmtColor(getActivity(), null, mInputBillAmt, curTransaction.getTotal_billed(),false);
 
         // set account add/debit amount
-        int value = curTransaction.getCl_credit() - curTransaction.getCl_debit() - curTransaction.getCl_overdraft();
+        //int value = curTransaction.getCl_credit() - curTransaction.getCl_debit() - curTransaction.getCl_overdraft();
+        int value = curTransaction.getCl_credit() - curTransaction.getCl_debit();
         AppCommonUtil.showAmtColor(getActivity(), null, mInputAcc, value, false);
 
-        // show/hide overdraft icon
+        // show/hide overdraft data
         if(curTransaction.getCl_overdraft() > 0) {
             mLayoutOverdraft.setVisibility(View.VISIBLE);
             mInputOverdraft.setText(AppCommonUtil.getNegativeAmtStr(curTransaction.getCl_overdraft()));

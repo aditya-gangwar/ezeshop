@@ -31,10 +31,10 @@
         android:id="@+id/input_mchnt_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""
+        android:text="Medipoint"
         android:textStyle="bold"
         android:background="@color/bg_light_grey_dark"
-        android:paddingTop="@dimen/XL_space"/>
+        android:paddingTop="@dimen/medium_space"/>
 
     <TextView
         style="@style/Edittext_only_view_small"
@@ -51,25 +51,26 @@
 
 
     <LinearLayout
-        style="@style/LL_Horizontal_paddingSidesXL"
-        android:layout_marginTop="@dimen/XXXXL_space">
+        style="@style/LL_Horizontal_paddingSidesLarge"
+        android:layout_marginTop="@dimen/XXL_space">
 
         <LinearLayout
             style="@style/LL_Vertical"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
-            android:layout_weight="1">
+            android:layout_weight="25">
 
             <ImageView
+                android:id="@+id/imageView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:paddingTop="@dimen/edittext_padding"
                 android:src="@drawable/ic_shopping_cart_black_24dp"
-                android:tint="@color/primary"/>
+                android:tint="@color/green_positive" />
 
             <TextView
-                style="@style/Edittext_only_view_XS"
+                style="@style/Edittext_only_view_XS_lessPad"
                 android:gravity="center"
                 android:text="Order sent to Merchant" />
 
@@ -78,13 +79,13 @@
         <View
             style="@style/Divider_horizontal_Large"
             android:layout_width="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="12.5"/>
 
         <LinearLayout
             style="@style/LL_Vertical"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
-            android:layout_weight="1">
+            android:layout_weight="25">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -95,7 +96,7 @@
                 android:tint="@color/primary"/>
 
             <TextView
-                style="@style/Edittext_only_view_XS"
+                style="@style/Edittext_only_view_XS_lessPad"
                 android:gravity="center"
                 android:text="Receive Call from Merchant" />
 
@@ -104,13 +105,13 @@
         <View
             style="@style/Divider_horizontal_Large"
             android:layout_width="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="12.5"/>
 
         <LinearLayout
             style="@style/LL_Vertical"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
-            android:layout_weight="1">
+            android:layout_weight="25">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -121,7 +122,7 @@
                 android:tint="@color/primary"/>
 
             <TextView
-                style="@style/Edittext_only_view_XS"
+                style="@style/Edittext_only_view_XS_lessPad"
                 android:gravity="center"
                 android:text="Delivery at your doorstep" />
 
@@ -131,7 +132,7 @@
 
 
     <LinearLayout style="@style/LL_Vertical_paddingSidesXL"
-        android:layout_marginTop="@dimen/XXXXL_space">
+        android:layout_marginTop="@dimen/XXL_space">
 
         <LinearLayout
             style="@style/LL_Horizontal_wrap">
@@ -143,7 +144,7 @@
                 android:layout_marginRight="@dimen/small_space"
                 android:paddingTop="@dimen/edittext_padding"
                 android:src="@drawable/ic_info_outline_black_18dp"
-                android:tint="@color/icon_grey"
+                android:tint="@color/green_positive"
                 android:visibility="visible" />
 
             <TextView

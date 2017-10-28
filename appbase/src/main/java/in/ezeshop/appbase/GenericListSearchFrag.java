@@ -29,7 +29,7 @@ import in.ezeshop.common.constants.ErrorCodes;
  * Created by adgangwa on 18-10-2017.
  */
 
-public class GenericListFragment extends BaseFragment
+public class GenericListSearchFrag extends BaseFragment
         implements SearchView.OnQueryTextListener {
     private static final String TAG = "BaseApp-GenericListFragment";
 
@@ -38,13 +38,14 @@ public class GenericListFragment extends BaseFragment
 
     private static final String ARG_ITEM_ICON = "listItemIcon";
     private static final String ARG_LIST_DATA = "listData";
-    private static final String ARG_TOOLBAR_TITLE = "toolbarTitle";
+    private static final String ARG_TITLE = "toolbarTitle";
 
     private static final int REQ_NOTIFY_ERROR = 1;
 
     // Special member variable to identify backstack cases
     private Integer mBackstackFlag;
 
+    private TextView mViewTitle;
     private RecyclerView mRecyclerView;
     private GenericListFragmentIf mCallback;
     private GenericListAdapter mAdapter;
@@ -52,20 +53,20 @@ public class GenericListFragment extends BaseFragment
     // Instance state
     int mImgResId;
     ArrayList<String> mItems;
-    String mToolbarTitle;
+    String mTitleStr;
 
     public interface GenericListFragmentIf {
         void setToolbarForFrag(int iconResId, String title, String subTitle);
         void onListItemSelected(int index, String text);
     }
 
-    public static GenericListFragment getInstance(int iconId, ArrayList<String> items, String toolbarTitle) {
+    public static GenericListSearchFrag getInstance(int iconId, ArrayList<String> items, String toolbarTitle) {
         Bundle args = new Bundle();
         args.putInt(ARG_ITEM_ICON, iconId);
         args.putStringArrayList(ARG_LIST_DATA, items);
-        args.putString(ARG_TOOLBAR_TITLE, toolbarTitle);
+        args.putString(ARG_TITLE, toolbarTitle);
 
-        GenericListFragment fragment = new GenericListFragment();
+        GenericListSearchFrag fragment = new GenericListSearchFrag();
         fragment.setArguments(args);
         return fragment;
     }
@@ -77,6 +78,8 @@ public class GenericListFragment extends BaseFragment
 
         try {
             mCallback = (GenericListFragmentIf) getActivity();
+            // title is used in case of Dialog and not fragment
+            mViewTitle.setVisibility(View.GONE);
 
             if(savedInstanceState==null) {
                 // Either fragment 'create' or 'backstack' case
@@ -84,7 +87,7 @@ public class GenericListFragment extends BaseFragment
                     // fragment create case - show data
                     updateUI(getArguments().getInt(ARG_ITEM_ICON),
                             getArguments().getStringArrayList(ARG_LIST_DATA),
-                            getArguments().getString(ARG_TOOLBAR_TITLE));
+                            getArguments().getString(ARG_TITLE));
                     mBackstackFlag = 123; // dummy memory allocation - to check for backstack scenarios later
                 } else {
                     // backstack case - no need to initialize member variables
@@ -97,7 +100,7 @@ public class GenericListFragment extends BaseFragment
                 // as adapter instance does not get stored - so need to recreate the same to show data on ui
                 updateUI(savedInstanceState.getInt("mImgResId"),
                         savedInstanceState.getStringArrayList("mItems"),
-                        savedInstanceState.getString("mToolbarTitle"));
+                        savedInstanceState.getString("mTitleStr"));
             }
 
         } catch (ClassCastException e) {
@@ -118,6 +121,7 @@ public class GenericListFragment extends BaseFragment
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_generic_list, container, false);
 
+        mViewTitle = (TextView) view.findViewById(R.id.label_title);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.list_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -189,7 +193,7 @@ public class GenericListFragment extends BaseFragment
     public void updateUI(int iconResId, ArrayList<String> items, String title) {
         mImgResId = iconResId;
         mItems = items;
-        mToolbarTitle = title;
+        mTitleStr = title;
 
         mAdapter = new GenericListAdapter(mImgResId, mItems);
         mRecyclerView.setAdapter(mAdapter);
@@ -223,7 +227,7 @@ public class GenericListFragment extends BaseFragment
     @Override
     public void onResume() {
         super.onResume();
-        mCallback.setToolbarForFrag(-1,mToolbarTitle,null);
+        mCallback.setToolbarForFrag(-1, mTitleStr,null);
     }
 
     @Override
@@ -231,7 +235,7 @@ public class GenericListFragment extends BaseFragment
         super.onSaveInstanceState(outState);
         outState.putInt("mImgResId", mImgResId);
         outState.putStringArrayList("mItems", mItems);
-        outState.putString("mToolbarTitle", mToolbarTitle);
+        outState.putString("mTitleStr", mTitleStr);
     }
 
     private class ListItemHolder extends RecyclerView.ViewHolder {

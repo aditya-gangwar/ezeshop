@@ -18,7 +18,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import in.ezeshop.appbase.BaseFragment;
-import in.ezeshop.appbase.GenericListFragment;
+import in.ezeshop.appbase.GenericListSearchFrag;
 import in.ezeshop.appbase.constants.AppConstants;
 import in.ezeshop.appbase.entities.MyAreas;
 import in.ezeshop.appbase.entities.MyCities;
@@ -408,7 +408,7 @@ public class UpdateAddressFragment extends BaseFragment {
                 }
                 break;
             case REQUEST_AREA:
-                String areaStr = data.getStringExtra(GenericListFragment.EXTRA_SELECTION);
+                String areaStr = data.getStringExtra(GenericListSearchFrag.EXTRA_SELECTION);
                 //mInputArea.setText(areaStr);
                 // Cant set here directly - as mInputArea will be null currently
                 LogMy.d(TAG,"Setting mSelectedArea: "+areaStr);
