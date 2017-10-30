@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LL_Vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            style="@style/LL_Vertical">
+
+            <LinearLayout
+                style="@style/LL_Horizontal_paddingSidesLarge"
+                android:background="@color/bg_listWithCard_header">
+
+                <ImageView
+                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:src="@drawable/ic_shopping_cart_black_18dp"
+                    android:tint="@color/white"/>
+
+                <TextView
+                    style="@style/Edittext_only_view_small"
+                    android:layout_width="match_parent"
+                    android:id="@+id/title_newOrders"
+                    android:layout_height="wrap_content"
+                    android:text="NEW ORDERS"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/Edittext_only_view_small"
+                android:layout_width="wrap_content"
+                android:id="@+id/no_newOrders"
+                android:layout_height="wrap_content"
+                android:textColor="@color/disabled"
+                android:layout_marginTop="@dimen/small_space"
+                android:text="No New Orders"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/recycler_newOrders"
+                android:layout_marginTop="@dimen/small_space"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                style="@style/LL_Horizontal_paddingSidesLarge"
+                android:background="@color/bg_listWithCard_header"
+                android:layout_marginTop="@dimen/large_space">
+
+                <ImageView
+                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:src="@drawable/ic_store_white_18dp"
+                    android:tint="@color/white"/>
+
+                <TextView
+                        style="@style/Edittext_only_view_small"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="ACCEPTED ORDERS"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:background="@color/bg_listWithCard_header"/>
+            </LinearLayout>
+
+            <TextView
+                style="@style/Edittext_only_view_small"
+                android:layout_width="wrap_content"
+                android:id="@+id/no_acceptedOrders"
+                android:layout_height="wrap_content"
+                android:textColor="@color/disabled"
+                android:layout_marginTop="@dimen/small_space"
+                android:text="No Accepted Orders"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/recycler_acceptedOrders"
+                android:layout_marginTop="@dimen/small_space"
+                android:visibility="gone">
+            </android.support.v7.widget.RecyclerView>
+
+            <LinearLayout
+                style="@style/LL_Horizontal_paddingSidesLarge"
+                android:background="@color/bg_listWithCard_header"
+                android:layout_marginTop="@dimen/large_space">
+
+                <ImageView
+                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:src="@drawable/ic_directions_run_black_18dp"
+                    android:tint="@color/white"/>
+
+                <TextView
+                        style="@style/Edittext_only_view_small"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="DISPATCHED ORDERS"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:background="@color/bg_listWithCard_header"/>
+            </LinearLayout>
+
+            <TextView
+                style="@style/Edittext_only_view_small"
+                android:layout_width="wrap_content"
+                android:id="@+id/no_dispatchedOrders"
+                android:layout_height="wrap_content"
+                android:textColor="@color/disabled"
+                android:layout_marginTop="@dimen/small_space"
+                android:text="No Dispatched Orders"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/recycler_dispatchedOrders"
+                android:layout_marginTop="@dimen/small_space"
+                android:visibility="gone">
+            </android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

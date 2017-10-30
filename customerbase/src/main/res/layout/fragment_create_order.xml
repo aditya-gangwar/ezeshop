@@ -12,23 +12,6 @@
         android:layout_height="match_parent"
         android:background="@color/bg_light_grey">
 
-        <!--LinearLayout
-            android:id="@+id/layout_last_row_btn"
-            style="@style/LL_Vertical"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
-
-            <View
-                style="@style/Divider_horizontal_Medium"
-                android:background="@color/primary" />
-
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_confirm_order"
-                style="@style/button_normal_border"
-                android:text="CONFIRM"
-                android:textColor="@color/primary" />
-        </LinearLayout-->
-
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_confirm_order"
             style="@style/button_normal_thin"

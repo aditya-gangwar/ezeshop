@@ -22,6 +22,9 @@
     <dimen name="prescription_icon_width">102dp</dimen>
     <dimen name="prescription_icon_height">102dp</dimen>
 
+    <dimen name="prescription_icon_width_small">96dp</dimen>
+    <dimen name="prescription_icon_height_small">96dp</dimen>
+
     <dimen name="normal_icon_width">32dp</dimen>
     <dimen name="normal_icon_height">32dp</dimen>
 
@@ -97,8 +100,8 @@
     <dimen name="XXXXL_space">47dp</dimen>
     <dimen name="big_space">77dp</dimen>
 
-    <dimen name="button_width_very_thin">45dp</dimen>
-    <dimen name="button_width_thin">72dp</dimen>
-    <dimen name="button_width_normal">84dp</dimen>
+    <dimen name="button_width_very_thin">47dp</dimen>
+    <dimen name="button_width_thin">67dp</dimen>
+    <dimen name="button_width_normal">82dp</dimen>
 
 </resources>
