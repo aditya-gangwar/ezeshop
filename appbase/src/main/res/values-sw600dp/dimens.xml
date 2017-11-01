@@ -19,8 +19,8 @@
     <dimen name="prescription_icon_frame_width">125dp</dimen>
     <dimen name="prescription_icon_frame_height">125dp</dimen>
 
-    <dimen name="prescription_icon_width">102dp</dimen>
-    <dimen name="prescription_icon_height">102dp</dimen>
+    <dimen name="prescription_icon_width">96dp</dimen>
+    <dimen name="prescription_icon_height">96dp</dimen>
 
     <dimen name="prescription_icon_width_small">96dp</dimen>
     <dimen name="prescription_icon_height_small">96dp</dimen>

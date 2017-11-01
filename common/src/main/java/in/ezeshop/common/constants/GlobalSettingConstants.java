@@ -57,6 +57,10 @@ public class GlobalSettingConstants {
     public static final String SETTINGS_CONTACT_US_URL = "ContactUs_Url";
     //public static final String SETTINGS_CB_TXN_VERIFY_TYPE = "Cb_Txn_Verify_Method";
     public static final String SETTINGS_DELIVERY_CHARGES = "Delivery_Charges";
+    public static final String SETTINGS_MCHNT_NEW_ORDER_TIMEOUT = "MchntNewOrderTimeout";
+    public static final String SETTINGS_MCHNT_ACPTD_ORDER_TIMEOUT = "MchntAcptdOrderTimeout";
+    public static final String SETTINGS_MCHNT_DSPTCHD_ORDER_TIMEOUT = "MchntDsptchdOrderTimeout";
+    public static final String SETNGS_ORDER_TMOUT_NOTIFY_THRSHLD_PRCENT = "OrderTmoutNotifyThrsholdPrcent";
 
     /*
      * Ones defined only in backend as constant values - as not used by App
@@ -132,6 +136,10 @@ public class GlobalSettingConstants {
         //aMap.put(SETTINGS_CUST_CARD_MAX_QTY, "50");
         aMap.put(SETTINGS_CONTACT_US_URL, "http://www.myecash.in/contact-us");
         aMap.put(SETTINGS_DELIVERY_CHARGES, "30");
+        aMap.put(SETTINGS_MCHNT_NEW_ORDER_TIMEOUT,"2");
+        aMap.put(SETTINGS_MCHNT_ACPTD_ORDER_TIMEOUT,"6");
+        aMap.put(SETTINGS_MCHNT_DSPTCHD_ORDER_TIMEOUT,"12");
+        aMap.put(SETNGS_ORDER_TMOUT_NOTIFY_THRSHLD_PRCENT,"20");
         valuesGlobalSettings = Collections.unmodifiableMap(aMap);
     }
     /*static {
@@ -213,6 +221,10 @@ public class GlobalSettingConstants {
         aMap.put(SETTINGS_CUST_TERMS_URL, null);
 
         aMap.put(SETTINGS_DELIVERY_CHARGES, "Delivery charges for online order to merchants");
+        aMap.put(SETTINGS_MCHNT_NEW_ORDER_TIMEOUT,"Duration in hours after which, the 'New' order if not accepted by Merchant, will be automatically get Cancelled");
+        aMap.put(SETTINGS_MCHNT_ACPTD_ORDER_TIMEOUT,"Duration in hours after which, the 'Accepted' order if not dispatched by Merchant, will be automatically get Cancelled");
+        aMap.put(SETTINGS_MCHNT_DSPTCHD_ORDER_TIMEOUT,"Duration in hours, after which the 'Dispatched' order if not delivered by Merchant, will be assumed to be delivered and get closed.");
+        aMap.put(SETNGS_ORDER_TMOUT_NOTIFY_THRSHLD_PRCENT,null);
         //aMap.put(SETTINGS_CUST_CARD_PRICE, null);
         //aMap.put(SETTINGS_CUST_CARD_MIN_QTY, null);
         //aMap.put(SETTINGS_CUST_CARD_MAX_QTY, null);
@@ -270,6 +282,10 @@ public class GlobalSettingConstants {
         //aMap.put(SETTINGS_CUST_CARD_MAX_QTY, DATATYPE_INT);
         aMap.put(SETTINGS_CONTACT_US_URL, DATATYPE_STRING);
         aMap.put(SETTINGS_DELIVERY_CHARGES, DATATYPE_INT);
+        aMap.put(SETTINGS_MCHNT_NEW_ORDER_TIMEOUT,DATATYPE_INT);
+        aMap.put(SETTINGS_MCHNT_ACPTD_ORDER_TIMEOUT,DATATYPE_INT);
+        aMap.put(SETTINGS_MCHNT_DSPTCHD_ORDER_TIMEOUT,DATATYPE_INT);
+        aMap.put(SETNGS_ORDER_TMOUT_NOTIFY_THRSHLD_PRCENT,DATATYPE_INT);
         valueTypesGlobalSettings = Collections.unmodifiableMap(aMap);
     }
 }

@@ -11,6 +11,7 @@ import com.backendless.Backendless;
 
 import in.ezeshop.appbase.constants.AppConstants;
 import in.ezeshop.common.database.Cashback;
+import in.ezeshop.common.database.CustomerOrder;
 import in.ezeshop.common.database.MerchantOps;
 import in.ezeshop.common.database.MerchantStats;
 import in.ezeshop.common.database.Merchants;
@@ -38,6 +39,12 @@ import in.ezeshop.common.database.Transaction;
         Backendless.setUrl( AppConstants.BACKENDLESS_HOST );
         // if you invoke this sample inside of android application, you should use overloaded "initApp" with "context" argument
         Backendless.initApp( AppConstants.BACKENDLESS_APP_ID, AppConstants.ANDROID_SECRET_KEY, MerchantServices.APP_VERSION );
+    }
+
+    public java.util.List<CustomerOrder> fetchPendingOrders(java.lang.String merchantId)
+    {
+        Object[] args = new Object[]{merchantId};
+        return Backendless.CustomService.invoke( SERVICE_NAME, SERVICE_VERSION_NAME, "fetchPendingOrders", args, java.util.List.class );
     }
 
     public Merchants changeMobile(java.lang.String verifyparam, java.lang.String newMobile, java.lang.String otp)

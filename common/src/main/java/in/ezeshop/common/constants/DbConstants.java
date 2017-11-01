@@ -156,6 +156,12 @@ public class DbConstants {
                     return null;
             }
         }
+
+        public static String getPendingWhereClause() {
+            return "(currStatus = '" + toString(New) +
+                    "' OR currStatus = '" + toString(Accepted) +
+                    "' OR currStatus = '" + toString(Dispatched) + "')";
+        }
     }
 
     public static String custOrderStatusChgReasons[] = {

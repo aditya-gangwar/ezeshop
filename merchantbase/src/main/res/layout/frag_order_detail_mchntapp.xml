@@ -51,6 +51,7 @@
 
                     <LinearLayout
                         android:id="@+id/layout_customer"
+                        android:paddingBottom="@dimen/small_space"
                         style="@style/LL_Vertical">
 
                         <LinearLayout
@@ -122,7 +123,29 @@
                                 android:textColor="@color/secondary_text"/>
                         </LinearLayout>
 
-                        <LinearLayout
+                        <TextView
+                            style="@style/Edittext_only_view_XS_lessPad"
+                            android:layout_width="wrap_content"
+                            android:layout_marginTop="@dimen/small_space"
+                            android:layout_marginLeft="@dimen/medium_space"
+                            android:paddingRight="@dimen/large_space"
+                            android:text="Delivery Address : "
+                            android:textColor="@color/secondary_text"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/input_dlvrAddres"
+                            style="@style/Edittext_only_view_small_lessPad"
+                            android:layout_width="match_parent"
+                            android:layout_marginBottom="@dimen/small_space"
+                            android:layout_marginTop="@dimen/XS_space"
+                            android:gravity="start"
+                            android:paddingLeft="@dimen/XL_space"
+                            android:text="Aditya Gangwar  (+91-8800191535) \nA-1103, Prateek Wisteria,\nSector 77, Noida"
+                            android:textColor="@color/secondary_text" />
+
+
+                        <!--LinearLayout
                             style="@style/LL_Horizontal_wrap"
                             android:paddingBottom="@dimen/small_space"
                             android:paddingLeft="@dimen/medium_space"
@@ -143,11 +166,11 @@
                                 android:gravity="right"
                                 android:text="- \u20B9 535"
                                 android:textColor="@color/red_negative" />
-                        </LinearLayout>
+                        </LinearLayout-->
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 
-                <android.support.v7.widget.CardView
+                <!--android.support.v7.widget.CardView
                     android:id="@+id/cardview_dlvrAddres"
                     style="@style/My_Cardview">
 
@@ -183,7 +206,7 @@
                             android:textColor="@color/secondary_text" />
 
                     </LinearLayout>
-                </android.support.v7.widget.CardView>
+                </android.support.v7.widget.CardView-->
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/cardview_prescrips"
@@ -237,7 +260,7 @@
                                 android:textColor="@color/secondary_text" />
                         </LinearLayout>
 
-                        <LinearLayout
+                        <!--LinearLayout
                             style="@style/LL_Horizontal_wrap"
                             android:layout_marginLeft="@dimen/medium_space"
                             android:paddingRight="@dimen/medium_space">
@@ -257,7 +280,7 @@
                                 android:gravity="right"
                                 android:text="NEW"
                                 android:textColor="@color/green_positive" />
-                        </LinearLayout>
+                        </LinearLayout-->
 
                         <TextView
                             android:id="@+id/input_prescripInfo"
@@ -610,7 +633,7 @@
                                 android:textStyle="bold" />
                         </LinearLayout>
 
-                        <LinearLayout
+                        <!--LinearLayout
                             style="@style/LL_Horizontal_wrap"
                             android:paddingLeft="@dimen/medium_space"
                             android:paddingRight="@dimen/medium_space">
@@ -648,7 +671,7 @@
                                 android:text="\@  5% of \u20B9 2345 + 10% of \u20B9 234"
                                 android:textColor="@color/secondary_text"
                                 android:textStyle="italic" />
-                        </LinearLayout>
+                        </LinearLayout-->
 
                         <TextView
                             style="@style/Edittext_only_view_XS"
@@ -656,7 +679,7 @@
                             android:layout_marginTop="@dimen/XS_space"
                             android:paddingLeft="@dimen/large_space"
                             android:paddingRight="@dimen/large_space"
-                            android:text="Invoice Copy"
+                            android:text="Bill Copy"
                             android:textStyle="bold"/>
 
                         <HorizontalScrollView
@@ -721,6 +744,681 @@
 
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
+
+<!--LinearLayout
+android:id="@+id/layout_whole"
+style="@style/LL_Vertical_paddingSidesLarge"
+android:paddingBottom="@dimen/medium_space">
+
+<android.support.v7.widget.CardView
+    android:id="@+id/cardview_customer"
+    style="@style/My_Cardview">
+
+    <LinearLayout
+        android:id="@+id/layout_customer"
+        android:paddingBottom="@dimen/small_space"
+        style="@style/LL_Vertical">
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:paddingLeft="@dimen/medium_space"
+            android:paddingRight="@dimen/medium_space">
+
+            <ImageView
+                style="@style/Img_CardTitle_Icon"
+                android:src="@drawable/ic_perm_identity_white_18dp" />
+
+            <TextView
+                android:id="@+id/cardTitle_customer"
+                style="@style/Edittext_CardTitle"
+                android:text="Customer Details" />
+
+            <TextView
+                android:id="@+id/cardBtn_dlvrAddres"
+                style="@style/Edittext_CardTitle_Button"
+                android:text="VIEW" />
+        </LinearLayout>
+
+        <View style="@style/Divider_horizontal_Medium" />
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:layout_marginTop="@dimen/small_space"
+            android:paddingLeft="@dimen/medium_space"
+            android:paddingRight="@dimen/medium_space">
+
+            <TextView
+                style="@style/Edittext_only_view_XS_lessPad"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="Name"
+                android:textColor="@color/secondary_text" />
+
+            <EditText
+                android:id="@+id/input_custName"
+                style="@style/Edittext_only_view_XS_lessPad"
+                android:layout_width="wrap_content"
+                android:gravity="right"
+                android:text="Aditya Gangwar"
+                android:textColor="@color/secondary_text" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:paddingLeft="@dimen/medium_space"
+            android:paddingRight="@dimen/medium_space">
+
+            <TextView
+                style="@style/Edittext_only_view_XS_lessPad"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="ID / Mobile"
+                android:textColor="@color/secondary_text" />
+
+            <EditText
+                android:id="@+id/input_custMobile"
+                style="@style/Edittext_only_view_XS_lessPad"
+                android:layout_width="wrap_content"
+                android:gravity="right"
+                android:text="8800191535"
+                android:textColor="@color/secondary_text"/>
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:paddingBottom="@dimen/small_space"
+            android:paddingLeft="@dimen/medium_space"
+            android:paddingRight="@dimen/medium_space">
+
+            <TextView
+                style="@style/Edittext_only_view_XS_lessPad"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="Account Balance"
+                android:textColor="@color/secondary_text" />
+
+            <EditText
+                android:id="@+id/input_accBalance"
+                style="@style/Edittext_only_view_XS_lessPad"
+                android:layout_width="wrap_content"
+                android:gravity="right"
+                android:text="- \u20B9 535"
+                android:textColor="@color/red_negative" />
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>
+
+<android.support.v7.widget.CardView
+    android:id="@+id/cardview_dlvrAddres"
+    style="@style/My_Cardview">
+
+    <LinearLayout
+        android:id="@+id/layout_dlvrAddres"
+        style="@style/LL_Vertical">
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:paddingLeft="@dimen/medium_space"
+            android:paddingRight="@dimen/medium_space">
+
+            <ImageView
+                style="@style/Img_CardTitle_Icon"
+                android:src="@drawable/ic_place_white_18dp" />
+            <TextView
+                android:id="@+id/cardTitle_dlvrAddres"
+                style="@style/Edittext_CardTitle"
+                android:text="Delivery Address" />
+        </LinearLayout>
+
+        <View style="@style/Divider_horizontal_Medium" />
+
+        <TextView
+            android:id="@+id/input_dlvrAddres"
+            style="@style/Edittext_only_view_small_lessPad"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="@dimen/small_space"
+            android:layout_marginTop="@dimen/small_space"
+            android:gravity="start"
+            android:paddingLeft="@dimen/large_space"
+            android:text="Aditya Gangwar  (+91-8800191535) \nA-1103, Prateek Wisteria,\nSector 77, Noida"
+            android:textColor="@color/secondary_text" />
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>
+
+<android.support.v7.widget.CardView
+    android:id="@+id/cardview_prescrips"
+    style="@style/My_Cardview">
+
+    <LinearLayout
+        android:id="@+id/layout_prescrips"
+        style="@style/LL_Vertical"
+        android:paddingBottom="@dimen/large_space">
+
+        <LinearLayout
+            android:id="@+id/layout_cardTitle"
+            style="@style/LL_Horizontal_wrap"
+            android:paddingLeft="@dimen/medium_space"
+            android:paddingRight="@dimen/medium_space">
+
+            <ImageView
+                style="@style/Img_CardTitle_Icon"
+                android:src="@drawable/ic_shopping_cart_black_18dp" />
+
+            <TextView
+                android:id="@+id/cardTitle_prescrips"
+                style="@style/Edittext_CardTitle"
+                android:text="Order Details" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/cardDiv_prescrips"
+            style="@style/Divider_horizontal_Medium" />
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:layout_marginTop="@dimen/medium_space"
+            android:layout_marginLeft="@dimen/medium_space"
+            android:paddingRight="@dimen/medium_space">
+
+            <TextView
+                style="@style/Edittext_only_view_XS_lessPad"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="Order ID"
+                android:textColor="@color/secondary_text" />
+
+            <EditText
+                android:id="@+id/input_orderId"
+                style="@style/Edittext_only_view_XS_lessPad"
+                android:layout_width="wrap_content"
+                android:gravity="right"
+                android:text="C145782350879234"
+                android:textColor="@color/secondary_text" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:layout_marginLeft="@dimen/medium_space"
+            android:paddingRight="@dimen/medium_space">
+
+            <TextView
+                style="@style/Edittext_only_view_XS_lessPad"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="Order Status"
+                android:textColor="@color/secondary_text" />
+
+            <EditText
+                android:id="@+id/input_orderStatus"
+                style="@style/Edittext_only_view_XS_lessPad"
+                android:layout_width="wrap_content"
+                android:gravity="right"
+                android:text="NEW"
+                android:textColor="@color/green_positive" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/input_prescripInfo"
+            style="@style/Edittext_only_view_XS_lessPad"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/small_space"
+            android:layout_marginLeft="@dimen/medium_space"
+            android:paddingRight="@dimen/large_space"
+            android:text="Prescriptions"/>
+
+        <HorizontalScrollView
+            android:id="@+id/layout_prescrip_imgs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/large_space"
+            android:layout_marginRight="@dimen/large_space"
+            android:layout_marginTop="@dimen/medium_space"
+            android:scrollbarSize="0dp"
+            android:visibility="visible">
+
+            <LinearLayout style="@style/LL_Horizontal_wrap">
+
+                <ImageView
+                    android:id="@+id/img_precrips_1"
+                    android:layout_width="@dimen/prescription_icon_width_small"
+                    android:layout_height="@dimen/prescription_icon_height_small"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="@dimen/large_space"
+                    android:background="@color/bg_light_grey_dark"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_description_black_18dp" />
+
+                <ImageView
+                    android:id="@+id/img_precrips_2"
+                    android:layout_width="@dimen/prescription_icon_width_small"
+                    android:layout_height="@dimen/prescription_icon_height_small"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="@dimen/large_space"
+                    android:background="@color/bg_light_grey_dark"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_description_black_18dp" />
+
+                <ImageView
+                    android:id="@+id/img_precrips_3"
+                    android:layout_width="@dimen/prescription_icon_width_small"
+                    android:layout_height="@dimen/prescription_icon_height_small"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="@dimen/large_space"
+                    android:background="@color/bg_light_grey_dark"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_description_black_18dp" />
+
+                <ImageView
+                    android:id="@+id/img_precrips_4"
+                    android:layout_width="@dimen/prescription_icon_width_small"
+                    android:layout_height="@dimen/prescription_icon_height_small"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="@dimen/large_space"
+                    android:background="@color/bg_light_grey_dark"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_description_black_18dp" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <TextView
+            android:id="@+id/input_commentsInfo1"
+            style="@style/Edittext_only_view_XS"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/large_space"
+            android:gravity="left|center_vertical"
+            android:paddingLeft="@dimen/large_space"
+            android:paddingRight="@dimen/large_space"
+            android:text="Additional Comments"
+            android:textColor="@color/secondary_text" />
+
+        <TextView
+            android:id="@+id/input_comments"
+            style="@style/Edittext_only_view_small"
+            android:layout_marginLeft="@dimen/large_space"
+            android:layout_marginRight="@dimen/medium_space"
+            android:layout_marginTop="@dimen/small_space"
+            android:background="@drawable/round_rect_border"
+            android:visibility="visible" />
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>
+
+<android.support.v7.widget.CardView
+    android:id="@+id/cardview_statusMap"
+    style="@style/My_Cardview">
+
+    <LinearLayout
+        android:id="@+id/layout_orderStatus"
+        style="@style/LL_Horizontal_wrap"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/medium_space"
+        android:paddingRight="@dimen/medium_space"
+        android:paddingTop="@dimen/small_space"
+        android:paddingBottom="@dimen/medium_space">
+
+        <LinearLayout
+            style="@style/LL_Vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/img_orderStatusNew"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="15"
+                android:src="@drawable/ic_shopping_cart_black_18dp"
+                android:tint="@color/green_positive" />
+
+            <View
+                style="@style/Divider_vertical_Large"
+                android:layout_height="@dimen/large_space"
+                android:background="@color/green_positive"/>
+
+            <ImageView
+                android:id="@+id/img_orderStatusAccptd"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="15"
+                android:src="@drawable/ic_store_white_18dp"
+                android:tint="@color/disabled" />
+
+            <View
+                style="@style/Divider_vertical_Large"
+                android:layout_height="@dimen/large_space"/>
+
+            <ImageView
+                android:id="@+id/img_orderStatusDsptchd"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="15"
+                android:src="@drawable/ic_directions_run_black_18dp"
+                android:tint="@color/disabled" />
+
+            <View
+                style="@style/Divider_vertical_Large"
+                android:layout_height="@dimen/large_space"/>
+
+            <ImageView
+                android:id="@+id/img_orderStatusDlvrd"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="15"
+                android:src="@drawable/ic_perm_identity_white_18dp"
+                android:tint="@color/disabled" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/LL_Vertical"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/medium_space">
+
+            <LinearLayout
+                android:layout_height="0dp"
+                android:layout_weight="15"
+                style="@style/LL_Horizontal_wrap">
+
+                <TextView
+                    android:id="@+id/label_orderStatusNew"
+                    style="@style/Edittext_only_view_small_lessPad"
+                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:text="New,"
+                    android:textColor="@color/primary_text"/>
+                <TextView
+                    android:id="@+id/time_statusNew"
+                    style="@style/Edittext_only_view_XS_lessPad"
+                    android:layout_width="wrap_content"
+                    android:text="12/09/2017 03:30 PM"
+                    android:textColor="@color/primary_text" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/large_space"/>
+
+            <LinearLayout
+                android:layout_height="0dp"
+                android:layout_weight="15"
+                style="@style/LL_Horizontal_wrap">
+
+                <TextView
+                    android:id="@+id/label_orderStatusAccptd"
+                    style="@style/Edittext_only_view_small_lessPad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Accepted,"
+                    android:textColor="@color/disabled"/>
+                <TextView
+                    android:id="@+id/time_statusAccptd"
+                    style="@style/Edittext_only_view_XS_lessPad"
+                    android:layout_width="wrap_content"
+                    android:text="12/09/2017 03:30 PM"
+                    android:textColor="@color/disabled" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/large_space"/>
+
+            <LinearLayout
+                android:layout_height="0dp"
+                android:layout_weight="15"
+                style="@style/LL_Horizontal_wrap">
+
+                <TextView
+                    android:id="@+id/label_orderStatusDspchd"
+                    style="@style/Edittext_only_view_small_lessPad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dispatched,"
+                    android:textColor="@color/disabled"/>
+                <TextView
+                    android:id="@+id/time_statusDsptchd"
+                    style="@style/Edittext_only_view_XS_lessPad"
+                    android:layout_width="wrap_content"
+                    android:text="12/09/2017 03:30 PM"
+                    android:textColor="@color/disabled" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/large_space"/>
+
+            <LinearLayout
+                android:layout_height="0dp"
+                android:layout_weight="15"
+                style="@style/LL_Horizontal_wrap">
+
+                <TextView
+                    android:id="@+id/label_orderStatusDlvrd"
+                    style="@style/Edittext_only_view_small_lessPad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Delivered,"
+                    android:textColor="@color/disabled"/>
+                <TextView
+                    android:id="@+id/time_statusDlvrd"
+                    style="@style/Edittext_only_view_XS_lessPad"
+                    android:layout_width="wrap_content"
+                    android:text="12/09/2017 03:30 PM"
+                    android:textColor="@color/disabled" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>
+
+<android.support.v7.widget.CardView
+    android:id="@+id/cardview_billing"
+    style="@style/My_Cardview">
+
+    <LinearLayout
+        android:id="@+id/layout_billing"
+        style="@style/LL_Vertical">
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:paddingLeft="@dimen/medium_space"
+            android:paddingRight="@dimen/medium_space">
+
+            <ImageView
+                style="@style/Img_CardTitle_Icon"
+                android:src="@drawable/ic_receipt_white_18dp" />
+
+            <TextView
+                android:id="@+id/cardTitle_billing"
+                style="@style/Edittext_CardTitle"
+                android:text="Billing" />
+
+            <TextView
+                android:id="@+id/cardBtn_billing"
+                style="@style/Edittext_CardTitle_Button"
+                android:text="EDIT" />
+        </LinearLayout>
+
+        <View style="@style/Divider_horizontal_Medium" />
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:layout_marginTop="@dimen/small_space"
+            android:paddingLeft="@dimen/medium_space"
+            android:paddingRight="@dimen/medium_space">
+
+            <TextView
+                style="@style/Edittext_only_view_small_lessPad"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="Bill Amount"
+                android:textColor="@color/secondary_text" />
+
+            <EditText
+                android:id="@+id/input_billAmt"
+                style="@style/Edittext_only_view_small_lessPad"
+                android:layout_width="wrap_content"
+                android:gravity="right"
+                android:text="\u20B9 535"
+                android:textColor="@color/secondary_text" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:paddingLeft="@dimen/medium_space"
+            android:paddingRight="@dimen/medium_space">
+
+            <TextView
+                style="@style/Edittext_only_view_small_lessPad"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="Account"
+                android:textColor="@color/secondary_text" />
+
+            <EditText
+                android:id="@+id/input_account"
+                style="@style/Edittext_only_view_small_lessPad"
+                android:layout_width="wrap_content"
+                android:gravity="right"
+                android:text="- \u20B9 35"
+                android:textColor="@color/red_negative" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:layout_marginTop="@dimen/small_space"
+            android:paddingLeft="@dimen/medium_space"
+            android:paddingRight="@dimen/medium_space">
+
+            <TextView
+                style="@style/Edittext_only_view_small_lessPad"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="TO PAY" />
+
+            <EditText
+                android:id="@+id/input_toPay"
+                style="@style/Edittext_only_view_small_lessPad"
+                android:layout_width="wrap_content"
+                android:gravity="right"
+                android:text="\u20B9 500"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:paddingLeft="@dimen/medium_space"
+            android:paddingRight="@dimen/medium_space">
+
+            <TextView
+                style="@style/Edittext_only_view_small_lessPad"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="* Cashback"
+                android:textColor="@color/secondary_text" />
+
+            <TextView
+                android:id="@+id/input_add_cb"
+                style="@style/Edittext_only_view_small_lessPad"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="+ \u20B9 NA"
+                android:textColor="@color/secondary_text" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_cb_details"
+            style="@style/LL_Horizontal_wrap"
+            android:layout_marginBottom="@dimen/small_space"
+            android:paddingLeft="@dimen/medium_space"
+            android:paddingRight="@dimen/medium_space">
+
+            <EditText
+                android:id="@+id/input_cb_details"
+                style="@style/Edittext_only_view_XS_lessPad"
+                android:layout_width="wrap_content"
+                android:paddingTop="0dp"
+                android:text="\@  5% of \u20B9 2345 + 10% of \u20B9 234"
+                android:textColor="@color/secondary_text"
+                android:textStyle="italic" />
+        </LinearLayout>
+
+        <TextView
+            style="@style/Edittext_only_view_XS"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/XS_space"
+            android:paddingLeft="@dimen/large_space"
+            android:paddingRight="@dimen/large_space"
+            android:text="Invoice Copy"
+            android:textStyle="bold"/>
+
+        <HorizontalScrollView
+            android:id="@+id/layout_invoices"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/large_space"
+            android:layout_marginRight="@dimen/large_space"
+            android:layout_marginBottom="@dimen/medium_space"
+            android:scrollbarSize="0dp"
+            android:visibility="visible">
+
+            <LinearLayout style="@style/LL_Horizontal_wrap">
+
+                <ImageView
+                    android:id="@+id/img_invoice_1"
+                    android:layout_width="@dimen/prescription_icon_width_small"
+                    android:layout_height="@dimen/prescription_icon_height_small"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="@dimen/large_space"
+                    android:background="@color/bg_light_grey_dark"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_receipt_white_18dp" />
+
+                <ImageView
+                    android:id="@+id/img_invoice_2"
+                    android:layout_width="@dimen/prescription_icon_width_small"
+                    android:layout_height="@dimen/prescription_icon_height_small"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="@dimen/large_space"
+                    android:background="@color/bg_light_grey_dark"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_receipt_white_18dp" />
+
+                <ImageView
+                    android:id="@+id/img_invoice_3"
+                    android:layout_width="@dimen/prescription_icon_width_small"
+                    android:layout_height="@dimen/prescription_icon_height_small"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="@dimen/large_space"
+                    android:background="@color/bg_light_grey_dark"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_receipt_white_18dp" />
+
+                <ImageView
+                    android:id="@+id/img_invoice_4"
+                    android:layout_width="@dimen/prescription_icon_width_small"
+                    android:layout_height="@dimen/prescription_icon_height_small"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="@dimen/large_space"
+                    android:background="@color/bg_light_grey_dark"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_receipt_white_18dp" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>
+
+</LinearLayout-->
 
 
     <!--LinearLayout

@@ -42,6 +42,7 @@ import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.DbConstants;
 import in.ezeshop.common.constants.ErrorCodes;
 import in.ezeshop.common.MyGlobalSettings;
+import in.ezeshop.common.database.CustomerOrder;
 import in.ezeshop.common.database.Merchants;
 import in.ezeshop.appbase.utilities.AppAlarms;
 import in.ezeshop.appbase.utilities.AppCommonUtil;
@@ -74,7 +75,8 @@ public class CashbackActivity extends BaseActivity implements
         CustomerListFragment.CustomerListFragmentIf, MerchantOpListFrag.MerchantOpListFragIf,
         TxnConfirmFragment.TxnConfirmFragmentIf, SettingsFragment2.SettingsFragment2If,
         //MerchantOrderListFrag.MerchantOrderListFragIf, CreateMchntOrderDialog.CreateMchntOrderDialogIf,
-        TxnVerifyDialog.TxnVerifyDialogIf, LoadTestDialog.LoadTestDialogIf {
+        TxnVerifyDialog.TxnVerifyDialogIf, LoadTestDialog.LoadTestDialogIf,
+        PendingOrderListFrag.PendingOrderListFragIf {
 
     private static final String TAG = "MchntApp-CashbackActivity";
 
@@ -97,6 +99,7 @@ public class CashbackActivity extends BaseActivity implements
     private static final String MERCHANT_OPS_LIST_FRAG = "MerchantOpsListFrag";
     private static final String TXN_CONFIRM_FRAGMENT = "TxnConfirmFragment";
     //private static final String MCHNT_ORDERS_FRAGMENT = "MchntOrdersFragment";
+    private static final String PENDING_ORDER_LIST_FRAG = "PendingOrderListFrag";
 
     private static final String DIALOG_BACK_BUTTON = "dialogBackButton";
     //private static final String DIALOG_LOGOUT = "dialogLogout";
@@ -305,6 +308,10 @@ public class CashbackActivity extends BaseActivity implements
             }
             else if (i == R.id.menu_settings) {
                 startSettingsFragment();
+
+            } else if (i == R.id.menu_pending_orders) {
+                AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
+                mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_FETCH_PENDING_ORDERS, null, null, null, null, null, null, null);
 
             } /*else if (i == R.id.menu_trusted_devices) {
                 startTrustedDevicesFragment();
@@ -1165,6 +1172,18 @@ public class CashbackActivity extends BaseActivity implements
                                     .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
                         }
                         break;
+                    case MyRetainedFragment.REQUEST_FETCH_PENDING_ORDERS:
+                        AppCommonUtil.cancelProgressDialog(true);
+                        if (errorCode == ErrorCodes.NO_ERROR && mWorkFragment.mPendingCustOrders.size()>0) {
+                            startPendingOrderListFrag();
+                        } else if (errorCode == ErrorCodes.NO_DATA_FOUND) {
+                            DialogFragmentWrapper.createNotification(AppConstants.generalInfoTitle, "No Pending Orders available", false, false)
+                                    .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
+                        } else {
+                            DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
+                                    .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
+                        }
+                        break;
                 }
             }
 
@@ -1187,6 +1206,37 @@ public class CashbackActivity extends BaseActivity implements
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), false, true)
                     .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
         }
+    }
+
+    @Override
+    public void setToolbarForFrag(int iconResId, String title, String subTitle) {
+        if(title!=null) {
+            mTbTitle.setVisibility(View.VISIBLE);
+            mTbTitle.setText(title);
+        } else {
+            mTbTitle.setVisibility(View.GONE);
+        }
+
+        if(subTitle!=null) {
+            mTbTitle2.setVisibility(View.VISIBLE);
+            mTbTitle2.setText(subTitle);
+        } else {
+            mTbTitle2.setVisibility(View.GONE);
+        }
+
+        if(iconResId!=-1 && iconResId!=0) {
+            mTbImage.setVisibility(View.VISIBLE);
+            mTbImage.setImageResource(iconResId);
+        } else {
+            mTbImage.setVisibility(View.GONE);
+        }
+
+        setDrawerState(false);
+    }
+
+    @Override
+    public void showOrderDetailed(CustomerOrder order) {
+
     }
 
     private void onMerchantStatsResult(int errorCode) {
@@ -2057,6 +2107,21 @@ public class CashbackActivity extends BaseActivity implements
             // Add over the existing fragment
             transaction.replace(R.id.fragment_container_1, fragment, MERCHANT_OPS_LIST_FRAG);
             transaction.addToBackStack(MERCHANT_OPS_LIST_FRAG);
+
+            // Commit the transaction
+            transaction.commit();
+        }
+    }
+
+    private void startPendingOrderListFrag() {
+        if (mFragMgr.findFragmentByTag(PENDING_ORDER_LIST_FRAG) == null) {
+
+            Fragment fragment = new PendingOrderListFrag();
+            FragmentTransaction transaction = mFragMgr.beginTransaction();
+
+            // Add over the existing fragment
+            transaction.replace(R.id.fragment_container_1, fragment, PENDING_ORDER_LIST_FRAG);
+            transaction.addToBackStack(PENDING_ORDER_LIST_FRAG);
 
             // Commit the transaction
             transaction.commit();

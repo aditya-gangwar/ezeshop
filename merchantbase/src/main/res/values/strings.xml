@@ -17,5 +17,7 @@
     <string name="emailSummary">"Change \'%s\' as contact Email ID."</string>
     <string name="contactPhoneSummary">"Change \'%s\' as Business Contact Phone number.\nDo not add 0 in start."</string>
 
+    <!-- Customer order related -->
+    <string name="orderExpiryBanner">"Expiring in \'%s\' minutes."</string>
 
 </resources>

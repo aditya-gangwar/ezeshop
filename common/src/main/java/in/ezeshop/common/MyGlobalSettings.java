@@ -170,6 +170,18 @@ public class MyGlobalSettings
     public static Integer getDeliveryCharges() {
         return (Integer) getValue(GlobalSettingConstants.SETTINGS_DELIVERY_CHARGES);
     }
+    public static Integer getNewOrderTimeoutMchnt() {
+        return (Integer) getValue(GlobalSettingConstants.SETTINGS_MCHNT_NEW_ORDER_TIMEOUT);
+    }
+    public static Integer getAcptdOrderTimeoutMchnt() {
+        return (Integer) getValue(GlobalSettingConstants.SETTINGS_MCHNT_ACPTD_ORDER_TIMEOUT);
+    }
+    public static Integer getDsptchdOrderTimeoutMchnt() {
+        return (Integer) getValue(GlobalSettingConstants.SETTINGS_MCHNT_DSPTCHD_ORDER_TIMEOUT);
+    }
+    public static Integer getOrderTmoutNotifyThrshldPercent() {
+        return (Integer) getValue(GlobalSettingConstants.SETNGS_ORDER_TMOUT_NOTIFY_THRSHLD_PRCENT);
+    }
 
 
     private static Object getValue(String gSettingKey) {

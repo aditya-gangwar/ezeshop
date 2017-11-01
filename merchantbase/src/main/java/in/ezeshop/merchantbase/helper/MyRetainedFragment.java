@@ -13,6 +13,7 @@ import in.ezeshop.appbase.utilities.AppAlarms;
 import in.ezeshop.appbase.utilities.TxnReportsHelper2;
 import in.ezeshop.common.constants.DbConstants;
 import in.ezeshop.common.constants.ErrorCodes;
+import in.ezeshop.common.database.CustomerOrder;
 import in.ezeshop.common.database.MerchantOps;
 import in.ezeshop.common.database.MerchantStats;
 import in.ezeshop.common.database.Transaction;
@@ -63,6 +64,7 @@ public class MyRetainedFragment extends RetainedFragment {
     public static final int REQUEST_LOAD_TEST = 26;
     public static final int REQUEST_GET_CUST_ID = 27;
     public static final int REQUEST_MSG_DEV_REG_CHK = 28;
+    public static final int REQUEST_FETCH_PENDING_ORDERS = 29;
 
     // Threads taken care by this fragment
     private MyBackgroundProcessor<String> mBackgroundProcessor;
@@ -103,6 +105,9 @@ public class MyRetainedFragment extends RetainedFragment {
     public TxnReportsHelper2 mTxnReportHelper;
     public int mSummary[] = new int[AppConstants.INDEX_SUMMARY_MAX_VALUE];
     public List<Transaction> mLastFetchTransactions;
+
+    // related to Customer Orders
+    public List<CustomerOrder> mPendingCustOrders;
 
     public void reset() {
         LogMy.d(TAG,"In reset");

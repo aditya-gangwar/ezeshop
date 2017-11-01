@@ -13,6 +13,142 @@
         android:clickable="false"
         android:focusable="false">
 
+        <LinearLayout
+            style="@style/LL_Vertical"
+            android:paddingBottom="@dimen/small_space"
+            android:paddingTop="@dimen/small_space">
+
+            <LinearLayout
+                android:id="@+id/lyt_expiring"
+                style="@style/LL_Horizontal_paddingSidesLarge"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="@dimen/medium_space"
+                android:clickable="false"
+                android:focusable="false"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/input_expiring"
+                    style="@style/Edittext_only_view_XS_lessPad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/round_rect_red"
+                    android:text="@string/orderExpiryBanner"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/LL_Horizontal_paddingSidesLarge"
+                android:layout_width="match_parent"
+                android:clickable="false"
+                android:focusable="false">
+
+                <TextView
+                    android:id="@+id/input_custName"
+                    style="@style/Edittext_only_view_small_lessPad"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="60"
+                    android:gravity="start|center_vertical"
+                    android:text="Aditya Gangwar"
+                    android:textColor="@color/secondary_text" />
+
+                <TextView
+                    android:id="@+id/input_billAmt"
+                    style="@style/Edittext_only_view_small_lessPad"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="30"
+                    android:gravity="end|center_vertical"
+                    android:paddingLeft="0dp"
+                    android:text="+ \u20B9 99,999"
+                    android:textColor="@color/green_positive" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/LL_Horizontal_paddingSidesLarge"
+                android:layout_width="match_parent"
+                android:clickable="false"
+                android:focusable="false">
+
+                <TextView
+                    android:id="@+id/input_orderTime"
+                    style="@style/Edittext_only_view_XS_lessPad"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="60"
+                    android:gravity="start|center_vertical"
+                    android:text="08 Apr,16  20:15"
+                    android:textColor="@color/secondary_text" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/LL_Horizontal_paddingSidesLarge"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/small_space"
+                android:clickable="false"
+                android:focusable="false">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/small_space"
+                    android:paddingBottom="@dimen/edittext_padding_less"
+                    android:paddingTop="@dimen/edittext_padding_less"
+                    android:src="@drawable/ic_place_white_18dp"
+                    android:tint="@color/primary" />
+
+                <TextView
+                    android:id="@+id/input_orderAddr"
+                    style="@style/Edittext_only_view_small_lessPad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="A-1103, Prateek Wisteria, Sector 77" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_agent"
+                style="@style/LL_Horizontal_paddingSidesLarge"
+                android:layout_width="match_parent"
+                android:clickable="false"
+                android:focusable="false">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/small_space"
+                    android:paddingTop="@dimen/edittext_padding_less"
+                    android:src="@drawable/ic_directions_run_black_18dp"
+                    android:tint="@color/primary" />
+
+                <TextView
+                    android:id="@+id/input_agentName"
+                    style="@style/Edittext_only_view_XS_lessPad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="Pradeep Sharma"
+                    android:textColor="@color/secondary_text" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
+
+    <!--android.support.v7.widget.CardView
+        android:id="@+id/cardview_pendingOrder"
+        style="@style/My_Cardview"
+        android:clickable="false"
+        android:focusable="false">
+
         <LinearLayout style="@style/LL_Vertical">
 
             <LinearLayout
@@ -88,24 +224,6 @@
 
                 </LinearLayout>
 
-                <!--LinearLayout
-                    style="@style/LL_Horizontal_paddingSidesLarge"
-                    android:layout_width="match_parent"
-                    android:clickable="false"
-                    android:focusable="false">
-
-                    <TextView
-                        style="@style/Edittext_only_view_XS_lessPad"
-                        android:id="@+id/txn_customer_id"
-                        android:text="Order ID : C18976345690231"
-                        android:layout_height="wrap_content"
-                        android:layout_width="0dp"
-                        android:layout_weight="70"
-                        android:textColor="@color/secondary_text"
-                        android:gravity="start"/>
-
-                </LinearLayout-->
-
                 <LinearLayout
                     style="@style/LL_Horizontal_paddingSidesLarge"
                     android:layout_width="match_parent"
@@ -160,7 +278,7 @@
             </LinearLayout>
 
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </android.support.v7.widget.CardView-->
 
     <!--android.support.v7.widget.CardView
         android:id="@+id/cardview_pendingOrder"
@@ -337,4 +455,3 @@
         </LinearLayout>
     </android.support.v7.widget.CardView-->
 
-</LinearLayout>

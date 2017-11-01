@@ -7,6 +7,8 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.geo.GeoPoint;
 import com.backendless.persistence.BackendlessDataQuery;
 
+import java.util.Date;
+
 public class CustomerOrder
 {
   private java.util.Date updated;
@@ -19,6 +21,8 @@ public class CustomerOrder
   private java.util.Date created;
   private String objectId;
   private String custPrivId;
+  private String custName;
+  private String custMobile;
   private java.util.List<Prescriptions> prescrips;
   private Customers customerNIDB;
   private Merchants merchantNIDB;
@@ -27,6 +31,67 @@ public class CustomerOrder
   private String prevStatus;
   private Integer statusChgByUserType;
   private String statusChgReason;
+  private Transaction txn;
+  private java.util.Date acceptTime;
+  private java.util.Date dispatchTime;
+  private java.util.Date deliverTime;
+  private java.util.Date cancelTime;
+
+  public String getCustName() {
+    return custName;
+  }
+
+  public void setCustName(String custName) {
+    this.custName = custName;
+  }
+
+  public String getCustMobile() {
+    return custMobile;
+  }
+
+  public void setCustMobile(String custMobile) {
+    this.custMobile = custMobile;
+  }
+
+  public Date getAcceptTime() {
+    return acceptTime;
+  }
+
+  public void setAcceptTime(Date acceptTime) {
+    this.acceptTime = acceptTime;
+  }
+
+  public Date getDispatchTime() {
+    return dispatchTime;
+  }
+
+  public void setDispatchTime(Date dispatchTime) {
+    this.dispatchTime = dispatchTime;
+  }
+
+  public Date getDeliverTime() {
+    return deliverTime;
+  }
+
+  public void setDeliverTime(Date deliverTime) {
+    this.deliverTime = deliverTime;
+  }
+
+  public Date getCancelTime() {
+    return cancelTime;
+  }
+
+  public void setCancelTime(Date cancelTime) {
+    this.cancelTime = cancelTime;
+  }
+
+  public Transaction getTxn() {
+    return txn;
+  }
+
+  public void setTxn(Transaction txn) {
+    this.txn = txn;
+  }
 
   public String getStatusChgReason() {
     return statusChgReason;

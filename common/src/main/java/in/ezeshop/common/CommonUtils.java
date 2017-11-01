@@ -2,16 +2,12 @@ package in.ezeshop.common;
 
 import com.backendless.exceptions.BackendlessException;
 import in.ezeshop.common.constants.CommonConstants;
+import in.ezeshop.common.constants.DbConstants;
 import in.ezeshop.common.constants.ErrorCodes;
-import in.ezeshop.common.database.Cashback;
-import in.ezeshop.common.database.Cities;
-import in.ezeshop.common.database.CustAddress;
-import in.ezeshop.common.database.MerchantStats;
-import in.ezeshop.common.database.Merchants;
-import in.ezeshop.common.database.Areas;
-import in.ezeshop.common.database.Transaction;
+import in.ezeshop.common.database.*;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
@@ -33,6 +29,32 @@ public class CommonUtils {
         return (System.currentTimeMillis() - CommonConstants.START_EPOCH_MILLI_SECS);
     }
 
+    // if not expiring - return 0
+    // If expiring - returns number of mins to expire
+    public static long isOrderExpiring(CustomerOrder order) {
+        // find timeout duration - as per order status
+        int timeout;
+        if (order.getCurrStatus().equals(DbConstants.CUSTOMER_ORDER_STATUS.New.toString())) {
+            timeout = MyGlobalSettings.getNewOrderTimeoutMchnt();
+        } else if (order.getCurrStatus().equals(DbConstants.CUSTOMER_ORDER_STATUS.Accepted.toString())) {
+            timeout = MyGlobalSettings.getAcptdOrderTimeoutMchnt();
+        } else if (order.getCurrStatus().equals(DbConstants.CUSTOMER_ORDER_STATUS.Dispatched.toString())) {
+            timeout = MyGlobalSettings.getDsptchdOrderTimeoutMchnt();
+        } else {
+            return 0;
+        }
+
+        // Threshold for 'expiry banner' is 80% of total timeout duration
+        int thresholdMillis = (timeout*CommonConstants.MILLISECS_IN_HOUR*MyGlobalSettings.getOrderTmoutNotifyThrshldPercent())/100;
+        long millisToExpire = ( (order.getCreateTime().getTime()+
+                (timeout*CommonConstants.MILLISECS_IN_HOUR)) -
+                System.currentTimeMillis() );
+        if(millisToExpire < thresholdMillis) {
+            // return mins to expire
+            return Math.round(millisToExpire / CommonConstants.MILLISECS_IN_MINUTE);
+        }
+        return 0;
+    }
 
     public static boolean txnVerifyReq(Merchants merchant, Transaction txn) {
         //if(txn.getCancelTime()==null) {
@@ -114,6 +136,18 @@ public class CommonUtils {
                 +city.getState()+
                 ((area.getPincode()==null||area.getPincode().isEmpty())?(""):(" - "+area.getPincode()))+"\n"
                 +"+91-"+addr.getContactNum();
+    }
+    public static String getCustAddrStrShort(CustAddress addr) {
+        Areas area = addr.getAreaNIDB();
+        if(area==null) {
+            return "";
+        }
+        Cities city = area.getCity();
+        if(city==null) {
+            return "";
+        }
+        return addr.getText1()+"\n"
+                +area.getAreaName()+", "+city.getCity();
     }
 
     public static String getMchntAddressStrWithName(Merchants mchnt) {

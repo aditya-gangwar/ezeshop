@@ -17,6 +17,7 @@ import in.ezeshop.appbase.utilities.AppCommonUtil;
 import in.ezeshop.appbase.utilities.BackgroundProcessor;
 import in.ezeshop.appbase.utilities.FileFetchr;
 import in.ezeshop.appbase.utilities.LogMy;
+import in.ezeshop.merchantbase.backendAPI.MerchantServices;
 import in.ezeshop.merchantbase.entities.MerchantUser;
 import in.ezeshop.appbase.entities.MyCashback;
 import in.ezeshop.appbase.entities.MyTransaction;
@@ -63,7 +64,7 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
     }
 
 
-    private class MessageLogin implements Serializable {
+    /*private class MessageLogin implements Serializable {
         public String userId;
         public String passwd;
         public String deviceId;
@@ -113,16 +114,11 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
         public File file;
         public String remoteDir;
     }
-    /*private class MessageMcntOrder implements Serializable {
-        public String skuOrId;
-        public int qty;
-        public int totalPrice;
-    }*/
     private class MessageLoadTest implements Serializable {
         public String custId;
         public String pin;
         public int reps;
-    }
+    }*/
 
     /*
      * Add request methods - Assumes that MerchantUser is instantiated
@@ -369,6 +365,9 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
                 case MyRetainedFragment.REQUEST_MSG_DEV_REG_CHK:
                     error = chkMsgDevReg();
                     break;
+                case MyRetainedFragment.REQUEST_FETCH_PENDING_ORDERS:
+                    error = fetchPendingOrders();
+                    break;
             }
         } catch (Exception e) {
             LogMy.e(TAG,"Unhandled exception in BG thread", e);
@@ -380,6 +379,20 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
     private int chkMsgDevReg() {
         LogMy.d(TAG, "In chkMsgDevReg");
         return MerchantUser.getInstance().checkMsgDevReg();
+    }
+
+    private int fetchPendingOrders() {
+        mRetainedFragment.mPendingCustOrders = null;
+
+        try {
+            mRetainedFragment.mPendingCustOrders = MerchantServices.getInstance().fetchPendingOrders(MerchantUser.getInstance().getMerchantId());
+            LogMy.d(TAG,"fetchPendingOrders success: "+mRetainedFragment.mPendingCustOrders.size());
+
+        } catch (BackendlessException e) {
+            LogMy.e(TAG,"Exception in fetchPendingOrders: "+e.toString());
+            return AppCommonUtil.getLocalErrorCode(e);
+        }
+        return ErrorCodes.NO_ERROR;
     }
 
     private int fetchMerchantOps() {

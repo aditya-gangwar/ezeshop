@@ -6,6 +6,10 @@
     <group android:checkableBehavior="single"
         android:id="@+id/grp1">
         <item
+            android:id="@+id/menu_pending_orders"
+            android:title="Pending Orders"
+            android:icon="@drawable/ic_shopping_cart_black_24dp" />
+        <item
             android:id="@+id/menu_settings"
             android:title="Settings"
             android:icon="@drawable/ic_settings_black_24dp" />
