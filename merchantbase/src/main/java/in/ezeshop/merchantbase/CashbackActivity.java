@@ -76,7 +76,7 @@ public class CashbackActivity extends BaseActivity implements
         TxnConfirmFragment.TxnConfirmFragmentIf, SettingsFragment2.SettingsFragment2If,
         //MerchantOrderListFrag.MerchantOrderListFragIf, CreateMchntOrderDialog.CreateMchntOrderDialogIf,
         TxnVerifyDialog.TxnVerifyDialogIf, LoadTestDialog.LoadTestDialogIf,
-        PendingOrderListFrag.PendingOrderListFragIf {
+        PendingOrderListFrag.PendingOrderListFragIf, PendingOrderDetailsFrag.PendingOrderDetailsFragIf {
 
     private static final String TAG = "MchntApp-CashbackActivity";
 
@@ -100,6 +100,7 @@ public class CashbackActivity extends BaseActivity implements
     private static final String TXN_CONFIRM_FRAGMENT = "TxnConfirmFragment";
     //private static final String MCHNT_ORDERS_FRAGMENT = "MchntOrdersFragment";
     private static final String PENDING_ORDER_LIST_FRAG = "PendingOrderListFrag";
+    private static final String PENDING_ORDER_DETAILS_FRAG = "PendingOrderDetailsFrag";
 
     private static final String DIALOG_BACK_BUTTON = "dialogBackButton";
     //private static final String DIALOG_LOGOUT = "dialogLogout";
@@ -1235,8 +1236,20 @@ public class CashbackActivity extends BaseActivity implements
     }
 
     @Override
-    public void showOrderDetailed(CustomerOrder order) {
+    public void showCustomerDetails(String customerId) {
 
+    }
+
+    @Override
+    public void acceptOrder(CustomerOrder order) {
+
+    }
+
+    @Override
+    public void showOrderDetailed(CustomerOrder order) {
+        // start order details fragment
+        mWorkFragment.mSelCustOrder = order;
+        startPendingOrderDetailsFrag();
     }
 
     private void onMerchantStatsResult(int errorCode) {
@@ -2107,6 +2120,21 @@ public class CashbackActivity extends BaseActivity implements
             // Add over the existing fragment
             transaction.replace(R.id.fragment_container_1, fragment, MERCHANT_OPS_LIST_FRAG);
             transaction.addToBackStack(MERCHANT_OPS_LIST_FRAG);
+
+            // Commit the transaction
+            transaction.commit();
+        }
+    }
+
+    private void startPendingOrderDetailsFrag() {
+        if (mFragMgr.findFragmentByTag(PENDING_ORDER_DETAILS_FRAG) == null) {
+
+            Fragment fragment = new PendingOrderDetailsFrag();
+            FragmentTransaction transaction = mFragMgr.beginTransaction();
+
+            // Add over the existing fragment
+            transaction.replace(R.id.fragment_container_1, fragment, PENDING_ORDER_DETAILS_FRAG);
+            transaction.addToBackStack(PENDING_ORDER_DETAILS_FRAG);
 
             // Commit the transaction
             transaction.commit();

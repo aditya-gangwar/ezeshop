@@ -108,6 +108,7 @@ public class MyRetainedFragment extends RetainedFragment {
 
     // related to Customer Orders
     public List<CustomerOrder> mPendingCustOrders;
+    public CustomerOrder mSelCustOrder;
 
     public void reset() {
         LogMy.d(TAG,"In reset");

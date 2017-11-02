@@ -19,6 +19,9 @@ android {
         versionCode 2
         versionName "17.1"
     }
+    dexOptions {
+        jumboMode true
+    }
     buildTypes {
         debug {
             minifyEnabled false

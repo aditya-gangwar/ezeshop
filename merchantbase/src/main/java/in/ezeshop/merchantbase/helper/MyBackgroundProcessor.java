@@ -17,6 +17,7 @@ import in.ezeshop.appbase.utilities.AppCommonUtil;
 import in.ezeshop.appbase.utilities.BackgroundProcessor;
 import in.ezeshop.appbase.utilities.FileFetchr;
 import in.ezeshop.appbase.utilities.LogMy;
+import in.ezeshop.common.database.Prescriptions;
 import in.ezeshop.merchantbase.backendAPI.MerchantServices;
 import in.ezeshop.merchantbase.entities.MerchantUser;
 import in.ezeshop.appbase.entities.MyCashback;
@@ -386,7 +387,7 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
 
         try {
             mRetainedFragment.mPendingCustOrders = MerchantServices.getInstance().fetchPendingOrders(MerchantUser.getInstance().getMerchantId());
-            LogMy.d(TAG,"fetchPendingOrders success: "+mRetainedFragment.mPendingCustOrders.size());
+            LogMy.d(TAG,"fetched order objects: "+mRetainedFragment.mPendingCustOrders.size());
 
         } catch (BackendlessException e) {
             LogMy.e(TAG,"Exception in fetchPendingOrders: "+e.toString());

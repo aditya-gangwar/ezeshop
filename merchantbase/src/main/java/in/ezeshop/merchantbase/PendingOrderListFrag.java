@@ -255,8 +255,15 @@ public class PendingOrderListFrag extends BaseFragment {
             if(order.getTxn()!=null) {
                 AppCommonUtil.showAmtColor(getActivity(),null,mInputBillAmt,order.getTxn().getPaymentAmt(),false);
             }
+
+            if(order.getTxn()==null) {
+                mInputBillAmt.setVisibility(View.GONE);
+            } else {
+                mInputBillAmt.setVisibility(View.VISIBLE);
+                AppCommonUtil.showAmtColor(getActivity(), null, mInputBillAmt, order.getTxn().getPaymentAmt(), false);
+            }
             //ToDo: Add agent details
-            mInputAgentName.setVisibility(View.GONE);
+            mLytAgent.setVisibility(View.GONE);
         }
     }
 

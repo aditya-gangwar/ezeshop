@@ -27,6 +27,9 @@ android {
         minSdkVersion 16
         targetSdkVersion 25
     }
+    dexOptions {
+        jumboMode true
+    }
     buildTypes {
         debug {
             minifyEnabled false

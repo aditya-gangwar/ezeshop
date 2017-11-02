@@ -25,16 +25,17 @@ public class Merchants
   private String email;
   private String name;
   private Boolean autoPasswd;
+  private String contactPhone2;
   private java.util.Date last_txn_archive;
   private String objectId;
   private java.util.Date created;
   private java.util.Date updated;
   private String ownerId;
   private java.util.Date delLocalFilesReq;
+  private String msgDevId;
   private String txn_table;
   private String auto_id;
   private String contactPhone;
-  private String contactPhone2;
   private Integer freeDlvrMinAmt;
   private Boolean invoiceNumOptional;
   private java.util.Date removeReqDate;
@@ -50,16 +51,6 @@ public class Merchants
   private String regFormNum;
   private Integer admin_status;
   private Address address;
-  private String msgDevId;
-
-  public String getMsgDevId() {
-    return msgDevId;
-  }
-
-  public void setMsgDevId(String msgDevId) {
-    this.msgDevId = msgDevId;
-  }
-
   public Boolean getInvoiceNumOnlyNumbers()
   {
     return invoiceNumOnlyNumbers;
@@ -220,6 +211,16 @@ public class Merchants
     this.autoPasswd = autoPasswd;
   }
 
+  public String getContactPhone2()
+  {
+    return contactPhone2;
+  }
+
+  public void setContactPhone2( String contactPhone2 )
+  {
+    this.contactPhone2 = contactPhone2;
+  }
+
   public java.util.Date getLast_txn_archive()
   {
     return last_txn_archive;
@@ -260,6 +261,16 @@ public class Merchants
     this.delLocalFilesReq = delLocalFilesReq;
   }
 
+  public String getMsgDevId()
+  {
+    return msgDevId;
+  }
+
+  public void setMsgDevId( String msgDevId )
+  {
+    this.msgDevId = msgDevId;
+  }
+
   public String getTxn_table()
   {
     return txn_table;
@@ -288,14 +299,6 @@ public class Merchants
   public void setContactPhone( String contactPhone )
   {
     this.contactPhone = contactPhone;
-  }
-
-  public String getContactPhone2() {
-    return contactPhone2;
-  }
-
-  public void setContactPhone2(String contactPhone2) {
-    this.contactPhone2 = contactPhone2;
   }
 
   public Integer getFreeDlvrMinAmt()

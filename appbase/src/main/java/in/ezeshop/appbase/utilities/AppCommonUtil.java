@@ -62,10 +62,12 @@ import in.ezeshop.common.database.BusinessCategories;
 import in.ezeshop.common.database.Cities;
 import in.ezeshop.common.database.CustAddress;
 import in.ezeshop.common.database.CustomerOps;
+import in.ezeshop.common.database.CustomerOrder;
 import in.ezeshop.common.database.Customers;
 import in.ezeshop.common.database.MerchantDevice;
 import in.ezeshop.common.database.MerchantOps;
 import in.ezeshop.common.database.Merchants;
+import in.ezeshop.common.database.Prescriptions;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -1075,6 +1077,8 @@ public class AppCommonUtil {
         Backendless.Data.mapTableToClass("Cities", Cities.class);
         Backendless.Data.mapTableToClass("Areas", Areas.class);
         Backendless.Data.mapTableToClass("CustAddress", CustAddress.class);
+        Backendless.Data.mapTableToClass("CustomerOrder", CustomerOrder.class);
+        Backendless.Data.mapTableToClass("Prescriptions", Prescriptions.class);
         //Backendless.Data.mapTableToClass("MerchantOrders", MerchantOrders.class);
 
         /*Backendless.Data.mapTableToClass( "Transaction0", Transaction.class );

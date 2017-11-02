@@ -146,8 +146,7 @@ public class CommonUtils {
         if(city==null) {
             return "";
         }
-        return addr.getText1()+"\n"
-                +area.getAreaName()+", "+city.getCity();
+        return addr.getText1()+", "+area.getAreaName();
     }
 
     public static String getMchntAddressStrWithName(Merchants mchnt) {

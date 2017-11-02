@@ -2,7 +2,9 @@ package in.ezeshop.common.database;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
+import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
+import com.backendless.geo.GeoPoint;
 import com.backendless.persistence.BackendlessDataQuery;
 
 public class Customers
@@ -257,7 +259,7 @@ public class Customers
     return addressesNIDB;
   }
 
-  public void setAddressesNIDB(java.util.List<CustAddress> addressesNIDB)
+  public void setAddressesNIDB( java.util.List<CustAddress> addressesNIDB )
   {
     this.addressesNIDB = addressesNIDB;
   }

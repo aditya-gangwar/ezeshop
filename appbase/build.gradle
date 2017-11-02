@@ -20,6 +20,9 @@ android {
         versionCode 2
         versionName "17.1"
     }
+    dexOptions {
+        jumboMode true
+    }
     buildTypes {
         debug {
             minifyEnabled false
@@ -75,9 +78,11 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile 'com.squareup.picasso:picasso:2.4.0'
-    compile 'com.github.jkwiecien:EasyImage:2.0.3'
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
+    compile 'com.github.jkwiecien:EasyImage:2.0.3'  // image picker
     //compile 'com.github.tajchert:nammu:1.1.3'
     compile 'pub.devrel:easypermissions:1.0.1'
-    compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.6.0'
-    compile 'id.zelory:compressor:2.1.0'
+    compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.6.0' // image zoom viewer
+    compile 'id.zelory:compressor:2.1.0'    // image compressor
 }

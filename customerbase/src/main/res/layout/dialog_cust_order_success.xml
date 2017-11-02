@@ -44,7 +44,7 @@
         android:text="Order ID: "
         android:textStyle="italic"
         android:background="@color/bg_light_grey_dark"
-        android:paddingBottom="@dimen/large_space"/>
+        android:paddingBottom="@dimen/medium_space"/>
 
     <View
         style="@style/Divider_horizontal_Large" />
@@ -139,17 +139,15 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top"
+                android:layout_height="match_parent"
                 android:layout_marginRight="@dimen/small_space"
-                android:paddingTop="@dimen/edittext_padding"
                 android:src="@drawable/ic_info_outline_black_18dp"
                 android:tint="@color/green_positive"
                 android:visibility="visible" />
 
             <TextView
                 android:id="@+id/info_1"
-                style="@style/Edittext_only_view_small"
+                style="@style/Edittext_only_view_XS"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="left"
@@ -169,7 +167,7 @@
 
             <TextView
                 android:id="@+id/info_3"
-                style="@style/Edittext_only_view_small"
+                style="@style/Edittext_only_view_XS"
                 android:layout_width="wrap_content"
                 android:textColor="@color/secondary_text"
                 android:gravity="left|center_vertical"

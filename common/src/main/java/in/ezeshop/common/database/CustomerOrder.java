@@ -7,127 +7,46 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.geo.GeoPoint;
 import com.backendless.persistence.BackendlessDataQuery;
 
-import java.util.Date;
-
 public class CustomerOrder
 {
   private java.util.Date updated;
+  private String custMobile;
   private String addressId;
   private String id;
+  private java.util.Date dispatchTime;
+  private java.util.Date cancelTime;
+  private String statusChgReason;
+  private Integer statusChgByUserType;
+  private java.util.Date deliverTime;
+  private String custName;
   private java.util.Date createTime;
   private String custComments;
+  private java.util.Date acceptTime;
   private String merchantId;
+  private String prevStatus;
   private String ownerId;
   private java.util.Date created;
   private String objectId;
   private String custPrivId;
-  private String custName;
-  private String custMobile;
+  private String currStatus;
+  private Transaction txn;
   private java.util.List<Prescriptions> prescrips;
   private Customers customerNIDB;
   private Merchants merchantNIDB;
   private CustAddress addressNIDB;
-  private String currStatus;
-  private String prevStatus;
-  private Integer statusChgByUserType;
-  private String statusChgReason;
-  private Transaction txn;
-  private java.util.Date acceptTime;
-  private java.util.Date dispatchTime;
-  private java.util.Date deliverTime;
-  private java.util.Date cancelTime;
-
-  public String getCustName() {
-    return custName;
-  }
-
-  public void setCustName(String custName) {
-    this.custName = custName;
-  }
-
-  public String getCustMobile() {
-    return custMobile;
-  }
-
-  public void setCustMobile(String custMobile) {
-    this.custMobile = custMobile;
-  }
-
-  public Date getAcceptTime() {
-    return acceptTime;
-  }
-
-  public void setAcceptTime(Date acceptTime) {
-    this.acceptTime = acceptTime;
-  }
-
-  public Date getDispatchTime() {
-    return dispatchTime;
-  }
-
-  public void setDispatchTime(Date dispatchTime) {
-    this.dispatchTime = dispatchTime;
-  }
-
-  public Date getDeliverTime() {
-    return deliverTime;
-  }
-
-  public void setDeliverTime(Date deliverTime) {
-    this.deliverTime = deliverTime;
-  }
-
-  public Date getCancelTime() {
-    return cancelTime;
-  }
-
-  public void setCancelTime(Date cancelTime) {
-    this.cancelTime = cancelTime;
-  }
-
-  public Transaction getTxn() {
-    return txn;
-  }
-
-  public void setTxn(Transaction txn) {
-    this.txn = txn;
-  }
-
-  public String getStatusChgReason() {
-    return statusChgReason;
-  }
-
-  public void setStatusChgReason(String statusChgReason) {
-    this.statusChgReason = statusChgReason;
-  }
-
-  public Integer getStatusChgByUserType() {
-    return statusChgByUserType;
-  }
-
-  public void setStatusChgByUserType(Integer statusChgByUserType) {
-    this.statusChgByUserType = statusChgByUserType;
-  }
-
-  public String getPrevStatus() {
-    return prevStatus;
-  }
-
-  public void setPrevStatus(String prevStatus) {
-    this.prevStatus = prevStatus;
-  }
-
-  public String getCurrStatus() {
-    return currStatus;
-  }
-
-  public void setCurrStatus(String currStatus) {
-    this.currStatus = currStatus;
-  }
-
   public java.util.Date getUpdated()
   {
     return updated;
+  }
+
+  public String getCustMobile()
+  {
+    return custMobile;
+  }
+
+  public void setCustMobile( String custMobile )
+  {
+    this.custMobile = custMobile;
   }
 
   public String getAddressId()
@@ -150,6 +69,66 @@ public class CustomerOrder
     this.id = id;
   }
 
+  public java.util.Date getDispatchTime()
+  {
+    return dispatchTime;
+  }
+
+  public void setDispatchTime( java.util.Date dispatchTime )
+  {
+    this.dispatchTime = dispatchTime;
+  }
+
+  public java.util.Date getCancelTime()
+  {
+    return cancelTime;
+  }
+
+  public void setCancelTime( java.util.Date cancelTime )
+  {
+    this.cancelTime = cancelTime;
+  }
+
+  public String getStatusChgReason()
+  {
+    return statusChgReason;
+  }
+
+  public void setStatusChgReason( String statusChgReason )
+  {
+    this.statusChgReason = statusChgReason;
+  }
+
+  public Integer getStatusChgByUserType()
+  {
+    return statusChgByUserType;
+  }
+
+  public void setStatusChgByUserType( Integer statusChgByUserType )
+  {
+    this.statusChgByUserType = statusChgByUserType;
+  }
+
+  public java.util.Date getDeliverTime()
+  {
+    return deliverTime;
+  }
+
+  public void setDeliverTime( java.util.Date deliverTime )
+  {
+    this.deliverTime = deliverTime;
+  }
+
+  public String getCustName()
+  {
+    return custName;
+  }
+
+  public void setCustName( String custName )
+  {
+    this.custName = custName;
+  }
+
   public java.util.Date getCreateTime()
   {
     return createTime;
@@ -170,6 +149,16 @@ public class CustomerOrder
     this.custComments = custComments;
   }
 
+  public java.util.Date getAcceptTime()
+  {
+    return acceptTime;
+  }
+
+  public void setAcceptTime( java.util.Date acceptTime )
+  {
+    this.acceptTime = acceptTime;
+  }
+
   public String getMerchantId()
   {
     return merchantId;
@@ -178,6 +167,16 @@ public class CustomerOrder
   public void setMerchantId( String merchantId )
   {
     this.merchantId = merchantId;
+  }
+
+  public String getPrevStatus()
+  {
+    return prevStatus;
+  }
+
+  public void setPrevStatus( String prevStatus )
+  {
+    this.prevStatus = prevStatus;
   }
 
   public String getOwnerId()
@@ -203,6 +202,26 @@ public class CustomerOrder
   public void setCustPrivId( String custPrivId )
   {
     this.custPrivId = custPrivId;
+  }
+
+  public String getCurrStatus()
+  {
+    return currStatus;
+  }
+
+  public void setCurrStatus( String currStatus )
+  {
+    this.currStatus = currStatus;
+  }
+
+  public Transaction getTxn()
+  {
+    return txn;
+  }
+
+  public void setTxn( Transaction txn )
+  {
+    this.txn = txn;
   }
 
   public java.util.List<Prescriptions> getPrescrips()
@@ -245,7 +264,7 @@ public class CustomerOrder
     this.addressNIDB = addressNIDB;
   }
 
-                                                    
+
   public CustomerOrder save()
   {
     return Backendless.Data.of( CustomerOrder.class ).save( this );

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <EditText
+        style="@style/Dialog_title"
+        android:id="@+id/label_title"
+        android:text="CHANGE ORDER STATUS"/>
+
+    <View
+        style="@style/Divider_horizontal_Large"/>
+
+    <LinearLayout
+        style="@style/LL_Vertical_paddingSidesLarge"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap"
+            android:layout_marginTop="@dimen/large_space">
+
+            <EditText
+                style="@style/Edittext_only_view_small_lessPad"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="Order ID"
+                android:textColor="@color/secondary_text"/>
+            <EditText
+                style="@style/Edittext_only_view_small_lessPad"
+                android:id="@+id/input_orderId"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="C1678623509347895"
+                android:gravity="end"
+                android:textColor="@color/secondary_text"/>
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap">
+
+            <EditText
+                style="@style/Edittext_only_view_small_lessPad"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="Current Status"
+                android:textColor="@color/secondary_text"/>
+            <EditText
+                style="@style/Edittext_only_view_small_lessPad"
+                android:id="@+id/input_status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="NEW"
+                android:gravity="end"
+                android:textColor="@color/secondary_text"/>
+        </LinearLayout>
+
+        <EditText
+            style="@style/Edittext_only_view_small_lessPad"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:text="Process Order :"
+            android:layout_marginTop="@dimen/XL_space"
+            android:layout_marginBottom="@dimen/small_space"/>
+
+        <LinearLayout
+            style="@style/LL_Horizontal_wrap">
+            <RadioButton
+                style="@style/Edittext_only_view_small"
+                android:id="@+id/radioButton1"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:text="REJECT"
+                android:gravity="left|center_vertical"
+                android:textColor="@color/secondary_text"/>
+            <RadioButton
+                style="@style/Edittext_only_view_small"
+                android:id="@+id/radioButton2"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:gravity="left|center_vertical"
+                android:text="ACCEPT"
+                android:textColor="@color/green_positive"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_rejectDetails"
+            style="@style/LL_Vertical"
+            android:layout_marginTop="@dimen/XXL_space"
+            android:visibility="gone">
+
+            <EditText
+                style="@style/Edittext_only_view_small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select Reason for Order Rejection ?"
+                android:layout_marginTop="@dimen/medium_space"
+                android:layout_marginBottom="@dimen/medium_space"/>
+
+            <EditText
+                style="@style/Edittext_only_click_bg_small"
+                android:id="@+id/input_payMode"
+                android:hint="Touch to Select"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/ic_arrow_drop_down_black_24dp"/>
+
+            <EditText
+                android:id="@+id/layout_confirmInfo"
+                style="@style/Edittext_only_view_small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Are you sure to Reject the order ?"
+                android:layout_marginTop="@dimen/XXXXL_space"
+                android:textColor="@color/accent2"/>
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/layout_acceptInfo"
+            style="@style/Edittext_only_view_small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select 'Continue' and provide Billing details to Accept the order."
+            android:layout_marginTop="@dimen/XXXXL_space"
+            android:textColor="@color/accent2"
+            android:visibility="visible"/>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.AppCompatButton
+        style="@style/button_normal_thin"
+        android:id="@+id/btn_process"
+        android:text="CONFIRM"
+        android:layout_marginTop="@dimen/large_space"/>
+
+</LinearLayout>

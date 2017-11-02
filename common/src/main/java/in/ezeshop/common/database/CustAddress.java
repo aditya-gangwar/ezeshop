@@ -2,7 +2,9 @@ package in.ezeshop.common.database;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
+import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
+import com.backendless.geo.GeoPoint;
 import com.backendless.persistence.BackendlessDataQuery;
 
 public class CustAddress
@@ -103,7 +105,7 @@ public class CustAddress
     return areaNIDB;
   }
 
-  public void setAreaNIDB(Areas areaNIDB)
+  public void setAreaNIDB( Areas areaNIDB )
   {
     this.areaNIDB = areaNIDB;
   }

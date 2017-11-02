@@ -27,7 +27,7 @@
                 android:text="CALL" />
 
             <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_txns"
+                android:id="@+id/btn_changeStatus"
                 style="@style/button_normal_thin"
                 android:layout_width="0dp"
                 android:layout_weight="50"
@@ -395,6 +395,7 @@
                                 android:tint="@color/green_positive" />
 
                             <View
+                                android:id="@+id/div_orderStatusNew"
                                 style="@style/Divider_vertical_Large"
                                 android:layout_height="@dimen/large_space"
                                 android:background="@color/green_positive"/>
@@ -408,6 +409,7 @@
                                 android:tint="@color/disabled" />
 
                             <View
+                                android:id="@+id/div_orderStatusAcptd"
                                 style="@style/Divider_vertical_Large"
                                 android:layout_height="@dimen/large_space"/>
 
@@ -420,6 +422,7 @@
                                 android:tint="@color/disabled" />
 
                             <View
+                                android:id="@+id/div_orderStatusDsptchd"
                                 style="@style/Divider_vertical_Large"
                                 android:layout_height="@dimen/large_space"/>
 

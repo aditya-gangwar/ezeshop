@@ -446,6 +446,7 @@ public class CreateOrderFragment extends BaseFragment implements
         EasyImage.handleActivityResult(requestCode, resultCode, data, getActivity(), new DefaultCallback() {
             @Override
             public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
+                AppCommonUtil.cancelProgressDialog(true);
                 LogMy.e(TAG,"Error returned by Image picker. Image Source: "+source,e);
             }
 

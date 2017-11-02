@@ -30,26 +30,32 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <TextView
-                style="@style/Edittext_only_view_small"
-                android:layout_width="wrap_content"
-                android:id="@+id/no_newOrders"
-                android:layout_height="wrap_content"
-                android:textColor="@color/disabled"
-                android:layout_marginTop="@dimen/small_space"
-                android:text="No New Orders"/>
+            <LinearLayout
+                style="@style/LL_Vertical_paddingSidesLarge"
+                android:background="@color/bg_light_grey_dark"
+                android:paddingBottom="@dimen/large_space">
 
-            <android.support.v7.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/recycler_newOrders"
-                android:layout_marginTop="@dimen/small_space"
-                android:visibility="gone"/>
+                <TextView
+                    style="@style/Edittext_only_view_small"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/no_newOrders"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/secondary_text"
+                    android:layout_marginTop="@dimen/small_space"
+                    android:text="No New Orders"
+                    android:visibility="visible"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/recycler_newOrders"
+                    android:layout_marginTop="@dimen/small_space"
+                    android:visibility="visible"/>
+            </LinearLayout>
 
             <LinearLayout
                 style="@style/LL_Horizontal_paddingSidesLarge"
-                android:background="@color/bg_listWithCard_header"
-                android:layout_marginTop="@dimen/large_space">
+                android:background="@color/bg_listWithCard_header">
 
                 <ImageView
                     android:layout_height="match_parent"
@@ -67,27 +73,32 @@
                         android:background="@color/bg_listWithCard_header"/>
             </LinearLayout>
 
-            <TextView
-                style="@style/Edittext_only_view_small"
-                android:layout_width="wrap_content"
-                android:id="@+id/no_acceptedOrders"
-                android:layout_height="wrap_content"
-                android:textColor="@color/disabled"
-                android:layout_marginTop="@dimen/small_space"
-                android:text="No Accepted Orders"/>
+            <LinearLayout
+                style="@style/LL_Vertical_paddingSidesLarge"
+                android:background="@color/bg_light_grey_dark"
+                android:paddingBottom="@dimen/large_space">
 
-            <android.support.v7.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/recycler_acceptedOrders"
-                android:layout_marginTop="@dimen/small_space"
-                android:visibility="gone">
-            </android.support.v7.widget.RecyclerView>
+                <TextView
+                    style="@style/Edittext_only_view_small"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/no_acceptedOrders"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/secondary_text"
+                    android:layout_marginTop="@dimen/small_space"
+                    android:text="No Accepted Orders"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/recycler_acceptedOrders"
+                    android:layout_marginTop="@dimen/small_space"
+                    android:visibility="visible">
+                </android.support.v7.widget.RecyclerView>
+            </LinearLayout>
 
             <LinearLayout
                 style="@style/LL_Horizontal_paddingSidesLarge"
-                android:background="@color/bg_listWithCard_header"
-                android:layout_marginTop="@dimen/large_space">
+                android:background="@color/bg_listWithCard_header">
 
                 <ImageView
                     android:layout_height="match_parent"
@@ -105,22 +116,27 @@
                         android:background="@color/bg_listWithCard_header"/>
             </LinearLayout>
 
-            <TextView
-                style="@style/Edittext_only_view_small"
-                android:layout_width="wrap_content"
-                android:id="@+id/no_dispatchedOrders"
-                android:layout_height="wrap_content"
-                android:textColor="@color/disabled"
-                android:layout_marginTop="@dimen/small_space"
-                android:text="No Dispatched Orders"/>
+            <LinearLayout
+                style="@style/LL_Vertical_paddingSidesLarge"
+                android:paddingBottom="@dimen/large_space"
+                android:background="@color/bg_light_grey_dark">
+                <TextView
+                    style="@style/Edittext_only_view_small"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/no_dispatchedOrders"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/secondary_text"
+                    android:layout_marginTop="@dimen/small_space"
+                    android:text="No Dispatched Orders"/>
 
-            <android.support.v7.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/recycler_dispatchedOrders"
-                android:layout_marginTop="@dimen/small_space"
-                android:visibility="gone">
-            </android.support.v7.widget.RecyclerView>
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/recycler_dispatchedOrders"
+                    android:layout_marginTop="@dimen/small_space"
+                    android:visibility="visible">
+                </android.support.v7.widget.RecyclerView>
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
