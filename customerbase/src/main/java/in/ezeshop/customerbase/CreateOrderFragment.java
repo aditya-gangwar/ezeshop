@@ -15,8 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -240,7 +238,7 @@ public class CreateOrderFragment extends BaseFragment implements
                 imgLyt.setVisibility(View.VISIBLE);
                 LogMy.d(TAG,"Image file: "+img.getAbsolutePath()+","+img.getPath()+","+Uri.fromFile(img));
 
-                Picasso.Builder builder = new Picasso.Builder(getActivity().getApplicationContext());
+                /*Picasso.Builder builder = new Picasso.Builder(getActivity().getApplicationContext());
                 builder.listener(new Picasso.Listener() {
                     @Override
                     public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
@@ -253,7 +251,9 @@ public class CreateOrderFragment extends BaseFragment implements
                 builder.build().load(Uri.fromFile(img)).fit().centerCrop()
 //                        .placeholder(R.drawable.ic_description_black_18dp)
 //                        .error(R.drawable.ic_clear_black_24dp)
-                        .into(mPrescripImgArr[indx]);
+                        .into(mPrescripImgArr[indx]);*/
+                mPrescripImgArr[indx].setImageURI(Uri.fromFile(img));
+                mPrescripImgArr[indx].setScaleType(ImageView.ScaleType.CENTER_CROP);
                 indx++;
             }
         }
@@ -404,16 +404,16 @@ public class CreateOrderFragment extends BaseFragment implements
 
         } else {
             List<String> permList = new ArrayList<>(Arrays.asList(perms));
-            if (EasyPermissions.somePermissionPermanentlyDenied(this, permList)) {
+            /*if (EasyPermissions.somePermissionPermanentlyDenied(this, permList)) {
                 // Permanently denied
                 new AppSettingsDialog.Builder(this)
                         .setRationale("Camera permission is required to add prescriptions image !")
                         .build().show();
-            } else {
+            } else {*/
                 // Do not have permissions, request them now
-                EasyPermissions.requestPermissions(this, "Need permission to take photo of the Prescription",
+                EasyPermissions.requestPermissions(this, "Camera permission is required to take photo of the Prescription",
                         RC_HANDLE_CAMERA_PERM, perms);
-            }
+            //}
         }
     }
 
@@ -435,7 +435,19 @@ public class CreateOrderFragment extends BaseFragment implements
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
         LogMy.d(TAG, "onPermissionsDenied:" + requestCode + ":" + perms.size());
-        // doing nothing - will anyways be tried again - if the user presses add button again
+
+        // Check if user selected - never ask again
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            // Never ask again selected
+            new AppSettingsDialog.Builder(this)
+                    .setRationale("Cannot upload prescription image without Camera permission. \n\nPress 'Ok' and select 'Permissions' on the Settings screen to provide Camera permission.")
+                    .build().show();
+        } else {
+            // Denied - show rationale for the same
+            DialogFragmentWrapper notDialog = DialogFragmentWrapper.createNotification(AppConstants.noPermissionTitle,
+                    "Cannot upload prescription image without Camera permission.", false, true);
+            notDialog.show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
+        }
     }
 
     @Override

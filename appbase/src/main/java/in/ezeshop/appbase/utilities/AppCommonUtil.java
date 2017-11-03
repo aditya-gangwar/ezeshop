@@ -926,6 +926,23 @@ public class AppCommonUtil {
                         .edit()
                         .putLong(AppConstants.PREF_ALL_FILES_DEL_TIME, System.currentTimeMillis())
                         .apply();
+            } else {
+                // delete files older than say 10 days
+                String[] files = activity.fileList();
+                for (String fileName :
+                        files) {
+                    long delTime = System.currentTimeMillis() -
+                            (MyGlobalSettings.getAppFilesKeepDays()* 24 * CommonConstants.MILLISECS_IN_HOUR);
+                    File file = activity.getFileStreamPath(fileName);
+                    if(AppCommonUtil.isAppFile(fileName) &&
+                            file.lastModified() < delTime) {
+                        if (activity.deleteFile(fileName)) {
+                            LogMy.d(TAG, "Deleted file as old now: " + fileName);
+                        } else {
+                            LogMy.e(TAG, "Failed to delete file: " + fileName);
+                        }
+                    }
+                }
             }
         }
     }
@@ -934,7 +951,8 @@ public class AppCommonUtil {
         return ( fileName.startsWith(CommonConstants.MERCHANT_TXN_FILE_PREFIX) ||
                 fileName.startsWith(CommonConstants.MERCHANT_CUST_DATA_FILE_PREFIX) ||
                 fileName.startsWith(CommonConstants.CASHBACK_DATA_FILE_PREFIX)||
-                fileName.startsWith(CommonConstants.PREFIX_TXN_IMG_FILE_NAME) );
+                //fileName.startsWith(CommonConstants.PREFIX_TXN_IMG_FILE_NAME)||
+                fileName.startsWith(CommonConstants.CUSTOMER_PRESCRIPS_FILE_PREFIX));
     }
 
     public static byte[] fileAsByteArray(Context ctxt, String fileName) throws Exception {

@@ -49,7 +49,7 @@ public class MyRetainedFragment extends RetainedFragment {
     public static final int REQUEST_UPDATE_MERCHANT_SETTINGS = 6;
     public static final int REQUEST_LOGOUT_MERCHANT = 7;
     public static final int REQUEST_FETCH_TXNS = 8;
-    public static final int REQUEST_FETCH_TXN_FILES = 9;
+    public static final int REQUEST_FETCH_FILES = 9;
     public static final int REQUEST_GENERATE_MERCHANT_PWD = 10;
     public static final int REQUEST_ADD_CUSTOMER_OP = 11;
     public static final int REQUEST_CHANGE_PASSWD = 12;
@@ -99,8 +99,11 @@ public class MyRetainedFragment extends RetainedFragment {
     public String mNewMobileNum;
     public String mOtpMobileChange;
 
-    // members used by 'Txn Reports Activity' to store its state, and its fragments
+    // Used to store URLs of missing files that are to be downloaded fro backend
+    // Used for files like CSV files, Images etc
     public List<String> mMissingFiles;
+
+    // members used by 'Txn Reports Activity' to store its state, and its fragments
     // 'Txn Reports Activity' store the helper instance here in onSaveInstance
     public TxnReportsHelper2 mTxnReportHelper;
     public int mSummary[] = new int[AppConstants.INDEX_SUMMARY_MAX_VALUE];
@@ -143,7 +146,7 @@ public class MyRetainedFragment extends RetainedFragment {
     public void addBackgroundJob(int requestCode, Context ctxt, String callingFragTag,
                                  String argStr1, String argStr2, String argStr3, Long argLong1, Boolean argBool1) {
         // transparently pass to background thread
-        mBackgroundProcessor.addBackgroundJob(requestCode, ctxt, callingFragTag, argStr1, argStr2, argStr3, argLong1, argBool1);
+        mBackgroundProcessor.addBackgroundJob(requestCode, getActivity(), callingFragTag, argStr1, argStr2, argStr3, argLong1, argBool1);
     }
 
     /*public void fetchMerchantsOps() {

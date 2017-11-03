@@ -35,6 +35,7 @@ public class GlobalSettingConstants {
     // 2) Cannot be visible on main screen i.e. can be fetched on per Merchant basis only.
     public static final String SETTINGS_TXNS_INTABLE_KEEP_DAYS = "Txns_Recent_Days";
 
+    public static final String SETTINGS_APP_FILES_KEEP_DAYS = "ServiceAppFilesKeepDays";
     public static final String SETTINGS_OPS_KEEP_DAYS = "Service_Req_Keep_Days";
     public static final String SETTINGS_OTP_VALID_MINS = "OTP_Valid_Mins";
     public static final String SETTINGS_MERCHANT_WRONG_ATTEMPT_LIMIT = "Mchnt_Allowed_Wrong_Verify_Attempts";
@@ -140,6 +141,7 @@ public class GlobalSettingConstants {
         aMap.put(SETTINGS_MCHNT_ACPTD_ORDER_TIMEOUT,"6");
         aMap.put(SETTINGS_MCHNT_DSPTCHD_ORDER_TIMEOUT,"12");
         aMap.put(SETNGS_ORDER_TMOUT_NOTIFY_THRSHLD_PRCENT,"20");
+        aMap.put(SETTINGS_APP_FILES_KEEP_DAYS,"10");
         valuesGlobalSettings = Collections.unmodifiableMap(aMap);
     }
     /*static {
@@ -225,6 +227,7 @@ public class GlobalSettingConstants {
         aMap.put(SETTINGS_MCHNT_ACPTD_ORDER_TIMEOUT,"Duration in hours after which, the 'Accepted' order if not dispatched by Merchant, will be automatically get Cancelled");
         aMap.put(SETTINGS_MCHNT_DSPTCHD_ORDER_TIMEOUT,"Duration in hours, after which the 'Dispatched' order if not delivered by Merchant, will be assumed to be delivered and get closed.");
         aMap.put(SETNGS_ORDER_TMOUT_NOTIFY_THRSHLD_PRCENT,null);
+        aMap.put(SETTINGS_APP_FILES_KEEP_DAYS,null);
         //aMap.put(SETTINGS_CUST_CARD_PRICE, null);
         //aMap.put(SETTINGS_CUST_CARD_MIN_QTY, null);
         //aMap.put(SETTINGS_CUST_CARD_MAX_QTY, null);
@@ -286,6 +289,7 @@ public class GlobalSettingConstants {
         aMap.put(SETTINGS_MCHNT_ACPTD_ORDER_TIMEOUT,DATATYPE_INT);
         aMap.put(SETTINGS_MCHNT_DSPTCHD_ORDER_TIMEOUT,DATATYPE_INT);
         aMap.put(SETNGS_ORDER_TMOUT_NOTIFY_THRSHLD_PRCENT,DATATYPE_INT);
+        aMap.put(SETTINGS_APP_FILES_KEEP_DAYS,DATATYPE_INT);
         valueTypesGlobalSettings = Collections.unmodifiableMap(aMap);
     }
 }

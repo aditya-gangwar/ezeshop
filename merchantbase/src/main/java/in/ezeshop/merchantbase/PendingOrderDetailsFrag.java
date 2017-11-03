@@ -1,8 +1,7 @@
 package in.ezeshop.merchantbase;
 
-import android.Manifest;
+import android.app.DialogFragment;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,30 +11,19 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.backendless.HeadersManager;
-import com.squareup.okhttp.Interceptor;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-import com.squareup.picasso.OkHttpDownloader;
-import com.squareup.picasso.Picasso;
-
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import id.zelory.compressor.Compressor;
 import in.ezeshop.appbase.BaseFragment;
+import in.ezeshop.appbase.GenericListDialog;
 import in.ezeshop.appbase.ImageViewActivity;
 import in.ezeshop.appbase.constants.AppConstants;
 import in.ezeshop.appbase.utilities.AppCommonUtil;
@@ -44,21 +32,16 @@ import in.ezeshop.appbase.utilities.LogMy;
 import in.ezeshop.common.CommonUtils;
 import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.ErrorCodes;
-import in.ezeshop.common.database.CustAddress;
 import in.ezeshop.common.database.CustomerOrder;
-import in.ezeshop.common.database.Merchants;
 import in.ezeshop.common.database.Prescriptions;
 import in.ezeshop.merchantbase.helper.MyRetainedFragment;
-import pl.aprilapps.easyphotopicker.DefaultCallback;
-import pl.aprilapps.easyphotopicker.EasyImage;
-import pub.devrel.easypermissions.AppSettingsDialog;
-import pub.devrel.easypermissions.EasyPermissions;
 
 /**
  * Created by adgangwa on 02-11-2017.
  */
 
-public class PendingOrderDetailsFrag extends BaseFragment {
+public class PendingOrderDetailsFrag extends BaseFragment
+        implements GenericListDialog.GenericListDialogIf {
     private static final String TAG = "MchntApp-PendingOrderDetailsFrag";
 
     private PendingOrderDetailsFrag.PendingOrderDetailsFragIf mCallback;
@@ -67,10 +50,14 @@ public class PendingOrderDetailsFrag extends BaseFragment {
 
     private static final int REQ_NOTIFY_ERROR = 4;
     private static final int REQ_NOTIFY_ERROR_EXIT = 5;
-    private static final int RC_HANDLE_CAMERA_PERM = 10;
+
+    private static final String DIALOG_CALL_NUMBER = "DialogCallNumber";
 
     // Special member variable to identify backstack cases
     private Integer mBackstackFlag;
+    private File[] mPrescripImgs = new File[CommonConstants.MAX_PRESCRIPS_PER_ORDER];
+    private ArrayList<String> mCallNumbers = new ArrayList<>(10);
+    private ArrayList<String> mCallNumDisplay = new ArrayList<>(10);
 
     // Part of instance state: to be restored in event of fragment recreation
 
@@ -168,6 +155,34 @@ public class PendingOrderDetailsFrag extends BaseFragment {
 
         // Order Status details
         refOrderStatusDetails(order);
+        // Billing details
+        refreshBillingDetails(order);
+
+        // Call numbers
+        prepareCallNumbers(order);
+    }
+
+    private void prepareCallNumbers(CustomerOrder order) {
+        mCallNumbers.add(order.getCustMobile());
+        mCallNumDisplay.add("Account Number ("+order.getCustName()+") : "
+                +AppConstants.PHONE_COUNTRY_CODE_DISPLAY+order.getCustMobile());
+
+        if(order.getAddressNIDB().getContactNum()!=null &&
+                !order.getAddressNIDB().getContactNum().equals(order.getCustMobile())) {
+            mCallNumbers.add(order.getAddressNIDB().getContactNum());
+            mCallNumDisplay.add("Delivery Address Number ("+order.getAddressNIDB().getToName()+") : "
+                    +AppConstants.PHONE_COUNTRY_CODE_DISPLAY+order.getAddressNIDB().getContactNum());
+        }
+
+        // todo: Add Delivery agent number
+    }
+
+    private void refreshBillingDetails(CustomerOrder order) {
+        if(order.getTxn()==null) {
+            mLytBilling.setVisibility(View.GONE);
+        } else {
+
+        }
     }
 
     private void refOrderStatusDetails(CustomerOrder order) {
@@ -239,13 +254,17 @@ public class PendingOrderDetailsFrag extends BaseFragment {
             // show prescription image previews
 
             // Make all invisible first
+            int cnt = order.getPrescrips().size();
             for(int i=0; i<CommonConstants.MAX_PRESCRIPS_PER_ORDER; i++) {
-                mPrescripImgArr[i].setVisibility(View.GONE);
-                //mPrescripImgArr[i].setImageResource(R.drawable.ic_description_black_18dp);
+                if(i<cnt) {
+                    mPrescripImgArr[i].setVisibility(View.VISIBLE);
+                } else {
+                    mPrescripImgArr[i].setVisibility(View.GONE);
+                }
             }
 
             // Add backendless headers to the request
-            OkHttpClient okHttpClient = new OkHttpClient();
+            /*OkHttpClient okHttpClient = new OkHttpClient();
             okHttpClient.interceptors().add(new Interceptor() {
                 @Override
                 public Response intercept(Chain chain) throws IOException {
@@ -257,32 +276,41 @@ public class PendingOrderDetailsFrag extends BaseFragment {
                     return chain.proceed(builder.build());
                 }
             });
+
             // Make picasso builder object with above HttpClient
             Picasso.Builder builder = new Picasso.Builder(getActivity().getApplicationContext());
             builder.downloader(new OkHttpDownloader(okHttpClient));
+            // add listener to picasso builder
+            builder.listener(new Picasso.Listener() {
+                @Override
+                public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
+                    LogMy.e(TAG,"Picasso image load failed: "+uri,exception);
+                    //imgView.setVisibility(View.GONE);
+                    AppCommonUtil.toast(getActivity(),"Failed to upload image");
+                }}
+            );*/
 
             int indx = 0;
             for (Prescriptions item :
                     order.getPrescrips()) {
+                String filename = Uri.parse(item.getUrl()).getLastPathSegment();
+                File file = getActivity().getFileStreamPath(filename);
+                if(file == null || !file.exists()) {
+                    // I shouldn't be here
+                    LogMy.wtf(TAG,"refreshPrescripImgs: Prescription image not available locally: "+item.getUrl());
+                } else {
+                    mPrescripImgArr[indx].setImageURI(Uri.fromFile(file));
+                    mPrescripImgArr[indx].setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    mPrescripImgs[indx] = file;
+                }
+                    //final View imgView = mPrescripImgArr[indx];
+                //imgView.setVisibility(View.VISIBLE);
+                //LogMy.d(TAG,"Image file URL: "+item.getUrl());
+                /*builder.build().load(item.getUrl()).fit().centerCrop()
+                        .placeholder(R.drawable.ic_description_black_18dp)
+                        .error(R.drawable.ic_clear_black_24dp)
+                        .into(mPrescripImgArr[indx]);*/
 
-                final View imgView = mPrescripImgArr[indx];
-                imgView.setVisibility(View.VISIBLE);
-                LogMy.d(TAG,"Image file URL: "+item.getUrl());
-
-                // add listener to picasso builder
-                builder.listener(new Picasso.Listener() {
-                    @Override
-                    public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
-                        LogMy.e(TAG,"Picasso image load failed: "+uri,exception);
-                        imgView.setVisibility(View.GONE);
-                        AppCommonUtil.toast(getActivity(),"Failed to upload image");
-                        // TODO: raise alarm
-                    }}
-                );
-                builder.build().load(item.getUrl()).fit().centerCrop()
-//                        .placeholder(R.drawable.ic_description_black_18dp)
-//                        .error(R.drawable.ic_clear_black_24dp)
-                        .into(mPrescripImgArr[indx]);
                 indx++;
             }
 
@@ -306,13 +334,13 @@ public class PendingOrderDetailsFrag extends BaseFragment {
 
                 int id = v.getId();
                 if (id==R.id.img_precrips_1 || id==R.id.img_precrips_2 || id==R.id.img_precrips_3 || id==R.id.img_precrips_4) {
-                    /*File img = mRetainedFragment.mPrescripImgs.get(getImgIndex(id));
+                    File img = mPrescripImgs[getImgIndex(id)];
                     LogMy.d(TAG,"Image file: "+img.getAbsolutePath()+","+img.getPath()+","+Uri.fromFile(img));
 
                     // Show appropriate uploaded prescription preview
                     Intent intent = new Intent(getActivity(), ImageViewActivity.class );
                     intent.putExtra(ImageViewActivity.INTENT_EXTRA_URI, Uri.fromFile(img));
-                    startActivity(intent);*/
+                    startActivity(intent);
 
                 } else {
                     return false;
@@ -327,16 +355,15 @@ public class PendingOrderDetailsFrag extends BaseFragment {
         return true;
     }
 
-    /*private int getImgIndex(int id) {
+    private int getImgIndex(int id) {
         for(int i=0; i<CommonConstants.MAX_PRESCRIPS_PER_ORDER; i++) {
-            if(mPrescripImgDelArr[i].getId()==id || mPrescripImgArr[i].getId()==id) {
+            if(mPrescripImgArr[i].getId()==id || mPrescripImgArr[i].getId()==id) {
                 return i;
             }
         }
-
         LogMy.e(TAG,"In getImgIndex: Invalid id: "+id);
         return -1;
-    }*/
+    }
 
     // Using BaseFragment's onClick method - to avoid double clicks
     @Override
@@ -349,7 +376,13 @@ public class PendingOrderDetailsFrag extends BaseFragment {
 
             int i = v.getId();
             if (i == mBtnCall.getId()) {
-
+                if(mCallNumbers.size() > 1) {
+                    DialogFragment dialog = GenericListDialog.getInstance(R.drawable.ic_call_black_18dp, mCallNumDisplay, "Select Number to Dial", true);
+                    dialog.setTargetFragment(this, GenericListDialog.REQ_GENERIC_LIST);
+                    dialog.show(getFragmentManager(), DIALOG_CALL_NUMBER);
+                } else {
+                    dialNumber(mCallNumbers.get(0));
+                }
             } else if (i == mBtnChangeStatus.getId()) {
 
             }
@@ -358,6 +391,31 @@ public class PendingOrderDetailsFrag extends BaseFragment {
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), true, true)
                     .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
         }
+    }
+
+    private void dialNumber(String num) {
+        String callNum;
+        if(num.startsWith(AppConstants.PHONE_COUNTRY_CODE)) {
+            if(num.startsWith(AppConstants.PHONE_COUNTRY_CODE_DISPLAY)) {
+                callNum = num.replace("-","");
+            } else {
+                callNum = num;
+            }
+        } else {
+            callNum = AppConstants.PHONE_COUNTRY_CODE+num;
+        }
+
+        LogMy.d(TAG,"dialNumber: "+num+", "+callNum);
+        Intent i = new Intent(Intent.ACTION_DIAL);
+        String p = "tel:" + callNum;
+        i.setData(Uri.parse(p));
+        startActivity(i);
+    }
+
+    @Override
+    public void onListItemSelected(int index, String text) {
+        LogMy.d(TAG, "In onListItemSelected :" + index + ", " + text);
+        dialNumber(mCallNumbers.get(index));
     }
 
     @Override

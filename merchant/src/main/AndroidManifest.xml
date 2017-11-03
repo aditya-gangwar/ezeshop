@@ -84,9 +84,9 @@
             android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name="in.ezeshop.appbase.barcodeReader.BarcodeCaptureActivity"
+        <!--activity android:name="in.ezeshop.appbase.barcodeReader.BarcodeCaptureActivity"
             android:label="Read Barcode"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"/-->
 
         <activity
             android:name="com.helpshift.support.activities.ParentActivity"
@@ -97,6 +97,11 @@
             android:name="in.ezeshop.merchantbase.HelpActivity"
             android:theme="@style/Helpshift.Theme.Activity"
             android:screenOrientation="portrait"/>
+
+        <activity
+            android:name="in.ezeshop.appbase.ImageViewActivity"
+            android:screenOrientation="portrait">
+        </activity>
 
         <meta-data
             android:name="io.fabric.ApiKey"

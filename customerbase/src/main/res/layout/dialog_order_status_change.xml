@@ -93,13 +93,13 @@
             android:id="@+id/layout_rejectDetails"
             style="@style/LL_Vertical"
             android:layout_marginTop="@dimen/XXL_space"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <EditText
                 style="@style/Edittext_only_view_small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Select Reason for Order Rejection ?"
+                android:text="Reason for Order Rejection ?"
                 android:layout_marginTop="@dimen/medium_space"
                 android:layout_marginBottom="@dimen/medium_space"/>
 

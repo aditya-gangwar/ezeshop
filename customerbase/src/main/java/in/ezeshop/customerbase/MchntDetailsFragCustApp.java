@@ -1,6 +1,7 @@
 package in.ezeshop.customerbase;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -47,7 +48,6 @@ public class MchntDetailsFragCustApp extends BaseFragment
 
     private static final int REQ_NOTIFY_ERROR = 1;
     private static final int REQ_NOTIFY_ERROR_EXIT = 5;
-    private static final int REQUEST_CALL_NUMBER = 10;
 
     public interface MchntDetailsFragCustAppIf {
         MyRetainedFragment getRetainedFragment();
@@ -215,8 +215,9 @@ public class MchntDetailsFragCustApp extends BaseFragment
                             mMchntNumbers.toArray(new String[mMchntNumbers.size()]), 0, true);
                     dialog.setTargetFragment(this,REQUEST_CALL_NUMBER);
                     dialog.show(getFragmentManager(), DIALOG_CALL_NUMBER);*/
-                    GenericListDialog.getInstance(R.drawable.ic_call_black_18dp,mMchntNumbers,"Select Number to Dial")
-                            .show(getFragmentManager(), DIALOG_CALL_NUMBER);
+                    DialogFragment dialog = GenericListDialog.getInstance(R.drawable.ic_call_black_18dp,mMchntNumbers,"Select Number to Dial",true);
+                    dialog.setTargetFragment(this, GenericListDialog.REQ_GENERIC_LIST);
+                    dialog.show(getFragmentManager(), DIALOG_CALL_NUMBER);
                 } else {
                     dialNumber(mMchntNumbers.get(0));
                 }

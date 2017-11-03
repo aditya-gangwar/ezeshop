@@ -31,11 +31,14 @@ import in.ezeshop.common.constants.ErrorCodes;
  */
 
 public class GenericListDialog extends BaseDialog {
-    public static final String TAG = "MchntApp-GenericListDialog";
+    private static final String TAG = "MchntApp-GenericListDialog";
+
+    public static final int REQ_GENERIC_LIST = 10;
 
     private static final String ARG_ITEM_ICON = "listItemIcon";
     private static final String ARG_LIST_DATA = "listData";
     private static final String ARG_TITLE = "toolbarTitle";
+    private static final String ARG_CALL_BY_FRAG = "callByFrag";
 
     public interface GenericListDialogIf {
         void onListItemSelected(int index, String text);
@@ -51,11 +54,12 @@ public class GenericListDialog extends BaseDialog {
     ArrayList<String> mItems;
     String mTitleStr;
 
-    public static GenericListDialog getInstance(int iconId, ArrayList<String> items, String title) {
+    public static GenericListDialog getInstance(int iconId, ArrayList<String> items, String title, boolean callByFrag) {
         Bundle args = new Bundle();
         args.putInt(ARG_ITEM_ICON, iconId);
         args.putStringArrayList(ARG_LIST_DATA, items);
         args.putString(ARG_TITLE, title);
+        args.putBoolean(ARG_CALL_BY_FRAG, callByFrag);
 
         GenericListDialog fragment = new GenericListDialog();
         fragment.setArguments(args);
@@ -85,7 +89,11 @@ public class GenericListDialog extends BaseDialog {
         super.onActivityCreated(savedInstanceState);
 
         try {
-            mCallback = (GenericListDialogIf) getActivity();
+            if(getArguments().getBoolean(ARG_CALL_BY_FRAG)) {
+                mCallback = (GenericListDialogIf) getTargetFragment();
+            } else {
+                mCallback = (GenericListDialogIf) getActivity();
+            }
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
                     + " must implement GenericListDialogIf");
@@ -164,6 +172,7 @@ public class GenericListDialog extends BaseDialog {
 
                     if (pos >= 0 && pos < getItemCount()) {
                         mCallback.onListItemSelected(pos, data.get(pos));
+                        getDialog().dismiss();
                     } else {
                         LogMy.wtf(TAG,"Invalid position in onClickListener of Generic list item: "+pos);
                     }

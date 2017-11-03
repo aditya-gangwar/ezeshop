@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -48,6 +49,7 @@ import in.ezeshop.appbase.utilities.AppAlarms;
 import in.ezeshop.appbase.utilities.AppCommonUtil;
 import in.ezeshop.appbase.utilities.DialogFragmentWrapper;
 import in.ezeshop.appbase.utilities.LogMy;
+import in.ezeshop.common.database.Prescriptions;
 import in.ezeshop.merchantbase.entities.MyCustomerOps;
 import in.ezeshop.merchantbase.entities.MerchantUser;
 import in.ezeshop.merchantbase.entities.MyMerchantStats;
@@ -1185,6 +1187,17 @@ public class CashbackActivity extends BaseActivity implements
                                     .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
                         }
                         break;
+                    case MyRetainedFragment.REQUEST_FETCH_FILES:
+                        AppCommonUtil.cancelProgressDialog(true);
+                        if (errorCode == ErrorCodes.NO_ERROR && mWorkFragment.mMissingFiles.size()==0) {
+                            startPendingOrderDetailsFrag();
+                        } else {
+                            // Todo: Raise alarm
+                            DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle,
+                                    "Order details not available currently. Please try after some time.", false, true)
+                                    .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
+                        }
+                        break;
                 }
             }
 
@@ -1247,9 +1260,35 @@ public class CashbackActivity extends BaseActivity implements
 
     @Override
     public void showOrderDetailed(CustomerOrder order) {
-        // start order details fragment
+        // store order for further reference
         mWorkFragment.mSelCustOrder = order;
-        startPendingOrderDetailsFrag();
+
+        // fetch all order files
+        if(mWorkFragment.mMissingFiles!=null) {
+            mWorkFragment.mMissingFiles.clear();
+        }
+        for (Prescriptions item :
+                order.getPrescrips()) {
+            String filename = Uri.parse(item.getUrl()).getLastPathSegment();
+            File file = getFileStreamPath(filename);
+            if(file == null || !file.exists()) {
+                // file does not exist locally
+                LogMy.d(TAG,"Missing prescription image file: "+filename);
+                if(mWorkFragment.mMissingFiles==null) {
+                    mWorkFragment.mMissingFiles = new ArrayList<>(order.getPrescrips().size());
+                }
+                mWorkFragment.mMissingFiles.add(item.getUrl());
+            }
+        }
+
+        if(mWorkFragment.mMissingFiles==null || mWorkFragment.mMissingFiles.size()==0) {
+            // start order details fragment
+            startPendingOrderDetailsFrag();
+        } else {
+            AppCommonUtil.showProgressDialog(this,AppConstants.progressDefault);
+            mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_FETCH_FILES,null,null
+            ,null,null,null,null,true);
+        }
     }
 
     private void onMerchantStatsResult(int errorCode) {

@@ -288,8 +288,8 @@ public class TxnReportsActivity extends BaseActivity implements
         // show progress dialog
         AppCommonUtil.showProgressDialog(this, AppConstants.progressReports);
         //mWorkFragment.fetchTxnFiles(this);
-        mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_FETCH_TXN_FILES, this, null,
-                null, null, null, null, null);
+        mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_FETCH_FILES, this, null,
+                null, null, null, null, false);
     }
 
     @Override
@@ -330,7 +330,7 @@ public class TxnReportsActivity extends BaseActivity implements
                     }
                     break;
 
-                case MyRetainedFragment.REQUEST_FETCH_TXN_FILES:
+                case MyRetainedFragment.REQUEST_FETCH_FILES:
                     if (errorCode == ErrorCodes.NO_ERROR) {
                         // all files should now be available locally
                         mHelper.onAllTxnFilesAvailable(false);

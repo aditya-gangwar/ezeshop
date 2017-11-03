@@ -102,6 +102,9 @@ public class MyGlobalSettings
     public static Integer getWrongAttemptResetMins() {
         return (Integer) getValue(GlobalSettingConstants.SETTINGS_WRONG_ATTEMPT_RESET_MINS);
     }
+    public static Integer getAppFilesKeepDays() {
+        return (Integer) getValue(GlobalSettingConstants.SETTINGS_APP_FILES_KEEP_DAYS);
+    }
     public static Integer getTxnsIntableKeepDays() {
         return (Integer) getValue(GlobalSettingConstants.SETTINGS_TXNS_INTABLE_KEEP_DAYS);
     }
