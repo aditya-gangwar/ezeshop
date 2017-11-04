@@ -127,7 +127,7 @@ public class TxnSuccessDialog extends BaseDialog {
     }
 
     @Override
-    public void handleBtnClick(DialogInterface dialog, int which) {
+    public void handleDialogBtnClick(DialogInterface dialog, int which) {
         switch (which) {
             case DialogInterface.BUTTON_POSITIVE:
                 dialog.dismiss();

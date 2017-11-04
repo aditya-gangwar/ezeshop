@@ -122,7 +122,7 @@ public class TrustedDevicesFragment extends BaseFragment {
     }
 
     @Override
-    public void handleBtnClick(View v) {
+    public void handleDialogBtnClick(View v) {
         if(!mCallback.getRetainedFragment().getResumeOk())
             return;
 

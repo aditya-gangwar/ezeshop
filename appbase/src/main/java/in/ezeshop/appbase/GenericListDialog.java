@@ -117,7 +117,7 @@ public class GenericListDialog extends BaseDialog {
     }
 
     @Override
-    public void handleBtnClick(DialogInterface dialog, int which) {
+    public void handleDialogBtnClick(DialogInterface dialog, int which) {
         // do nothing
     }
 

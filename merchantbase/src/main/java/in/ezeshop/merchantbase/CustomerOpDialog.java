@@ -95,7 +95,7 @@ public class CustomerOpDialog extends BaseDialog  {
     }
 
     @Override
-    public void handleBtnClick(DialogInterface dialog, int which) {
+    public void handleDialogBtnClick(DialogInterface dialog, int which) {
         switch (which) {
             case DialogInterface.BUTTON_POSITIVE:
                 //Do nothing here because we override this button later to change the close behaviour.

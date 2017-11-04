@@ -20,4 +20,13 @@
     <!-- Customer order related -->
     <string name="orderExpiryBanner">"Expiring in \'%s\' minutes."</string>
 
+    <string-array name="newOrderCancelReasons">
+        <item>All Items not available</item>
+        <item>Customer made the order by mistake</item>
+        <item>Store is closed</item>
+        <item>Customer address out of delivery area</item>
+        <item>Customer phone not reachable</item>
+        <item>Delivery time not as per Customer</item>
+    </string-array>
+
 </resources>

@@ -66,6 +66,7 @@ public class PendingOrderDetailsFrag extends BaseFragment
         MyRetainedFragment getRetainedFragment();
         void setToolbarForFrag(int iconResId, String title, String subTitle);
         void showCustomerDetails(String customerId);
+        void cancelOrder(CustomerOrder order);
         void acceptOrder(CustomerOrder order);
     }
 
@@ -372,7 +373,7 @@ public class PendingOrderDetailsFrag extends BaseFragment
             return;
 
         try {
-            LogMy.d(TAG, "In handleBtnClick: " + v.getId());
+            LogMy.d(TAG, "In handleDialogBtnClick: " + v.getId());
 
             int i = v.getId();
             if (i == mBtnCall.getId()) {
@@ -387,7 +388,7 @@ public class PendingOrderDetailsFrag extends BaseFragment
 
             }
         } catch (Exception e) {
-            LogMy.e(TAG, "Exception in handleBtnClick", e);
+            LogMy.e(TAG, "Exception in handleDialogBtnClick", e);
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), true, true)
                     .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
         }

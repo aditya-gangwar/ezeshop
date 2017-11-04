@@ -103,7 +103,7 @@ public class BillingFragment2 extends BaseFragment {
     // Not using BaseFragment's onClick method
     @Override
     public void onClick(View v) {
-        //public void handleBtnClick(View v) {
+        //public void handleDialogBtnClick(View v) {
         if(!mCallback.getRetainedFragment().getResumeOk())
             return;
 
