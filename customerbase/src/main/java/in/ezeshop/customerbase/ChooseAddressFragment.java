@@ -109,7 +109,7 @@ public class ChooseAddressFragment extends BaseFragment {
             return;
 
         try {
-            LogMy.d(TAG, "In handleBtnClick: " + v.getId());
+            LogMy.d(TAG, "In handleDialogBtnClick: " + v.getId());
 
             int id = v.getId();
             if (id == mBtnAddAddress.getId()) {
@@ -133,7 +133,7 @@ public class ChooseAddressFragment extends BaseFragment {
                 mCallback.onSelectAddress(CustomerUser.getInstance().getAllAddress().get(idx).getId());
             }
         } catch (Exception e) {
-            LogMy.e(TAG, "Exception in handleBtnClick", e);
+            LogMy.e(TAG, "Exception in handleDialogBtnClick", e);
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), true, true)
                     .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
         }

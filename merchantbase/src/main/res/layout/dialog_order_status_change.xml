@@ -21,13 +21,13 @@
             style="@style/LL_Horizontal_wrap"
             android:layout_marginTop="@dimen/large_space">
 
-            <EditText
+            <TextView
                 style="@style/Edittext_only_view_small_lessPad"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:text="Order ID"
                 android:textColor="@color/secondary_text"/>
-            <EditText
+            <TextView
                 style="@style/Edittext_only_view_small_lessPad"
                 android:id="@+id/input_orderId"
                 android:layout_width="0dp"
@@ -41,13 +41,13 @@
         <LinearLayout
             style="@style/LL_Horizontal_wrap">
 
-            <EditText
+            <TextView
                 style="@style/Edittext_only_view_small_lessPad"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:text="Current Status"
                 android:textColor="@color/secondary_text"/>
-            <EditText
+            <TextView
                 style="@style/Edittext_only_view_small_lessPad"
                 android:id="@+id/input_status"
                 android:layout_width="0dp"
@@ -58,7 +58,7 @@
                 android:textColor="@color/secondary_text"/>
         </LinearLayout>
 
-        <EditText
+        <TextView
             style="@style/Edittext_only_view_small_lessPad"
             android:layout_height="match_parent"
             android:layout_width="wrap_content"
@@ -70,16 +70,16 @@
             style="@style/LL_Horizontal_wrap">
             <RadioButton
                 style="@style/Edittext_only_view_small"
-                android:id="@+id/radioButton1"
+                android:id="@+id/radioBtnCancel"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:text="REJECT"
+                android:text="CANCEL"
                 android:gravity="left|center_vertical"
                 android:textColor="@color/secondary_text"/>
             <RadioButton
                 style="@style/Edittext_only_view_small"
-                android:id="@+id/radioButton2"
+                android:id="@+id/radioBtnNext"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
@@ -90,40 +90,40 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/layout_rejectDetails"
+            android:id="@+id/layout_cancelDetails"
             style="@style/LL_Vertical"
             android:layout_marginTop="@dimen/XXL_space"
             android:visibility="visible">
 
-            <EditText
+            <TextView
                 style="@style/Edittext_only_view_small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Reason for Order Rejection ?"
+                android:text="Reason for Order Cancel ?"
                 android:layout_marginTop="@dimen/medium_space"
                 android:layout_marginBottom="@dimen/medium_space"/>
 
             <EditText
                 style="@style/Edittext_only_click_bg_small"
-                android:id="@+id/input_payMode"
+                android:id="@+id/input_cancelReason"
                 android:hint="Touch to Select"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableRight="@drawable/ic_arrow_drop_down_black_24dp"/>
 
-            <EditText
+            <TextView
                 android:id="@+id/layout_confirmInfo"
                 style="@style/Edittext_only_view_small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Are you sure to Reject the order ?"
+                android:text="Are you sure to Cancel the order ?"
                 android:layout_marginTop="@dimen/XXXXL_space"
                 android:textColor="@color/accent2"/>
 
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/layout_acceptInfo"
+        <TextView
+            android:id="@+id/input_processInfo"
             style="@style/Edittext_only_view_small"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

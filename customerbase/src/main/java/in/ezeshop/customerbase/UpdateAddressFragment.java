@@ -201,7 +201,7 @@ public class UpdateAddressFragment extends BaseFragment {
             return;
 
         try {
-            LogMy.d(TAG, "In handleBtnClick: " + v.getId());
+            LogMy.d(TAG, "In handleDialogBtnClick: " + v.getId());
             int id = v.getId();
 
             if(id==mInputCity.getId()) {

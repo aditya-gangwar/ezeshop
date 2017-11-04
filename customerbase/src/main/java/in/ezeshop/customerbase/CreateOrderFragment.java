@@ -322,7 +322,7 @@ public class CreateOrderFragment extends BaseFragment implements
             return;
 
         try {
-            LogMy.d(TAG, "In handleBtnClick: " + v.getId());
+            LogMy.d(TAG, "In handleDialogBtnClick: " + v.getId());
 
             int i = v.getId();
             if (i == mBtnAddPrescrip.getId()) {
@@ -350,7 +350,7 @@ public class CreateOrderFragment extends BaseFragment implements
                 }
             }
         } catch (Exception e) {
-            LogMy.e(TAG, "Exception in handleBtnClick", e);
+            LogMy.e(TAG, "Exception in handleDialogBtnClick", e);
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), true, true)
                     .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
         }
