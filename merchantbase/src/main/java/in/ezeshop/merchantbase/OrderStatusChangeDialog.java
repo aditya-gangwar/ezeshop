@@ -50,6 +50,9 @@ public class OrderStatusChangeDialog extends BaseDialog {
 
     private OrderStatusChangeDialogIf mCallback;
 
+    public static final int REQ_ORDER_STATUS_CHG = 11;
+    public static final String DIALOG_ORDER_STATUS_CHG = "DialogOrderStatusChg";
+
     public interface OrderStatusChangeDialogIf {
         //MyRetainedFragment getRetainedFragment();
         void cancelOrder(String orderId, String reason);
@@ -109,7 +112,7 @@ public class OrderStatusChangeDialog extends BaseDialog {
 
             mLytCancelDetails.setVisibility(View.VISIBLE);
             mInfoProcessOrder.setVisibility(View.GONE);
-            mBtnProcess.setText("CONFIRM");
+            //mBtnProcess.setText("CONFIRM");
 
         } else if(id == mRadioBtnNext.getId()) {
             mRadioBtnNext.setChecked(true);
@@ -117,7 +120,7 @@ public class OrderStatusChangeDialog extends BaseDialog {
 
             mLytCancelDetails.setVisibility(View.GONE);
             mInfoProcessOrder.setVisibility(View.VISIBLE);
-            mBtnProcess.setText("CONTINUE");
+            //mBtnProcess.setText("CONTINUE");
 
         } else if(id == mBtnCancelReason.getId()) {
             AppCommonUtil.hideKeyboard(getActivity());

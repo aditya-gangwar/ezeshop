@@ -111,14 +111,14 @@
                 android:layout_height="wrap_content"
                 android:drawableRight="@drawable/ic_arrow_drop_down_black_24dp"/>
 
-            <TextView
+            <!--TextView
                 android:id="@+id/layout_confirmInfo"
                 style="@style/Edittext_only_view_small"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Are you sure to Cancel the order ?"
                 android:layout_marginTop="@dimen/XXXXL_space"
-                android:textColor="@color/accent2"/>
+                android:textColor="@color/accent2"/-->
 
         </LinearLayout>
 
@@ -137,7 +137,7 @@
     <android.support.v7.widget.AppCompatButton
         style="@style/button_normal_thin"
         android:id="@+id/btn_process"
-        android:text="CONFIRM"
+        android:text="CONTINUE"
         android:layout_marginTop="@dimen/large_space"/>
 
 </LinearLayout>

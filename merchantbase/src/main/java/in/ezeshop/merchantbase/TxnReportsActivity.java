@@ -54,7 +54,7 @@ public class TxnReportsActivity extends BaseActivity implements
         MyDatePickerDialog.MyDatePickerIf, TxnSummaryFragment.TxnSummaryFragmentIf,
         TxnListFragment.TxnListFragmentIf, DialogFragmentWrapper.DialogFragmentWrapperIf,
         TxnDetailsDialog.TxnDetailsDialogIf, TxnReportsHelper2.TxnReportsHelper2If,
-        CustomerDetailsDialog.CustomerDetailsDialogIf {
+        CustDetailsFragMchntApp.CustDetailsFragMchntAppIf {
 
     private static final String TAG = "MchntApp-TxnReportsActivity";
 
@@ -71,6 +71,7 @@ public class TxnReportsActivity extends BaseActivity implements
     private static final String DIALOG_CUSTOMER_DETAILS = "dialogCustomerDetails";
     private static final String DIALOG_TXN_VERIFY_TYPE = "dialogTxnVerifyType";
     //private static final String DIALOG_OTP_CANCEL_TXN = "dialogOtpTxn";
+    private static final String CUSTOMER_DETAILS_FRAG = "CustomerDetailsFrag";
 
     // All required date formatters
     private SimpleDateFormat mSdfOnlyDateDisplay = new SimpleDateFormat(CommonConstants.DATE_FORMAT_ONLY_DATE_DISPLAY, CommonConstants.MY_LOCALE);
@@ -453,8 +454,9 @@ public class TxnReportsActivity extends BaseActivity implements
         // response against search of particular customer details
         if(errorCode==ErrorCodes.NO_ERROR) {
             // show customer details dialog
-            CustomerDetailsDialog dialog = CustomerDetailsDialog.newInstance(-1, false);
-            dialog.show(mFragMgr, DIALOG_CUSTOMER_DETAILS);
+            /*CustomerDetailsDialog dialog = CustomerDetailsDialog.newInstance(-1, false);
+            dialog.show(mFragMgr, DIALOG_CUSTOMER_DETAILS);*/
+            startCustDetailFrag(false);
         } else {
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
                     .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
@@ -473,6 +475,23 @@ public class TxnReportsActivity extends BaseActivity implements
             //mWorkFragment.fetchCashback(internalId);
             mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_GET_CASHBACK, null, null,
                     internalId, null, null, null, null);
+        }
+    }
+
+    private void startCustDetailFrag(boolean showGetTxnsBtn) {
+        Fragment fragment = mFragMgr.findFragmentByTag(CUSTOMER_DETAILS_FRAG);
+        if (fragment == null) {
+            LogMy.d(TAG,"Creating new customer details fragment");
+            // Create new fragment and transaction
+            fragment = CustDetailsFragMchntApp.newInstance(-1, showGetTxnsBtn);
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+            // Add over the existing fragment
+            transaction.replace(R.id.fragment_container_1, fragment, CUSTOMER_DETAILS_FRAG);
+            transaction.addToBackStack(CUSTOMER_DETAILS_FRAG);
+
+            // Commit the transaction
+            transaction.commit();
         }
     }
 
@@ -676,6 +695,12 @@ public class TxnReportsActivity extends BaseActivity implements
             txnListFrag.sortNupdateUI();
         }
     }
+
+    @Override
+    public void setToolbarForFrag(int iconResId, String title, String subTitle) {
+        setToolbarTitle(title);
+    }
+
 
     @Override
     public void setToolbarTitle(String title) {

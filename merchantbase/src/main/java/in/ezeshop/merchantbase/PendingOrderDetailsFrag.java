@@ -1,5 +1,6 @@
 package in.ezeshop.merchantbase;
 
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.net.Uri;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import in.ezeshop.appbase.BaseFragment;
@@ -31,6 +33,7 @@ import in.ezeshop.appbase.utilities.DialogFragmentWrapper;
 import in.ezeshop.appbase.utilities.LogMy;
 import in.ezeshop.common.CommonUtils;
 import in.ezeshop.common.constants.CommonConstants;
+import in.ezeshop.common.constants.DbConstants;
 import in.ezeshop.common.constants.ErrorCodes;
 import in.ezeshop.common.database.CustomerOrder;
 import in.ezeshop.common.database.Prescriptions;
@@ -41,7 +44,7 @@ import in.ezeshop.merchantbase.helper.MyRetainedFragment;
  */
 
 public class PendingOrderDetailsFrag extends BaseFragment
-        implements GenericListDialog.GenericListDialogIf {
+        implements GenericListDialog.GenericListDialogIf, OrderStatusChangeDialog.OrderStatusChangeDialogIf {
     private static final String TAG = "MchntApp-PendingOrderDetailsFrag";
 
     private PendingOrderDetailsFrag.PendingOrderDetailsFragIf mCallback;
@@ -60,14 +63,15 @@ public class PendingOrderDetailsFrag extends BaseFragment
     private ArrayList<String> mCallNumDisplay = new ArrayList<>(10);
 
     // Part of instance state: to be restored in event of fragment recreation
+    private String mCancelReason;
 
     // Container Activity must implement this interface
     public interface PendingOrderDetailsFragIf {
         MyRetainedFragment getRetainedFragment();
         void setToolbarForFrag(int iconResId, String title, String subTitle);
-        void showCustomerDetails(String customerId);
-        void cancelOrder(CustomerOrder order);
-        void acceptOrder(CustomerOrder order);
+        void showCustomerDetails(String custMobile);
+        void cancelOrder(String cancelReason);
+        void acceptOrder();
     }
 
     @Override
@@ -118,6 +122,7 @@ public class PendingOrderDetailsFrag extends BaseFragment
                 }
             } else {
                 // fragment recreate case - restore member variables
+                mCancelReason = savedInstanceState.getString("mCancelReason");
             }
 
             //setup all listeners
@@ -200,19 +205,42 @@ public class PendingOrderDetailsFrag extends BaseFragment
             LogMy.wtf(TAG,"refOrderStatusDetails: Order create time is null");
         }
 
+        boolean isCancelled = order.getCurrStatus().equals(DbConstants.CUSTOMER_ORDER_STATUS.Cancelled.toString());
+
+        // Init view for Accepted status
+        mImgOrderStatusAcptd.setVisibility(View.VISIBLE);
+        mDivOrderStatusAcptd.setVisibility(View.VISIBLE);
+        mSpaceStatusAccptd.setVisibility(View.VISIBLE);
+        mLytStatusAccptd.setVisibility(View.VISIBLE);
+
         if(order.getAcceptTime()!=null) {
             mImgOrderStatusAcptd.setColorFilter(ContextCompat.getColor(getActivity(), R.color.green_positive));
             mDivOrderStatusAcptd.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.green_positive));
             mLabelStatusAccptd.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
             mTimeStatusAccptd.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
             mTimeStatusAccptd.setText(mSdfDateWithTime.format(order.getAcceptTime()));
+
         } else {
-            mImgOrderStatusAcptd.setColorFilter(ContextCompat.getColor(getActivity(), R.color.disabled));
-            mDivOrderStatusAcptd.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.disabled));
-            mLabelStatusAccptd.setTextColor(ContextCompat.getColor(getActivity(), R.color.disabled));
-            mTimeStatusAccptd.setTextColor(ContextCompat.getColor(getActivity(), R.color.disabled));
-            mTimeStatusAccptd.setText("");
+            if(isCancelled) {
+                mImgOrderStatusAcptd.setVisibility(View.GONE);
+                mDivOrderStatusAcptd.setVisibility(View.GONE);
+                mSpaceStatusAccptd.setVisibility(View.GONE);
+                mLytStatusAccptd.setVisibility(View.GONE);
+
+            } else {
+                mImgOrderStatusAcptd.setColorFilter(ContextCompat.getColor(getActivity(), R.color.disabled));
+                mDivOrderStatusAcptd.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.disabled));
+                mLabelStatusAccptd.setTextColor(ContextCompat.getColor(getActivity(), R.color.disabled));
+                mTimeStatusAccptd.setTextColor(ContextCompat.getColor(getActivity(), R.color.disabled));
+                mTimeStatusAccptd.setText("");
+            }
         }
+
+        // Init view for Dispatched status
+        mImgOrderStatusDsptchd.setVisibility(View.VISIBLE);
+        mDivOrderStatusDsptchd.setVisibility(View.VISIBLE);
+        mSpaceStatusDsptchd.setVisibility(View.VISIBLE);
+        mLytStatusDsptchd.setVisibility(View.VISIBLE);
 
         if(order.getDispatchTime()!=null) {
             mImgOrderStatusDsptchd.setColorFilter(ContextCompat.getColor(getActivity(), R.color.green_positive));
@@ -221,12 +249,24 @@ public class PendingOrderDetailsFrag extends BaseFragment
             mTimeStatusDsptchd.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
             mTimeStatusDsptchd.setText(mSdfDateWithTime.format(order.getDispatchTime()));
         } else {
-            mImgOrderStatusDsptchd.setColorFilter(ContextCompat.getColor(getActivity(), R.color.disabled));
-            mDivOrderStatusDsptchd.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.disabled));
-            mLabelStatusDsptchd.setTextColor(ContextCompat.getColor(getActivity(), R.color.disabled));
-            mTimeStatusDsptchd.setTextColor(ContextCompat.getColor(getActivity(), R.color.disabled));
-            mTimeStatusDsptchd.setText("");
+            if(isCancelled) {
+                mImgOrderStatusDsptchd.setVisibility(View.GONE);
+                mDivOrderStatusDsptchd.setVisibility(View.GONE);
+                mSpaceStatusDsptchd.setVisibility(View.GONE);
+                mLytStatusDsptchd.setVisibility(View.GONE);
+
+            } else {
+                mImgOrderStatusDsptchd.setColorFilter(ContextCompat.getColor(getActivity(), R.color.disabled));
+                mDivOrderStatusDsptchd.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.disabled));
+                mLabelStatusDsptchd.setTextColor(ContextCompat.getColor(getActivity(), R.color.disabled));
+                mTimeStatusDsptchd.setTextColor(ContextCompat.getColor(getActivity(), R.color.disabled));
+                mTimeStatusDsptchd.setText("");
+            }
         }
+
+        // Init view for Delivered status
+        mImgOrderStatusDlvrd.setVisibility(View.VISIBLE);
+        mLytStatusDsptchd.setVisibility(View.VISIBLE);
 
         if(order.getDeliverTime()!=null) {
             mImgOrderStatusDlvrd.setColorFilter(ContextCompat.getColor(getActivity(), R.color.green_positive));
@@ -234,10 +274,29 @@ public class PendingOrderDetailsFrag extends BaseFragment
             mTimeStatusDlvrd.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
             mTimeStatusDlvrd.setText(mSdfDateWithTime.format(order.getDeliverTime()));
         } else {
-            mImgOrderStatusDlvrd.setColorFilter(ContextCompat.getColor(getActivity(), R.color.disabled));
-            mLabelStatusDlvrd.setTextColor(ContextCompat.getColor(getActivity(), R.color.disabled));
-            mTimeStatusDlvrd.setTextColor(ContextCompat.getColor(getActivity(), R.color.disabled));
-            mTimeStatusDlvrd.setText("");
+            if(isCancelled) {
+                mImgOrderStatusDlvrd.setVisibility(View.GONE);
+                mLytStatusDsptchd.setVisibility(View.GONE);
+
+            } else {
+                mImgOrderStatusDlvrd.setColorFilter(ContextCompat.getColor(getActivity(), R.color.disabled));
+                mLabelStatusDlvrd.setTextColor(ContextCompat.getColor(getActivity(), R.color.disabled));
+                mTimeStatusDlvrd.setTextColor(ContextCompat.getColor(getActivity(), R.color.disabled));
+                mTimeStatusDlvrd.setText("");
+            }
+        }
+
+        if(isCancelled) {
+            mImgOrderStatusCancel.setVisibility(View.VISIBLE);
+            mLytStatusCancel.setVisibility(View.VISIBLE);
+
+            mImgOrderStatusCancel.setColorFilter(ContextCompat.getColor(getActivity(), R.color.green_positive));
+            mLabelStatusCancel.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
+            mTimeStatusCancel.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
+            mTimeStatusCancel.setText(mSdfDateWithTime.format(order.getDeliverTime()));
+        } else {
+            mImgOrderStatusCancel.setVisibility(View.GONE);
+            mLytStatusCancel.setVisibility(View.GONE);
         }
 
     }
@@ -384,13 +443,44 @@ public class PendingOrderDetailsFrag extends BaseFragment
                 } else {
                     dialNumber(mCallNumbers.get(0));
                 }
-            } else if (i == mBtnChangeStatus.getId()) {
 
+            } else if (i == mBtnChangeStatus.getId()) {
+                DialogFragment dialog = OrderStatusChangeDialog.newInstance(mRetainedFragment.mSelCustOrder.getId(),
+                        mRetainedFragment.mSelCustOrder.getCurrStatus(), true);
+                dialog.setTargetFragment(this, OrderStatusChangeDialog.REQ_ORDER_STATUS_CHG);
+                dialog.show(getFragmentManager(), OrderStatusChangeDialog.DIALOG_ORDER_STATUS_CHG);
+
+            } else if(i == mBtnCustDetails.getId()) {
+                mCallback.showCustomerDetails(mInputCustMobile.getText().toString());
             }
+
         } catch (Exception e) {
             LogMy.e(TAG, "Exception in handleDialogBtnClick", e);
             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), true, true)
                     .show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
+        }
+    }
+
+    @Override
+    public void cancelOrder(String orderId, String reason) {
+        if(orderId.equals(mRetainedFragment.mSelCustOrder.getId())) {
+            mCancelReason = reason;
+            // ask for confirmation
+            String msg = "Are you sure to Cancel Order with ID# "+orderId;
+            DialogFragment dialog = DialogFragmentWrapper.createConfirmationDialog("Confirm Cancellation", msg, true, false);
+            dialog.setTargetFragment(this, DialogFragmentWrapper.REQUEST_DIALOG_CONFIRMATION);
+            dialog.show(getFragmentManager(), DialogFragmentWrapper.DIALOG_CONFIRMATION);
+        } else {
+            LogMy.wtf(TAG,"cancelOrder: The order id is not same: "+orderId+", "+mRetainedFragment.mSelCustOrder.getId());
+        }
+    }
+
+    @Override
+    public void acceptOrder(String orderId) {
+        if(orderId.equals(mRetainedFragment.mSelCustOrder.getId())) {
+            mCallback.acceptOrder();
+        } else {
+            LogMy.wtf(TAG,"acceptOrder: The order id is not same: "+orderId+", "+mRetainedFragment.mSelCustOrder.getId());
         }
     }
 
@@ -423,13 +513,19 @@ public class PendingOrderDetailsFrag extends BaseFragment
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         LogMy.d(TAG, "In onActivityResult :" + requestCode + ", " + resultCode);
         super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode!= Activity.RESULT_OK) {
+            return;
+        }
 
         try {
             switch (requestCode) {
+                case DialogFragmentWrapper.REQUEST_DIALOG_CONFIRMATION:
+                    // only cancellation confirmation is requested from this fragment
+                    mCallback.cancelOrder(mCancelReason);
+                    break;
                 case REQ_NOTIFY_ERROR:
                     // do nothing
                     break;
-
                 case REQ_NOTIFY_ERROR_EXIT:
                     //mCallback.restartTxn();
                     break;
@@ -449,11 +545,13 @@ public class PendingOrderDetailsFrag extends BaseFragment
         mImgPrescrip4.setOnTouchListener(this);
 
         // Avoid double clicks on the button
+        mBtnCustDetails.setOnClickListener(this);
         mBtnCall.setOnClickListener(this);
         mBtnChangeStatus.setOnClickListener(this);
     }
 
     // UI Resources data members
+    @BindView(R2.id.cardBtn_custDetails) TextView mBtnCustDetails;
     @BindView(R2.id.input_custName) TextView mInputCustName;
     @BindView(R2.id.input_custMobile) TextView mInputCustMobile;
     @BindView(R2.id.input_dlvrAddres) TextView mInputAddress;
@@ -477,22 +575,37 @@ public class PendingOrderDetailsFrag extends BaseFragment
     @BindView(R2.id.img_orderStatusDsptchd) ImageView mImgOrderStatusDsptchd;
     @BindView(R2.id.div_orderStatusDsptchd) View mDivOrderStatusDsptchd;
     @BindView(R2.id.img_orderStatusDlvrd) ImageView mImgOrderStatusDlvrd;
-
+    //@BindView(R2.id.div_orderStatusDlvrd) View mDivOrderStatusDlvrd;
+    @BindView(R2.id.img_orderStatusCancel) ImageView mImgOrderStatusCancel;
+    // status new
     @BindView(R2.id.label_orderStatusNew) TextView mLabelStatusNew;
     @BindView(R2.id.time_statusNew) TextView mTimeStatusNew;
+    // status accepted
+    @BindView(R2.id.space_orderStatusAccptd) TextView mSpaceStatusAccptd;
+    @BindView(R2.id.lyt_orderStatusAccptd) TextView mLytStatusAccptd;
     @BindView(R2.id.label_orderStatusAccptd) TextView mLabelStatusAccptd;
     @BindView(R2.id.time_statusAccptd) TextView mTimeStatusAccptd;
+    // status dispatched
+    @BindView(R2.id.space_orderStatusDspchd) TextView mSpaceStatusDsptchd;
+    @BindView(R2.id.lyt_orderStatusDspchd) TextView mLytStatusDsptchd;
     @BindView(R2.id.label_orderStatusDspchd) TextView mLabelStatusDsptchd;
     @BindView(R2.id.time_statusDsptchd) TextView mTimeStatusDsptchd;
+    // status delivered
+    @BindView(R2.id.space_orderStatusDlvrd) TextView mSpaceStatusDlvrd;
+    @BindView(R2.id.lyt_orderStatusDlvrd) TextView mLytStatusDlvrd;
     @BindView(R2.id.label_orderStatusDlvrd) TextView mLabelStatusDlvrd;
     @BindView(R2.id.time_statusDlvrd) TextView mTimeStatusDlvrd;
+    // status cancelled
+    //@BindView(R2.id.space_orderStatusCancel) TextView mSpaceStatusCancel;
+    @BindView(R2.id.lyt_orderStatusCancel) TextView mLytStatusCancel;
+    @BindView(R2.id.label_orderStatusCancel) TextView mLabelStatusCancel;
+    @BindView(R2.id.time_statusCancel) TextView mTimeStatusCancel;
 
     // Billing details members
     @BindView(R2.id.cardview_billing) View mLytBilling;
 
     @BindView(R2.id.btn_call) AppCompatButton mBtnCall;
     @BindView(R2.id.btn_changeStatus) AppCompatButton mBtnChangeStatus;
-
 
     ImageView mPrescripImgArr[];
     private Unbinder unbinder;
@@ -525,7 +638,7 @@ public class PendingOrderDetailsFrag extends BaseFragment
     public void onSaveInstanceState(Bundle outState) {
         LogMy.d(TAG, "In onSaveInstanceState");
         super.onSaveInstanceState(outState);
-        //outState.putString("mSelectedAreaId", mSelectedAreaId);
+        outState.putString("mCancelReason", mCancelReason);
     }
 
     @Override public void onDestroyView() {

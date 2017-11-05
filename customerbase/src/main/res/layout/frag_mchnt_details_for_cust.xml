@@ -245,7 +245,7 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:text="You are not member yet with this Merchant !! \n\nJust do your first transaction with the merchant to start your member cashback account."
-                android:visibility="gone"
+                android:visibility="visible"
                 android:textColor="@color/secondary_text"/>
 
             <LinearLayout

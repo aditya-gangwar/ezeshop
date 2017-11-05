@@ -26,6 +26,7 @@ import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.DbConstants;
 import in.ezeshop.common.constants.ErrorCodes;
 import in.ezeshop.common.database.Cashback;
+import in.ezeshop.common.database.CustomerOrder;
 import in.ezeshop.common.database.MerchantDevice;
 import in.ezeshop.common.database.MerchantOps;
 import in.ezeshop.common.database.MerchantStats;
@@ -475,6 +476,14 @@ public class MerchantUser
                 mMerchant.getAuto_id());
     }
 
+    public CustomerOrder changeOrderStatus(String orderId, String argStatus, String reason) {
+        if(mPseudoLoggedIn) {
+            // intentionally using 'Backend' error code - as calling fx. will try to convert
+            throw new BackendlessException(String.valueOf(ErrorCodes.OPERATION_NOT_ALLOWED), "");
+        }
+        isLoginValid();
+        return MerchantServices.getInstance().changeOrderStatus(orderId, argStatus, reason);
+    }
     /*
      * Methods for DB uploads / commits
      */

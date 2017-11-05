@@ -65,6 +65,7 @@ public class MyRetainedFragment extends RetainedFragment {
     public static final int REQUEST_GET_CUST_ID = 27;
     public static final int REQUEST_MSG_DEV_REG_CHK = 28;
     public static final int REQUEST_FETCH_PENDING_ORDERS = 29;
+    public static final int REQUEST_CHG_ORDER_STATUS = 30;
 
     // Threads taken care by this fragment
     private MyBackgroundProcessor<String> mBackgroundProcessor;

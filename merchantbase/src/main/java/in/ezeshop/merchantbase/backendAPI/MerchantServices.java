@@ -41,6 +41,12 @@ import in.ezeshop.common.database.Transaction;
         Backendless.initApp( AppConstants.BACKENDLESS_APP_ID, AppConstants.ANDROID_SECRET_KEY, MerchantServices.APP_VERSION );
     }
 
+    public CustomerOrder changeOrderStatus(String orderId, String argStatus, String reason)
+    {
+        Object[] args = new Object[]{orderId,argStatus,reason};
+        return Backendless.CustomService.invoke( SERVICE_NAME, SERVICE_VERSION_NAME, "changeOrderStatus", args, CustomerOrder.class );
+    }
+
     public java.util.List<CustomerOrder> fetchPendingOrders(java.lang.String merchantId)
     {
         Object[] args = new Object[]{merchantId};

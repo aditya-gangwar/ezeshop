@@ -186,12 +186,8 @@ public class AppConstants {
             "Delivery charges: \u20B9 %d (Free if Bill > \u20B9 %d).\n" +
             "Payment : Cash on delivery\n";
 
-    public static final String orderSuccessMsg = "Your order is sent to '%s' successfully.\n" +
-            "Your Order ID is '%s'\n" +
-            "\n" +
-            "Merchant will call you shortly for confirming order details.\n" +
-            "\n" +
-            "Payment is to be done in cash on delivery.\n";
+    public static final String orderStatusChgSuccessMsg = "Order status changed successfully to '%s'.";
+
 
 
     //public static final String noDebitWoCardMsg = "Debit not allowed without Customer Card.\n\nScan Card now ?\n";

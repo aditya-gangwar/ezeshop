@@ -12,6 +12,7 @@ import in.ezeshop.appbase.constants.AppConstants;
 import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.ErrorCodes;
 import in.ezeshop.common.database.Cashback;
+import in.ezeshop.common.database.CustomerOrder;
 import in.ezeshop.common.database.MerchantStats;
 import in.ezeshop.appbase.utilities.AppCommonUtil;
 import in.ezeshop.appbase.utilities.BackgroundProcessor;
@@ -364,12 +365,38 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
                 case MyRetainedFragment.REQUEST_FETCH_PENDING_ORDERS:
                     error = fetchPendingOrders(data);
                     break;
+                case MyRetainedFragment.REQUEST_CHG_ORDER_STATUS:
+                    error = changeOrderStatus(data);
+                    break;
             }
         } catch (Exception e) {
             LogMy.e(TAG,"Unhandled exception in BG thread", e);
             error = ErrorCodes.GENERAL_ERROR;
         }
         return error;
+    }
+
+    private int changeOrderStatus(MessageBgJob opData) {
+        try {
+            if (opData.argStr1.equals(mRetainedFragment.mSelCustOrder.getId())) {
+                CustomerOrder updatedOrder = MerchantUser.getInstance().changeOrderStatus(opData.argStr1, opData.argStr2, opData.argStr3);
+                LogMy.d(TAG, "changeOrderStatus success to: " + updatedOrder.getCurrStatus());
+
+                // update local order object
+                updatedOrder.setAddressNIDB(mRetainedFragment.mSelCustOrder.getAddressNIDB());
+                updatedOrder.setCustomerNIDB(mRetainedFragment.mSelCustOrder.getCustomerNIDB());
+                updatedOrder.setMerchantNIDB(mRetainedFragment.mSelCustOrder.getMerchantNIDB());
+                mRetainedFragment.mSelCustOrder = updatedOrder;
+
+            } else {
+                // I shouldn't be here
+                LogMy.wtf(TAG,"changeOrderStatus: Order IDs dont match: "+opData.argStr1+", "+mRetainedFragment.mSelCustOrder.getId());
+            }
+        } catch (BackendlessException e) {
+            LogMy.e(TAG,"Exception in changeOrderStatus: "+e.toString());
+            return AppCommonUtil.getLocalErrorCode(e);
+        }
+        return ErrorCodes.NO_ERROR;
     }
 
     private int chkMsgDevReg() {

@@ -1,341 +1,442 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/LL_Vertical"
-    android:layout_height="wrap_content">
-    
-    <TextView
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent">
+
+    <!--TextView
         style="@style/Dialog_title"
         android:id="@+id/label_title"
         android:layout_marginBottom="@dimen/large_space"
-        android:text="CUSTOMER  DETAILS"/>
+        android:text="CUSTOMER  DETAILS"/-->
 
     <LinearLayout
-        style="@style/LL_Horizontal_paddingSidesXL">
+        android:id="@+id/lyt_btns"
+        style="@style/LL_Horizontal_wrap"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
-        <ImageView
-            style="@style/Imageview_Left_Column"
-            android:src="@drawable/ic_phone_android_white_18dp" />
-        <TextView
-            style="@style/Edittext_only_view_small_lessPad"
-            android:id="@+id/label_customer_mobile"
-            android:layout_height="match_parent"
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_call"
+            style="@style/button_inverted_thin"
             android:layout_width="0dp"
-            android:text="Mobile"
-            android:layout_weight="1"
-            android:gravity="left|center_vertical"/>
-        <TextView
-            style="@style/Edittext_only_view_small_lessPad"
-            android:id="@+id/input_customer_mobile"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="880xxx1535"
-            android:textColor="@color/primary"/>
+            android:layout_weight="50"
+            android:text="Call"/>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_txns"
+            style="@style/button_normal_thin"
+            android:layout_width="0dp"
+            android:layout_weight="50"
+            android:text="View Orders" />
+
     </LinearLayout>
 
-    <LinearLayout
-            style="@style/LL_Horizontal_paddingSidesXL">
 
-            <ImageView
-                style="@style/Imageview_Left_Column"
-                android:src="@drawable/ic_access_time_white_18dp"/>
-            <TextView
-                style="@style/Edittext_only_view_small_lessPad"
-                android:layout_height="match_parent"
-                android:layout_width="0dp"
-                android:text="Last Txn"
-                android:layout_weight="1"
-                android:gravity="left|center_vertical"/>
-            <TextView
-                style="@style/Edittext_only_view_small_lessPad"
-                android:id="@+id/input_cust_last_activity"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="22 July 16, 23:00"/>
-        </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/medium_space"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@id/lyt_btns">
 
         <LinearLayout
-            style="@style/LL_Horizontal_paddingSidesXL">
-
-            <ImageView
-                style="@style/Imageview_Left_Column"
-                android:src="@drawable/ic_phone_android_white_18dp"
-                android:visibility="invisible"/>
-            <TextView
-                style="@style/Edittext_only_view_small_lessPad"
-                android:layout_height="match_parent"
-                android:layout_width="0dp"
-                android:text="First Txn"
-                android:layout_weight="1"
-                android:gravity="left|center_vertical"
-                android:paddingTop="0dp"/>
-            <TextView
-                style="@style/Edittext_only_view_small_lessPad"
-                android:id="@+id/input_cust_register_on"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="22 July 16, 23:00"
-                android:paddingTop="0dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            style="@style/LL_Horizontal_paddingSidesXL">
-
-            <ImageView
-                style="@style/Imageview_Left_Column"
-                android:src="@drawable/ic_input_white_18dp"/>
-            <TextView
-                style="@style/Edittext_only_view_small_lessPad"
-                android:layout_height="match_parent"
-                android:layout_width="0dp"
-                android:text="Status"
-                android:layout_weight="45"
-                android:gravity="left|center_vertical"/>
-            <TextView
-                style="@style/Edittext_only_view_small_lessPad"
-                android:id="@+id/input_status"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Active"
-                android:textColor="@color/green_positive"/>
-        </LinearLayout>
-
-        <LinearLayout
-            style="@style/LL_Vertical"
-            android:id="@+id/layout_status_details">
+            style="@style/LL_Vertical_paddingSidesXL"
+            android:scrollbars="vertical"
+            android:scrollbarAlwaysDrawVerticalTrack="true">
 
             <LinearLayout
-                style="@style/LL_Horizontal_paddingSidesXL"
-                android:visibility="visible">
+                style="@style/LL_Horizontal_wrap">
 
                 <ImageView
                     style="@style/Imageview_Left_Column"
-                    android:src="@drawable/ic_input_white_18dp"
-                    android:visibility="invisible"
-                    android:paddingTop="0dp"/>
+                    android:src="@drawable/ic_perm_identity_white_18dp" />
                 <TextView
                     style="@style/Edittext_only_view_small_lessPad"
-                    android:gravity="left"
-                    android:id="@+id/input_reason"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Wrong password attempts limit reached."
-                    android:paddingTop="0dp"
-                    android:textStyle="italic"
-                    android:textColor="@color/secondary_text"/>
-            </LinearLayout>
-
-            <LinearLayout
-                style="@style/LL_Horizontal_paddingSidesXL"
-                android:visibility="visible">
-
-                <ImageView
-                    style="@style/Imageview_Left_Column"
-                    android:src="@drawable/ic_input_white_18dp"
-                    android:visibility="invisible"/>
-                <TextView
-                    style="@style/Edittext_only_view_small_lessPad"
+                    android:id="@+id/label_customer_name"
                     android:layout_height="match_parent"
                     android:layout_width="0dp"
-                    android:text="Changed on"
-                    android:layout_weight="45"
-                    android:gravity="left|center_vertical"/>
-                <TextView
-                    style="@style/Edittext_only_view_small_lessPad"
-                    android:id="@+id/input_status_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="22 July 16, 23:00"/>
-            </LinearLayout>
-
-            <LinearLayout
-                style="@style/LL_Horizontal_paddingSidesXL"
-                android:visibility="visible">
-
-                <ImageView
-                    style="@style/Imageview_Left_Column"
-                    android:src="@drawable/ic_input_white_18dp"
-                    android:visibility="invisible"
-                    android:paddingTop="0dp"/>
-                <TextView
-                    style="@style/Edittext_only_view_small_lessPad"
-                    android:id="@+id/input_activation"
-                    android:layout_height="match_parent"
-                    android:layout_width="match_parent"
-                    android:text="Will be automatically activated within 24 hours"
-                    android:gravity="left"
-                    android:paddingTop="0dp"
-                    android:textStyle="italic"
-                    android:textColor="@color/secondary_text"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/small_space"/>
-
-        <LinearLayout
-            style="@style/LL_Horizontal_paddingSidesXL"
-            android:layout_marginTop="@dimen/medium_space">
-
-            <ImageView
-                style="@style/Imageview_Left_Column"
-                android:src="@drawable/ic_receipt_white_18dp"/>
-            <TextView
-                style="@style/Edittext_only_view_small_lessPad"
-                android:layout_height="match_parent"
-                android:layout_width="0dp"
-                android:text="Total Bill"
-                android:layout_weight="45"
-                android:gravity="left|center_vertical"/>
-            <TextView
-                style="@style/Edittext_only_view_small_lessPad"
-                android:id="@+id/input_total_bill"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="\u20B9 NA"/>
-        </LinearLayout>
-
-        <LinearLayout
-            style="@style/LL_Vertical"
-            android:id="@+id/layout_acc_balance"
-            android:layout_marginTop="@dimen/large_space">
-
-            <!--TextView
-                style="@style/Edittext_only_view_small"
-                android:layout_height="match_parent"
-                android:layout_width="wrap_content"
-                android:id="@+id/label_acc"
-                android:text="ACCOUNT"
-                android:textStyle="normal"
-                android:textColor="@color/subheading"
-                android:paddingLeft="@dimen/screen_side_padding_more" /-->
-
-            <LinearLayout
-                style="@style/LL_Horizontal_paddingSidesXL"
-                android:id="@+id/label_acc_bal">
-
-                <ImageView
-                    style="@style/Imageview_Left_Column"
-                    android:src="@drawable/ic_account_balance_wallet_white_18dp"/>
-                <TextView
-                    style="@style/Edittext_only_view_small_lessPad"
-                    android:layout_height="match_parent"
-                    android:layout_width="0dp"
-                    android:text="Account Balance"
+                    android:text="Name"
                     android:layout_weight="1"
                     android:gravity="left|center_vertical"/>
                 <TextView
                     style="@style/Edittext_only_view_small_lessPad"
-                    android:id="@+id/input_acc_balance"
+                    android:id="@+id/input_customer_name"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="+ \u20B9 NA"
+                    android:text="Aditya"/>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/LL_Horizontal_wrap">
+
+                <ImageView
+                    style="@style/Imageview_Left_Column"
+                    android:src="@drawable/ic_phone_android_white_18dp" />
+                <TextView
+                    style="@style/Edittext_only_view_small_lessPad"
+                    android:id="@+id/label_customer_mobile"
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:text="ID / Mobile"
+                    android:layout_weight="1"
+                    android:gravity="left|center_vertical"/>
+                <TextView
+                    style="@style/Edittext_only_view_small_lessPad"
+                    android:id="@+id/input_customer_mobile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="8800191535"/>
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/LL_Horizontal_wrap">
+
+                <ImageView
+                    style="@style/Imageview_Left_Column"
+                    android:src="@drawable/ic_input_white_18dp"/>
+                <TextView
+                    style="@style/Edittext_only_view_small_lessPad"
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:text="Status"
+                    android:layout_weight="45"
+                    android:gravity="left|center_vertical"/>
+                <TextView
+                    style="@style/Edittext_only_view_small_lessPad"
+                    android:id="@+id/input_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Active"
                     android:textColor="@color/green_positive"/>
             </LinearLayout>
-            <LinearLayout
-                style="@style/LL_Horizontal_paddingSidesXL"
-                android:visibility="visible"
-                android:id="@+id/label_acc_add">
 
-                <ImageView
-                    style="@style/Imageview_Left_Column"
-                    android:src="@drawable/ic_account_balance_wallet_white_18dp"
-                    android:visibility="invisible"/>
-                <TextView
-                    style="@style/Edittext_only_view_small_lessPad"
-                    android:layout_height="match_parent"
-                    android:layout_width="0dp"
-                    android:text="Total Add"
-                    android:layout_weight="45"
-                    android:gravity="left|center_vertical"/>
-                <TextView
-                    style="@style/Edittext_only_view_small_lessPad"
-                    android:id="@+id/input_acc_add"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="+ \u20B9 NA" />
+            <LinearLayout
+                style="@style/LL_Vertical"
+                android:id="@+id/layout_status_details">
+
+                <LinearLayout
+                    style="@style/LL_Horizontal_wrap"
+                    android:visibility="visible">
+
+                    <ImageView
+                        style="@style/Imageview_Left_Column"
+                        android:src="@drawable/ic_input_white_18dp"
+                        android:visibility="invisible"
+                        android:paddingTop="0dp"/>
+                    <TextView
+                        style="@style/Edittext_only_view_small_lessPad"
+                        android:gravity="left"
+                        android:id="@+id/input_reason"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Wrong password attempts limit reached."
+                        android:paddingTop="0dp"
+                        android:textStyle="italic"
+                        android:textColor="@color/secondary_text"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/LL_Horizontal_wrap"
+                    android:visibility="visible">
+
+                    <ImageView
+                        style="@style/Imageview_Left_Column"
+                        android:src="@drawable/ic_input_white_18dp"
+                        android:visibility="invisible"/>
+                    <TextView
+                        style="@style/Edittext_only_view_small_lessPad"
+                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:text="Changed on"
+                        android:layout_weight="45"
+                        android:gravity="left|center_vertical"/>
+                    <TextView
+                        style="@style/Edittext_only_view_small_lessPad"
+                        android:id="@+id/input_status_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="22 July 16, 23:00"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/LL_Horizontal_wrap"
+                    android:visibility="visible">
+
+                    <ImageView
+                        style="@style/Imageview_Left_Column"
+                        android:src="@drawable/ic_input_white_18dp"
+                        android:visibility="invisible"
+                        android:paddingTop="0dp"/>
+                    <TextView
+                        style="@style/Edittext_only_view_small_lessPad"
+                        android:id="@+id/input_activation"
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:text="Will be automatically activated within 24 hours"
+                        android:gravity="left"
+                        android:paddingTop="0dp"
+                        android:textStyle="italic"
+                        android:textColor="@color/secondary_text"/>
+                </LinearLayout>
             </LinearLayout>
-            <LinearLayout
-                style="@style/LL_Horizontal_paddingSidesXL"
-                android:visibility="visible"
-                android:id="@+id/layout_acc_cb">
 
-                <ImageView
-                    style="@style/Imageview_Left_Column"
-                    android:src="@drawable/ic_account_balance_wallet_white_18dp"
-                    android:visibility="invisible"
-                    android:paddingTop="0dp"/>
-                <TextView
-                    style="@style/Edittext_only_view_small_lessPad"
-                    android:layout_height="match_parent"
-                    android:layout_width="0dp"
-                    android:layout_weight="45"
-                    android:text="    |--- Cashback"
-                    android:gravity="left"
-                    android:paddingTop="0dp"
-                    android:textColor="@color/secondary_text"/>
-                <TextView
-                    style="@style/Edittext_only_view_small_lessPad"
-                    android:id="@+id/input_cb"
+            <LinearLayout
+                style="@style/LL_Horizontal_wrap"
+                android:id="@+id/layout_extra_details"
+                android:paddingTop="@dimen/XL_space"
+                android:paddingBottom="@dimen/medium_space">
+
+                <View
+                    style="@style/Divider_horizontal_Medium"
+                    android:layout_weight="50"
+                    android:background="@color/primary"/>
+
+                <EditText
+                    style="@style/Edittext_only_view_small"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/label_cash_back"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="+ \u20B9 9,999"
-                    android:paddingTop="0dp"
-                    android:textColor="@color/secondary_text"/>
+                    android:layout_gravity="center"
+                    android:text="Account Details"
+                    android:textColor="@color/primary"/>
+
+                <View
+                    style="@style/Divider_horizontal_Medium"
+                    android:layout_weight="50"
+                    android:background="@color/primary"/>
             </LinearLayout>
-            <LinearLayout
-                style="@style/LL_Horizontal_paddingSidesXL"
-                android:visibility="visible"
-                android:id="@+id/layout_acc_deposit">
 
-                <ImageView
-                    style="@style/Imageview_Left_Column"
-                    android:src="@drawable/ic_account_balance_wallet_white_18dp"
-                    android:visibility="invisible"
-                    android:paddingTop="0dp"/>
-                <TextView
-                    style="@style/Edittext_only_view_small_lessPad"
-                    android:layout_height="match_parent"
-                    android:layout_width="0dp"
-                    android:layout_weight="45"
-                    android:text="    |--- Money"
-                    android:gravity="left"
-                    android:paddingTop="0dp"
-                    android:textColor="@color/secondary_text"/>
-                <TextView
-                    style="@style/Edittext_only_view_small_lessPad"
-                    android:id="@+id/input_acc_deposit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="+ \u20B9 9,999"
-                    android:paddingTop="0dp"
-                    android:textColor="@color/secondary_text"/>
-            </LinearLayout>
-            <LinearLayout
-                style="@style/LL_Horizontal_paddingSidesXL"
+            <EditText
+                style="@style/Edittext_only_view_XS_lessPad"
+                android:id="@+id/layout_nonMemberInfo"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="Customer has done no transaction at your store yet !!"
                 android:visibility="visible"
-                android:id="@+id/label_acc_debit"
-                android:layout_marginBottom="@dimen/XL_space">
+                android:textColor="@color/secondary_text"/>
 
-                <ImageView
-                    style="@style/Imageview_Left_Column"
-                    android:src="@drawable/ic_account_balance_wallet_white_18dp"
-                    android:visibility="invisible"/>
-                <TextView
-                    style="@style/Edittext_only_view_small_lessPad"
-                    android:layout_height="match_parent"
-                    android:layout_width="0dp"
-                    android:text="Total Debit"
-                    android:layout_weight="45"
-                    android:gravity="left|center_vertical"/>
-                <TextView
-                    style="@style/Edittext_only_view_small_lessPad"
-                    android:id="@+id/input_acc_debit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="- \u20B9 NA" />
+        <LinearLayout
+            android:id="@+id/layout_accDetails"
+            style="@style/LL_Vertical"
+            android:visibility="visible">
+
+            <LinearLayout
+                    style="@style/LL_Horizontal_wrap">
+
+                    <ImageView
+                        style="@style/Imageview_Left_Column"
+                        android:src="@drawable/ic_access_time_white_18dp"/>
+                    <TextView
+                        style="@style/Edittext_only_view_small_lessPad"
+                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:text="Last Order"
+                        android:layout_weight="1"
+                        android:gravity="left|center_vertical"/>
+                    <TextView
+                        style="@style/Edittext_only_view_small_lessPad"
+                        android:id="@+id/input_cust_last_activity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="22 July 16, 23:00"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/LL_Horizontal_wrap">
+
+                    <ImageView
+                        style="@style/Imageview_Left_Column"
+                        android:src="@drawable/ic_phone_android_white_18dp"
+                        android:visibility="invisible"/>
+                    <TextView
+                        style="@style/Edittext_only_view_small_lessPad"
+                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:text="First Order"
+                        android:layout_weight="1"
+                        android:gravity="left|center_vertical"
+                        android:paddingTop="0dp"/>
+                    <TextView
+                        style="@style/Edittext_only_view_small_lessPad"
+                        android:id="@+id/input_cust_register_on"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="22 July 16, 23:00"
+                        android:paddingTop="0dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/LL_Horizontal_wrap"
+                    android:layout_marginTop="@dimen/small_space">
+
+                    <ImageView
+                        style="@style/Imageview_Left_Column"
+                        android:src="@drawable/ic_receipt_white_18dp"/>
+                    <TextView
+                        style="@style/Edittext_only_view_small_lessPad"
+                        android:layout_height="match_parent"
+                        android:layout_width="0dp"
+                        android:text="Total Bill"
+                        android:layout_weight="45"
+                        android:gravity="left|center_vertical"/>
+                    <TextView
+                        style="@style/Edittext_only_view_small_lessPad"
+                        android:id="@+id/input_total_bill"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="\u20B9 NA"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/LL_Vertical"
+                    android:id="@+id/layout_acc_balance"
+                    android:layout_marginTop="@dimen/small_space">
+
+                    <!--TextView
+                        style="@style/Edittext_only_view_small"
+                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:id="@+id/label_acc"
+                        android:text="ACCOUNT"
+                        android:textStyle="normal"
+                        android:textColor="@color/subheading"
+                        android:paddingLeft="@dimen/screen_side_padding_more" /-->
+
+                    <LinearLayout
+                        style="@style/LL_Horizontal_wrap"
+                        android:id="@+id/label_acc_bal">
+
+                        <ImageView
+                            style="@style/Imageview_Left_Column"
+                            android:src="@drawable/ic_account_balance_wallet_white_18dp"/>
+                        <TextView
+                            style="@style/Edittext_only_view_small_lessPad"
+                            android:layout_height="match_parent"
+                            android:layout_width="0dp"
+                            android:text="Account Balance"
+                            android:layout_weight="1"
+                            android:gravity="left|center_vertical"/>
+                        <TextView
+                            style="@style/Edittext_only_view_small_lessPad"
+                            android:id="@+id/input_acc_balance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="+ \u20B9 NA"
+                            android:textColor="@color/green_positive"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        style="@style/LL_Horizontal_wrap"
+                        android:visibility="visible"
+                        android:id="@+id/label_acc_add">
+
+                        <ImageView
+                            style="@style/Imageview_Left_Column"
+                            android:src="@drawable/ic_account_balance_wallet_white_18dp"
+                            android:visibility="invisible"/>
+                        <TextView
+                            style="@style/Edittext_only_view_small_lessPad"
+                            android:layout_height="match_parent"
+                            android:layout_width="0dp"
+                            android:text="|--- Total Add"
+                            android:layout_weight="45"
+                            android:gravity="left|center_vertical"
+                            android:textColor="@color/secondary_text"/>
+                        <TextView
+                            style="@style/Edittext_only_view_small_lessPad"
+                            android:id="@+id/input_acc_add"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="+ \u20B9 NA"
+                            android:textColor="@color/secondary_text"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        style="@style/LL_Horizontal_wrap"
+                        android:visibility="visible"
+                        android:id="@+id/layout_acc_cb">
+
+                        <ImageView
+                            style="@style/Imageview_Left_Column"
+                            android:src="@drawable/ic_account_balance_wallet_white_18dp"
+                            android:visibility="invisible"
+                            android:paddingTop="0dp"/>
+                        <TextView
+                            style="@style/Edittext_only_view_XS_lessPad"
+                            android:layout_height="match_parent"
+                            android:layout_width="0dp"
+                            android:layout_weight="45"
+                            android:text="         |--- Cashback"
+                            android:gravity="left"
+                            android:paddingTop="0dp"
+                            android:textColor="@color/secondary_text"/>
+                        <TextView
+                            style="@style/Edittext_only_view_XS_lessPad"
+                            android:id="@+id/input_cb"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="+ \u20B9 9,999"
+                            android:paddingTop="0dp"
+                            android:textColor="@color/secondary_text"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        style="@style/LL_Horizontal_wrap"
+                        android:visibility="visible"
+                        android:id="@+id/layout_acc_deposit">
+
+                        <ImageView
+                            style="@style/Imageview_Left_Column"
+                            android:src="@drawable/ic_account_balance_wallet_white_18dp"
+                            android:visibility="invisible"
+                            android:paddingTop="0dp"/>
+                        <TextView
+                            style="@style/Edittext_only_view_XS_lessPad"
+                            android:layout_height="match_parent"
+                            android:layout_width="0dp"
+                            android:layout_weight="45"
+                            android:text="         |--- Money"
+                            android:gravity="left"
+                            android:paddingTop="0dp"
+                            android:textColor="@color/secondary_text"/>
+                        <TextView
+                            style="@style/Edittext_only_view_XS_lessPad"
+                            android:id="@+id/input_acc_deposit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="+ \u20B9 9,999"
+                            android:paddingTop="0dp"
+                            android:textColor="@color/secondary_text"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        style="@style/LL_Horizontal_wrap"
+                        android:visibility="visible"
+                        android:id="@+id/label_acc_debit"
+                        android:layout_marginBottom="@dimen/XL_space">
+
+                        <ImageView
+                            style="@style/Imageview_Left_Column"
+                            android:src="@drawable/ic_account_balance_wallet_white_18dp"
+                            android:visibility="invisible"/>
+                        <TextView
+                            style="@style/Edittext_only_view_small_lessPad"
+                            android:layout_height="match_parent"
+                            android:layout_width="0dp"
+                            android:text="|--- Total Debit"
+                            android:layout_weight="45"
+                            android:gravity="left|center_vertical"
+                            android:textColor="@color/secondary_text"/>
+                        <TextView
+                            style="@style/Edittext_only_view_small_lessPad"
+                            android:id="@+id/input_acc_debit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="- \u20B9 NA"
+                            android:textColor="@color/secondary_text"/>
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    
-</LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

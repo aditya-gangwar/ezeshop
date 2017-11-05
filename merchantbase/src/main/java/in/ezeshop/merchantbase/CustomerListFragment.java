@@ -80,6 +80,7 @@ public class CustomerListFragment extends BaseFragment {
     public interface CustomerListFragmentIf {
         MyRetainedFragment getRetainedFragment();
         void setDrawerState(boolean isEnabled);
+        void showCustomerDetails(MyCashback data, boolean showGetTxnsBtn);
     }
 
     // instance state - store and restore
@@ -678,8 +679,9 @@ public class CustomerListFragment extends BaseFragment {
                     notifyItemChanged(selected_position);
 
                     if (pos >= 0 && pos < getItemCount()) {
-                        CustomerDetailsDialog dialog = CustomerDetailsDialog.newInstance(pos, true);
-                        dialog.show(getFragmentManager(), DIALOG_CUSTOMER_DETAILS);
+                        /*CustomerDetailsDialog dialog = CustomerDetailsDialog.newInstance(pos, true);
+                        dialog.show(getFragmentManager(), DIALOG_CUSTOMER_DETAILS);*/
+                        mCallback.showCustomerDetails(mCbs.get(pos), true);
                     } else {
                         LogMy.e(TAG,"Invalid position in onClickListener of customer list item: "+pos);
                     }

@@ -115,8 +115,7 @@ public class DbConstants {
         Accepted,
         Dispatched,
         Delivered,
-        Cancelled,
-        Rejected;
+        Cancelled;
 
         public static String toString(CUSTOMER_ORDER_STATUS status) {
             switch (status) {
@@ -130,8 +129,6 @@ public class DbConstants {
                     return "Delivered";
                 case Cancelled:
                     return "Cancelled";
-                case Rejected:
-                    return "Rejected";
                 default:
                     return "";
             }
@@ -150,8 +147,6 @@ public class DbConstants {
                     return Delivered;
                 case "Cancelled":
                     return Cancelled;
-                case "Rejected":
-                    return Rejected;
                 default:
                     return null;
             }
@@ -163,11 +158,6 @@ public class DbConstants {
                     "' OR currStatus = '" + toString(Dispatched) + "')";
         }
     }
-
-    public static String custOrderStatusChgReasons[] = {
-            "Not Attended",
-            "Invalid"
-    };
 
     // SKU to Item Name mapping
     /*public static final String SKU_CUSTOMER_CARDS = "1001";

@@ -1,4 +1,4 @@
-package in.ezeshop.customerbase;
+package in.ezeshop.merchantbase;
 
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,6 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import in.ezeshop.appbase.BaseFragment;
 import in.ezeshop.appbase.GenericListDialog;
@@ -28,53 +28,57 @@ import in.ezeshop.appbase.utilities.AppCommonUtil;
 import in.ezeshop.appbase.utilities.DialogFragmentWrapper;
 import in.ezeshop.appbase.utilities.LogMy;
 import in.ezeshop.common.CommonUtils;
+import in.ezeshop.common.DateUtil;
+import in.ezeshop.common.MyCustomer;
+import in.ezeshop.common.MyGlobalSettings;
 import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.DbConstants;
 import in.ezeshop.common.constants.ErrorCodes;
+import in.ezeshop.common.database.Customers;
 import in.ezeshop.common.database.Merchants;
-import in.ezeshop.customerbase.helper.MyRetainedFragment;
+import in.ezeshop.merchantbase.helper.MyRetainedFragment;
+import pl.aprilapps.easyphotopicker.EasyImage;
 
 /**
- * Created by adgangwa on 28-10-2017.
+ * Created by adgangwa on 05-11-2017.
  */
 
-public class MchntDetailsFragCustApp extends BaseFragment
-        implements GenericListDialog.GenericListDialogIf {
-    private static final String TAG = "CustApp-MchntDetailsFragCustApp";
+public class CustDetailsFragMchntApp extends BaseFragment {
+    private static final String TAG = "CustApp-CustDetailsFragMchntApp";
 
+    private static final String ARG_CB_POSITION = "cbPosition";
     private static final String ARG_GETTXNS_BTN = "getTxnsBtn";
-    private static final String DIALOG_CALL_NUMBER = "DialogCallNumber";
+    //private static final String DIALOG_CALL_NUMBER = "DialogCallNumber";
 
     private static final int REQ_NOTIFY_ERROR = 1;
     private static final int REQ_NOTIFY_ERROR_EXIT = 5;
 
-    public interface MchntDetailsFragCustAppIf {
+    public interface CustDetailsFragMchntAppIf {
         MyRetainedFragment getRetainedFragment();
         void setToolbarForFrag(int iconResId, String title, String subTitle);
-        void getMchntTxns(String id, String name);
+        void getCustTxns(String id);
     }
 
     private SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.MY_LOCALE);
 
-    private MyRetainedFragment mRetainedFragment;
-    private MchntDetailsFragCustAppIf mCallback;
+    private CustDetailsFragMchntAppIf mCallback;
 
-    private String mMerchantId;
-    ArrayList<String> mMchntNumbers = new ArrayList<>(10);
+    private String mCustMobile;
 
-    public static MchntDetailsFragCustApp newInstance(boolean showGetTxnsBtn) {
-        LogMy.d(TAG, "Creating new MchntDetailsFragCustApp instance: ");
+    public static CustDetailsFragMchntApp newInstance(int position, boolean showGetTxnsBtn) {
+        LogMy.d(TAG, "Creating new CustDetailsFragMchntApp instance: ");
         Bundle args = new Bundle();
+        args.putInt(ARG_CB_POSITION, position);
         args.putBoolean(ARG_GETTXNS_BTN, showGetTxnsBtn);
 
-        MchntDetailsFragCustApp fragment = new MchntDetailsFragCustApp();
+        CustDetailsFragMchntApp fragment = new CustDetailsFragMchntApp();
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.frag_mchnt_details_for_cust, container, false);
+        View v = inflater.inflate(R.layout.dialog_customer_details, container, false);
         bindUiResources(v);
         return v;
     }
@@ -85,18 +89,24 @@ public class MchntDetailsFragCustApp extends BaseFragment
         LogMy.d(TAG, "In onActivityCreated");
 
         try {
-            mCallback = (MchntDetailsFragCustApp.MchntDetailsFragCustAppIf) getActivity();
-            mRetainedFragment = mCallback.getRetainedFragment();
+            mCallback = (CustDetailsFragMchntAppIf) getActivity();
 
             //setup all listeners
             initListeners();
 
-            updateUI(mCallback.getRetainedFragment().mSelectCashback,
-                    getArguments().getBoolean(ARG_GETTXNS_BTN,true));
+            MyCashback cb = mCallback.getRetainedFragment().mCurrCashback;
+            int position = getArguments().getInt(ARG_CB_POSITION, -1);
+            if(position>=0) {
+                cb = mCallback.getRetainedFragment().mLastFetchCashbacks.get(position);
+                mCustMobile = cb.getCustomer().getMobileNum();
+                //cust = cb.getCustomer();
+            }
+
+            updateUI(cb, getArguments().getBoolean(ARG_GETTXNS_BTN,true));
 
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
-                    + " must implement MchntDetailsFragCustAppIf");
+                    + " must implement CustDetailsFragMchntAppIf");
         } catch(Exception e) {
             LogMy.e(TAG, "Exception in onActivityCreated", e);
             // unexpected exception - show error
@@ -106,59 +116,51 @@ public class MchntDetailsFragCustApp extends BaseFragment
         }
     }
 
+
+
     private void updateUI(MyCashback data, boolean showTxnBtn) {
         LogMy.d(TAG, "In updateUI");
         if(data==null) {
             return;
         }
 
-        Merchants merchant = data.getMerchant();
+        MyCustomer cust = data.getCustomer();
 
-        if(merchant != null) {
-            mMerchantId = merchant.getAuto_id();
+        if(cust != null) {
+            mInputCustName.setText(cust.getName());
+            mInputMobileNum.setText(cust.getMobileNum());
 
-            if (merchant.getAdmin_status() == DbConstants.USER_STATUS_UNDER_CLOSURE) {
-                mLayoutExpNotice.setVisibility(View.VISIBLE);
-                mInputExpNotice.setText(String.format(getString(R.string.mchnt_remove_notice_to_cust),
-                        AppCommonUtil.getMchntRemovalDate(merchant.getRemoveReqDate())));
+            int status = cust.getStatus();
+            mInputStatus.setText(DbConstants.userStatusDesc[status]);
+            if(status != DbConstants.USER_STATUS_ACTIVE) {
+                mLayoutStatusDetails.setVisibility(View.VISIBLE);
+                mInputStatus.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
+                mInputStatusDate.setText(cust.getStatusUpdateTime());
+                mInputReason.setText(cust.getStatusReason());
+
+                if(status==DbConstants.USER_STATUS_LOCKED) {
+                    mInputStatusDetails.setVisibility(View.VISIBLE);
+                    DateUtil time = new DateUtil(cust.getStatusUpdateDate());
+                    time.addMinutes(MyGlobalSettings.getAccBlockMins(DbConstants.USER_TYPE_CUSTOMER));
+                    String detail = "Will be Unlocked at "+mSdfDateWithTime.format(time.getTime());
+                    mInputStatusDetails.setText(detail);
+
+                } else if(status==DbConstants.USER_STATUS_LIMITED_CREDIT_ONLY) {
+                    mInputStatusDetails.setVisibility(View.VISIBLE);
+                    DateUtil time = new DateUtil(cust.getStatusUpdateDate());
+                    time.addMinutes(MyGlobalSettings.getCustAccLimitModeMins());
+                    String detail = "Will be Active again at "+mSdfDateWithTime.format(time.getTime());
+                    mInputStatusDetails.setText(detail);
+
+                } else {
+                    mInputStatusDetails.setVisibility(View.GONE);
+                }
             } else {
-                mLayoutExpNotice.setVisibility(View.GONE);
+                mLayoutStatusDetails.setVisibility(View.GONE);
             }
 
-            /*if(cb.getDpMerchant()!=null) {
-                mImgMerchant.setImageBitmap(cb.getDpMerchant());
-            }*/
-            Bitmap dp = AppCommonUtil.getLocalBitmap(getActivity(),
-                    merchant.getDisplayImage(), getResources().getDimension(R.dimen.dp_item_image_width));
-            if (dp != null) {
-                mImgMerchant.setImageBitmap(dp);
-            }
-
-            mName.setText(merchant.getName());
-            String textCbRate = "";
-            if(Integer.valueOf(merchant.getPrepaidCbRate()) <= 0) {
-                textCbRate = merchant.getCb_rate() + "%";
-                mPpCbDetails.setVisibility(View.GONE);
-            } else {
-                textCbRate = merchant.getCb_rate()+"% + "+merchant.getPrepaidCbRate()+"% *";
-                mPpCbDetails.setVisibility(View.VISIBLE);
-                String ppCbDetails = "* "+merchant.getPrepaidCbRate()+"% when Money added > "+AppCommonUtil.getAmtStr(merchant.getPrepaidCbMinAmt());
-                mPpCbDetails.setText(ppCbDetails);
-            }
-            mCbRate.setText(textCbRate);
-
-            String phone = AppConstants.PHONE_COUNTRY_CODE + "-" + merchant.getContactPhone();
-            mMchntNumbers.add(phone);
-
-            if(merchant.getContactPhone2()!=null && !merchant.getContactPhone2().isEmpty()) {
-                phone = phone + ", " + AppConstants.PHONE_COUNTRY_CODE + "-" + merchant.getContactPhone2();
-                mMchntNumbers.add(AppConstants.PHONE_COUNTRY_CODE + "-" + merchant.getContactPhone2());
-            }
-            mInputContactPhone.setText(phone);
-
-            mAddress.setText(CommonUtils.getMchntAddressStr(merchant));
         } else {
-            LogMy.wtf(TAG, "updateUI: Merchant object is null !!");
+            LogMy.wtf(TAG, "updateUI: Customer object is null !!");
             return;
         }
 
@@ -167,20 +169,22 @@ public class MchntDetailsFragCustApp extends BaseFragment
             mNonMemberInfo.setVisibility(View.GONE);
             mLytAccDetails.setVisibility(View.VISIBLE);
 
-            Date time = data.getLastTxnTime();
-            if(time==null) {
-                time = data.getCreateTime();
+            if(data.getLastTxnTime()!=null) {
+                mLastUsedHere.setText(mSdfDateWithTime.format(data.getLastTxnTime()));
+            } else {
+                mLastUsedHere.setText("-");
             }
-            mLastTxnTime.setText(mSdfDateWithTime.format(time));
+            if(data.getCreateTime()!=null) {
+                mFirstUsedHere.setText(mSdfDateWithTime.format(data.getCreateTime()));
+            } else {
+                mFirstUsedHere.setText("-");
+            }
 
             AppCommonUtil.showAmt(getActivity(), null, mInputTotalBill, data.getBillAmt(),false);
-
             AppCommonUtil.showAmtColor(getActivity(), null, mInputAccBalance, data.getCurrAccBalance(), false);
             AppCommonUtil.showAmtSigned(getActivity(), null, mInputAccTotalAdd, data.getCurrAccTotalAdd(), false);
-
             AppCommonUtil.showAmt(getActivity(), null, mInputAccAddCb, data.getCurrAccTotalCb(), true);
             AppCommonUtil.showAmt(getActivity(), null, mInputAccDeposit, data.getClCredit(), true);
-
             AppCommonUtil.showAmtSigned(getActivity(), null, mInputAccTotalDebit, (data.getCurrAccTotalDebit()*-1), false);
 
         } else {
@@ -191,7 +195,7 @@ public class MchntDetailsFragCustApp extends BaseFragment
         }
 
         if(showTxnBtn) {
-           mBtnGetTxns.setVisibility(View.VISIBLE);
+            mBtnGetTxns.setVisibility(View.VISIBLE);
         } else {
             mBtnGetTxns.setVisibility(View.GONE);
         }
@@ -208,21 +212,10 @@ public class MchntDetailsFragCustApp extends BaseFragment
 
             int id = v.getId();
             if (id == mBtnCall.getId()) {
-
-                if(mMchntNumbers.size() > 1) {
-                    /*DialogFragmentWrapper dialog = DialogFragmentWrapper.createSingleChoiceDialog("Select Number to Call",
-                            mMchntNumbers.toArray(new String[mMchntNumbers.size()]), 0, true);
-                    dialog.setTargetFragment(this,REQUEST_CALL_NUMBER);
-                    dialog.show(getFragmentManager(), DIALOG_CALL_NUMBER);*/
-                    DialogFragment dialog = GenericListDialog.getInstance(R.drawable.ic_call_black_18dp,mMchntNumbers,"Select Number to Dial",true);
-                    dialog.setTargetFragment(this, GenericListDialog.REQ_GENERIC_LIST);
-                    dialog.show(getFragmentManager(), DIALOG_CALL_NUMBER);
-                } else {
-                    dialNumber(mMchntNumbers.get(0));
-                }
+                dialNumber(mCustMobile);
 
             } else if (id==mBtnGetTxns.getId()) {
-                mCallback.getMchntTxns(mMerchantId, mName.getText().toString());
+                mCallback.getCustTxns(mCustMobile);
             }
         } catch (Exception e) {
             LogMy.e(TAG, "Exception in handleDialogBtnClick", e);
@@ -249,12 +242,6 @@ public class MchntDetailsFragCustApp extends BaseFragment
     }
 
     @Override
-    public void onListItemSelected(int index, String text) {
-        LogMy.d(TAG, "In onListItemSelected :" + index + ", " + text);
-        dialNumber(mMchntNumbers.get(index));
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         LogMy.d(TAG, "In onActivityResult :" + requestCode + ", " + resultCode);
         if(resultCode != Activity.RESULT_OK) {
@@ -273,66 +260,65 @@ public class MchntDetailsFragCustApp extends BaseFragment
         mBtnGetTxns.setOnClickListener(this);
     }
 
-    // UI Resources data members
-    private View mLayoutExpNotice;
-    private EditText mInputExpNotice;
-    private ImageView mImgMerchant;
-    private EditText mName;
-    private EditText mCbRate;
-    private EditText mPpCbDetails;
-    private EditText mInputContactPhone;
-    private EditText mAddress;
+    private TextView mInputCustName;
+    private TextView mInputMobileNum;
+    private TextView mInputStatus;
+    private View mLayoutStatusDetails;
+    private TextView mInputReason;
+    private TextView mInputStatusDate;
+    private TextView mInputStatusDetails;
 
     private View mNonMemberInfo;
     private View mLytAccDetails;
 
-    private EditText mLastTxnTime;
-    private EditText mInputTotalBill;
-
-    private EditText mInputAccBalance;
-    private EditText mInputAccTotalAdd;
+    private TextView mLastUsedHere;
+    private TextView mFirstUsedHere;
+    private TextView mInputTotalBill;
+    private TextView mInputAccBalance;
+    private TextView mInputAccTotalAdd;
     private TextView mInputAccAddCb;
     private TextView mInputAccDeposit;
-    private EditText mInputAccTotalDebit;
+    private TextView mInputAccTotalDebit;
 
     private AppCompatButton mBtnCall;
     private AppCompatButton mBtnGetTxns;
 
     private void bindUiResources(View v) {
 
-        mImgMerchant = (ImageView) v.findViewById(R.id.img_merchant);
-
-        mName = (EditText) v.findViewById(R.id.input_brand_name);
-        mCbRate = (EditText) v.findViewById(R.id.input_cb_rate);
-        mPpCbDetails = (EditText) v.findViewById(R.id.input_pp_cb_details);
+        mInputCustName = (TextView) v.findViewById(R.id.input_customer_name);
+        mInputMobileNum = (TextView) v.findViewById(R.id.input_customer_mobile);
+        mInputStatus = (TextView) v.findViewById(R.id.input_status);
+        mLayoutStatusDetails = v.findViewById(R.id.layout_status_details);
+        mInputReason = (TextView) v.findViewById(R.id.input_reason);
+        mInputStatusDate = (TextView) v.findViewById(R.id.input_status_date);
+        mInputStatusDetails = (TextView) v.findViewById(R.id.input_activation);
 
         mNonMemberInfo = v.findViewById(R.id.layout_nonMemberInfo);
         mLytAccDetails = v.findViewById(R.id.layout_accDetails);
 
-        mLastTxnTime = (EditText) v.findViewById(R.id.input_last_txn_time);;
-        mInputTotalBill = (EditText) v.findViewById(R.id.input_total_bill);
-
-        mInputAccBalance = (EditText) v.findViewById(R.id.input_acc_balance);
-        mInputAccTotalAdd = (EditText) v.findViewById(R.id.input_acc_add);
+        mLastUsedHere = (TextView) v.findViewById(R.id.input_cust_last_activity);;
+        mFirstUsedHere = (TextView) v.findViewById(R.id.input_cust_register_on);;
+        mInputTotalBill = (TextView) v.findViewById(R.id.input_total_bill);
+        mInputAccBalance = (TextView) v.findViewById(R.id.input_acc_balance);
+        mInputAccTotalAdd = (TextView) v.findViewById(R.id.input_acc_add);
         mInputAccAddCb = (TextView) v.findViewById(R.id.input_cb);
         mInputAccDeposit = (TextView) v.findViewById(R.id.input_acc_deposit);
-        mInputAccTotalDebit = (EditText) v.findViewById(R.id.input_acc_debit);
-
-        mInputContactPhone = (EditText) v.findViewById(R.id.input_contactNum);
-        mAddress = (EditText) v.findViewById(R.id.input_address);
-
-        mLayoutExpNotice = v.findViewById(R.id.layout_expiry_notice);
-        mInputExpNotice = (EditText) v.findViewById(R.id.input_expiry_notice);
+        mInputAccTotalDebit = (TextView) v.findViewById(R.id.input_acc_debit);
 
         mBtnCall = (AppCompatButton) v.findViewById(R.id.btn_call);
         mBtnGetTxns = (AppCompatButton) v.findViewById(R.id.btn_txns);
+    }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("mCustMobile", mCustMobile);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mCallback.setToolbarForFrag(-1,"Merchant Details",null);
+        mCallback.setToolbarForFrag(-1,"Customer Details",null);
 
         try {
             // intentionally called from onResume
@@ -355,12 +341,6 @@ public class MchntDetailsFragCustApp extends BaseFragment
         AppCommonUtil.cancelToast();
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        LogMy.d(TAG, "In onSaveInstanceState");
-        super.onSaveInstanceState(outState);
-    }
-
     @Override public void onDestroyView() {
         super.onDestroyView();
         //unbinder.unbind();
@@ -368,9 +348,8 @@ public class MchntDetailsFragCustApp extends BaseFragment
 
     @Override
     public void onDestroy() {
-        // Clear any configuration that was done!
-        //EasyImage.clearConfiguration(getActivity());
         super.onDestroy();
     }
 
 }
+

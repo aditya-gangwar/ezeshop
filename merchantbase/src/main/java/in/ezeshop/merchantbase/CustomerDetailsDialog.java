@@ -1,4 +1,4 @@
-package in.ezeshop.merchantbase;
+/*package in.ezeshop.merchantbase;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -25,9 +25,6 @@ import in.ezeshop.merchantbase.helper.MyRetainedFragment;
 
 import java.text.SimpleDateFormat;
 
-/**
- * Created by adgangwa on 21-05-2016.
- */
 public class CustomerDetailsDialog extends BaseDialog {
     private static final String TAG = "MchntApp-CustomerDetailsDialog";
     private static final String ARG_CB_POSITION = "cbPosition";
@@ -143,19 +140,6 @@ public class CustomerDetailsDialog extends BaseDialog {
             }
             mFirstUsedHere.setText(mSdfDateWithTime.format(cb.getCreateTime()));
 
-            /*if(cust.getCardId()==null || cust.getCardId().isEmpty()) {
-                mLayoutCard.setVisibility(View.GONE);
-            } else {
-                mLayoutCard.setVisibility(View.VISIBLE);
-                mInputQrCard.setText(CommonUtils.getHalfVisibleMobileNum(cust.getCardId()));
-                mInputCardStatus.setText(DbConstants.cardStatusDesc[cust.getCardStatus()]);
-                mLayoutCardStatusDate.setVisibility(View.GONE);
-                if (cust.getCardStatus() != DbConstants.CUSTOMER_CARD_STATUS_ACTIVE) {
-                    mInputCardStatus.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
-                    mLayoutCardStatusDate.setVisibility(View.VISIBLE);
-                    mCardStatusDate.setText(cust.getCardStatusUpdateTime());
-                }
-            }*/
             int status = cust.getStatus();
             mInputStatus.setText(DbConstants.userStatusDesc[status]);
             if(status != DbConstants.USER_STATUS_ACTIVE) {
@@ -189,21 +173,7 @@ public class CustomerDetailsDialog extends BaseDialog {
             //mInputTotalBill.setText(AppCommonUtil.getAmtStr(cb.getBillAmt()));
             //mInputCbBill.setText(AppCommonUtil.getAmtStr(cb.getCbBillAmt()));
 
-            /*if(cb.getClCredit()==0 && cb.getCurrClDebit()==0) {
-                mLayoutAccBalance.setVisibility(View.GONE);
-            } else {
-                mLayoutAccBalance.setVisibility(View.VISIBLE);*/
-
             AppCommonUtil.showAmtColor(getActivity(), null, mInputAccBalance, cb.getCurrAccBalance(), false);
-
-            /*int accBalance = cb.getCurrAccBalance();
-            if(accBalance<0) {
-                mInputAccBalance.setText(AppCommonUtil.getNegativeAmtStr(Math.abs(accBalance),false));
-                mInputAccBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.red_negative));
-            } else {
-                mInputAccBalance.setText(AppCommonUtil.getNegativeAmtStr(accBalance,true));
-                mInputAccBalance.setTextColor(ContextCompat.getColor(getActivity(), R.color.green_positive));
-            }*/
 
             //mInputAccBalance.setText(AppCommonUtil.getAmtStr(cb.getCurrAccBalance()));
             //mInputAccTotalAdd.setText(AppCommonUtil.getNegativeAmtStr(cb.getCurrAccTotalAdd(),true));
@@ -217,25 +187,6 @@ public class CustomerDetailsDialog extends BaseDialog {
             //mInputAccTotalDebit.setText(AppCommonUtil.getNegativeAmtStr(cb.getCurrAccTotalDebit(),true));
             AppCommonUtil.showAmtSigned(getActivity(), null, mInputAccTotalDebit, (cb.getCurrAccTotalDebit()*-1), false);
             //}
-
-            /*mInputCbAvailable.setText(AppCommonUtil.getAmtStr(cb.getCurrCbBalance()));
-            mInputCbTotalAward.setText(AppCommonUtil.getAmtStr(cb.getCbCredit()));
-            mInputCbTotalRedeem.setText(AppCommonUtil.getAmtStr(cb.getCbRedeem()));*/
-
-            /*if(mCallback.getRetainedFragment().mMerchantUser.isPseudoLoggedIn()) {
-                // set cust care specific fields too
-                //mName.setText(cust.getName());
-                mCreatedOn.setText(cust.getCustCreateTime());
-                mFirstLogin.setText(cust.isFirstLoginOk().toString());
-                //mInputAdminRemarks.setText(cust.getRemarks());
-            } else {
-                // hide fields for customer care logins only
-                //mLayoutName.setVisibility(View.GONE);
-                mLayoutCreated.setVisibility(View.GONE);
-                mLayoutFirstLogin.setVisibility(View.GONE);
-                //mLayoutRemarks.setVisibility(View.GONE);
-                //mLayoutCardStatusDate.setVisibility(View.GONE);
-            }*/
 
         } else {
             LogMy.wtf(TAG, "Customer or Cashback object is null !!");
@@ -272,10 +223,6 @@ public class CustomerDetailsDialog extends BaseDialog {
     private TextView mInputAccDeposit;
     private TextView mInputAccTotalDebit;
 
-    /*private TextView mInputCbAvailable;
-    private TextView mInputCbTotalAward;
-    private TextView mInputCbTotalRedeem;*/
-
     // layouts for optional fields
     //private View mLayoutName;
     //private View mLayoutCreated;
@@ -295,12 +242,6 @@ public class CustomerDetailsDialog extends BaseDialog {
         //mCreatedOn = (TextView) v.findViewById(R.id.input_cust_created_on);;
         //mFirstLogin = (TextView) v.findViewById(R.id.input_first_login);;
 
-        /*mLayoutCard = v.findViewById(R.id.layout_card);
-        mInputQrCard = (TextView) v.findViewById(R.id.input_qr_card);
-        //mLayoutCardDetails = v.findViewById(R.id.layout_card_details);
-        mInputCardStatus = (TextView) v.findViewById(R.id.input_card_status);
-        mCardStatusDate = (TextView) v.findViewById(R.id.input_card_status_date);*/
-
         mInputStatus = (TextView) v.findViewById(R.id.input_status);
         mLayoutStatusDetails = v.findViewById(R.id.layout_status_details);
         mInputReason = (TextView) v.findViewById(R.id.input_reason);
@@ -316,10 +257,6 @@ public class CustomerDetailsDialog extends BaseDialog {
         mInputAccAddCb = (TextView) v.findViewById(R.id.input_cb);
         mInputAccDeposit = (TextView) v.findViewById(R.id.input_acc_deposit);
         mInputAccTotalDebit = (TextView) v.findViewById(R.id.input_acc_debit);
-
-        /*mInputCbAvailable = (TextView) v.findViewById(R.id.input_cb_balance);
-        mInputCbTotalAward = (TextView) v.findViewById(R.id.input_cb_award);
-        mInputCbTotalRedeem = (TextView) v.findViewById(R.id.input_cb_redeem);*/
 
         // layouts for optional fields
         //mLayoutName = v.findViewById(R.id.layout_cust_name);
@@ -337,3 +274,4 @@ public class CustomerDetailsDialog extends BaseDialog {
         outState.putString("mCustMobile", mCustMobile);
     }
 }
+*/

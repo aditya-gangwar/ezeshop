@@ -34,6 +34,8 @@ public class DialogFragmentWrapper extends DialogFragment {
     public static final String DIALOG_CONFIRMATION = "DialogConfirmation";
     public static final String DIALOG_NOTIFICATION = "DialogNotification";
 
+    public static final int REQUEST_DIALOG_CONFIRMATION = 20;
+
     public static final String EXTRA_SELECTION = "extraSelected";
     public static final String EXTRA_SELECTION_INDEX = "extraSelectedIndex";
 

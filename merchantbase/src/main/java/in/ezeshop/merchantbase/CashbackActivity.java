@@ -36,6 +36,7 @@ import com.helpshift.support.Support;
 import in.ezeshop.appbase.*;
 import in.ezeshop.appbase.constants.AppConstants;
 
+import in.ezeshop.appbase.entities.MyCashback;
 import in.ezeshop.appbase.utilities.BackgroundProcessor;
 import in.ezeshop.appbase.utilities.MsgPushService;
 import in.ezeshop.common.CommonUtils;
@@ -72,7 +73,7 @@ public class CashbackActivity extends BaseActivity implements
         //TrustedDevicesFragment.TrustedDevicesFragmentIf,
         TxnPinInputDialog.TxnPinInputDialogIf, MobileChangePreference.MobileChangePreferenceIf,
         DashboardTxnFragment.DashboardFragmentIf, DashboardFragment.DashboardSummaryFragmentIf,
-        CustomerDetailsDialog.CustomerDetailsDialogIf,
+        CustDetailsFragMchntApp.CustDetailsFragMchntAppIf,
         //CustomerDataDialog.CustomerDataDialogIf,
         CustomerListFragment.CustomerListFragmentIf, MerchantOpListFrag.MerchantOpListFragIf,
         TxnConfirmFragment.TxnConfirmFragmentIf, SettingsFragment2.SettingsFragment2If,
@@ -101,6 +102,7 @@ public class CashbackActivity extends BaseActivity implements
     private static final String MERCHANT_OPS_LIST_FRAG = "MerchantOpsListFrag";
     private static final String TXN_CONFIRM_FRAGMENT = "TxnConfirmFragment";
     //private static final String MCHNT_ORDERS_FRAGMENT = "MchntOrdersFragment";
+    private static final String CUSTOMER_DETAILS_FRAG = "CustomerDetailsFrag";
     private static final String PENDING_ORDER_LIST_FRAG = "PendingOrderListFrag";
     private static final String PENDING_ORDER_DETAILS_FRAG = "PendingOrderDetailsFrag";
 
@@ -117,7 +119,7 @@ public class CashbackActivity extends BaseActivity implements
 
     private static final String DIALOG_PIN_CUSTOMER_OP = "dialogPinCustomerOp";
     private static final String DIALOG_CUSTOMER_OP_OTP = "dialogCustomerOpOtp";
-    private static final String DIALOG_CUSTOMER_DETAILS = "dialogCustomerDetails";
+    //private static final String DIALOG_CUSTOMER_DETAILS = "dialogCustomerDetails";
     private static final String DIALOG_MERCHANT_DETAILS = "dialogMerchantDetails";
     private static final String DIALOG_CUSTOMER_DATA = "dialogCustomerData";
     //private static final String DIALOG_CREATE_MCHNT_ORDER = "dialogCrtMchntOrder";
@@ -155,6 +157,7 @@ public class CashbackActivity extends BaseActivity implements
     //boolean mExitAfterLogout;
     boolean mTbImageIsMerchant;
     int mLastMenuItemId;
+    boolean mCustDetailDialogPending;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,6 +186,7 @@ public class CashbackActivity extends BaseActivity implements
             //mExitAfterLogout = savedInstanceState.getBoolean("mExitAfterLogout");
             mTbImageIsMerchant = savedInstanceState.getBoolean("mTbImageIsMerchant");
             mLastMenuItemId = savedInstanceState.getInt("mLastMenuItemId");
+            mCustDetailDialogPending = savedInstanceState.getBoolean("mCustDetailDialogPending");
         }
 
         // Setup a toolbar to replace the action bar.
@@ -478,8 +482,9 @@ public class CashbackActivity extends BaseActivity implements
             dialog.show(mFragMgr, DIALOG_MERCHANT_DETAILS);
         } else {
             // show customer details dialog
-            CustomerDetailsDialog dialog = CustomerDetailsDialog.newInstance(-1, true);
-            dialog.show(mFragMgr, DIALOG_CUSTOMER_DETAILS);
+            startCustDetailFrag(true);
+            /*CustomerDetailsDialog dialog = CustomerDetailsDialog.newInstance(-1, true);
+            dialog.show(mFragMgr, DIALOG_CUSTOMER_DETAILS);*/
         }
     }
 
@@ -1198,6 +1203,18 @@ public class CashbackActivity extends BaseActivity implements
                                     .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
                         }
                         break;
+                    case MyRetainedFragment.REQUEST_CHG_ORDER_STATUS:
+                        AppCommonUtil.cancelProgressDialog(true);
+                        if (errorCode == ErrorCodes.NO_ERROR) {
+                            String msg = String.format(AppConstants.orderStatusChgSuccessMsg, mWorkFragment.mSelCustOrder.getCurrStatus().toString());
+                            DialogFragmentWrapper.createNotification(AppConstants.defaultSuccessTitle, msg, false, false)
+                                    .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
+                        } else {
+                            String msg = "Failed to change Order Status.\n\n"+AppCommonUtil.getErrorDesc(errorCode);
+                            DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, msg, false, true)
+                                    .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
+                        }
+                        break;
                 }
             }
 
@@ -1249,13 +1266,33 @@ public class CashbackActivity extends BaseActivity implements
     }
 
     @Override
-    public void showCustomerDetails(String customerId) {
+    public void showCustomerDetails(String custMobile) {
+        if(mWorkFragment.mCurrCashback.getCustomer().getMobileNum().equals(custMobile)) {
+            // data available
+            startCustDetailFrag(true);
+        } else {
+            // fetch data from db
+            mCustDetailDialogPending = true;
+            AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
+            mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_GET_CASHBACK, null, null,
+                    custMobile, null, null, null, null);
+        }
+    }
+
+    @Override
+    public void acceptOrder() {
 
     }
 
     @Override
-    public void acceptOrder(CustomerOrder order) {
-
+    public void cancelOrder(String cancelReason) {
+        if(mWorkFragment.mSelCustOrder.getCurrStatus().equals(DbConstants.CUSTOMER_ORDER_STATUS.Delivered.toString())) {
+            AppCommonUtil.toast(this,"Order already delivered");
+        } else {
+            AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
+            mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_CHG_ORDER_STATUS, null, null,
+                    mWorkFragment.mSelCustOrder.getId(), DbConstants.CUSTOMER_ORDER_STATUS.Cancelled.toString(), cancelReason, null, null);
+        }
     }
 
     @Override
@@ -1538,13 +1575,14 @@ public class CashbackActivity extends BaseActivity implements
 
         AppCommonUtil.cancelProgressDialog(true);
 
-        if(mLastMenuItemId == R.id.menu_customers) {
+        if(mCustDetailDialogPending || mLastMenuItemId == R.id.menu_customers) {
             //AppCommonUtil.cancelProgressDialog(true);
             // response against search of particular customer details
             if(errorCode==ErrorCodes.NO_ERROR) {
                 // show customer details dialog
-                CustomerDetailsDialog dialog = CustomerDetailsDialog.newInstance(-1, true);
-                dialog.show(mFragMgr, DIALOG_CUSTOMER_DETAILS);
+                startCustDetailFrag(true);
+                /*CustomerDetailsDialog dialog = CustomerDetailsDialog.newInstance(-1, true);
+                dialog.show(mFragMgr, DIALOG_CUSTOMER_DETAILS);*/
             } else {
                 DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(errorCode), false, true)
                         .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
@@ -2016,6 +2054,24 @@ public class CashbackActivity extends BaseActivity implements
         }
     }
 
+    private void startCustDetailFrag(boolean showGetTxnsBtn) {
+        Fragment fragment = mFragMgr.findFragmentByTag(CUSTOMER_DETAILS_FRAG);
+        if (fragment == null) {
+            LogMy.d(TAG,"Creating new customer details fragment");
+            // Create new fragment and transaction
+            fragment = CustDetailsFragMchntApp.newInstance(-1, showGetTxnsBtn);
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+            // Add over the existing fragment
+            transaction.replace(R.id.fragment_container_1, fragment, CUSTOMER_DETAILS_FRAG);
+            transaction.addToBackStack(CUSTOMER_DETAILS_FRAG);
+
+            // Commit the transaction
+            transaction.commit();
+            mCustDetailDialogPending = false;
+        }
+    }
+
     private void startTxnConfirmFrag(int cashPaid) {
         //mTbCalculator.setVisibility(View.GONE);
 
@@ -2148,6 +2204,12 @@ public class CashbackActivity extends BaseActivity implements
             // Commit the transaction
             transaction.commit();
         }
+    }
+
+    @Override
+    public void showCustomerDetails(MyCashback data, boolean showGetTxnsBtn) {
+        mWorkFragment.mCurrCashback = data;
+        startCustDetailFrag(showGetTxnsBtn);
     }
 
     private void startMerchantOpsFrag() {
@@ -2410,6 +2472,7 @@ public class CashbackActivity extends BaseActivity implements
         //outState.putBoolean("mExitAfterLogout", mExitAfterLogout);
         outState.putBoolean("mTbImageIsMerchant", mTbImageIsMerchant);
         outState.putInt("mLastMenuItemId", mLastMenuItemId);
+        outState.putBoolean("mCustDetailDialogPending", mCustDetailDialogPending);
     }
 
     @Override

@@ -51,8 +51,8 @@
 
                     <LinearLayout
                         android:id="@+id/layout_customer"
-                        android:paddingBottom="@dimen/small_space"
-                        style="@style/LL_Vertical">
+                        style="@style/LL_Vertical"
+                        android:paddingBottom="@dimen/small_space">
 
                         <LinearLayout
                             style="@style/LL_Horizontal_wrap"
@@ -66,12 +66,12 @@
                             <TextView
                                 android:id="@+id/cardTitle_customer"
                                 style="@style/Edittext_CardTitle"
-                                android:text="Customer Details" />
+                                android:text="Customer" />
 
                             <TextView
-                                android:id="@+id/cardBtn_dlvrAddres"
+                                android:id="@+id/cardBtn_custDetails"
                                 style="@style/Edittext_CardTitle_Button"
-                                android:text="VIEW" />
+                                android:text="DETAILS" />
                             <!--ImageView
                                 style="@style/Img_CardTitle_Button"/-->
                         </LinearLayout>
@@ -120,18 +120,18 @@
                                 android:layout_width="wrap_content"
                                 android:gravity="right"
                                 android:text="8800191535"
-                                android:textColor="@color/secondary_text"/>
+                                android:textColor="@color/secondary_text" />
                         </LinearLayout>
 
                         <TextView
                             style="@style/Edittext_only_view_XS_lessPad"
                             android:layout_width="wrap_content"
-                            android:layout_marginTop="@dimen/small_space"
                             android:layout_marginLeft="@dimen/medium_space"
+                            android:layout_marginTop="@dimen/small_space"
                             android:paddingRight="@dimen/large_space"
                             android:text="Delivery Address : "
                             android:textColor="@color/secondary_text"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/input_dlvrAddres"
@@ -239,8 +239,8 @@
 
                         <LinearLayout
                             style="@style/LL_Horizontal_wrap"
-                            android:layout_marginTop="@dimen/medium_space"
                             android:layout_marginLeft="@dimen/medium_space"
+                            android:layout_marginTop="@dimen/medium_space"
                             android:paddingRight="@dimen/medium_space">
 
                             <TextView
@@ -286,10 +286,10 @@
                             android:id="@+id/input_prescripInfo"
                             style="@style/Edittext_only_view_XS_lessPad"
                             android:layout_width="wrap_content"
-                            android:layout_marginTop="@dimen/small_space"
                             android:layout_marginLeft="@dimen/medium_space"
+                            android:layout_marginTop="@dimen/small_space"
                             android:paddingRight="@dimen/large_space"
-                            android:text="Prescriptions"/>
+                            android:text="Prescriptions" />
 
                         <HorizontalScrollView
                             android:id="@+id/layout_prescrip_imgs"
@@ -376,10 +376,10 @@
                         android:id="@+id/layout_orderStatus"
                         style="@style/LL_Horizontal_wrap"
                         android:layout_height="wrap_content"
+                        android:paddingBottom="@dimen/medium_space"
                         android:paddingLeft="@dimen/medium_space"
                         android:paddingRight="@dimen/medium_space"
-                        android:paddingTop="@dimen/small_space"
-                        android:paddingBottom="@dimen/medium_space">
+                        android:paddingTop="@dimen/small_space">
 
                         <LinearLayout
                             style="@style/LL_Vertical"
@@ -398,7 +398,7 @@
                                 android:id="@+id/div_orderStatusNew"
                                 style="@style/Divider_vertical_Large"
                                 android:layout_height="@dimen/large_space"
-                                android:background="@color/green_positive"/>
+                                android:background="@color/green_positive" />
 
                             <ImageView
                                 android:id="@+id/img_orderStatusAccptd"
@@ -411,7 +411,7 @@
                             <View
                                 android:id="@+id/div_orderStatusAcptd"
                                 style="@style/Divider_vertical_Large"
-                                android:layout_height="@dimen/large_space"/>
+                                android:layout_height="@dimen/large_space" />
 
                             <ImageView
                                 android:id="@+id/img_orderStatusDsptchd"
@@ -424,7 +424,7 @@
                             <View
                                 android:id="@+id/div_orderStatusDsptchd"
                                 style="@style/Divider_vertical_Large"
-                                android:layout_height="@dimen/large_space"/>
+                                android:layout_height="@dimen/large_space" />
 
                             <ImageView
                                 android:id="@+id/img_orderStatusDlvrd"
@@ -432,6 +432,19 @@
                                 android:layout_height="0dp"
                                 android:layout_weight="15"
                                 android:src="@drawable/ic_perm_identity_white_18dp"
+                                android:tint="@color/disabled" />
+
+                            <!--View
+                                android:id="@+id/div_orderStatusDlvrd"
+                                style="@style/Divider_vertical_Large"
+                                android:layout_height="@dimen/large_space" /-->
+
+                            <ImageView
+                                android:id="@+id/img_orderStatusCancel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="0dp"
+                                android:layout_weight="15"
+                                android:src="@drawable/ic_cancel_black_18dp"
                                 android:tint="@color/disabled" />
 
                         </LinearLayout>
@@ -442,17 +455,18 @@
                             android:layout_marginLeft="@dimen/medium_space">
 
                             <LinearLayout
+                                style="@style/LL_Horizontal_wrap"
                                 android:layout_height="0dp"
-                                android:layout_weight="15"
-                                style="@style/LL_Horizontal_wrap">
+                                android:layout_weight="15">
 
                                 <TextView
                                     android:id="@+id/label_orderStatusNew"
                                     style="@style/Edittext_only_view_small_lessPad"
-                                    android:layout_height="match_parent"
                                     android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
                                     android:text="New,"
-                                    android:textColor="@color/primary_text"/>
+                                    android:textColor="@color/primary_text" />
+
                                 <TextView
                                     android:id="@+id/time_statusNew"
                                     style="@style/Edittext_only_view_XS_lessPad"
@@ -462,13 +476,15 @@
                             </LinearLayout>
 
                             <Space
+                                android:id="@+id/space_orderStatusAccptd"
                                 android:layout_width="match_parent"
-                                android:layout_height="@dimen/large_space"/>
+                                android:layout_height="@dimen/large_space" />
 
                             <LinearLayout
+                                android:id="@+id/lyt_orderStatusAccptd"
+                                style="@style/LL_Horizontal_wrap"
                                 android:layout_height="0dp"
-                                android:layout_weight="15"
-                                style="@style/LL_Horizontal_wrap">
+                                android:layout_weight="15">
 
                                 <TextView
                                     android:id="@+id/label_orderStatusAccptd"
@@ -476,7 +492,8 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="Accepted,"
-                                    android:textColor="@color/disabled"/>
+                                    android:textColor="@color/disabled" />
+
                                 <TextView
                                     android:id="@+id/time_statusAccptd"
                                     style="@style/Edittext_only_view_XS_lessPad"
@@ -486,13 +503,15 @@
                             </LinearLayout>
 
                             <Space
+                                android:id="@+id/space_orderStatusDspchd"
                                 android:layout_width="match_parent"
-                                android:layout_height="@dimen/large_space"/>
+                                android:layout_height="@dimen/large_space" />
 
                             <LinearLayout
+                                android:id="@+id/lyt_orderStatusDspchd"
+                                style="@style/LL_Horizontal_wrap"
                                 android:layout_height="0dp"
-                                android:layout_weight="15"
-                                style="@style/LL_Horizontal_wrap">
+                                android:layout_weight="15">
 
                                 <TextView
                                     android:id="@+id/label_orderStatusDspchd"
@@ -500,7 +519,8 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="Dispatched,"
-                                    android:textColor="@color/disabled"/>
+                                    android:textColor="@color/disabled" />
+
                                 <TextView
                                     android:id="@+id/time_statusDsptchd"
                                     style="@style/Edittext_only_view_XS_lessPad"
@@ -510,13 +530,15 @@
                             </LinearLayout>
 
                             <Space
+                                android:id="@+id/space_orderStatusDlvrd"
                                 android:layout_width="match_parent"
-                                android:layout_height="@dimen/large_space"/>
+                                android:layout_height="@dimen/large_space" />
 
                             <LinearLayout
+                                android:id="@+id/lyt_orderStatusDlvrd"
+                                style="@style/LL_Horizontal_wrap"
                                 android:layout_height="0dp"
-                                android:layout_weight="15"
-                                style="@style/LL_Horizontal_wrap">
+                                android:layout_weight="15">
 
                                 <TextView
                                     android:id="@+id/label_orderStatusDlvrd"
@@ -524,9 +546,37 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="Delivered,"
-                                    android:textColor="@color/disabled"/>
+                                    android:textColor="@color/disabled" />
+
                                 <TextView
                                     android:id="@+id/time_statusDlvrd"
+                                    style="@style/Edittext_only_view_XS_lessPad"
+                                    android:layout_width="wrap_content"
+                                    android:text="12/09/2017 03:30 PM"
+                                    android:textColor="@color/disabled" />
+                            </LinearLayout>
+
+                            <!--Space
+                                android:id="@+id/space_orderStatusCancel"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/large_space" /-->
+
+                            <LinearLayout
+                                android:id="@+id/lyt_orderStatusCancel"
+                                style="@style/LL_Horizontal_wrap"
+                                android:layout_height="0dp"
+                                android:layout_weight="15">
+
+                                <TextView
+                                    android:id="@+id/label_orderStatusCancel"
+                                    style="@style/Edittext_only_view_small_lessPad"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Cancelled,"
+                                    android:textColor="@color/disabled" />
+
+                                <TextView
+                                    android:id="@+id/time_statusCancel"
                                     style="@style/Edittext_only_view_XS_lessPad"
                                     android:layout_width="wrap_content"
                                     android:text="12/09/2017 03:30 PM"
@@ -683,15 +733,15 @@
                             android:paddingLeft="@dimen/large_space"
                             android:paddingRight="@dimen/large_space"
                             android:text="Bill Copy"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
                         <HorizontalScrollView
                             android:id="@+id/layout_invoices"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/medium_space"
                             android:layout_marginLeft="@dimen/large_space"
                             android:layout_marginRight="@dimen/large_space"
-                            android:layout_marginBottom="@dimen/medium_space"
                             android:scrollbarSize="0dp"
                             android:visibility="visible">
 
