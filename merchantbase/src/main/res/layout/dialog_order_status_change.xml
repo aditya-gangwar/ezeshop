@@ -22,13 +22,13 @@
             android:layout_marginTop="@dimen/large_space">
 
             <TextView
-                style="@style/Edittext_only_view_small_lessPad"
+                style="@style/Edittext_only_view_XS_lessPad"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:text="Order ID"
                 android:textColor="@color/secondary_text"/>
             <TextView
-                style="@style/Edittext_only_view_small_lessPad"
+                style="@style/Edittext_only_view_XS_lessPad"
                 android:id="@+id/input_orderId"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -42,13 +42,13 @@
             style="@style/LL_Horizontal_wrap">
 
             <TextView
-                style="@style/Edittext_only_view_small_lessPad"
+                style="@style/Edittext_only_view_XS_lessPad"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:text="Current Status"
                 android:textColor="@color/secondary_text"/>
             <TextView
-                style="@style/Edittext_only_view_small_lessPad"
+                style="@style/Edittext_only_view_XS_lessPad"
                 android:id="@+id/input_status"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -138,6 +138,6 @@
         style="@style/button_normal_thin"
         android:id="@+id/btn_process"
         android:text="CONTINUE"
-        android:layout_marginTop="@dimen/large_space"/>
+        android:layout_marginTop="@dimen/XXXL_space"/>
 
 </LinearLayout>

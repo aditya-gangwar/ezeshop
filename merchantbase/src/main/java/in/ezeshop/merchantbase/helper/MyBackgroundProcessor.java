@@ -10,6 +10,7 @@ import com.backendless.exceptions.BackendlessException;
 import in.ezeshop.appbase.backendAPI.CommonServices;
 import in.ezeshop.appbase.constants.AppConstants;
 import in.ezeshop.common.constants.CommonConstants;
+import in.ezeshop.common.constants.DbConstants;
 import in.ezeshop.common.constants.ErrorCodes;
 import in.ezeshop.common.database.Cashback;
 import in.ezeshop.common.database.CustomerOrder;
@@ -378,19 +379,31 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
 
     private int changeOrderStatus(MessageBgJob opData) {
         try {
-            if (opData.argStr1.equals(mRetainedFragment.mSelCustOrder.getId())) {
-                CustomerOrder updatedOrder = MerchantUser.getInstance().changeOrderStatus(opData.argStr1, opData.argStr2, opData.argStr3);
+            // Status can be changed only for pending orders
+            CustomerOrder order = mRetainedFragment.mPendingCustOrders.get(opData.argStr1);
+            if (order!=null) {
+                CustomerOrder updatedOrder = MerchantUser.getInstance().changeOrderStatus(order.getId(), opData.argStr2, opData.argStr3);
                 LogMy.d(TAG, "changeOrderStatus success to: " + updatedOrder.getCurrStatus());
 
                 // update local order object
-                updatedOrder.setAddressNIDB(mRetainedFragment.mSelCustOrder.getAddressNIDB());
-                updatedOrder.setCustomerNIDB(mRetainedFragment.mSelCustOrder.getCustomerNIDB());
-                updatedOrder.setMerchantNIDB(mRetainedFragment.mSelCustOrder.getMerchantNIDB());
-                mRetainedFragment.mSelCustOrder = updatedOrder;
+                updatedOrder.setAddressNIDB(order.getAddressNIDB());
+                updatedOrder.setCustomerNIDB(order.getCustomerNIDB());
+                updatedOrder.setMerchantNIDB(order.getMerchantNIDB());
+                //mRetainedFragment.mSelCustOrder = updatedOrder;
+
+                // update pending order list
+                DbConstants.CUSTOMER_ORDER_STATUS updatedStatus = DbConstants.CUSTOMER_ORDER_STATUS.fromString(updatedOrder.getCurrStatus());
+                if(DbConstants.CUSTOMER_ORDER_STATUS.Cancelled == updatedStatus ||
+                        DbConstants.CUSTOMER_ORDER_STATUS.Delivered == updatedStatus ) {
+                    // Order is closed - delete from pending order list
+                    mRetainedFragment.mPendingCustOrders.remove(updatedOrder.getId());
+                } else {
+                    mRetainedFragment.mPendingCustOrders.put(updatedOrder.getId(), updatedOrder);
+                }
 
             } else {
                 // I shouldn't be here
-                LogMy.wtf(TAG,"changeOrderStatus: Order IDs dont match: "+opData.argStr1+", "+mRetainedFragment.mSelCustOrder.getId());
+                LogMy.wtf(TAG,"changeOrderStatus: Order object is null: "+opData.argStr1);
             }
         } catch (BackendlessException e) {
             LogMy.e(TAG,"Exception in changeOrderStatus: "+e.toString());
@@ -408,7 +421,11 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
         mRetainedFragment.mPendingCustOrders = null;
 
         try {
-            mRetainedFragment.mPendingCustOrders = MerchantServices.getInstance().fetchPendingOrders(MerchantUser.getInstance().getMerchantId());
+            List<CustomerOrder> orders = MerchantServices.getInstance().fetchPendingOrders(MerchantUser.getInstance().getMerchantId());
+            for (CustomerOrder item :
+                    orders) {
+                mRetainedFragment.mPendingCustOrders.put(item.getId(), item);
+            }
             LogMy.d(TAG,"fetched order objects: "+mRetainedFragment.mPendingCustOrders.size());
 
         } catch (BackendlessException e) {

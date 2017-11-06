@@ -98,10 +98,8 @@ public class CustDetailsFragMchntApp extends BaseFragment {
             int position = getArguments().getInt(ARG_CB_POSITION, -1);
             if(position>=0) {
                 cb = mCallback.getRetainedFragment().mLastFetchCashbacks.get(position);
-                mCustMobile = cb.getCustomer().getMobileNum();
                 //cust = cb.getCustomer();
             }
-
             updateUI(cb, getArguments().getBoolean(ARG_GETTXNS_BTN,true));
 
         } catch (ClassCastException e) {
@@ -128,6 +126,7 @@ public class CustDetailsFragMchntApp extends BaseFragment {
 
         if(cust != null) {
             mInputCustName.setText(cust.getName());
+            mCustMobile = cust.getMobileNum();
             mInputMobileNum.setText(cust.getMobileNum());
 
             int status = cust.getStatus();

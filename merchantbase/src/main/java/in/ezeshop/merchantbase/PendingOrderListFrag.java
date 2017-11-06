@@ -59,7 +59,7 @@ public class PendingOrderListFrag extends BaseFragment {
     public interface PendingOrderListFragIf {
         void setToolbarForFrag(int iconResId, String title, String subTitle);
         MyRetainedFragment getRetainedFragment();
-        void showOrderDetailed(CustomerOrder order);
+        void showOrderDetailed(String orderId);
     }
 
     /*public static PendingOrderListFrag getInstance(Date startTime, Date endTime) {
@@ -125,7 +125,7 @@ public class PendingOrderListFrag extends BaseFragment {
         List<CustomerOrder> dsptchdOrders = null;
 
         for (CustomerOrder order :
-                mRetainedFragment.mPendingCustOrders) {
+                mRetainedFragment.mPendingCustOrders.values()) {
             if (order.getCurrStatus().equals(DbConstants.CUSTOMER_ORDER_STATUS.New.toString())) {
                 if(newOrders==null) {
                     newOrders = new ArrayList<>(mRetainedFragment.mPendingCustOrders.size());
@@ -289,7 +289,7 @@ public class PendingOrderListFrag extends BaseFragment {
                     notifyItemChanged(selected_position);
 
                     if (pos >= 0 && pos < getItemCount()) {
-                        mCallback.showOrderDetailed(mCustOrders.get(pos));
+                        mCallback.showOrderDetailed(mCustOrders.get(pos).getId());
                     } else {
                         LogMy.e(TAG,"Invalid position in onClickListener of txn list item: "+pos);
                     }

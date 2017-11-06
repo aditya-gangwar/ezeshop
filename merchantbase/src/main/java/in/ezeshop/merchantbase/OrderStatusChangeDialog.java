@@ -87,19 +87,24 @@ public class OrderStatusChangeDialog extends BaseDialog {
         }
 
         initListeners();
-        initDialogView();
+        if(savedInstanceState==null) {
+            initDialogView();
+        }
     }
 
     private void initDialogView() {
         mInputOrderId.setText(getArguments().getString(ARG_ORDER_ID));
         mInputOrderStatus.setText(getArguments().getString(ARG_ORDER_STATUS));
+
+        mLytCancelDetails.setVisibility(View.GONE);
+        mInfoProcessOrder.setVisibility(View.GONE);
     }
 
     private void initListeners() {
         mRadioBtnCancel.setOnClickListener(this);
         mRadioBtnNext.setOnClickListener(this);
         mBtnCancelReason.setOnClickListener(this);
-        mRadioBtnNext.setOnClickListener(this);
+        mBtnProcess.setOnClickListener(this);
     }
 
     @Override
@@ -130,7 +135,7 @@ public class OrderStatusChangeDialog extends BaseDialog {
             dialog.setTargetFragment(OrderStatusChangeDialog.this, REQUEST_CANCEL_REASON);
             dialog.show(getFragmentManager(), DIALOG_CANCEL_REASON);
 
-        } else if(id == mRadioBtnNext.getId()) {
+        } else if(id == mBtnProcess.getId()) {
 
             if(mRadioBtnCancel.isChecked()) {
                 // Check reason is provided

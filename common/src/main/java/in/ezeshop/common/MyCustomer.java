@@ -78,7 +78,7 @@ public class MyCustomer {
 
         csvFields[CUST_CSV_PRIVATE_ID] = customer.getPrivate_id() ;
         csvFields[CUST_CSV_NAME] = customer.getName() ;
-        csvFields[CUST_CSV_MOBILE_NUM] = CommonUtils.getHalfVisibleMobileNum(customer.getMobile_num());
+        csvFields[CUST_CSV_MOBILE_NUM] = customer.getMobile_num();
         csvFields[CUST_CSV_ACC_STATUS] = String.valueOf(customer.getAdmin_status()) ;
         csvFields[CUST_CSV_STATUS_REASON] = customer.getStatus_reason();
         csvFields[CUST_CSV_STATUS_UPDATE_TIME] = String.valueOf(customer.getStatus_update_time().getTime()) ;

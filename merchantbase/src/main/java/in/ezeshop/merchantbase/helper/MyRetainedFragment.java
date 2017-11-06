@@ -84,6 +84,7 @@ public class MyRetainedFragment extends RetainedFragment {
     public MyCustomer mCurrCustomer;
     public MyTransaction mCurrTransaction;
     public int mBillTotal;
+    public boolean isBillingForOnlineOrder;
 
     public MerchantStats mMerchantStats;
     public List<MyCashback> mLastFetchCashbacks;
@@ -111,8 +112,9 @@ public class MyRetainedFragment extends RetainedFragment {
     public List<Transaction> mLastFetchTransactions;
 
     // related to Customer Orders
-    public List<CustomerOrder> mPendingCustOrders;
-    public CustomerOrder mSelCustOrder;
+    //public List<CustomerOrder> mPendingCustOrders;
+    public Map<String, CustomerOrder> mPendingCustOrders;
+    //public CustomerOrder mSelCustOrder;
 
     public void reset() {
         LogMy.d(TAG,"In reset");
@@ -128,6 +130,7 @@ public class MyRetainedFragment extends RetainedFragment {
         //mOrderItems = null;
         //mCbExcludedTotal = 0;
         mBillTotal = 0;
+        isBillingForOnlineOrder = false;
 
         mCustomerOp= null;
         mVerifyParamMobileChange = null;
@@ -135,6 +138,7 @@ public class MyRetainedFragment extends RetainedFragment {
         mOtpMobileChange = null;
 
         mCustRegName = null;
+        //mSelCustOrder = null;
 
         if(AppConstants.USE_CRASHLYTICS) {
             Crashlytics.setString(AppConstants.CLTS_INPUT_CUST_MOBILE, "");

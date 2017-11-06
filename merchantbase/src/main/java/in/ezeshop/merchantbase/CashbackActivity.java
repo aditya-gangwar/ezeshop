@@ -1206,7 +1206,13 @@ public class CashbackActivity extends BaseActivity implements
                     case MyRetainedFragment.REQUEST_CHG_ORDER_STATUS:
                         AppCommonUtil.cancelProgressDialog(true);
                         if (errorCode == ErrorCodes.NO_ERROR) {
-                            String msg = String.format(AppConstants.orderStatusChgSuccessMsg, mWorkFragment.mSelCustOrder.getCurrStatus().toString());
+                            // remove order detail fragment
+                            Fragment currentFragment = getFragmentManager().findFragmentByTag(PENDING_ORDER_DETAILS_FRAG);
+                            if (currentFragment != null && currentFragment.isVisible()) {
+                                // remove fragment
+                                getFragmentManager().popBackStackImmediate();
+                            }
+                            String msg = String.format(AppConstants.orderStatusChgSuccessMsg, opData.argStr1);
                             DialogFragmentWrapper.createNotification(AppConstants.defaultSuccessTitle, msg, false, false)
                                     .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
                         } else {
@@ -1267,7 +1273,9 @@ public class CashbackActivity extends BaseActivity implements
 
     @Override
     public void showCustomerDetails(String custMobile) {
-        if(mWorkFragment.mCurrCashback.getCustomer().getMobileNum().equals(custMobile)) {
+        if(mWorkFragment.mCurrCashback!=null &&
+                mWorkFragment.mCurrCashback.getCustomer() != null &&
+                mWorkFragment.mCurrCashback.getCustomer().getMobileNum().equals(custMobile)) {
             // data available
             startCustDetailFrag(true);
         } else {
@@ -1280,27 +1288,61 @@ public class CashbackActivity extends BaseActivity implements
     }
 
     @Override
-    public void acceptOrder() {
+    public void acceptOrder(String orderId) {
+        // Only pending orders can be cancelled
+        CustomerOrder order = mWorkFragment.mPendingCustOrders.get(orderId);
 
-    }
-
-    @Override
-    public void cancelOrder(String cancelReason) {
-        if(mWorkFragment.mSelCustOrder.getCurrStatus().equals(DbConstants.CUSTOMER_ORDER_STATUS.Delivered.toString())) {
-            AppCommonUtil.toast(this,"Order already delivered");
+        if(order!=null) {
+            if(!order.getCurrStatus().equals(DbConstants.CUSTOMER_ORDER_STATUS.New.toString())) {
+                AppCommonUtil.toast(this,"Order already "+order.getCurrStatus());
+            } else {
+                // start billing fragment - if not available, fetch account details first
+                if(mWorkFragment.mCurrCashback!=null &&
+                        mWorkFragment.mCurrCashback.getCustomer() != null &&
+                        mWorkFragment.mCurrCashback.getCustomer().getMobileNum().equals(order.getCustMobile())) {
+                    // data available
+                    onCashbackResponse(ErrorCodes.NO_ERROR);
+                } else {
+                    // fetch data from db
+                    AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
+                    mWorkFragment.isBillingForOnlineOrder = true;
+                    mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_GET_CASHBACK, null, null,
+                            order.getCustMobile(), null, null, null, null);
+                }
+            }
         } else {
-            AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
-            mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_CHG_ORDER_STATUS, null, null,
-                    mWorkFragment.mSelCustOrder.getId(), DbConstants.CUSTOMER_ORDER_STATUS.Cancelled.toString(), cancelReason, null, null);
+            LogMy.wtf(TAG,"cancelOrder: Order object is null");
         }
     }
 
     @Override
-    public void showOrderDetailed(CustomerOrder order) {
-        // store order for further reference
-        mWorkFragment.mSelCustOrder = order;
+    public void cancelOrder(String orderId, String cancelReason) {
+        // Only pending orders can be cancelled
+        CustomerOrder order = mWorkFragment.mPendingCustOrders.get(orderId);
 
-        // fetch all order files
+        if(order!=null) {
+            if(order.getCurrStatus().equals(DbConstants.CUSTOMER_ORDER_STATUS.Delivered.toString())) {
+                AppCommonUtil.toast(this,"Order already Delivered");
+            } else if(order.getCurrStatus().equals(DbConstants.CUSTOMER_ORDER_STATUS.Cancelled.toString())) {
+                AppCommonUtil.toast(this,"Order already Cancelled");
+            } else {
+                AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
+                mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_CHG_ORDER_STATUS, null, null,
+                        orderId, DbConstants.CUSTOMER_ORDER_STATUS.Cancelled.toString(), cancelReason, null, null);
+            }
+        } else {
+            LogMy.wtf(TAG,"cancelOrder: Order object is null");
+        }
+    }
+
+    @Override
+    public void showOrderDetailed(String orderId) {
+        // store order for further reference
+        //mWorkFragment.mSelCustOrder = order;
+
+        CustomerOrder order = mWorkFragment.mPendingCustOrders.get(orderId);
+
+        // fetch all missing order attached files
         if(mWorkFragment.mMissingFiles!=null) {
             mWorkFragment.mMissingFiles.clear();
         }

@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.backendless.exceptions.BackendlessException;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,19 +50,23 @@ public class PendingOrderDetailsFrag extends BaseFragment
     private static final String TAG = "MchntApp-PendingOrderDetailsFrag";
 
     private PendingOrderDetailsFrag.PendingOrderDetailsFragIf mCallback;
-    private MyRetainedFragment mRetainedFragment;
+    //private MyRetainedFragment mRetainedFragment;
     private SimpleDateFormat mSdfDateWithTime;
 
     private static final int REQ_NOTIFY_ERROR = 4;
     private static final int REQ_NOTIFY_ERROR_EXIT = 5;
 
     private static final String DIALOG_CALL_NUMBER = "DialogCallNumber";
+    private static final String ARG_ORDER_ID = "argOrderId";
 
     // Special member variable to identify backstack cases
     private Integer mBackstackFlag;
     private File[] mPrescripImgs = new File[CommonConstants.MAX_PRESCRIPS_PER_ORDER];
     private ArrayList<String> mCallNumbers = new ArrayList<>(10);
     private ArrayList<String> mCallNumDisplay = new ArrayList<>(10);
+
+    private String mOrderId;
+    private String mOrderCurrStatus;
 
     // Part of instance state: to be restored in event of fragment recreation
     private String mCancelReason;
@@ -70,9 +76,20 @@ public class PendingOrderDetailsFrag extends BaseFragment
         MyRetainedFragment getRetainedFragment();
         void setToolbarForFrag(int iconResId, String title, String subTitle);
         void showCustomerDetails(String custMobile);
-        void cancelOrder(String cancelReason);
-        void acceptOrder();
+        void cancelOrder(String orderId, String cancelReason);
+        void acceptOrder(String orderId);
     }
+
+    public static PendingOrderDetailsFrag getInstance(String orderId) {
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_ORDER_ID, orderId);
+
+        PendingOrderDetailsFrag fragment = new PendingOrderDetailsFrag();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -86,12 +103,12 @@ public class PendingOrderDetailsFrag extends BaseFragment
         super.onActivityCreated(savedInstanceState);
 
         try {
-            mCallback = (PendingOrderDetailsFrag.PendingOrderDetailsFragIf) getActivity();
+            mCallback = (PendingOrderDetailsFragIf) getActivity();
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString() + " must implement PendingOrderDetailsFragIf");
         }
 
-        mRetainedFragment = mCallback.getRetainedFragment();
+        //mRetainedFragment = mCallback.getRetainedFragment();
         mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.MY_LOCALE);
 
         mPrescripImgArr = new ImageView[]{mImgPrescrip1,mImgPrescrip2,mImgPrescrip3,mImgPrescrip4};
@@ -128,7 +145,7 @@ public class PendingOrderDetailsFrag extends BaseFragment
             //setup all listeners
             initListeners();
             // Update view - only to be done only after values are restored above
-            initDisplay();
+            initDisplay(mCallback.getRetainedFragment().mPendingCustOrders.get(getArguments().getString(ARG_ORDER_ID)));
 
         } catch (Exception e) {
             LogMy.e(TAG, "Exception in onActivityCreated", e);
@@ -139,8 +156,15 @@ public class PendingOrderDetailsFrag extends BaseFragment
         }
     }
 
-    private void initDisplay() {
-        CustomerOrder order = mRetainedFragment.mSelCustOrder;
+    private void initDisplay(CustomerOrder order) {
+        //CustomerOrder order = mRetainedFragment.mSelCustOrder;
+        if(order==null) {
+            LogMy.wtf(TAG,"initDisplay: Order object is null");
+            throw new BackendlessException(String.valueOf(ErrorCodes.GENERAL_ERROR), "Order object is null");
+        }
+
+        mOrderId = order.getId();
+        mOrderCurrStatus = order.getCurrStatus();
 
         // Customer details
         mInputCustName.setText(order.getCustName());
@@ -169,6 +193,9 @@ public class PendingOrderDetailsFrag extends BaseFragment
     }
 
     private void prepareCallNumbers(CustomerOrder order) {
+        mCallNumbers.clear();
+        mCallNumDisplay.clear();
+
         mCallNumbers.add(order.getCustMobile());
         mCallNumDisplay.add("Account Number ("+order.getCustName()+") : "
                 +AppConstants.PHONE_COUNTRY_CODE_DISPLAY+order.getCustMobile());
@@ -445,8 +472,7 @@ public class PendingOrderDetailsFrag extends BaseFragment
                 }
 
             } else if (i == mBtnChangeStatus.getId()) {
-                DialogFragment dialog = OrderStatusChangeDialog.newInstance(mRetainedFragment.mSelCustOrder.getId(),
-                        mRetainedFragment.mSelCustOrder.getCurrStatus(), true);
+                DialogFragment dialog = OrderStatusChangeDialog.newInstance(mOrderId, mOrderCurrStatus, true);
                 dialog.setTargetFragment(this, OrderStatusChangeDialog.REQ_ORDER_STATUS_CHG);
                 dialog.show(getFragmentManager(), OrderStatusChangeDialog.DIALOG_ORDER_STATUS_CHG);
 
@@ -463,7 +489,7 @@ public class PendingOrderDetailsFrag extends BaseFragment
 
     @Override
     public void cancelOrder(String orderId, String reason) {
-        if(orderId.equals(mRetainedFragment.mSelCustOrder.getId())) {
+        if(orderId.equals(mOrderId)) {
             mCancelReason = reason;
             // ask for confirmation
             String msg = "Are you sure to Cancel Order with ID# "+orderId;
@@ -471,16 +497,16 @@ public class PendingOrderDetailsFrag extends BaseFragment
             dialog.setTargetFragment(this, DialogFragmentWrapper.REQUEST_DIALOG_CONFIRMATION);
             dialog.show(getFragmentManager(), DialogFragmentWrapper.DIALOG_CONFIRMATION);
         } else {
-            LogMy.wtf(TAG,"cancelOrder: The order id is not same: "+orderId+", "+mRetainedFragment.mSelCustOrder.getId());
+            LogMy.wtf(TAG,"cancelOrder: The order id is not same: "+orderId+", "+mOrderId);
         }
     }
 
     @Override
     public void acceptOrder(String orderId) {
-        if(orderId.equals(mRetainedFragment.mSelCustOrder.getId())) {
-            mCallback.acceptOrder();
+        if(orderId.equals(mOrderId)) {
+            mCallback.acceptOrder(mOrderId);
         } else {
-            LogMy.wtf(TAG,"acceptOrder: The order id is not same: "+orderId+", "+mRetainedFragment.mSelCustOrder.getId());
+            LogMy.wtf(TAG,"acceptOrder: The order id is not same: "+orderId+", "+mOrderId);
         }
     }
 
@@ -521,7 +547,7 @@ public class PendingOrderDetailsFrag extends BaseFragment
             switch (requestCode) {
                 case DialogFragmentWrapper.REQUEST_DIALOG_CONFIRMATION:
                     // only cancellation confirmation is requested from this fragment
-                    mCallback.cancelOrder(mCancelReason);
+                    mCallback.cancelOrder(mOrderId, mCancelReason);
                     break;
                 case REQ_NOTIFY_ERROR:
                     // do nothing
@@ -581,23 +607,23 @@ public class PendingOrderDetailsFrag extends BaseFragment
     @BindView(R2.id.label_orderStatusNew) TextView mLabelStatusNew;
     @BindView(R2.id.time_statusNew) TextView mTimeStatusNew;
     // status accepted
-    @BindView(R2.id.space_orderStatusAccptd) TextView mSpaceStatusAccptd;
-    @BindView(R2.id.lyt_orderStatusAccptd) TextView mLytStatusAccptd;
+    @BindView(R2.id.space_orderStatusAccptd) View mSpaceStatusAccptd;
+    @BindView(R2.id.lyt_orderStatusAccptd) View mLytStatusAccptd;
     @BindView(R2.id.label_orderStatusAccptd) TextView mLabelStatusAccptd;
     @BindView(R2.id.time_statusAccptd) TextView mTimeStatusAccptd;
     // status dispatched
-    @BindView(R2.id.space_orderStatusDspchd) TextView mSpaceStatusDsptchd;
-    @BindView(R2.id.lyt_orderStatusDspchd) TextView mLytStatusDsptchd;
+    @BindView(R2.id.space_orderStatusDspchd) View mSpaceStatusDsptchd;
+    @BindView(R2.id.lyt_orderStatusDspchd) View mLytStatusDsptchd;
     @BindView(R2.id.label_orderStatusDspchd) TextView mLabelStatusDsptchd;
     @BindView(R2.id.time_statusDsptchd) TextView mTimeStatusDsptchd;
     // status delivered
-    @BindView(R2.id.space_orderStatusDlvrd) TextView mSpaceStatusDlvrd;
-    @BindView(R2.id.lyt_orderStatusDlvrd) TextView mLytStatusDlvrd;
+    @BindView(R2.id.space_orderStatusDlvrd) View mSpaceStatusDlvrd;
+    @BindView(R2.id.lyt_orderStatusDlvrd) View mLytStatusDlvrd;
     @BindView(R2.id.label_orderStatusDlvrd) TextView mLabelStatusDlvrd;
     @BindView(R2.id.time_statusDlvrd) TextView mTimeStatusDlvrd;
     // status cancelled
     //@BindView(R2.id.space_orderStatusCancel) TextView mSpaceStatusCancel;
-    @BindView(R2.id.lyt_orderStatusCancel) TextView mLytStatusCancel;
+    @BindView(R2.id.lyt_orderStatusCancel) View mLytStatusCancel;
     @BindView(R2.id.label_orderStatusCancel) TextView mLabelStatusCancel;
     @BindView(R2.id.time_statusCancel) TextView mTimeStatusCancel;
 
