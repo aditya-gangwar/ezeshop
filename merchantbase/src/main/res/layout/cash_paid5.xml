@@ -7,24 +7,26 @@
 
     <LinearLayout
         style="@style/LL_Horizontal_wrap"
+        android:layout_width="match_parent"
         android:id="@+id/title_cashPaid"
-        android:layout_marginLeft="@dimen/small_space">
+        android:gravity="left|center_vertical"
+        android:layout_marginBottom="@dimen/XS_space">
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="10"
             android:layout_height="wrap_content"
             android:src="@drawable/cash_logo_18dp"
-            android:layout_marginBottom="@dimen/small_space"
-            android:layout_gravity="center"/>
+            android:scaleType="centerInside"/>
 
         <EditText
             style="@style/Edittext_only_view_small"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_gravity="center"
+            android:layout_width="0dp"
+            android:layout_weight="90"
+            android:gravity="left|center_vertical"
             android:textStyle="bold"
             android:textColor="@color/secondary_text"
-            android:layout_marginBottom="@dimen/small_space"
             android:text="PAYMENT"/>
 
         <!--View

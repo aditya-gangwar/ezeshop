@@ -87,7 +87,7 @@ public class BillingFragment2 extends BaseFragment {
     }
 
     private void setTotalAmt() {
-        String str = "Bill    " + AppConstants.SYMBOL_RS + String.valueOf(mRetainedFragment.mBillTotal);
+        String str = "Bill    " + AppConstants.SYMBOL_RS + String.valueOf(mRetainedFragment.mBillAmount);
         mBtnTotal.setText(str);
     }
 
@@ -127,7 +127,7 @@ public class BillingFragment2 extends BaseFragment {
 
             } else if(resId == R.id.input_kb_clear) {
                 mInputItemAmt.setText(AppConstants.SYMBOL_RS_0);
-                mRetainedFragment.mBillTotal = 0;
+                mRetainedFragment.mBillAmount = 0;
                 setTotalAmt();
 
             } else {// process keys 0 - 9
@@ -154,7 +154,7 @@ public class BillingFragment2 extends BaseFragment {
     // Input string is after removing leading rupee symbol
     private void handlePlus(String curStr) {
         if(curStr.length()>0) {
-            mRetainedFragment.mBillTotal = Integer.parseInt(curStr);
+            mRetainedFragment.mBillAmount = Integer.parseInt(curStr);
             setTotalAmt();
         }
     }

@@ -26,6 +26,7 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AlertDialog;
@@ -88,6 +89,7 @@ public class AppCommonUtil {
 
     // single active progress dialog at any time
     private static Toast mToast;
+    private static Snackbar mSnackbar;
     private static ProgressDialog mProgressDialog;
     private static String mProgressDialogMsg;
 
@@ -266,7 +268,7 @@ public class AppCommonUtil {
     }
 
     /*
-     8 Show toast on screen
+     * Show toast on screen
      */
     public static void toast(Context context, String msg) {
         if(mToast!=null) {
@@ -278,6 +280,14 @@ public class AppCommonUtil {
     public static void cancelToast() {
         if(mToast!=null)
             mToast.cancel();
+    }
+
+    public static void snackbar(View coordinatorLyt, String msg) {
+        if(mSnackbar!=null) {
+            mSnackbar.dismiss();
+        }
+        mSnackbar = Snackbar.make(coordinatorLyt, msg, Snackbar.LENGTH_SHORT);
+        mSnackbar.show();
     }
 
     /*

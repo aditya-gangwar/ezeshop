@@ -105,7 +105,7 @@ public class OrderListViewFragment extends ListFragment implements OrderListView
     }
 
     private void setTotalAmt() {
-        String str = "Total      "+ AppConstants.SYMBOL_RS + String.valueOf(mRetainedFragment.mBillTotal);
+        String str = "Total      "+ AppConstants.SYMBOL_RS + String.valueOf(mRetainedFragment.mBillAmount);
         mTotalBtn.setText(str);
     }
 
@@ -181,7 +181,7 @@ public class OrderListViewFragment extends ListFragment implements OrderListView
                 // delete item in the list
                 OrderItem item = mRetainedFragment.mOrderItems.remove(mChangePosition);
                 // update total bill amount
-                mRetainedFragment.mBillTotal = mRetainedFragment.mBillTotal - item.getPrice();
+                mRetainedFragment.mBillAmount = mRetainedFragment.mBillAmount - item.getPrice();
                 if (item.isCashbackExcluded()) {
                     mRetainedFragment.mCbExcludedTotal = mRetainedFragment.mCbExcludedTotal - item.getPrice();
                 }
@@ -222,7 +222,7 @@ public class OrderListViewFragment extends ListFragment implements OrderListView
     private void updateBillTotal(int oldItemPrice, OrderItem updatedItem) {
         LogMy.d(TAG,"In processPriceChange: "+oldItemPrice);
 
-        mRetainedFragment.mBillTotal = mRetainedFragment.mBillTotal - oldItemPrice + updatedItem.getPrice();
+        mRetainedFragment.mBillAmount = mRetainedFragment.mBillAmount - oldItemPrice + updatedItem.getPrice();
         if (updatedItem.isCashbackExcluded()) {
             mRetainedFragment.mCbExcludedTotal = mRetainedFragment.mCbExcludedTotal - oldItemPrice + updatedItem.getPrice();
         }

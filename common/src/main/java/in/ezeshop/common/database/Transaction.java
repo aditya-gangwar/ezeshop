@@ -33,7 +33,26 @@ public class Transaction
   private String cb_percent;
   private String cust_mobile;
   private Integer cl_debit;
+  private Integer delCharge;
+  private Boolean isFinal;
   private Cashback cashback;
+
+  public Boolean getFinal() {
+    return isFinal;
+  }
+
+  public void setFinal(Boolean aFinal) {
+    isFinal = aFinal;
+  }
+
+  public Integer getDelCharge() {
+    return delCharge;
+  }
+
+  public void setDelCharge(Integer delCharge) {
+    this.delCharge = delCharge;
+  }
+
   public Integer getCb_credit()
   {
     return cb_credit;

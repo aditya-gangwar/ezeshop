@@ -9,9 +9,7 @@ import android.os.Handler;
 import com.crashlytics.android.Crashlytics;
 
 import in.ezeshop.appbase.constants.AppConstants;
-import in.ezeshop.appbase.utilities.AppAlarms;
 import in.ezeshop.appbase.utilities.TxnReportsHelper2;
-import in.ezeshop.common.constants.DbConstants;
 import in.ezeshop.common.constants.ErrorCodes;
 import in.ezeshop.common.database.CustomerOrder;
 import in.ezeshop.common.database.MerchantOps;
@@ -26,10 +24,8 @@ import in.ezeshop.merchantbase.entities.MerchantUser;
 import in.ezeshop.appbase.entities.MyCashback;
 import in.ezeshop.common.MyCustomer;
 import in.ezeshop.appbase.entities.MyTransaction;
-import in.ezeshop.merchantbase.entities.OrderItem;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -83,8 +79,9 @@ public class MyRetainedFragment extends RetainedFragment {
     public MyCashback mCurrCashback;
     public MyCustomer mCurrCustomer;
     public MyTransaction mCurrTransaction;
-    public int mBillTotal;
-    public boolean isBillingForOnlineOrder;
+    public int mBillAmount;
+    public String mOrderIdForBilling;
+    public List<File> mBillImgs;
 
     public MerchantStats mMerchantStats;
     public List<MyCashback> mLastFetchCashbacks;
@@ -129,8 +126,8 @@ public class MyRetainedFragment extends RetainedFragment {
         mCustMobile = null;
         //mOrderItems = null;
         //mCbExcludedTotal = 0;
-        mBillTotal = 0;
-        isBillingForOnlineOrder = false;
+        mBillAmount = 0;
+        mOrderIdForBilling = null;
 
         mCustomerOp= null;
         mVerifyParamMobileChange = null;

@@ -89,8 +89,6 @@ public class PendingOrderDetailsFrag extends BaseFragment
         return fragment;
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.frag_order_detail_mchntapp, container, false);

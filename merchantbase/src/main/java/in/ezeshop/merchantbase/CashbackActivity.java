@@ -1296,6 +1296,8 @@ public class CashbackActivity extends BaseActivity implements
             if(!order.getCurrStatus().equals(DbConstants.CUSTOMER_ORDER_STATUS.New.toString())) {
                 AppCommonUtil.toast(this,"Order already "+order.getCurrStatus());
             } else {
+                mCustDetailDialogPending = false; // resetting for just in case
+
                 // start billing fragment - if not available, fetch account details first
                 if(mWorkFragment.mCurrCashback!=null &&
                         mWorkFragment.mCurrCashback.getCustomer() != null &&
@@ -1305,7 +1307,7 @@ public class CashbackActivity extends BaseActivity implements
                 } else {
                     // fetch data from db
                     AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
-                    mWorkFragment.isBillingForOnlineOrder = true;
+                    mWorkFragment.mOrderIdForBilling = orderId;
                     mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_GET_CASHBACK, null, null,
                             order.getCustMobile(), null, null, null, null);
                 }
@@ -2271,6 +2273,9 @@ public class CashbackActivity extends BaseActivity implements
 
     private void startPendingOrderDetailsFrag() {
         if (mFragMgr.findFragmentByTag(PENDING_ORDER_DETAILS_FRAG) == null) {
+            // will be set to orderId - in case the merchant accepts order (thus creates billing txn)
+            // or edit txn
+            mWorkFragment.mOrderIdForBilling = null;
 
             Fragment fragment = new PendingOrderDetailsFrag();
             FragmentTransaction transaction = mFragMgr.beginTransaction();

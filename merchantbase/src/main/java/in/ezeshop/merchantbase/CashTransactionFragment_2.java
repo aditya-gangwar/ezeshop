@@ -93,6 +93,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
     private int mOverdraft;
 
     private int mAddCashload;
+    private int mDelCharges;
     private int mAddCbNormal;
     private int mAddCbExtra;
 
@@ -113,6 +114,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
     private int mDebitClStatus;
     private int mOverdraftStatus;
     private int mAddCbStatus;
+    private int mDelChgsStatus;
 
     private long newBillDialogOpenTime;
 
@@ -127,7 +129,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         LogMy.d(TAG, "In onCreateView");
-        View v = inflater.inflate(R.layout.fragment_cash_txn_5, container, false);
+        View v = inflater.inflate(R.layout.fragment_cash_txn_6, container, false);
 
         // access to UI elements
         bindUiResources(v);
@@ -188,6 +190,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
                     setAddClStatus(savedInstanceState.getInt("mAddClStatus"));
                     setDebitClStatus(savedInstanceState.getInt("mDebitClStatus"));
                     setOverdraftStatus(savedInstanceState.getInt("mOverdraftStatus"));
+                    setDelChgsStatus(savedInstanceState.getInt("mDelChgsStatus"));
                 }
             } else {
                 // these fxs update onscreen view also, so need to be run for backstack scenario too
@@ -195,6 +198,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
                 setAddClStatus(mAddClStatus);
                 setDebitClStatus(mDebitClStatus);
                 setOverdraftStatus(mOverdraftStatus);
+                setDelChgsStatus(mDelChgsStatus);
             }
 
             // Init view - only to be done after states are set above
@@ -234,18 +238,18 @@ public class CashTransactionFragment_2 extends BaseFragment implements
     }
 
     private void displayInputBillAmt() {
-        int value = mRetainedFragment.mBillTotal;
+        int value = mRetainedFragment.mBillAmount;
         AppCommonUtil.showAmtColor(getActivity(), null, mInputBillAmt, value,false);
         mLayoutBillAmt.setAlpha(value==0?0.4f:1.0f);
         mImgBill.setColorFilter(ContextCompat.getColor(getActivity(),
                 value==0?R.color.disabled:R.color.primary),
                 PorterDuff.Mode.SRC_IN);
 
-        /*if(mRetainedFragment.mBillTotal==0) {
+        /*if(mRetainedFragment.mBillAmount==0) {
             mInputBillAmt.setText(AppConstants.SYMBOL_RS_0);
             mLayoutBillAmt.setAlpha(0.4f);
         } else {
-            mInputBillAmt.setText(AppCommonUtil.getNegativeAmtStr(mRetainedFragment.mBillTotal, true));
+            mInputBillAmt.setText(AppCommonUtil.getNegativeAmtStr(mRetainedFragment.mBillAmount, true));
             mLayoutBillAmt.setAlpha(1.0f);
         }*/
     }
@@ -316,7 +320,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
     }
 
     private void calcAndSetAmts(boolean forcedRefresh) {
-        LogMy.d(TAG,"Entering calcAndSetAmts: Bill:"+mRetainedFragment.mBillTotal+", cashPaid:"+mCashPaid);
+        LogMy.d(TAG,"Entering calcAndSetAmts: Bill:"+mRetainedFragment.mBillAmount +", cashPaid:"+mCashPaid);
         LogMy.d(TAG,"Amount status: mDebitClStatus:"+ mDebitClStatus +", mAddClStatus:"+mAddClStatus+", mOverdraftStatus:"+ mOverdraftStatus);
 
         // calculate add/redeem amounts fresh
@@ -338,7 +342,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
         LogMy.d(TAG,"After merge cashload: "+mAddCashload+", "+ mDebitCashload);
 
         // calculate cash to pay
-        int effectiveToPay = mRetainedFragment.mBillTotal - mDebitCashload;
+        int effectiveToPay = (mRetainedFragment.mBillAmount + mDelCharges) - mDebitCashload;
         mReturnCash = mCashPaid - (effectiveToPay + mAddCashload);
 
         // if any change to be returned
@@ -347,7 +351,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
             if(mDebitCashload >= mReturnCash) {
                 setDebitCashload(mDebitCashload - mReturnCash);
                 // calculate values again
-                effectiveToPay = mRetainedFragment.mBillTotal - mDebitCashload;
+                effectiveToPay = (mRetainedFragment.mBillAmount + mDelCharges) - mDebitCashload;
                 mReturnCash = mCashPaid - (effectiveToPay + mAddCashload);
             }
         }
@@ -378,7 +382,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
         int oldMinCash = mMinCashToPay;
         calcMinCashToPay();
         if(oldMinCash!=mMinCashToPay || forcedRefresh) {
-            mCashPaidHelper.refreshValues(mMinCashToPay, mCashPaid, mRetainedFragment.mBillTotal);
+            mCashPaidHelper.refreshValues(mMinCashToPay, mCashPaid, (mRetainedFragment.mBillAmount + mDelCharges));
         }
     }
 
@@ -387,7 +391,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
         int effectiveToPay = 0;
         if(mDebitClStatus ==STATUS_AUTO) {
             // mDebitCashback will always be 0 - but added here just for completeness of formulae
-            effectiveToPay = mRetainedFragment.mBillTotal - mDebitCashload;
+            effectiveToPay = (mRetainedFragment.mBillAmount + mDelCharges) - mDebitCashload;
 
             if( mCashPaid > effectiveToPay ) {
                 // no point of any redeem, if cashPaid is already more than the amount
@@ -406,7 +410,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
         int effectiveToPay = 0;
         if(mAddClStatus==STATUS_AUTO) {
             //mAddCashload = 0;
-            effectiveToPay = mRetainedFragment.mBillTotal - mDebitCashload;
+            effectiveToPay = (mRetainedFragment.mBillAmount + mDelCharges) - mDebitCashload;
             int addCash = (mCashPaid < effectiveToPay)?0:(mCashPaid - effectiveToPay);
 
             // check for limit
@@ -431,7 +435,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
         } else {*/
             // Min cash to pay = 'Bill amt' - 'all enabled debit amts'
             // If 'any one or both combined enabled debit amount' > 'bill amt', then mMinCashToPay = 0
-            mMinCashToPay = mRetainedFragment.mBillTotal;
+            mMinCashToPay = mRetainedFragment.mBillAmount + mDelCharges;
             if (mDebitClStatus == STATUS_AUTO) {
                 mMinCashToPay = mMinCashToPay - Math.min(mClBalance, mMinCashToPay);
             }
@@ -492,7 +496,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
                     }
                     LogMy.d(TAG, "Received new bill amount.");
                     String newBillAmt = (String) data.getSerializableExtra(NumberInputDialog.EXTRA_INPUT_HUMBER);
-                    mRetainedFragment.mBillTotal = Integer.parseInt(newBillAmt);
+                    mRetainedFragment.mBillAmount = Integer.parseInt(newBillAmt);
                     displayInputBillAmt();
                     updateAmtUiStates();
 
@@ -509,7 +513,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
                     String newCashAmt = (String) data.getSerializableExtra(NumberInputDialog.EXTRA_INPUT_HUMBER);
                     if(mCashPaidHelper==null) {
                         mCashPaidHelper = new CashPaid2(mMinCashToPay, (mOverdraftStatus==STATUS_AUTO),
-                                mRetainedFragment.mBillTotal, this, getActivity());
+                                (mRetainedFragment.mBillAmount + mDelCharges), this, getActivity());
                     }
 
                     mCashPaidHelper.onCustomAmtEnter(newCashAmt,(mOverdraftStatus==STATUS_AUTO));
@@ -559,7 +563,8 @@ public class CashTransactionFragment_2 extends BaseFragment implements
         LogMy.d(TAG, "In setTransactionValues");
         Transaction trans = new Transaction();
         // Set only the amounts
-        trans.setTotal_billed(mRetainedFragment.mBillTotal);
+        trans.setTotal_billed(mRetainedFragment.mBillAmount);
+        trans.setDelCharge(mDelCharges);
         trans.setCb_eligible_amt(mCbEligibleAmt);
         trans.setExtracb_eligible_amt(mExtraCbEligibleAmt);
         trans.setPaymentAmt(mCashPaid);
@@ -575,6 +580,12 @@ public class CashTransactionFragment_2 extends BaseFragment implements
         trans.setExtra_cb_percent(String.valueOf(mPpCbRate));
 
         trans.setCust_private_id(mRetainedFragment.mCurrCustomer.getPrivateId());
+
+        // If this txn is for an online order - the TxnId will be same as orderId
+        // Else backend will generate a new one
+        if(mRetainedFragment.mOrderIdForBilling!=null) {
+            trans.setTrans_id(mRetainedFragment.mOrderIdForBilling);
+        }
 
         mRetainedFragment.mCurrTransaction = new MyTransaction(trans);
     }
@@ -622,7 +633,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
                         setDebitClStatus(STATUS_CLEARED);
                         calcAndSetAmts(false);
 
-                    } else if(mCashPaid == mRetainedFragment.mBillTotal) {
+                    } else if(mCashPaid == (mRetainedFragment.mBillAmount + mDelCharges)) {
                         AppCommonUtil.toast(getActivity(), "Full Payment selected already");
 
                     } else{
@@ -737,6 +748,19 @@ public class CashTransactionFragment_2 extends BaseFragment implements
                             }
                         }
                     }
+                } else if (i == R.id.img_delivery_charges || i == R.id.label_delivery_charges || i == R.id.input_delivery_charges) {
+                    if(mDelChgsStatus==STATUS_AUTO) {
+                        setDelChgsStatus(STATUS_CLEARED);
+                    } else if(mDelChgsStatus==STATUS_CLEARED) {
+                        if(isDelChgsApplicable()) {
+                            setDelChgsStatus(STATUS_AUTO);
+                        } else {
+                            //AppCommonUtil.toast(getActivity(), "Delivery Charge not applicable");
+                            String msg = "Delivery Charges not applicable. 'Bill amount' is more than free delivery bill of "
+                                    + AppCommonUtil.getAmtStr(MerchantUser.getInstance().getMerchant().getFreeDlvrMinAmt()) + ".";
+                            AppCommonUtil.snackbar(mCoordinatorLayout, msg);
+                        }
+                    }
                 } else {
                     return false;
                 }
@@ -787,6 +811,10 @@ public class CashTransactionFragment_2 extends BaseFragment implements
         mLabelBill.setOnTouchListener(this);
         mInputBillAmt.setOnTouchListener(this);
 
+        mImgDelChgs.setOnTouchListener(this);
+        mLabelDelChgs.setOnTouchListener(this);
+        mInputDelChgs.setOnTouchListener(this);
+
         //mLayoutAccount.setOnTouchListener(this);
         mImgAccount.setOnTouchListener(this);
         mLabelAccount.setOnTouchListener(this);
@@ -826,7 +854,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
                     if ((mAddCbNormal + mAddCbExtra) <= 0 && mAddCashload <= 0 && mOverdraft <= 0 && mDebitCashload <= 0) {
                         //AppCommonUtil.toast(getActivity(), "No MyeCash data to process !!");
                         String msg;
-                        //if (mRetainedFragment.mBillTotal <= 0) {
+                        //if (mRetainedFragment.mBillAmount <= 0) {
                             msg = "All Add/Debit amounts are 0. Nothing to process.";
                         //} else {
                         //    msg = "'Award Cashback' is less than 1 Rupee. Other credit/debit amount are 0.";
@@ -867,6 +895,33 @@ public class CashTransactionFragment_2 extends BaseFragment implements
 
     }
 
+    private void setDelChgsStatus(int status) {
+        LogMy.d(TAG, "In setDelChgsStatus: " + status);
+        mDelChgsStatus = status;
+        if(mAddCbStatus == STATUS_AUTO) {
+            mLayoutDelChgs.setVisibility(View.VISIBLE);
+            mLayoutDelChgs.setAlpha(1.0f);
+            mImgDelChgs.setColorFilter(ContextCompat.getColor(getActivity(), R.color.primary), PorterDuff.Mode.SRC_IN);
+            //mLabelDelChgs.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
+            //mInputDelChgs.setTextColor(ContextCompat.getColor(getActivity(), R.color.primary_text));
+            mDelCharges = MyGlobalSettings.getDeliveryCharges();
+
+        } else if(mAddCbStatus == STATUS_CLEARED) {
+            mLayoutDelChgs.setVisibility(View.VISIBLE);
+            mLayoutAddCb.setAlpha(0.5f);
+            mImgDelChgs.setColorFilter(ContextCompat.getColor(getActivity(), R.color.disabled), PorterDuff.Mode.SRC_IN);
+            //mLabelDelChgs.setTextColor(ContextCompat.getColor(getActivity(), R.color.disabled));
+            //mInputDelChgs.setTextColor(ContextCompat.getColor(getActivity(), R.color.disabled));
+            mDelCharges = 0;
+
+        } else if(mAddCbStatus == STATUS_DISABLED) {
+            mLayoutDelChgs.setVisibility(View.GONE);
+            mDelCharges = 0;
+        }
+
+        AppCommonUtil.showAmtColor(getActivity(), mLabelDelChgs, mInputDelChgs, mDelCharges,false);
+    }
+
     private void setAddClStatus(int status) {
         LogMy.d(TAG, "In setAddClStatus: " + status);
         mAddClStatus = status;
@@ -899,8 +954,6 @@ public class CashTransactionFragment_2 extends BaseFragment implements
             mLayoutOverdraft.setBackgroundResource(R.drawable.round_rect_border_disabled);
             //mImgOverdraft.setColorFilter(R.color.disabled);
             mImgOverdraft.setColorFilter(ContextCompat.getColor(getActivity(), R.color.disabled), PorterDuff.Mode.SRC_IN);
-            /*mImgOverdraft.setImageDrawable(AppCommonUtil.getTintedDrawable(getActivity(),
-                    R.drawable.ic_account_balance_wallet_white_24dp, R.color.disabled));*/
             mLabelOverdraft.setTextColor(ContextCompat.getColor(getActivity(), R.color.disabled));
             mInputOverdraft.setTextColor(ContextCompat.getColor(getActivity(), R.color.disabled));
         } else {
@@ -923,6 +976,11 @@ public class CashTransactionFragment_2 extends BaseFragment implements
         }
     }
 
+    private boolean isDelChgsApplicable() {
+        return (mRetainedFragment.mBillAmount > 0 &&
+                mRetainedFragment.mBillAmount < MerchantUser.getInstance().getMerchant().getFreeDlvrMinAmt());
+    }
+
     /*
      * Calculates 'states' based on parameters which can't be changed from this screen
      * i.e, merchant settings, and account/cashback balance
@@ -930,6 +988,17 @@ public class CashTransactionFragment_2 extends BaseFragment implements
      */
     private void initAmtUiStates() {
         LogMy.d(TAG, "In initAmtUiStates");
+
+        // Delivery Charges status
+        if(mRetainedFragment.mOrderIdForBilling==null) {
+            setDelChgsStatus(STATUS_DISABLED);
+        } else {
+            if(isDelChgsApplicable()) {
+                setDelChgsStatus(STATUS_AUTO);
+            } else {
+                setDelChgsStatus(STATUS_CLEARED);
+            }
+        }
 
         // Init 'add cash' status
         if(mMerchantUser.getMerchant().getCl_add_enable()) {
@@ -980,7 +1049,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
         if(mCashPaidHelper==null) {
             calcMinCashToPay();
             mCashPaidHelper = new CashPaid2(mMinCashToPay, (mOverdraftStatus==STATUS_AUTO),
-                    mRetainedFragment.mBillTotal, this, getActivity());
+                    (mRetainedFragment.mBillAmount + mDelCharges), this, getActivity());
         }
         mCashPaidHelper.initView(getView());
 
@@ -1012,7 +1081,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
             // not permanently disabled
             int newStatus;
 
-            if(mRetainedFragment.mBillTotal <= 0) {
+            if(mRetainedFragment.mBillAmount <= 0) {
                 newStatus = STATUS_NO_BILL_AMT;
             } else {
                 newStatus = (mDebitClStatus == STATUS_AUTO) ? STATUS_AUTO : STATUS_CLEARED;
@@ -1025,7 +1094,7 @@ public class CashTransactionFragment_2 extends BaseFragment implements
             // not permanently disabled
             int newStatus;
 
-            if(mRetainedFragment.mBillTotal <= 0) {
+            if(mRetainedFragment.mBillAmount <= 0) {
                 newStatus = STATUS_NO_BILL_AMT;
             } else {
                 newStatus = (mOverdraftStatus == STATUS_AUTO) ? STATUS_AUTO : STATUS_CLEARED;
@@ -1035,12 +1104,17 @@ public class CashTransactionFragment_2 extends BaseFragment implements
     }
 
     // UI Resources data members
-    //private View mCoordinatorLayout;
+    private View mCoordinatorLayout;
 
     private View mLayoutBillAmt;
     private ImageView mImgBill;
     private View mLabelBill;
     private EditText mInputBillAmt;
+
+    private View mLayoutDelChgs;
+    private ImageView mImgDelChgs;
+    private EditText mLabelDelChgs;
+    private EditText mInputDelChgs;
 
     private View mLayoutAccount;
     private ImageView mImgAccount;
@@ -1062,12 +1136,17 @@ public class CashTransactionFragment_2 extends BaseFragment implements
     private void bindUiResources(View v) {
         LogMy.d(TAG, "In bindUiResources");
 
-        //mCoordinatorLayout = v.findViewById(R.id.myCoordinatorLayout);
+        mCoordinatorLayout = v.findViewById(R.id.myCoordinatorLayout);
 
         mLayoutBillAmt = v.findViewById(R.id.layout_bill_amt);
         mImgBill = (ImageView) v.findViewById(R.id.img_trans_bill_amt);
         mLabelBill = v.findViewById(R.id.label_trans_bill_amt);
         mInputBillAmt = (EditText) v.findViewById(R.id.input_trans_bill_amt);
+
+        mLayoutDelChgs = v.findViewById(R.id.layout_delivery_charges);
+        mImgDelChgs = (ImageView) v.findViewById(R.id.img_delivery_charges);
+        mLabelDelChgs = (EditText) v.findViewById(R.id.label_delivery_charges);
+        mInputDelChgs = (EditText) v.findViewById(R.id.input_delivery_charges);
 
         mLayoutAccount = v.findViewById(R.id.layout_account);
         mImgAccount = (ImageView) v.findViewById(R.id.img_account);
@@ -1168,11 +1247,11 @@ public class CashTransactionFragment_2 extends BaseFragment implements
         // calculate add cashback
         if(STATUS_DISABLED != mAddCbStatus) {
 
-            boolean cbApply = (mRetainedFragment.mBillTotal > 0);
+            boolean cbApply = (mRetainedFragment.mBillAmount > 0);
             boolean cbExtraApply = (mAddCashload >= mMerchantUser.getMerchant().getPrepaidCbMinAmt() && mPpCbRate>0);
 
             // calculate cashbacks
-            int cbEligibleAmt = mRetainedFragment.mBillTotal - mRetainedFragment.mCbExcludedTotal - mDebitCashback;
+            int cbEligibleAmt = mRetainedFragment.mBillAmount - mRetainedFragment.mCbExcludedTotal - mDebitCashback;
             if(cbApply) {
                 mAddCbNormal = (int) (cbEligibleAmt * mCbRate) / 100;
             } else {

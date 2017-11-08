@@ -88,7 +88,7 @@
                         android:layout_width="0dp"
                         android:layout_weight="50"
                         android:gravity="left|center_vertical"
-                        android:text="Total Bill"
+                        android:text="Bill Amount"
                         android:id="@+id/label_trans_bill_amt"/>
                     <EditText
                         style="@style/Edittext_only_view_medium"

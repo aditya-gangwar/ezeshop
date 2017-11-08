@@ -403,8 +403,8 @@ public class CreateOrderFragment extends BaseFragment implements
             }
 
         } else {
-            List<String> permList = new ArrayList<>(Arrays.asList(perms));
-            /*if (EasyPermissions.somePermissionPermanentlyDenied(this, permList)) {
+            /*List<String> permList = new ArrayList<>(Arrays.asList(perms));
+            if (EasyPermissions.somePermissionPermanentlyDenied(this, permList)) {
                 // Permanently denied
                 new AppSettingsDialog.Builder(this)
                         .setRationale("Camera permission is required to add prescriptions image !")
