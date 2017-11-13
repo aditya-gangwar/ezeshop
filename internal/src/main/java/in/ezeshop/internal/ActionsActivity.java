@@ -509,9 +509,9 @@ public class ActionsActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void changeOrderStatus(MerchantOrders updatedOrder) {
+    public void cancelOrder(MerchantOrders updatedOrder) {
         AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
-        mWorkFragment.changeOrderStatus(updatedOrder);
+        mWorkFragment.cancelOrder(updatedOrder);
     }
 
     @Override

@@ -4,9 +4,6 @@ import android.content.Context;
 import android.os.Handler;
 
 import java.io.File;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -84,10 +81,12 @@ public class MyRetainedFragment extends RetainedFragment {
     // customer order/address related parameters
     public List<File> mPrescripImgs;
     public CustomerOrder mCustOrder;
+    public Transaction mCurrTxn;
+    // address selected for delivery or for add/update
+    public CustAddress mSelectedAddress;
     //public String mSelectedAddrId;
     //public String mSelectedMchntId;
     //public String mOrderComments;
-    public CustAddress mCustAddrToSave;
 
     public void reset() {
         LogMy.d(TAG,"In reset");
@@ -97,7 +96,7 @@ public class MyRetainedFragment extends RetainedFragment {
         //mLastFetchCashbacks = null;
         mPrescripImgs = null;
         //mSelectedAddrId = null;
-        mCustAddrToSave= null;
+        mSelectedAddress = null;
         //mSelectedMchntId = null;
         //mOrderComments=null;
         mCustOrder = null;

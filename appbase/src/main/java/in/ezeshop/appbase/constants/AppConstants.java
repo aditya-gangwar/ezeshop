@@ -186,7 +186,7 @@ public class AppConstants {
             "Delivery charges: \u20B9 %d (Free if Bill > \u20B9 %d).\n" +
             "Payment : Cash on delivery\n";
 
-    public static final String orderStatusChgSuccessMsg = "Order status changed successfully to '%s'.";
+    public static final String orderCancelSuccessMsg = "Order# '%s' is cancelled successfully.";
 
 
 

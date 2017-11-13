@@ -472,17 +472,17 @@ public class MerchantUser
         LogMy.d(TAG, "In fetchMerchantOps");
         isLoginValid();
 
-        return MerchantServices.getInstance().getMerchantOps(
-                mMerchant.getAuto_id());
+        return MerchantServices.getInstance().getMerchantOps(mMerchant.getAuto_id());
     }
 
-    public CustomerOrder changeOrderStatus(String orderId, String argStatus, String reason) {
+    public Transaction cancelOrder(String orderId, String reason) {
         if(mPseudoLoggedIn) {
             // intentionally using 'Backend' error code - as calling fx. will try to convert
             throw new BackendlessException(String.valueOf(ErrorCodes.OPERATION_NOT_ALLOWED), "");
         }
         isLoginValid();
-        return MerchantServices.getInstance().changeOrderStatus(orderId, argStatus, reason);
+        //return MerchantServices.getInstance().cancelOrder(orderId, argStatus, reason);
+        return CommonServices.getInstance().cancelOrder(orderId, getMerchantId(), reason);
     }
     /*
      * Methods for DB uploads / commits

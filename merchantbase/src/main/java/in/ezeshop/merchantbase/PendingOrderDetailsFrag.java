@@ -39,6 +39,7 @@ import in.ezeshop.common.constants.DbConstants;
 import in.ezeshop.common.constants.ErrorCodes;
 import in.ezeshop.common.database.CustomerOrder;
 import in.ezeshop.common.database.Prescriptions;
+import in.ezeshop.common.database.Transaction;
 import in.ezeshop.merchantbase.helper.MyRetainedFragment;
 
 /**
@@ -150,70 +151,66 @@ public class PendingOrderDetailsFrag extends BaseFragment
             DialogFragmentWrapper dialog = DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, AppCommonUtil.getErrorDesc(ErrorCodes.GENERAL_ERROR), true, true);
             dialog.setTargetFragment(this, REQ_NOTIFY_ERROR_EXIT);
             dialog.show(getFragmentManager(), DialogFragmentWrapper.DIALOG_NOTIFICATION);
-            //throw e;
+            throw e;
         }
     }
 
-    private void initDisplay(CustomerOrder order) {
+    private void initDisplay(Transaction txn) {
         //CustomerOrder order = mRetainedFragment.mSelCustOrder;
-        if(order==null) {
+        if(txn==null) {
             LogMy.wtf(TAG,"initDisplay: Order object is null");
             throw new BackendlessException(String.valueOf(ErrorCodes.GENERAL_ERROR), "Order object is null");
         }
 
-        mOrderId = order.getId();
-        mOrderCurrStatus = order.getCurrStatus();
+        mOrderId = txn.getTrans_id();
+        mOrderCurrStatus = txn.getCustOrder().getCurrStatus();
 
         // Customer details
-        mInputCustName.setText(order.getCustName());
-        mInputCustMobile.setText(order.getCustMobile());
-        mInputAddress.setText(CommonUtils.getCustAddrStrWithName(order.getAddressNIDB()));
+        mInputCustName.setText(txn.getCustOrder().getCustName());
+        mInputCustMobile.setText(txn.getCust_mobile());
+        mInputAddress.setText(CommonUtils.getCustAddrStrWithName(txn.getCustOrder()));
 
         // Order details
-        mInputOrderId.setText(order.getId());
-        refreshPrescripImgs(order);
-        if(order.getCustComments()==null || order.getCustComments().isEmpty()) {
+        mInputOrderId.setText(txn.getTrans_id());
+        refreshPrescripImgs(txn.getCustOrder());
+        if(txn.getCustOrder().getCustComments()==null || txn.getCustOrder().getCustComments().isEmpty()) {
             mInputCommentsInfo.setVisibility(View.GONE);
             mInputComments.setVisibility(View.GONE);
         } else {
             mInputCommentsInfo.setVisibility(View.VISIBLE);
             mInputComments.setVisibility(View.VISIBLE);
-            mInputComments.setText(order.getCustComments());
+            mInputComments.setText(txn.getCustOrder().getCustComments());
         }
 
         // Order Status details
-        refOrderStatusDetails(order);
+        refOrderStatusDetails(txn.getCustOrder());
         // Billing details
-        refreshBillingDetails(order);
+        refreshBillingDetails(txn);
 
         // Call numbers
-        prepareCallNumbers(order);
+        prepareCallNumbers(txn);
     }
 
-    private void prepareCallNumbers(CustomerOrder order) {
+    private void prepareCallNumbers(Transaction txn) {
         mCallNumbers.clear();
         mCallNumDisplay.clear();
 
-        mCallNumbers.add(order.getCustMobile());
-        mCallNumDisplay.add("Account Number ("+order.getCustName()+") : "
-                +AppConstants.PHONE_COUNTRY_CODE_DISPLAY+order.getCustMobile());
+        mCallNumbers.add(txn.getCust_mobile());
+        mCallNumDisplay.add("Account Number ("+txn.getCustOrder().getCustName()+") : "
+                +AppConstants.PHONE_COUNTRY_CODE_DISPLAY+txn.getCust_mobile());
 
-        if(order.getAddressNIDB().getContactNum()!=null &&
-                !order.getAddressNIDB().getContactNum().equals(order.getCustMobile())) {
-            mCallNumbers.add(order.getAddressNIDB().getContactNum());
-            mCallNumDisplay.add("Delivery Address Number ("+order.getAddressNIDB().getToName()+") : "
-                    +AppConstants.PHONE_COUNTRY_CODE_DISPLAY+order.getAddressNIDB().getContactNum());
+        if(txn.getCustOrder().getDelvryContactNum()!=null &&
+                !txn.getCustOrder().getDelvryContactNum().equals(txn.getCust_mobile())) {
+            mCallNumbers.add(txn.getCustOrder().getDelvryContactNum());
+            mCallNumDisplay.add("Delivery Address Number ("+txn.getCustOrder().getDelvryToName()+") : "
+                    +AppConstants.PHONE_COUNTRY_CODE_DISPLAY+txn.getCustOrder().getDelvryContactNum());
         }
 
         // todo: Add Delivery agent number
     }
 
-    private void refreshBillingDetails(CustomerOrder order) {
-        if(order.getTxn()==null) {
-            mLytBilling.setVisibility(View.GONE);
-        } else {
-
-        }
+    private void refreshBillingDetails(Transaction txn) {
+        mLytBilling.setVisibility(View.GONE);
     }
 
     private void refOrderStatusDetails(CustomerOrder order) {

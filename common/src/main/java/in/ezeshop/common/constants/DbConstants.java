@@ -109,6 +109,40 @@ public class DbConstants {
     public static final String TXN_CUSTOMER_PIN_NOT_USED = "No";
     public static final String TXN_CUSTOMER_OTP_USED = "OTP";
 
+    public enum TRANSACTION_STATUS {
+        Pending,
+        Committed,
+        Cancelled;
+
+        public static String toString(TRANSACTION_STATUS status) {
+            switch (status) {
+                case Pending:
+                    return "Pending";
+                case Committed:
+                    return "Committed";
+                case Cancelled:
+                    return "Cancelled";
+                default:
+                    return "";
+            }
+        }
+        // reverse of toString
+        public static TRANSACTION_STATUS fromString(String status) {
+            switch (status) {
+                case "Pending":
+                    return Pending;
+                case "Committed":
+                    return Committed;
+                case "Cancelled":
+                    return Cancelled;
+                default:
+                    return null;
+            }
+        }
+    }
+
+
+
     // Customer Orders Table values
     public enum CUSTOMER_ORDER_STATUS {
         New,

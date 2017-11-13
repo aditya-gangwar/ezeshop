@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +27,6 @@ import in.ezeshop.appbase.utilities.FileFetchr;
 import in.ezeshop.common.CommonUtils;
 import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.database.Cashback;
-import in.ezeshop.common.database.CustomerOrder;
 import in.ezeshop.common.database.Merchants;
 import in.ezeshop.common.database.Transaction;
 import in.ezeshop.customerbase.backendAPI.CustomerServices;
@@ -259,11 +257,12 @@ public class MyBackgroundProcessor <T> extends BackgroundProcessor<T> {
         }
         try{
             // Create order now
-            mRetainedFragment.mCustOrder = CustomerServices.getInstance().createCustomerOrder(
+            mRetainedFragment.mCurrTxn = CustomerServices.getInstance().createCustomerOrder(
                     mRetainedFragment.mCustOrder.getMerchantId(),
-                    mRetainedFragment.mCustOrder.getAddressId(),
+                    opData.argStr1,
                     mRetainedFragment.mCustOrder.getCustComments(),
                     urls);
+            mRetainedFragment.mCustOrder = mRetainedFragment.mCurrTxn.getCustOrder();
 
         } catch (BackendlessException e) {
             LogMy.e(TAG,"createCustomerOrder failed: "+e.toString());
@@ -274,7 +273,7 @@ public class MyBackgroundProcessor <T> extends BackgroundProcessor<T> {
 
     private int saveCustAddress(Boolean setAsDefault) {
         LogMy.d(TAG, "In saveCustAddress");
-        return CustomerUser.getInstance().saveCustAddress(mRetainedFragment.mCustAddrToSave, setAsDefault);
+        return CustomerUser.getInstance().saveCustAddress(mRetainedFragment.mSelectedAddress, setAsDefault);
     }
 
     private int chkMsgDevReg() {

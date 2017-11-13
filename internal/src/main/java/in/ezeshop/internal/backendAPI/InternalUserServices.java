@@ -78,10 +78,10 @@ public class InternalUserServices
         return Backendless.CustomService.invoke( SERVICE_NAME, SERVICE_VERSION_NAME, "getAllottedCards", args, java.util.List.class );
     }
 
-    public MerchantOrders changeOrderStatus(MerchantOrders updatedOrder)
+    public MerchantOrders cancelOrder(MerchantOrders updatedOrder)
     {
         Object[] args = new Object[]{updatedOrder};
-        return Backendless.CustomService.invoke( SERVICE_NAME, SERVICE_VERSION_NAME, "changeOrderStatus", args, MerchantOrders.class );
+        return Backendless.CustomService.invoke( SERVICE_NAME, SERVICE_VERSION_NAME, "cancelOrder", args, MerchantOrders.class );
     }*/
 
     public void clearDummyMchntData()

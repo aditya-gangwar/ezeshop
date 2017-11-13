@@ -121,6 +121,7 @@ public class CommonConstants {
     public static final String MERCHANT_TXN_IMAGE_ROOT_DIR = MERCHANT_ROOT_DIR+"txnImages"+ CommonConstants.FILE_PATH_SEPERATOR;
 
     public static final String CUSTOMER_PRESCRIPS_ROOT_DIR = CUSTOMER_ROOT_DIR+"prescriptions"+ CommonConstants.FILE_PATH_SEPERATOR;
+    public static final String MERCHANT_BILL_COPIES_ROOT_DIR = MERCHANT_ROOT_DIR+"billcopies"+ CommonConstants.FILE_PATH_SEPERATOR;
 
     public static final String MERCHANT_TXN_FILE_PREFIX = "txns_";
     public static final String CUSTOMER_TXN_FILE_PREFIX = "txns_";
@@ -129,6 +130,7 @@ public class CommonConstants {
     public static final String PREFIX_TXN_IMG_FILE_NAME = "txnImg_";
     public static final String PREFIX_TXN_CANCEL_IMG_FILE_NAME = "txnCancel_";
     public static final String CUSTOMER_PRESCRIPS_FILE_PREFIX = "prn_";
+    public static final String MERCHANT_BILL_COPIES_FILE_PREFIX = "bill_";
 
     public static final String CSV_DELIMETER = ",";
     public static final String SPECIAL_DELIMETER = ";";

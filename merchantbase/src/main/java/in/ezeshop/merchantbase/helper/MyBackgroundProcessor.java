@@ -4,21 +4,21 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.util.ArrayMap;
 
 import com.backendless.exceptions.BackendlessException;
 
 import in.ezeshop.appbase.backendAPI.CommonServices;
 import in.ezeshop.appbase.constants.AppConstants;
 import in.ezeshop.common.constants.CommonConstants;
-import in.ezeshop.common.constants.DbConstants;
 import in.ezeshop.common.constants.ErrorCodes;
 import in.ezeshop.common.database.Cashback;
-import in.ezeshop.common.database.CustomerOrder;
 import in.ezeshop.common.database.MerchantStats;
 import in.ezeshop.appbase.utilities.AppCommonUtil;
 import in.ezeshop.appbase.utilities.BackgroundProcessor;
 import in.ezeshop.appbase.utilities.FileFetchr;
 import in.ezeshop.appbase.utilities.LogMy;
+import in.ezeshop.common.database.Transaction;
 import in.ezeshop.merchantbase.backendAPI.MerchantServices;
 import in.ezeshop.merchantbase.entities.MerchantUser;
 import in.ezeshop.appbase.entities.MyCashback;
@@ -27,6 +27,7 @@ import in.ezeshop.appbase.entities.MyTransaction;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -366,8 +367,8 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
                 case MyRetainedFragment.REQUEST_FETCH_PENDING_ORDERS:
                     error = fetchPendingOrders(data);
                     break;
-                case MyRetainedFragment.REQUEST_CHG_ORDER_STATUS:
-                    error = changeOrderStatus(data);
+                case MyRetainedFragment.REQUEST_CANCEL_ORDER:
+                    error = cancelOrder(data);
                     break;
             }
         } catch (Exception e) {
@@ -377,36 +378,29 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
         return error;
     }
 
-    private int changeOrderStatus(MessageBgJob opData) {
+    private int cancelOrder(MessageBgJob opData) {
         try {
             // Status can be changed only for pending orders
-            CustomerOrder order = mRetainedFragment.mPendingCustOrders.get(opData.argStr1);
-            if (order!=null) {
-                CustomerOrder updatedOrder = MerchantUser.getInstance().changeOrderStatus(order.getId(), opData.argStr2, opData.argStr3);
-                LogMy.d(TAG, "changeOrderStatus success to: " + updatedOrder.getCurrStatus());
+            Transaction txn = mRetainedFragment.mPendingCustOrders.get(opData.argStr1);
+            if (txn!=null) {
+                Transaction dbTxn = MerchantUser.getInstance().cancelOrder(txn.getTrans_id(), opData.argStr2);
+                LogMy.d(TAG, "cancelOrder success");
 
                 // update local order object
-                updatedOrder.setAddressNIDB(order.getAddressNIDB());
-                updatedOrder.setCustomerNIDB(order.getCustomerNIDB());
-                updatedOrder.setMerchantNIDB(order.getMerchantNIDB());
+                //updatedOrder.setAddressNIDB(order.getAddressNIDB());
+                dbTxn.getCustOrder().setCustomerNIDB(txn.getCustOrder().getCustomerNIDB());
+                dbTxn.getCustOrder().setMerchantNIDB(txn.getCustOrder().getMerchantNIDB());
                 //mRetainedFragment.mSelCustOrder = updatedOrder;
 
-                // update pending order list
-                DbConstants.CUSTOMER_ORDER_STATUS updatedStatus = DbConstants.CUSTOMER_ORDER_STATUS.fromString(updatedOrder.getCurrStatus());
-                if(DbConstants.CUSTOMER_ORDER_STATUS.Cancelled == updatedStatus ||
-                        DbConstants.CUSTOMER_ORDER_STATUS.Delivered == updatedStatus ) {
-                    // Order is closed - delete from pending order list
-                    mRetainedFragment.mPendingCustOrders.remove(updatedOrder.getId());
-                } else {
-                    mRetainedFragment.mPendingCustOrders.put(updatedOrder.getId(), updatedOrder);
-                }
+                // Order is closed - delete from pending order list
+                mRetainedFragment.mPendingCustOrders.remove(dbTxn.getTrans_id());
 
             } else {
                 // I shouldn't be here
-                LogMy.wtf(TAG,"changeOrderStatus: Order object is null: "+opData.argStr1);
+                LogMy.wtf(TAG,"cancelOrder: Order object is null: "+opData.argStr1);
             }
         } catch (BackendlessException e) {
-            LogMy.e(TAG,"Exception in changeOrderStatus: "+e.toString());
+            LogMy.e(TAG,"Exception in cancelOrder: "+e.toString());
             return AppCommonUtil.getLocalErrorCode(e);
         }
         return ErrorCodes.NO_ERROR;
@@ -421,10 +415,13 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
         mRetainedFragment.mPendingCustOrders = null;
 
         try {
-            List<CustomerOrder> orders = MerchantServices.getInstance().fetchPendingOrders(MerchantUser.getInstance().getMerchantId());
-            for (CustomerOrder item :
+            List<Transaction> orders = MerchantServices.getInstance().fetchPendingOrders(MerchantUser.getInstance().getMerchantId());
+            for (Transaction item :
                     orders) {
-                mRetainedFragment.mPendingCustOrders.put(item.getId(), item);
+                if(mRetainedFragment.mPendingCustOrders==null) {
+                    mRetainedFragment.mPendingCustOrders = new HashMap<>(orders.size());
+                }
+                mRetainedFragment.mPendingCustOrders.put(item.getTrans_id(), item);
             }
             LogMy.d(TAG,"fetched order objects: "+mRetainedFragment.mPendingCustOrders.size());
 

@@ -65,18 +65,20 @@ public class CashTransactionFragment_2 extends BaseFragment implements
     private static final int STATUS_NO_BALANCE = 22;
     private static final int STATUS_BALANCE_BELOW_LIMIT = 23;
     private static final int STATUS_ACCOUNT_FULL = 24;
+    private static final int STATUS_ONLINE_ORDER = 25;
 
 
     public static final Map<Integer, String> statusDesc;
     static {
         Map<Integer, String> aMap = new HashMap<>(10);
         aMap.put(STATUS_CASH_PAID_NOT_SET,"Payment Not Set");
-        aMap.put(STATUS_NO_BILL_AMT,"No Bill Amount for Debit");
+        aMap.put(STATUS_NO_BILL_AMT,"No Bill Amount");
 
         aMap.put(STATUS_DISABLED,"Disabled in Settings");
-        aMap.put(STATUS_NO_BALANCE,"No Balance for Debit");
+        aMap.put(STATUS_NO_BALANCE,"No Account Balance");
         aMap.put(STATUS_BALANCE_BELOW_LIMIT,"Balance below "+AppCommonUtil.getAmtStr(MyGlobalSettings.getCbRedeemLimit()));
         aMap.put(STATUS_ACCOUNT_FULL,"Account Limit Reached");
+        aMap.put(STATUS_ONLINE_ORDER,"Not allowed for Online Customer order");
         statusDesc = Collections.unmodifiableMap(aMap);
     }
 
@@ -562,30 +564,27 @@ public class CashTransactionFragment_2 extends BaseFragment implements
     private void setTransactionValues() {
         LogMy.d(TAG, "In setTransactionValues");
         Transaction trans = new Transaction();
-        // Set only the amounts
+
+        // Important to set all Numerical values (to 0 if not applicable)
         trans.setTotal_billed(mRetainedFragment.mBillAmount);
         trans.setDelCharge(mDelCharges);
-        trans.setCb_eligible_amt(mCbEligibleAmt);
-        trans.setExtracb_eligible_amt(mExtraCbEligibleAmt);
-        trans.setPaymentAmt(mCashPaid);
-
         trans.setCl_credit(mAddCashload);
-        trans.setCb_credit(mAddCbNormal);
-        trans.setExtra_cb_credit(mAddCbExtra);
-
         trans.setCl_debit(mDebitCashload);
         trans.setCl_overdraft(mOverdraft);
+        trans.setPaymentAmt(mCashPaid);
 
+        trans.setCb_eligible_amt(mCbEligibleAmt);
         trans.setCb_percent(String.valueOf(mCbRate));
+        trans.setCb_credit(mAddCbNormal);
+
         trans.setExtra_cb_percent(String.valueOf(mPpCbRate));
+        trans.setExtracb_eligible_amt(mExtraCbEligibleAmt);
+        trans.setExtra_cb_credit(mAddCbExtra);
 
         trans.setCust_private_id(mRetainedFragment.mCurrCustomer.getPrivateId());
-
         // If this txn is for an online order - the TxnId will be same as orderId
         // Else backend will generate a new one
-        if(mRetainedFragment.mOrderIdForBilling!=null) {
-            trans.setTrans_id(mRetainedFragment.mOrderIdForBilling);
-        }
+        trans.setTrans_id(mRetainedFragment.mOrderIdForBilling);
 
         mRetainedFragment.mCurrTransaction = new MyTransaction(trans);
     }
@@ -735,17 +734,18 @@ public class CashTransactionFragment_2 extends BaseFragment implements
                                 calcAndSetAmts(false);
                             }
                         } else  {
-                            String errorStr = null;
+                            AppCommonUtil.toast(getActivity(), statusDesc.get(mOverdraftStatus));
+                            /*String errorStr = null;
                             switch (mOverdraftStatus) {
                                 case STATUS_NO_BILL_AMT:
-                                    errorStr = "No Bill Amount for Overdraft";
+                                    errorStr = "No Bill Amount";
                                     break;
                                 default:
                                     errorStr = statusDesc.get(mOverdraftStatus);
                             }
                             if(errorStr!=null) {
                                 AppCommonUtil.toast(getActivity(),errorStr);
-                            }
+                            }*/
                         }
                     }
                 } else if (i == R.id.img_delivery_charges || i == R.id.label_delivery_charges || i == R.id.input_delivery_charges) {
@@ -1024,8 +1024,10 @@ public class CashTransactionFragment_2 extends BaseFragment implements
         }
 
         // Init overdraft status
-        if(mMerchantUser.getMerchant().getCl_overdraft_enable()) {
-
+        // Not allowed for online customer orders
+        if(mRetainedFragment.mOrderIdForBilling!=null) {
+            setOverdraftStatus(STATUS_ONLINE_ORDER);
+        } else if(mMerchantUser.getMerchant().getCl_overdraft_enable()) {
             int accBalance = mRetainedFragment.mCurrCashback.getCurrAccBalance();
             if(accBalance<0 && Math.abs(accBalance) >= MyGlobalSettings.getAccOverdraftLimit()) {
                 setOverdraftStatus(STATUS_ACCOUNT_FULL);

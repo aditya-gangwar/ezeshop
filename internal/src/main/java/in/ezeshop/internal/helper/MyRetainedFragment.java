@@ -125,7 +125,7 @@ public class MyRetainedFragment extends RetainedFragment {
         mBackgroundProcessor.addFetchAllottedCardsReq(orderId);
     }
 
-    public void changeOrderStatus(MerchantOrders updatedOrder) {
+    public void cancelOrder(MerchantOrders updatedOrder) {
         mBackgroundProcessor.addOrderStatusChangeReq(updatedOrder);
     }*/
 

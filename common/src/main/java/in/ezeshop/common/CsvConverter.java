@@ -15,7 +15,6 @@ import in.ezeshop.common.database.Transaction;
  */
 public class CsvConverter {
 
-    //private static SimpleDateFormat mSdfDateWithTime = new SimpleDateFormat(CommonConstants.DATE_FORMAT_WITH_TIME, CommonConstants.MY_LOCALE);
 
     /*
      * Index of various parameters in Txn CSV records
@@ -27,31 +26,37 @@ public class CsvConverter {
      */
     // ANY CHANGE IN BELOW SHOULD HAVE CORRESPONDING CHANGE IN SQL COMMAND IN EoD SHELL SCRIPT
     // WHICH CREATES MONTHLY TXN CSV DUMP
-    private static int TXN_CSV_IDX_ID = 0;
+    private static int TXN_CSV_IDX_VERSION = 0;
     private static int TXN_CSV_IDX_TIME = 1;
-    private static int TXN_CSV_IDX_MERCHANT_ID = 2;
-    private static int TXN_CSV_IDX_MERCHANT_NAME = 3;
-    private static int TXN_CSV_IDX_CUSTOMER_MOB = 4;
-    private static int TXN_CSV_IDX_CUSTOMER_PVT_ID = 5;
-    //private static int TXN_CSV_IDX_USED_CARD_ID = 6;
-    private static int TXN_CSV_IDX_TOTAL_BILLED = 6;
-    //private static int TXN_CSV_IDX_CB_BILLED = 7;
-    private static int TXN_CSV_IDX_ACC_CREDIT = 7;
-    private static int TXN_CSV_IDX_ACC_DEBIT = 8;
-    private static int TXN_CSV_IDX_ACC_OVERDRAFT = 9;
-    private static int TXN_CSV_IDX_PAYMENT = 10;
-    //private static int TXN_CSV_IDX_CB_REDEEM = 10;
-    private static int TXN_CSV_IDX_CB_AWARD = 11;
-    private static int TXN_CSV_IDX_CB_RATE = 12;
-    private static int TXN_CSV_IDX_CUST_PIN = 13;
-    //private static int TXN_CSV_IDX_IMG_FILE = 14;
-    private static int TXN_CSV_IDX_INV_NUM = 14;
-    //private static int TXN_CSV_IDX_CANCEL_TIME = 16;
-    private static int TXN_CSV_IDX_EXT_CB_CREDIT = 15;
-    private static int TXN_CSV_IDX_EXT_CB_RATE = 16;
-    private static int TXN_CSV_IDX_CB_ELIGIBLE_AMT = 17;
-    private static int TXN_CSV_IDX_EXT_CB_ELIGIBLE_AMT = 18;
-    private static int TXN_CSV_TOTAL_FIELDS = 19;
+    private static int TXN_CSV_IDX_ID = 2;
+    private static int TXN_CSV_IDX_STATUS = 3;
+    // merchant and customer data
+    private static int TXN_CSV_IDX_MERCHANT_ID = 4;
+    private static int TXN_CSV_IDX_MERCHANT_NAME = 5;
+    private static int TXN_CSV_IDX_CUSTOMER_PVT_ID = 6;
+    private static int TXN_CSV_IDX_CUSTOMER_MOB = 7;
+    // Billing data
+    private static int TXN_CSV_IDX_TOTAL_BILLED = 8;
+    private static int TXN_CSV_IDX_DELIVERY_CHARGE = 9;
+    private static int TXN_CSV_IDX_ACC_CREDIT = 10;
+    private static int TXN_CSV_IDX_ACC_DEBIT = 11;
+    private static int TXN_CSV_IDX_ACC_OVERDRAFT = 12;
+    private static int TXN_CSV_IDX_PAYMENT = 13;
+    // cashback related
+    private static int TXN_CSV_IDX_CB_ELIGIBLE_AMT = 14;
+    private static int TXN_CSV_IDX_CB_RATE = 15;
+    private static int TXN_CSV_IDX_CB_AWARD = 16;
+    // extra cashback related
+    private static int TXN_CSV_IDX_EXT_CB_ELIGIBLE_AMT = 17;
+    private static int TXN_CSV_IDX_EXT_CB_RATE = 18;
+    private static int TXN_CSV_IDX_EXT_CB_CREDIT = 19;
+    // other data
+    private static int TXN_CSV_IDX_INV_NUM = 20;
+    private static int TXN_CSV_IDX_CUST_PIN = 21;
+    private static int TXN_CSV_TOTAL_FIELDS = 22;
+
+    // Txn CSV format version codes
+    private static String TXN_CSV_VERSION_1 = "1";
 
     // Total size of above fields = 15*10 + 50;
     public static final int TXN_CSV_MAX_SIZE = 256;
@@ -60,38 +65,38 @@ public class CsvConverter {
     public static String csvStrFromTxn(Transaction txn) {
         String[] csvFields = new String[TXN_CSV_TOTAL_FIELDS];
 
-        csvFields[TXN_CSV_IDX_ID] = txn.getTrans_id();
-        //csvFields[TXN_CSV_IDX_TIME] = mSdfDateWithTime.format(txn.getCreate_time());
-        if(txn.getCreate_time()!=null) {
-            csvFields[TXN_CSV_IDX_TIME] = String.valueOf(txn.getCreate_time().getTime()/1000);
-        } else {
-            csvFields[TXN_CSV_IDX_TIME] = "";
-        }
+        csvFields[TXN_CSV_IDX_VERSION] = TXN_CSV_VERSION_1;
+        csvFields[TXN_CSV_IDX_TIME] = (txn.getCreate_time()==null)?"":String.valueOf(txn.getCreate_time().getTime()/1000);
+        csvFields[TXN_CSV_IDX_ID] = (txn.getTrans_id()==null)?"":txn.getTrans_id();
+        csvFields[TXN_CSV_IDX_STATUS] = txn.getStatus();
+
+                // merchant and customer data
         csvFields[TXN_CSV_IDX_MERCHANT_ID] = txn.getMerchant_id();
         if(txn.getMerchant_name().contains(CommonConstants.CSV_DELIMETER)) {
             txn.setMerchant_name(txn.getMerchant_name().replace(CommonConstants.CSV_DELIMETER, ""));
         }
         csvFields[TXN_CSV_IDX_MERCHANT_NAME] = txn.getMerchant_name();
-        csvFields[TXN_CSV_IDX_CUSTOMER_MOB] = txn.getCust_mobile();
         csvFields[TXN_CSV_IDX_CUSTOMER_PVT_ID] = txn.getCust_private_id();
-        //csvFields[TXN_CSV_IDX_USED_CARD_ID] = (txn.getUsedCardId()==null)?"":txn.getUsedCardId();
+        csvFields[TXN_CSV_IDX_CUSTOMER_MOB] = txn.getCust_mobile();
+
+        // Billing data
         csvFields[TXN_CSV_IDX_TOTAL_BILLED] = String.valueOf(txn.getTotal_billed());
-        //csvFields[TXN_CSV_IDX_CB_BILLED] = String.valueOf(txn.getCb_billed());
+        csvFields[TXN_CSV_IDX_DELIVERY_CHARGE] = String.valueOf(txn.getDelCharge());
+        csvFields[TXN_CSV_IDX_ACC_CREDIT] = String.valueOf(txn.getCl_credit());
         csvFields[TXN_CSV_IDX_ACC_DEBIT] = String.valueOf(txn.getCl_debit());
         csvFields[TXN_CSV_IDX_ACC_OVERDRAFT] = String.valueOf(txn.getCl_overdraft());
         csvFields[TXN_CSV_IDX_PAYMENT] = String.valueOf(txn.getPaymentAmt());
-        csvFields[TXN_CSV_IDX_ACC_CREDIT] = String.valueOf(txn.getCl_credit());
-        //csvFields[TXN_CSV_IDX_CB_REDEEM] = String.valueOf(txn.getCb_debit());
-        csvFields[TXN_CSV_IDX_CB_AWARD] = String.valueOf(txn.getCb_credit());
+        // cashback related
+        csvFields[TXN_CSV_IDX_CB_ELIGIBLE_AMT] = String.valueOf(txn.getCb_eligible_amt());
         csvFields[TXN_CSV_IDX_CB_RATE] = txn.getCb_percent();
+        csvFields[TXN_CSV_IDX_CB_AWARD] = String.valueOf(txn.getCb_credit());
+        // extra cashback related
+        csvFields[TXN_CSV_IDX_EXT_CB_ELIGIBLE_AMT] = String.valueOf(txn.getExtracb_eligible_amt());
+        csvFields[TXN_CSV_IDX_EXT_CB_RATE] = txn.getExtra_cb_percent();
+        csvFields[TXN_CSV_IDX_EXT_CB_CREDIT] = String.valueOf(txn.getExtra_cb_credit());
+
+        // other data
         csvFields[TXN_CSV_IDX_CUST_PIN] = txn.getCpin();
-        /*String imgFilename = txn.getImgFileName();
-        csvFields[TXN_CSV_IDX_IMG_FILE] = (imgFilename==null)?"":imgFilename;*/
-
-        if(txn.getMerchant_name().contains(CommonConstants.CSV_DELIMETER)) {
-            txn.setMerchant_name(txn.getMerchant_name().replace(CommonConstants.CSV_DELIMETER, ""));
-        }
-
         if(txn.getInvoiceNum()==null) {
             csvFields[TXN_CSV_IDX_INV_NUM] = "";
         } else {
@@ -100,18 +105,6 @@ public class CsvConverter {
             }
             csvFields[TXN_CSV_IDX_INV_NUM] = txn.getInvoiceNum();
         }
-
-        csvFields[TXN_CSV_IDX_INV_NUM] = (txn.getInvoiceNum()==null)?"":txn.getInvoiceNum();
-        /*if(txn.getCancelTime()!=null) {
-            csvFields[TXN_CSV_IDX_CANCEL_TIME] = String.valueOf(txn.getCancelTime().getTime()/1000) ;
-        } else {
-            csvFields[TXN_CSV_IDX_CANCEL_TIME] = "";
-        }*/
-
-        csvFields[TXN_CSV_IDX_EXT_CB_CREDIT] = String.valueOf(txn.getExtra_cb_credit());
-        csvFields[TXN_CSV_IDX_EXT_CB_RATE] = txn.getExtra_cb_percent();
-        csvFields[TXN_CSV_IDX_CB_ELIGIBLE_AMT] = String.valueOf(txn.getCb_eligible_amt());
-        csvFields[TXN_CSV_IDX_EXT_CB_ELIGIBLE_AMT] = String.valueOf(txn.getExtracb_eligible_amt());
 
         // join the fields in single CSV string
         StringBuilder sb = new StringBuilder(TXN_CSV_MAX_SIZE);
@@ -125,55 +118,38 @@ public class CsvConverter {
         String[] csvFields = csvString.split(TXN_CSV_DELIM, -1);
 
         Transaction txn = new Transaction();
-        txn.setTrans_id(csvFields[TXN_CSV_IDX_ID]);
         if(csvFields[TXN_CSV_IDX_TIME].isEmpty()) {
             txn.setCreate_time(null);
         } else {
             txn.setCreate_time(new Date(Long.parseLong(csvFields[TXN_CSV_IDX_TIME])*1000));
         }
+        txn.setTrans_id(csvFields[TXN_CSV_IDX_ID]);
+        txn.setStatus(csvFields[TXN_CSV_IDX_STATUS]);
+        // merchant and customer details
         txn.setMerchant_id(csvFields[TXN_CSV_IDX_MERCHANT_ID]);
         txn.setMerchant_name(csvFields[TXN_CSV_IDX_MERCHANT_NAME]);
-        txn.setCust_mobile(csvFields[TXN_CSV_IDX_CUSTOMER_MOB]);
         txn.setCust_private_id(csvFields[TXN_CSV_IDX_CUSTOMER_PVT_ID]);
-        //txn.setUsedCardId(csvFields[TXN_CSV_IDX_USED_CARD_ID]);
+        txn.setCust_mobile(csvFields[TXN_CSV_IDX_CUSTOMER_MOB]);
+
+        // Billing data
         txn.setTotal_billed(Integer.parseInt(csvFields[TXN_CSV_IDX_TOTAL_BILLED]));
-        //txn.setCb_billed(Integer.parseInt(csvFields[TXN_CSV_IDX_CB_BILLED]));
+        txn.setDelCharge(Integer.parseInt(csvFields[TXN_CSV_IDX_DELIVERY_CHARGE]));
+        txn.setCl_credit(Integer.parseInt(csvFields[TXN_CSV_IDX_ACC_CREDIT]));
         txn.setCl_debit(Integer.parseInt(csvFields[TXN_CSV_IDX_ACC_DEBIT]));
         txn.setCl_overdraft(Integer.parseInt(csvFields[TXN_CSV_IDX_ACC_OVERDRAFT]));
         txn.setPaymentAmt(Integer.parseInt(csvFields[TXN_CSV_IDX_PAYMENT]));
-        txn.setCl_credit(Integer.parseInt(csvFields[TXN_CSV_IDX_ACC_CREDIT]));
-        //txn.setCb_debit(Integer.parseInt(csvFields[TXN_CSV_IDX_CB_REDEEM]));
-        txn.setCb_credit(Integer.parseInt(csvFields[TXN_CSV_IDX_CB_AWARD]));
-        txn.setCb_percent(csvFields[TXN_CSV_IDX_CB_RATE]);
-        txn.setCpin(csvFields[TXN_CSV_IDX_CUST_PIN]);
-        //txn.setImgFileName(csvFields[TXN_CSV_IDX_IMG_FILE]);
-        txn.setInvoiceNum(csvFields[TXN_CSV_IDX_INV_NUM]);
-        /*if(csvFields[TXN_CSV_IDX_CANCEL_TIME].isEmpty()) {
-            txn.setCancelTime(null);
-        } else {
-            txn.setCancelTime(new Date(Long.parseLong(csvFields[TXN_CSV_IDX_CANCEL_TIME])*1000));
-        }*/
-
-        // New fields added - shudn't break old CSV files
-        /*if(TXN_CSV_IDX_EXT_CB_CREDIT < csvFields.length &&
-                !csvFields[TXN_CSV_IDX_EXT_CB_CREDIT].isEmpty() &&
-                !csvFields[TXN_CSV_IDX_EXT_CB_CREDIT].equals("null")) {
-            txn.setExtra_cb_credit(Integer.parseInt(csvFields[TXN_CSV_IDX_EXT_CB_CREDIT]));
-        } else {
-            txn.setExtra_cb_credit(0);
-        }
-        if(TXN_CSV_IDX_EXT_CB_RATE < csvFields.length &&
-                !csvFields[TXN_CSV_IDX_EXT_CB_RATE].isEmpty() &&
-                !csvFields[TXN_CSV_IDX_EXT_CB_RATE].equals("null")) {
-            txn.setExtra_cb_percent(csvFields[TXN_CSV_IDX_EXT_CB_RATE]);
-        } else {
-            txn.setExtra_cb_percent("0");
-        }*/
-
-        txn.setExtra_cb_credit(Integer.parseInt(csvFields[TXN_CSV_IDX_EXT_CB_CREDIT]));
-        txn.setExtra_cb_percent(csvFields[TXN_CSV_IDX_EXT_CB_RATE]);
+        // cashback related
         txn.setCb_eligible_amt(Integer.parseInt(csvFields[TXN_CSV_IDX_CB_ELIGIBLE_AMT]));
+        txn.setCb_percent(csvFields[TXN_CSV_IDX_CB_RATE]);
+        txn.setCb_credit(Integer.parseInt(csvFields[TXN_CSV_IDX_CB_AWARD]));
+        // extra cashback related
         txn.setExtracb_eligible_amt(Integer.parseInt(csvFields[TXN_CSV_IDX_EXT_CB_ELIGIBLE_AMT]));
+        txn.setExtra_cb_percent(csvFields[TXN_CSV_IDX_EXT_CB_RATE]);
+        txn.setExtra_cb_credit(Integer.parseInt(csvFields[TXN_CSV_IDX_EXT_CB_CREDIT]));
+
+        // other data
+        txn.setCpin(csvFields[TXN_CSV_IDX_CUST_PIN]);
+        txn.setInvoiceNum(csvFields[TXN_CSV_IDX_INV_NUM]);
 
         return txn;
     }

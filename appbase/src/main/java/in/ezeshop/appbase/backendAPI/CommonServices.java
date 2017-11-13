@@ -11,6 +11,7 @@ package in.ezeshop.appbase.backendAPI;
   import in.ezeshop.appbase.constants.AppConstants;
   import in.ezeshop.common.database.Customers;
   import in.ezeshop.common.database.Merchants;
+  import in.ezeshop.common.database.Transaction;
 
 
   public class CommonServices
@@ -41,6 +42,12 @@ package in.ezeshop.appbase.backendAPI;
       {
           Object[] args = new Object[]{};
           Backendless.CustomService.invoke( SERVICE_NAME, SERVICE_VERSION_NAME, "isSessionValid", args );
+      }
+
+      public Transaction cancelOrder(String orderId, String merchantId, String reason)
+      {
+          Object[] args = new Object[]{orderId,merchantId,reason};
+          return Backendless.CustomService.invoke( SERVICE_NAME, SERVICE_VERSION_NAME, "cancelOrder", args, Transaction.class );
       }
 
       public java.lang.String setMsgDeviceId(java.lang.String userId, java.lang.String deviceId)

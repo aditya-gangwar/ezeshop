@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import in.ezeshop.appbase.BaseFragment;
@@ -24,11 +23,9 @@ import in.ezeshop.appbase.utilities.DialogFragmentWrapper;
 import in.ezeshop.appbase.utilities.LogMy;
 import in.ezeshop.appbase.utilities.OnSingleClickListener;
 import in.ezeshop.common.CommonUtils;
-import in.ezeshop.common.MyGlobalSettings;
 import in.ezeshop.common.constants.CommonConstants;
 import in.ezeshop.common.constants.DbConstants;
 import in.ezeshop.common.constants.ErrorCodes;
-import in.ezeshop.common.database.CustomerOrder;
 import in.ezeshop.common.database.Transaction;
 import in.ezeshop.merchantbase.helper.MyRetainedFragment;
 
@@ -120,29 +117,29 @@ public class PendingOrderListFrag extends BaseFragment {
     private void updateUI() {
         mCallback.setToolbarForFrag(-1,"Pending Online Orders",null);
 
-        List<CustomerOrder> newOrders = null;
-        List<CustomerOrder> accptdOrders = null;
-        List<CustomerOrder> dsptchdOrders = null;
+        List<Transaction> newOrders = null;
+        List<Transaction> accptdOrders = null;
+        List<Transaction> dsptchdOrders = null;
 
-        for (CustomerOrder order :
+        for (Transaction txn :
                 mRetainedFragment.mPendingCustOrders.values()) {
-            if (order.getCurrStatus().equals(DbConstants.CUSTOMER_ORDER_STATUS.New.toString())) {
+            if (txn.getCustOrder().getCurrStatus().equals(DbConstants.CUSTOMER_ORDER_STATUS.New.toString())) {
                 if(newOrders==null) {
                     newOrders = new ArrayList<>(mRetainedFragment.mPendingCustOrders.size());
                 }
-                newOrders.add(order);
+                newOrders.add(txn);
 
-            } else if (order.getCurrStatus().equals(DbConstants.CUSTOMER_ORDER_STATUS.Accepted.toString())) {
+            } else if (txn.getCustOrder().getCurrStatus().equals(DbConstants.CUSTOMER_ORDER_STATUS.Accepted.toString())) {
                 if(accptdOrders==null) {
                     accptdOrders = new ArrayList<>(mRetainedFragment.mPendingCustOrders.size());
                 }
-                accptdOrders.add(order);
+                accptdOrders.add(txn);
 
-            } else if (order.getCurrStatus().equals(DbConstants.CUSTOMER_ORDER_STATUS.Dispatched.toString())) {
+            } else if (txn.getCustOrder().getCurrStatus().equals(DbConstants.CUSTOMER_ORDER_STATUS.Dispatched.toString())) {
                 if(dsptchdOrders==null) {
                     dsptchdOrders = new ArrayList<>(mRetainedFragment.mPendingCustOrders.size());
                 }
-                dsptchdOrders.add(order);
+                dsptchdOrders.add(txn);
             }
         }
 
@@ -212,7 +209,7 @@ public class PendingOrderListFrag extends BaseFragment {
 
     private class OrderHolder extends RecyclerView.ViewHolder {
 
-        private CustomerOrder mOrder;
+        private Transaction mOrder;
 
         private View mLytExpiring;
         private TextView mInputExpiring;
@@ -236,11 +233,11 @@ public class PendingOrderListFrag extends BaseFragment {
             mInputAgentName = (TextView) itemView.findViewById(R.id.input_agentName);
         }
 
-        public void bindTxn(CustomerOrder order) {
-            mOrder = order;
+        public void bindTxn(Transaction txn) {
+            mOrder = txn;
 
             // Check if about to expire
-            long minsToExpire = CommonUtils.isOrderExpiring(order);
+            long minsToExpire = CommonUtils.isOrderExpiring(txn.getCustOrder());
             if(minsToExpire > 0) {
                 // show order expiry notification
                 mLytExpiring.setVisibility(View.VISIBLE);
@@ -249,30 +246,28 @@ public class PendingOrderListFrag extends BaseFragment {
                 mLytExpiring.setVisibility(View.GONE);
             }
 
-            mInputCustName.setText(order.getCustName());
-            mDatetime.setText(mSdfDateWithTime.format(order.getCreateTime()));
-            mInputAddress.setText(CommonUtils.getCustAddrStrShort(order.getAddressNIDB()) );
-            if(order.getTxn()!=null) {
-                AppCommonUtil.showAmtColor(getActivity(),null,mInputBillAmt,order.getTxn().getPaymentAmt(),false);
-            }
+            mInputCustName.setText(txn.getCustOrder().getCustName());
+            mDatetime.setText(mSdfDateWithTime.format(txn.getCreate_time()));
+            mInputAddress.setText(CommonUtils.getDlvryAddrStrShort(txn.getCustOrder()) );
 
-            if(order.getTxn()==null) {
+            AppCommonUtil.showAmtColor(getActivity(), null, mInputBillAmt, txn.getPaymentAmt(), false);
+            /*if(txn.getTxn()==null) {
                 mInputBillAmt.setVisibility(View.GONE);
             } else {
                 mInputBillAmt.setVisibility(View.VISIBLE);
-                AppCommonUtil.showAmtColor(getActivity(), null, mInputBillAmt, order.getTxn().getPaymentAmt(), false);
-            }
+                AppCommonUtil.showAmtColor(getActivity(), null, mInputBillAmt, txn.getTxn().getPaymentAmt(), false);
+            }*/
             //ToDo: Add agent details
             mLytAgent.setVisibility(View.GONE);
         }
     }
 
     private class CustOrderAdapter extends RecyclerView.Adapter<OrderHolder> {
-        private List<CustomerOrder> mCustOrders;
+        private List<Transaction> mCustOrders;
         private int selected_position = -1;
         private View.OnClickListener mListener;
 
-        public CustOrderAdapter(List<CustomerOrder> txns) {
+        public CustOrderAdapter(List<Transaction> txns) {
             mCustOrders = txns;
             mListener = new OnSingleClickListener() {
                 @Override
@@ -289,7 +284,7 @@ public class PendingOrderListFrag extends BaseFragment {
                     notifyItemChanged(selected_position);
 
                     if (pos >= 0 && pos < getItemCount()) {
-                        mCallback.showOrderDetailed(mCustOrders.get(pos).getId());
+                        mCallback.showOrderDetailed(mCustOrders.get(pos).getTrans_id());
                     } else {
                         LogMy.e(TAG,"Invalid position in onClickListener of txn list item: "+pos);
                     }
@@ -307,7 +302,7 @@ public class PendingOrderListFrag extends BaseFragment {
         }
         @Override
         public void onBindViewHolder(OrderHolder holder, int position) {
-            CustomerOrder txn = mCustOrders.get(position);
+            Transaction txn = mCustOrders.get(position);
             if(selected_position == position){
                 // Here I am just highlighting the background
                 holder.itemView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.list_highlight));

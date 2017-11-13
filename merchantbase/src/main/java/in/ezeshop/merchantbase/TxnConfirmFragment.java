@@ -383,7 +383,7 @@ public class TxnConfirmFragment extends BaseFragment implements
 
                             LogMy.d(TAG,"Before rename: "+compressedImage.getAbsolutePath());
                             File newFile = new File(compressedImage.getParent(),
-                                    CommonUtils.getCustPrescripFilename(CustomerUser.getInstance().getCustomer().getPrivate_id()));
+                                    CommonUtils.getMchntBillCopyFilename(MerchantUser.getInstance().getMerchant().getAuto_id()));
                             if( compressedImage.renameTo(newFile) ) {
                                 // file rename success
                                 LogMy.d(TAG,"After rename: "+newFile.getAbsolutePath());

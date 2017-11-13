@@ -29,6 +29,21 @@ public class CommonUtils {
         return (System.currentTimeMillis() - CommonConstants.START_EPOCH_MILLI_SECS);
     }
 
+    public static void resetTxnBillingDetails(Transaction txn) {
+        txn.setTotal_billed(0);
+        txn.setDelCharge(0);
+        txn.setCl_credit(0);
+        txn.setCl_debit(0);
+        txn.setCl_overdraft(0);
+        txn.setPaymentAmt(0);
+        txn.setCb_eligible_amt(0);
+        txn.setCb_percent("0");
+        txn.setCb_credit(0);
+        txn.setExtracb_eligible_amt(0);
+        txn.setExtra_cb_percent("0");
+        txn.setExtra_cb_credit(0);
+    }
+
     // if not expiring - return 0
     // If expiring - returns number of mins to expire
     public static long isOrderExpiring(CustomerOrder order) {
@@ -56,9 +71,21 @@ public class CommonUtils {
         return 0;
     }
 
+    public static boolean isOnlineOrderTxn(Transaction txn) {
+        return (txn.getTrans_id()!=null &&
+                txn.getTrans_id().startsWith(CommonConstants.CUST_ORDER_ID_PREFIX));
+    }
+
     public static boolean txnVerifyReq(Merchants merchant, Transaction txn) {
+
+        // for online orders - PIN is not required, as it is always initiated by Customer
+        // and that is taken as implicit acceptance to deduct points from account for this order
+        if(isOnlineOrderTxn(txn)) {
+            return false;
+        }
+
         //if(txn.getCancelTime()==null) {
-            int cl_credit_threshold = (merchant.getCl_credit_limit_for_pin() < 0) ? MyGlobalSettings.getAccAddPinLimit() : merchant.getCl_credit_limit_for_pin();
+            //int cl_credit_threshold = (merchant.getCl_credit_limit_for_pin() < 0) ? MyGlobalSettings.getAccAddPinLimit() : merchant.getCl_credit_limit_for_pin();
             int cl_debit_threshold = (merchant.getCl_debit_limit_for_pin() < 0) ? MyGlobalSettings.getAccDebitPinLimit() : merchant.getCl_debit_limit_for_pin();
             //int cb_debit_threshold = (merchant.getCb_debit_limit_for_pin() < 0) ? MyGlobalSettings.getCbDebitPinLimit() : merchant.getCb_debit_limit_for_pin();
 
@@ -68,8 +95,8 @@ public class CommonUtils {
 
             //int higher_debit_threshold = Math.max(cl_debit_threshold, cb_debit_threshold);
 
-            return (txn.getCl_credit() > cl_credit_threshold
-                    || txn.getCl_debit() > cl_debit_threshold
+            return (txn.getCl_debit() > cl_debit_threshold
+                    //|| txn.getCl_credit() > cl_credit_threshold
                     || txn.getCl_overdraft() > 0
                     //|| txn.getCb_debit() > cb_debit_threshold
                     //|| (txn.getCl_debit() + txn.getCb_debit()) > higher_debit_threshold
@@ -121,6 +148,11 @@ public class CommonUtils {
         return addr.getToName()+"\n"
                 +getCustAddressStr(addr);
     }
+    public static String getCustAddrStrWithName(CustomerOrder order) {
+        return order.getDelvryToName()+"\n"
+                +getCustAddressStr(order);
+    }
+
     public static String getCustAddressStr(CustAddress addr) {
         Areas area = addr.getAreaNIDB();
         if(area==null) {
@@ -137,8 +169,15 @@ public class CommonUtils {
                 ((area.getPincode()==null||area.getPincode().isEmpty())?(""):(" - "+area.getPincode()))+"\n"
                 +"+91-"+addr.getContactNum();
     }
-    public static String getCustAddrStrShort(CustAddress addr) {
-        Areas area = addr.getAreaNIDB();
+    public static String getCustAddressStr(CustomerOrder order) {
+        return order.getDelvryAddrText()+"\n"
+                +order.getDelvryAddrArea()+", "+order.getDelvryAddrCity()+"\n"
+                +order.getDelvryAddrState()+"\n"
+                +"+91-"+order.getDelvryContactNum();
+    }
+
+    public static String getDlvryAddrStrShort(CustomerOrder order) {
+        /*Areas area = addr.getAreaNIDB();
         if(area==null) {
             return "";
         }
@@ -146,7 +185,8 @@ public class CommonUtils {
         if(city==null) {
             return "";
         }
-        return addr.getText1()+", "+area.getAreaName();
+        return addr.getText1()+", "+area.getAreaName();*/
+        return order.getDelvryAddrText()+", "+order.getDelvryAddrArea();
     }
 
     public static String getMchntAddressStrWithName(Merchants mchnt) {
@@ -218,6 +258,20 @@ public class CommonUtils {
                 customerId.substring(0,2) + CommonConstants.FILE_PATH_SEPERATOR +
                 customerId.substring(0,4) + CommonConstants.FILE_PATH_SEPERATOR +
                 customerId;
+    }
+
+    public static String getMchntBillDir(String merchantId) {
+        // prescription directory: merchants/billcopies/<first 3 chars of merchant id>/<first 5 chars of merchant id>/<merchant id>/
+        return CommonConstants.MERCHANT_BILL_COPIES_ROOT_DIR +
+                merchantId.substring(0,3) + CommonConstants.FILE_PATH_SEPERATOR +
+                merchantId.substring(0,5) + CommonConstants.FILE_PATH_SEPERATOR +
+                merchantId;
+    }
+
+    public static String getMchntBillCopyFilename(String merchantId) {
+        // File name: bill_<mchnt_id>_<epoch time>.webp
+        return CommonConstants.MERCHANT_BILL_COPIES_FILE_PREFIX + merchantId + "_" +
+                Base35.fromBase10(getMyEpochMilliSecs(),0) + "." + CommonConstants.PHOTO_FILE_FORMAT;
     }
 
     public static String getCustPrescripFilename(String customerId) {

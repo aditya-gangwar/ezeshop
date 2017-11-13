@@ -126,10 +126,18 @@ public class CreateOrderFragment extends BaseFragment implements
                 // Either fragment 'create' or 'backstack' case
                 if (mBackstackFlag==null) {
                     // fragment create case - initialize member variables
-                    //mPrescripsDisabled = false;
                     mBackstackFlag = 123; // dummy memory allocation - to check for backstack scenarios later
                     // On first create set 'default address' as selected address
-                    mRetainedFragment.mCustOrder.setAddressId(CustomerUser.getInstance().getCustomer().getDefaultAddressId());;
+                    //mRetainedFragment.mCustOrder.setAddressId(CustomerUser.getInstance().getCustomer().getDefaultAddressId());
+                    String defaultAddrId = CustomerUser.getInstance().getCustomer().getDefaultAddressId();
+                    if(defaultAddrId!=null && !defaultAddrId.isEmpty()) {
+                        List<CustAddress> allAddress = CustomerUser.getInstance().getAllAddress();
+                        for (CustAddress addr : allAddress) {
+                            if(addr.getId().equals(defaultAddrId)) {
+                                mRetainedFragment.mSelectedAddress = addr;
+                            }
+                        }
+                    }
                 } else {
                     // backstack case - no need to initialize member variables
                     // as the same are automatically stored and restored
@@ -193,10 +201,9 @@ public class CreateOrderFragment extends BaseFragment implements
     private void refreshAddress() {
         LogMy.d(TAG,"In refreshAddress");
 
-        // First time - set to default address
-        List<CustAddress> allAddress = CustomerUser.getInstance().getAllAddress();
-
+        /*List<CustAddress> allAddress = CustomerUser.getInstance().getAllAddress();
         String selAddress = mRetainedFragment.mCustOrder.getAddressId();
+
         CustAddress selAddr = null;
         if( !(selAddress==null || allAddress==null || allAddress.isEmpty() || selAddress.isEmpty()) ) {
             for (CustAddress addr : allAddress) {
@@ -204,12 +211,12 @@ public class CreateOrderFragment extends BaseFragment implements
                     selAddr = addr;
                 }
             }
-        }
+        }*/
 
-        if(selAddr!=null) {
+        if(mRetainedFragment.mSelectedAddress!=null) {
             mBtnChangeAddr.setText("CHANGE");
-            mInputAddress.setText(CommonUtils.getCustAddrStrWithName(selAddr));
-            mSelectedAreaId = selAddr.getAreaId();
+            mInputAddress.setText(CommonUtils.getCustAddrStrWithName(mRetainedFragment.mSelectedAddress));
+            mSelectedAreaId = mRetainedFragment.mSelectedAddress.getAreaId();
         } else {
             mBtnChangeAddr.setText("SELECT");
             mInputAddress.setText("");
@@ -335,7 +342,7 @@ public class CreateOrderFragment extends BaseFragment implements
             } else if (i == mBtnChangeMchnt.getId()) {
                 // delivery address should be set
                 if(mInputAddress.getText().toString().isEmpty() ||
-                        mRetainedFragment.mCustOrder.getAddressId()==null) {
+                        mRetainedFragment.mSelectedAddress==null) {
                     AppCommonUtil.toast(getActivity(), "Set Delivery Address");
                 } else {
                     // show 'choose merchant' fragment
@@ -371,7 +378,7 @@ public class CreateOrderFragment extends BaseFragment implements
 
         // both delivery address and merchant is mandatory
         if(mInputAddress.getText().toString().isEmpty() ||
-                mRetainedFragment.mCustOrder.getAddressId()==null) {
+                mRetainedFragment.mSelectedAddress==null) {
             allok = false;
             mInputAddress.setError("Delivery address missing");
             AppCommonUtil.toast(getActivity(), "Delivery address missing");

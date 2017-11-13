@@ -43,10 +43,10 @@ import in.ezeshop.common.database.Transaction;
         Backendless.initApp( AppConstants.BACKENDLESS_APP_ID, AppConstants.ANDROID_SECRET_KEY, CustomerServices.APP_VERSION );
     }
 
-    public CustomerOrder createCustomerOrder(String mchntId, String addressId, String comments, java.util.List<String> prescripUrls)
+    public Transaction createCustomerOrder(String mchntId, String addressId, String comments, java.util.List<String> prescripUrls)
     {
         Object[] args = new Object[]{mchntId,addressId,comments,prescripUrls};
-        return Backendless.CustomService.invoke( SERVICE_NAME, SERVICE_VERSION_NAME, "createCustomerOrder", args, CustomerOrder.class );
+        return Backendless.CustomService.invoke( SERVICE_NAME, SERVICE_VERSION_NAME, "createCustomerOrder", args, Transaction.class );
     }
 
     public java.util.List<Merchants> mchntsByDeliveryArea(String areadId)

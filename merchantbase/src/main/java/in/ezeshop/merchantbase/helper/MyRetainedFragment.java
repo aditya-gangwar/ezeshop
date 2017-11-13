@@ -61,7 +61,7 @@ public class MyRetainedFragment extends RetainedFragment {
     public static final int REQUEST_GET_CUST_ID = 27;
     public static final int REQUEST_MSG_DEV_REG_CHK = 28;
     public static final int REQUEST_FETCH_PENDING_ORDERS = 29;
-    public static final int REQUEST_CHG_ORDER_STATUS = 30;
+    public static final int REQUEST_CANCEL_ORDER = 30;
 
     // Threads taken care by this fragment
     private MyBackgroundProcessor<String> mBackgroundProcessor;
@@ -110,7 +110,7 @@ public class MyRetainedFragment extends RetainedFragment {
 
     // related to Customer Orders
     //public List<CustomerOrder> mPendingCustOrders;
-    public Map<String, CustomerOrder> mPendingCustOrders;
+    public Map<String, Transaction> mPendingCustOrders;
     //public CustomerOrder mSelCustOrder;
 
     public void reset() {

@@ -503,8 +503,8 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
                         if (errorCode == ErrorCodes.NO_ERROR) {
                             // show success dialog
                             CustOrderSuccessDialog dialog = CustOrderSuccessDialog.newInstance(
-                                    mRetainedFragment.mCustOrder.getMerchantNIDB().getName(),
-                                    mRetainedFragment.mCustOrder.getId() );
+                                    mRetainedFragment.mCurrTxn.getMerchant_name(),
+                                    mRetainedFragment.mCurrTxn.getTrans_id() );
                             dialog.show(mFragMgr, DIALOG_ORDER_SUCCESS);
 
                             /*String msg = String.format(CommonConstants.MY_LOCALE, AppConstants.orderSuccessMsg,
@@ -946,11 +946,12 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
          * Choose Address Fragment Interface implementation
          */
     @Override
-    public void onSelectAddress(String addrId) {
+    public void onSelectAddress(CustAddress addr) {
         Fragment currentFragment = getFragmentManager().findFragmentByTag(CUSTOMER_CHOOSE_ADDRESS_FRAG);
         if(currentFragment != null && currentFragment.isVisible()) {
             // update selected address id
-            mRetainedFragment.mCustOrder.setAddressId(addrId);
+            //mRetainedFragment.mCustOrder.setAddressId(addrId);
+            mRetainedFragment.mSelectedAddress = addr;
             // remove fragment
             getFragmentManager().popBackStackImmediate();
             // 'create order' fragment should already show updated address on resume
@@ -978,7 +979,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
     public void onUpdateAddress(CustAddress addr, boolean setAsDefault) {
         LogMy.d(TAG,"In onUpdateAddress: "+addr.getId());
         AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
-        mRetainedFragment.mCustAddrToSave = addr;
+        mRetainedFragment.mSelectedAddress = addr;
         //mRetainedFragment.saveCustAddress(setAsDefault);
         mRetainedFragment.addBackgroundJob(MyRetainedFragment.REQUEST_SAVE_CUST_ADDR, null, null, null, null, null, null, setAsDefault);
     }
@@ -1086,7 +1087,7 @@ public class CashbackActivityCust2 extends AppCompatActivity implements
             // order confirmed
             AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
             mRetainedFragment.addBackgroundJob(MyRetainedFragment.REQUEST_CREATE_ORDER, this, null,
-                    null, null, null, null, null);
+                    mRetainedFragment.mSelectedAddress.getId(), null, null, null, null);
         }
     }
 

@@ -196,7 +196,7 @@ public class MyBackgroundProcessor <T> extends BackgroundProcessor<T> {
                 error = fetchAllottedCards((String) msg.obj);
                 break;
             case MyRetainedFragment.REQUEST_CHANGE_ORDER_STATUS:
-                error = changeOrderStatus((MerchantOrders) msg.obj);
+                error = cancelOrder((MerchantOrders) msg.obj);
                 break;*/
             case MyRetainedFragment.REQUEST_DEL_DUMMY_DATA:
                 error = delDummyMchntData();
@@ -408,10 +408,10 @@ public class MyBackgroundProcessor <T> extends BackgroundProcessor<T> {
         return ErrorCodes.NO_ERROR;
     }
 
-    private int changeOrderStatus(MerchantOrders order) {
+    private int cancelOrder(MerchantOrders order) {
         try {
-            mRetainedFragment.mCurrOrder = InternalUserServices.getInstance().changeOrderStatus(order);
-            LogMy.d(TAG,"changeOrderStatus success");
+            mRetainedFragment.mCurrOrder = InternalUserServices.getInstance().cancelOrder(order);
+            LogMy.d(TAG,"cancelOrder success");
             // update in last fetched list too
             int effectIndex = -1;
             for(int i=0; i<mRetainedFragment.mLastFetchMchntOrders.size(); i++) {
@@ -426,7 +426,7 @@ public class MyBackgroundProcessor <T> extends BackgroundProcessor<T> {
             }
 
         } catch (BackendlessException e) {
-            LogMy.e(TAG,"Exception in changeOrderStatus: "+e.toString());
+            LogMy.e(TAG,"Exception in cancelOrder: "+e.toString());
             return AppCommonUtil.getLocalErrorCode(e);
         }
         return ErrorCodes.NO_ERROR;

@@ -51,6 +51,7 @@ import in.ezeshop.appbase.utilities.AppCommonUtil;
 import in.ezeshop.appbase.utilities.DialogFragmentWrapper;
 import in.ezeshop.appbase.utilities.LogMy;
 import in.ezeshop.common.database.Prescriptions;
+import in.ezeshop.common.database.Transaction;
 import in.ezeshop.merchantbase.entities.MyCustomerOps;
 import in.ezeshop.merchantbase.entities.MerchantUser;
 import in.ezeshop.merchantbase.entities.MyMerchantStats;
@@ -1195,7 +1196,7 @@ public class CashbackActivity extends BaseActivity implements
                     case MyRetainedFragment.REQUEST_FETCH_FILES:
                         AppCommonUtil.cancelProgressDialog(true);
                         if (errorCode == ErrorCodes.NO_ERROR && mWorkFragment.mMissingFiles.size()==0) {
-                            startPendingOrderDetailsFrag();
+                            startPendingOrderDetailsFrag(opData.argStr1);
                         } else {
                             // Todo: Raise alarm
                             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle,
@@ -1203,7 +1204,7 @@ public class CashbackActivity extends BaseActivity implements
                                     .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
                         }
                         break;
-                    case MyRetainedFragment.REQUEST_CHG_ORDER_STATUS:
+                    case MyRetainedFragment.REQUEST_CANCEL_ORDER:
                         AppCommonUtil.cancelProgressDialog(true);
                         if (errorCode == ErrorCodes.NO_ERROR) {
                             // remove order detail fragment
@@ -1212,11 +1213,11 @@ public class CashbackActivity extends BaseActivity implements
                                 // remove fragment
                                 getFragmentManager().popBackStackImmediate();
                             }
-                            String msg = String.format(AppConstants.orderStatusChgSuccessMsg, opData.argStr1);
+                            String msg = String.format(AppConstants.orderCancelSuccessMsg, opData.argStr1);
                             DialogFragmentWrapper.createNotification(AppConstants.defaultSuccessTitle, msg, false, false)
                                     .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
                         } else {
-                            String msg = "Failed to change Order Status.\n\n"+AppCommonUtil.getErrorDesc(errorCode);
+                            String msg = "Failed to cancel order.\n\n"+AppCommonUtil.getErrorDesc(errorCode);
                             DialogFragmentWrapper.createNotification(AppConstants.generalFailureTitle, msg, false, true)
                                     .show(mFragMgr, DialogFragmentWrapper.DIALOG_NOTIFICATION);
                         }
@@ -1290,7 +1291,7 @@ public class CashbackActivity extends BaseActivity implements
     @Override
     public void acceptOrder(String orderId) {
         // Only pending orders can be cancelled
-        CustomerOrder order = mWorkFragment.mPendingCustOrders.get(orderId);
+        CustomerOrder order = mWorkFragment.mPendingCustOrders.get(orderId).getCustOrder();
 
         if(order!=null) {
             if(!order.getCurrStatus().equals(DbConstants.CUSTOMER_ORDER_STATUS.New.toString())) {
@@ -1320,7 +1321,7 @@ public class CashbackActivity extends BaseActivity implements
     @Override
     public void cancelOrder(String orderId, String cancelReason) {
         // Only pending orders can be cancelled
-        CustomerOrder order = mWorkFragment.mPendingCustOrders.get(orderId);
+        CustomerOrder order = mWorkFragment.mPendingCustOrders.get(orderId).getCustOrder();
 
         if(order!=null) {
             if(order.getCurrStatus().equals(DbConstants.CUSTOMER_ORDER_STATUS.Delivered.toString())) {
@@ -1329,8 +1330,8 @@ public class CashbackActivity extends BaseActivity implements
                 AppCommonUtil.toast(this,"Order already Cancelled");
             } else {
                 AppCommonUtil.showProgressDialog(this, AppConstants.progressDefault);
-                mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_CHG_ORDER_STATUS, null, null,
-                        orderId, DbConstants.CUSTOMER_ORDER_STATUS.Cancelled.toString(), cancelReason, null, null);
+                mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_CANCEL_ORDER, null, null,
+                        orderId, cancelReason, null, null, null);
             }
         } else {
             LogMy.wtf(TAG,"cancelOrder: Order object is null");
@@ -1342,21 +1343,21 @@ public class CashbackActivity extends BaseActivity implements
         // store order for further reference
         //mWorkFragment.mSelCustOrder = order;
 
-        CustomerOrder order = mWorkFragment.mPendingCustOrders.get(orderId);
+        Transaction txn = mWorkFragment.mPendingCustOrders.get(orderId);
 
         // fetch all missing order attached files
         if(mWorkFragment.mMissingFiles!=null) {
             mWorkFragment.mMissingFiles.clear();
         }
         for (Prescriptions item :
-                order.getPrescrips()) {
+                txn.getCustOrder().getPrescrips()) {
             String filename = Uri.parse(item.getUrl()).getLastPathSegment();
             File file = getFileStreamPath(filename);
             if(file == null || !file.exists()) {
                 // file does not exist locally
                 LogMy.d(TAG,"Missing prescription image file: "+filename);
                 if(mWorkFragment.mMissingFiles==null) {
-                    mWorkFragment.mMissingFiles = new ArrayList<>(order.getPrescrips().size());
+                    mWorkFragment.mMissingFiles = new ArrayList<>(txn.getCustOrder().getPrescrips().size());
                 }
                 mWorkFragment.mMissingFiles.add(item.getUrl());
             }
@@ -1364,11 +1365,11 @@ public class CashbackActivity extends BaseActivity implements
 
         if(mWorkFragment.mMissingFiles==null || mWorkFragment.mMissingFiles.size()==0) {
             // start order details fragment
-            startPendingOrderDetailsFrag();
+            startPendingOrderDetailsFrag(orderId);
         } else {
             AppCommonUtil.showProgressDialog(this,AppConstants.progressDefault);
             mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_FETCH_FILES,null,null
-            ,null,null,null,null,true);
+                ,orderId,null,null,null,true);
         }
     }
 
@@ -2271,13 +2272,13 @@ public class CashbackActivity extends BaseActivity implements
         }
     }
 
-    private void startPendingOrderDetailsFrag() {
+    private void startPendingOrderDetailsFrag(String orderId) {
         if (mFragMgr.findFragmentByTag(PENDING_ORDER_DETAILS_FRAG) == null) {
             // will be set to orderId - in case the merchant accepts order (thus creates billing txn)
             // or edit txn
             mWorkFragment.mOrderIdForBilling = null;
 
-            Fragment fragment = new PendingOrderDetailsFrag();
+            Fragment fragment = PendingOrderDetailsFrag.getInstance(orderId);
             FragmentTransaction transaction = mFragMgr.beginTransaction();
 
             // Add over the existing fragment

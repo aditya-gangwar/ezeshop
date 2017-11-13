@@ -42,7 +42,7 @@ public class ChooseAddressFragment extends BaseFragment {
     public interface ChooseAddressFragmentIf {
         MyRetainedFragment getRetainedFragment();
         void setToolbarForFrag(int iconResId, String title, String subTitle);
-        void onSelectAddress(String addrId);
+        void onSelectAddress(CustAddress addr);
         void onAddAddress();
         void onEditAddress(String addrId);
     }
@@ -130,7 +130,8 @@ public class ChooseAddressFragment extends BaseFragment {
                 // any one address is selected
                 int idx = getAddrIndex(id);
                 LogMy.d(TAG,"Selected address. Idx: "+idx);
-                mCallback.onSelectAddress(CustomerUser.getInstance().getAllAddress().get(idx).getId());
+                //mCallback.onSelectAddress(CustomerUser.getInstance().getAllAddress().get(idx).getId());
+                mCallback.onSelectAddress(CustomerUser.getInstance().getAllAddress().get(idx));
             }
         } catch (Exception e) {
             LogMy.e(TAG, "Exception in handleDialogBtnClick", e);

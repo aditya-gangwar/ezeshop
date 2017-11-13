@@ -1,10 +1,48 @@
 package in.ezeshop.common.database;
 
+/*
+ * All fields below in logical custOrder for easier understanding
+ *
+ * - create_time
+ * - trans_id
+ * - status
+ *
+ * Merchant and Customer data
+ * - merchant_id
+ * - merchant_name
+ * - cust_private_id
+ * - cust_mobile
+ *
+ * Billing details
+ * - total_billed
+ * - delCharge
+ * - cl_credit
+ * - cl_debit
+ * - cl_overdraft
+ * - paymentAmt
+ * Cashback related
+ * - cb_eligible_amt
+ * - cb_percent
+ * - cb_credit
+ * Extra cashback related
+ * - extra_cb_percent
+ * - extracb_eligible_amt
+ * - extra_cb_credit
+ *
+ * Other data
+ * - invoiceNum
+ * - cpin
+ * - archived
+ *
+ * Child objects
+ * - cashback -- will be null for non-committed txns i.e. isFinal = false
+ * - online customer custOrder
+ */
+
+
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
-import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
-import com.backendless.geo.GeoPoint;
 import com.backendless.persistence.BackendlessDataQuery;
 
 public class Transaction
@@ -34,15 +72,16 @@ public class Transaction
   private String cust_mobile;
   private Integer cl_debit;
   private Integer delCharge;
-  private Boolean isFinal;
+  private String status;
   private Cashback cashback;
+  private CustomerOrder custOrder;
 
-  public Boolean getFinal() {
-    return isFinal;
+  public String getStatus() {
+    return status;
   }
 
-  public void setFinal(Boolean aFinal) {
-    isFinal = aFinal;
+  public void setStatus(String status) {
+    this.status = status;
   }
 
   public Integer getDelCharge() {
@@ -283,7 +322,14 @@ public class Transaction
     this.cashback = cashback;
   }
 
-                                                    
+  public CustomerOrder getCustOrder() {
+    return custOrder;
+  }
+
+  public void setCustOrder(CustomerOrder custOrder) {
+    this.custOrder = custOrder;
+  }
+
   public Transaction save()
   {
     return Backendless.Data.of( Transaction.class ).save( this );

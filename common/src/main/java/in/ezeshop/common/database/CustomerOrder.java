@@ -11,7 +11,7 @@ public class CustomerOrder
 {
   private java.util.Date updated;
   private String custMobile;
-  private String addressId;
+  //private String addressId;
   private String id;
   private java.util.Date dispatchTime;
   private java.util.Date cancelTime;
@@ -29,11 +29,66 @@ public class CustomerOrder
   private String objectId;
   private String custPrivId;
   private String currStatus;
-  private Transaction txn;
+  //private Transaction txn;
   private java.util.List<Prescriptions> prescrips;
   private Customers customerNIDB;
   private Merchants merchantNIDB;
-  private CustAddress addressNIDB;
+  //private CustAddress addressNIDB;
+  private String delvryToName;
+  private String delvryContactNum;
+  private String delvryAddrText;
+  private String delvryAddrArea;
+  private String delvryAddrCity;
+  private String delvryAddrState;
+
+  public String getDelvryToName() {
+    return delvryToName;
+  }
+
+  public void setDelvryToName(String delvryToName) {
+    this.delvryToName = delvryToName;
+  }
+
+  public String getDelvryContactNum() {
+    return delvryContactNum;
+  }
+
+  public void setDelvryContactNum(String delvryContactNum) {
+    this.delvryContactNum = delvryContactNum;
+  }
+
+  public String getDelvryAddrText() {
+    return delvryAddrText;
+  }
+
+  public void setDelvryAddrText(String delvryAddrText) {
+    this.delvryAddrText = delvryAddrText;
+  }
+
+  public String getDelvryAddrArea() {
+    return delvryAddrArea;
+  }
+
+  public void setDelvryAddrArea(String delvryAddrArea) {
+    this.delvryAddrArea = delvryAddrArea;
+  }
+
+  public String getDelvryAddrCity() {
+    return delvryAddrCity;
+  }
+
+  public void setDelvryAddrCity(String delvryAddrCity) {
+    this.delvryAddrCity = delvryAddrCity;
+  }
+
+  public String getDelvryAddrState() {
+    return delvryAddrState;
+  }
+
+  public void setDelvryAddrState(String delvryAddrState) {
+    this.delvryAddrState = delvryAddrState;
+  }
+
   public java.util.Date getUpdated()
   {
     return updated;
@@ -49,7 +104,7 @@ public class CustomerOrder
     this.custMobile = custMobile;
   }
 
-  public String getAddressId()
+  /*public String getAddressId()
   {
     return addressId;
   }
@@ -57,7 +112,7 @@ public class CustomerOrder
   public void setAddressId( String addressId )
   {
     this.addressId = addressId;
-  }
+  }*/
 
   public String getId()
   {
@@ -214,7 +269,7 @@ public class CustomerOrder
     this.currStatus = currStatus;
   }
 
-  public Transaction getTxn()
+  /*public Transaction getTxn()
   {
     return txn;
   }
@@ -222,7 +277,7 @@ public class CustomerOrder
   public void setTxn( Transaction txn )
   {
     this.txn = txn;
-  }
+  }*/
 
   public java.util.List<Prescriptions> getPrescrips()
   {
@@ -254,7 +309,7 @@ public class CustomerOrder
     this.merchantNIDB = merchantNIDB;
   }
 
-  public CustAddress getAddressNIDB()
+  /*public CustAddress getAddressNIDB()
   {
     return addressNIDB;
   }
@@ -262,7 +317,7 @@ public class CustomerOrder
   public void setAddressNIDB( CustAddress addressNIDB )
   {
     this.addressNIDB = addressNIDB;
-  }
+  }*/
 
 
   public CustomerOrder save()
