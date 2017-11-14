@@ -1037,7 +1037,7 @@ public class CashbackActivity extends BaseActivity implements
                     case MyRetainedFragment.REQUEST_REGISTER_CUSTOMER:
                         onCustRegResponse(errorCode);
                         break;
-                    case MyRetainedFragment.REQUEST_COMMIT_TRANS:
+                    case MyRetainedFragment.REQUEST_PROCESS_TRANS:
                         onCommitTransResponse(errorCode);
                         break;
                     case MyRetainedFragment.REQUEST_UPDATE_MERCHANT_SETTINGS:
@@ -1698,11 +1698,11 @@ public class CashbackActivity extends BaseActivity implements
                 dialog.show(mFragMgr, DIALOG_TXN_VERIFY_TYPE);
             /*} else {
                 LogMy.d(TAG,"In onTransactionConfirm, card scanned available");
-                commitTxn(null,true);
+                processTxn(null,true);
             }*/
         } else {
             LogMy.d(TAG,"In onTransactionConfirm, txn verify not required");
-            commitTxn(null,true);
+            processTxn(null,true);
         }
     }
 
@@ -1739,13 +1739,13 @@ public class CashbackActivity extends BaseActivity implements
     @Override
     public void onTxnPin(String pinOrOtp, String tag) {
         if(tag.equals(DIALOG_PIN_CASH_TXN)) {
-            commitTxn(pinOrOtp, false);
+            processTxn(pinOrOtp, false);
         } else if(tag.equals(DIALOG_OTP_CASH_TXN)) {
-            commitTxn(pinOrOtp, true);
+            processTxn(pinOrOtp, true);
         }
     }
 
-    private void commitTxn(String pin, boolean isOtp) {
+    private void processTxn(String pin, boolean isOtp) {
         int resultCode = AppCommonUtil.isNetworkAvailableAndConnected(this);
         if ( resultCode != ErrorCodes.NO_ERROR) {
             // Show error notification dialog
@@ -1766,7 +1766,7 @@ public class CashbackActivity extends BaseActivity implements
             }*/
 
             //mWorkFragment.commitCashTransaction(pin, isOtp);
-            mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_COMMIT_TRANS, null, null,
+            mWorkFragment.addBackgroundJob(MyRetainedFragment.REQUEST_PROCESS_TRANS, null, null,
                     pin, null, null, null, isOtp);
         }
     }
@@ -2072,7 +2072,7 @@ public class CashbackActivity extends BaseActivity implements
                             //startBillingFragment();
                         } else {
                             mWorkFragment.mCurrTransaction.getTransaction().setUsedCardId(mWorkFragment.mCustCardId);
-                            commitTxn("",true);
+                            processTxn("",true);
                         }
                     } else {
                         AppCommonUtil.toast(this, "Invalid Customer Card");

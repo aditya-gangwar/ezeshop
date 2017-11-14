@@ -1,7 +1,7 @@
 package in.ezeshop.common.database;
 
 /*
- * All fields below in logical custOrder for easier understanding
+ * All fields below in logical order for easier understanding
  *
  * - create_time
  * - trans_id

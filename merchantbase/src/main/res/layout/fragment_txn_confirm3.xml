@@ -262,7 +262,7 @@
                     <EditText
                         style="@style/Edittext_only_view_small"
                         android:layout_height="wrap_content"
-                        android:id="@+id/label_cash_back"
+                        android:id="@+id/label_moreDetails"
                         android:layout_width="wrap_content"
                         android:layout_gravity="center"
                         android:text="MORE DETAILS"

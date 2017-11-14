@@ -109,10 +109,16 @@ import in.ezeshop.common.database.Transaction;
         return Backendless.CustomService.invoke( SERVICE_NAME, SERVICE_VERSION_NAME, "cancelTxn", args, Transaction.class);
     }*/
 
-    public Transaction commitTxn(String csvTxnData, String pin, boolean isOtp)
+    /*public Transaction processTxn(String csvTxnData, String pin, boolean isOtp)
     {
         Object[] args = new Object[]{csvTxnData,pin,isOtp};
-        return Backendless.CustomService.invoke( SERVICE_NAME, SERVICE_VERSION_NAME, "commitTxn", args, Transaction.class );
+        return Backendless.CustomService.invoke( SERVICE_NAME, SERVICE_VERSION_NAME, "processTxn", args, Transaction.class );
+    }*/
+
+    public Transaction processTxn(Transaction txn, String pin, boolean isOtp)
+    {
+        Object[] args = new Object[]{txn,pin,isOtp};
+        return Backendless.CustomService.invoke( SERVICE_NAME, SERVICE_VERSION_NAME, "processTxn", args, Transaction.class );
     }
 
     public void generateTxnOtp(java.lang.String custMobileOrId)

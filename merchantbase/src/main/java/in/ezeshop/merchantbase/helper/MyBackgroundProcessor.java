@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
-import android.util.ArrayMap;
 
 import com.backendless.exceptions.BackendlessException;
 
@@ -182,7 +181,7 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
         MessageTxnCommit msg = new MessageTxnCommit();
         msg.pin = pin;
         msg.isOtp = isOtp;
-        mRequestHandler.obtainMessage(MyRetainedFragment.REQUEST_COMMIT_TRANS, msg).sendToTarget();
+        mRequestHandler.obtainMessage(MyRetainedFragment.REQUEST_PROCESS_TRANS, msg).sendToTarget();
     }
     public void addCashbackRequest(String custId) {
         LogMy.d(TAG, "In addCashbackRequest:  " + custId);
@@ -291,7 +290,7 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
                 case MyRetainedFragment.REQUEST_REGISTER_CUSTOMER:
                     error = registerCustomer(data);
                     break;
-                case MyRetainedFragment.REQUEST_COMMIT_TRANS:
+                case MyRetainedFragment.REQUEST_PROCESS_TRANS:
                     //commitCashTrans((Transaction) msg.obj);
                     error = commitCashTrans(data);
                     break;
@@ -596,7 +595,7 @@ public class MyBackgroundProcessor<T> extends BackgroundProcessor<T> {
     }
 
     private int commitCashTrans(MessageBgJob opData) {
-        int errorCode =  MerchantUser.getInstance().commitTxn(mRetainedFragment.mCurrTransaction, opData.argStr1, opData.argBool1, false);
+        int errorCode =  MerchantUser.getInstance().processTxn(mRetainedFragment.mCurrTransaction, opData.argStr1, opData.argBool1, false);
         if(errorCode==ErrorCodes.NO_ERROR) {
             mRetainedFragment.mCurrCashback.resetOnlyCashback(mRetainedFragment.mCurrTransaction.getTransaction().getCashback());
         }

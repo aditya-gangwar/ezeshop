@@ -553,7 +553,7 @@ public class MerchantUser
                     default:
                         LogMy.e(TAG,"Invalid value: "+i%4);
                 }
-                errCode = commitTxn(myTxn, pin, false, true);
+                errCode = processTxn(myTxn, pin, false, true);
                 if(errCode!=ErrorCodes.NO_ERROR) {
                     break;
                 } else {
@@ -569,7 +569,7 @@ public class MerchantUser
         return errCode;
     }
 
-    public int commitTxn(MyTransaction txn, String pin, boolean isOtp, boolean loadTest) {
+    public int processTxn(MyTransaction txn, String pin, boolean isOtp, boolean loadTest) {
         if(mPseudoLoggedIn) {
             return ErrorCodes.OPERATION_NOT_ALLOWED;
         }
@@ -579,14 +579,15 @@ public class MerchantUser
 
             Transaction tx = txn.getTransaction();
             // settings values eventually set by backend to null/empty for now
-            tx.setTrans_id("");
-            tx.setMerchant_id("");
-            tx.setMerchant_name("");
-            tx.setCust_mobile("");
+            //tx.setTrans_id("");
+            //tx.setMerchant_id("");
+            //tx.setMerchant_name("");
+            //tx.setCust_mobile("");
 
-            String csvStr = CsvConverter.csvStrFromTxn(tx);
-            Transaction newTxn = MerchantServices.getInstance().commitTxn(csvStr,pin,isOtp);
-            LogMy.d(TAG, "Txn commit success: " + newTxn.getTrans_id());
+            //String csvStr = CsvConverter.csvStrFromTxn(tx);
+            //Transaction newTxn = MerchantServices.getInstance().processTxn(csvStr,pin,isOtp);
+            Transaction newTxn = MerchantServices.getInstance().processTxn(tx,pin,isOtp);
+            LogMy.d(TAG, "Txn process success: " + newTxn.getTrans_id());
             if(!loadTest) {
                 txn.setCurrTransaction(newTxn);
             }

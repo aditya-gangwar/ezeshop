@@ -122,6 +122,7 @@ public class TxnConfirmFragment extends BaseFragment implements
 
             initListeners();
             displayTransactionValues();
+            refreshBillImgs();
 
         } catch (Exception e) {
             LogMy.e(TAG, "Exception in Fragment: ", e);
@@ -241,22 +242,21 @@ public class TxnConfirmFragment extends BaseFragment implements
         mInputCbDetails.setText(MyTransaction.getCbDetailStr(curTransaction,false));
 
         /* More Details */
-        if(curTransaction.getTrans_id()==null || curTransaction.getTrans_id().isEmpty()) {
-            // this txn is not for online order
-            mLayoutOrderId.setVisibility(View.GONE);
-        } else {
+        if(CommonUtils.isOnlineOrderTxn(curTransaction)) {
             mLayoutOrderId.setVisibility(View.VISIBLE);
             mInputOrderId.setText(curTransaction.getTrans_id());
+        } else {
+            mLayoutOrderId.setVisibility(View.GONE);
         }
         // Bill Number
         if(mMerchant.getInvoiceNumAsk()) {
-            mLayoutExtraDetails.setVisibility(View.VISIBLE);
+            //mLayoutExtraDetails.setVisibility(View.VISIBLE);
             mLayoutBillNum.setVisibility(View.VISIBLE);
             if(mMerchant.getInvoiceNumOnlyNumbers()) {
                 mInputBillNum.setInputType(EditorInfo.TYPE_CLASS_NUMBER);
             }
         } else {
-            mLayoutExtraDetails.setVisibility(View.GONE);
+            //mLayoutExtraDetails.setVisibility(View.GONE);
             mLayoutBillNum.setVisibility(View.GONE);
         }
     }
@@ -487,7 +487,6 @@ public class TxnConfirmFragment extends BaseFragment implements
     private View mLayoutExtraDetails;
     private LinearLayout mLayoutOrderId;
     private EditText mInputOrderId;
-
     private View mLayoutBillNum;
     private EditText mInputBillNum;
 

@@ -41,7 +41,7 @@ public class MyRetainedFragment extends RetainedFragment {
     public static final int REQUEST_GET_CASHBACK = 2;
     public static final int REQUEST_REGISTER_CUSTOMER = 3;
     public static final int REQUEST_LOGIN = 4;
-    public static final int REQUEST_COMMIT_TRANS = 5;
+    public static final int REQUEST_PROCESS_TRANS = 5;
     public static final int REQUEST_UPDATE_MERCHANT_SETTINGS = 6;
     public static final int REQUEST_LOGOUT_MERCHANT = 7;
     public static final int REQUEST_FETCH_TXNS = 8;
